@@ -1,0 +1,60 @@
+{
+  "canisters": {
+    "signer": {
+      "frontend": {
+        "entrypoint": "examples/react-signer/dist/index.html"
+      },
+      "source": [
+        "examples/react-signer/dist/"
+      ],
+      "type": "assets"
+    },
+    "dapp": {
+      "frontend": {
+        "entrypoint": "examples/react-dapp/dist/index.html"
+      },
+      "source": [
+        "examples/react-dapp/dist/"
+      ],
+      "type": "assets"
+    },
+    "docs": {
+      "frontend": {
+        "entrypoint": "docs/out/index.html"
+      },
+      "source": ["docs/out"],
+      "type": "assets"
+    },
+    "signer-backend": {
+      "candid": "examples/signer-backend/signer-backend.did",
+      "package": "signer-backend",
+      "type": "rust",
+      "optimize": "cycles"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:8000",
+      "type": "ephemeral"
+    },
+    "ic": {
+      "providers": [
+        "https://icp0.io"
+      ],
+      "type": "persistent"
+    },
+    "dev": {
+      "providers": [
+        "https://icp0.io"
+      ],
+      "type": "persistent"
+    }
+  },
+  "version": 1
+}

@@ -1,0 +1,18 @@
+# This section is owned by the Internet Identity Labs, Inc. team
+# Each line is a file pattern followed by one or more owners.
+
+# nfid repository owner
+* @olekid
+
+# documentation owners
+docs/* @dostro @olekid @dmitriiIdentityLabs
+
+# @nfid/identitykit SDK owners
+packages/identitykit/* @olekid @dmitriiIdentityLabs @chorniy8pavlo
+
+# identitykit examples owners
+examples/* @olekid @dmitriiIdentityLabs @chorniy8pavlo
+
+# pipelines owner
+.github/* @DaniilIdentity @dmitriiIdentityLabs
+docker-for-e2e/* @DaniilIdentity

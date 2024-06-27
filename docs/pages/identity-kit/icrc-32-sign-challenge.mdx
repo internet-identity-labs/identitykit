@@ -1,0 +1,72 @@
+---
+title: "ICRC-32: Sign Challenge"
+date: "2023-12-12"
+authors:
+  - name: "Dan Ostrovski"
+  - name: "Philipp Litzenberger"
+---
+
+import { Stack } from "../../components/stack"
+import { Tabs } from "nextra/components"
+
+## ICRC-32 Sign Challenge
+
+<Stack>
+[![Status Badge](https://img.shields.io/badge/STATUS-DRAFT-ffcc00.svg)](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_32_sign_challenge.md)
+
+[![Extension Badge](https://img.shields.io/badge/Extends-ICRC--25-ffcc222.svg)](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_25_signer_interaction_standard.md)
+
+[![Standard Issue](https://img.shields.io/badge/ISSUE-ICRC--32-blue?logo=github)](https://github.com/dfinity/wg-identity-authentication/issues/113)
+
+</Stack>
+
+The `icrc32_sign_challenge` method provides a secure mechanism for verifying ownership of user
+identities. By facilitating cryptographic proofs, this standard strengthens the security framework
+of applications, ensuring that user identities are protected and authenticated reliably.
+
+<Tabs items={['Method Call', 'Request Type', 'Response Type']} defaultIndex="0">
+
+<Tabs.Tab>
+```typescript filename="Method Call"
+const response: Response = await connection.signChallange({
+  principal: "rwlgt-iiaaa-aaaaa-aaaaa-cai", // optinal filter for identity that should sign 
+  challenge: "UjwgsORvEzp98TmB1cAIseNOoD9+GLyN/1DzJ5+jxZM="
+})
+```
+
+```json filename="response data"
+{
+  "version": "1",
+  "signedChallenge": {
+    "publicKey": "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEOTdHYwpFTr/oPXOfLQcteymk8AQE41VwPQ1W7Xpm0Zt1AY4+5aOnMAbAIjXEchxPuGbPWqPqwntXMPs3w4rOaA==",
+    "signature": "bldf7qn7DC5NzTyX5kp4GpZHaEncE5/6n/Y8av3xjEwIVFAwmhyW0uM+WBXRTj4QbScot04dfaBXUOcSWF0IjQ=="
+  }
+}
+```
+
+</Tabs.Tab>
+
+<Tabs.Tab>
+```typescript filename="Request Type"
+type Request = {
+  principal?: string
+  challenge: string
+}
+
+````
+</Tabs.Tab>
+
+<Tabs.Tab>
+```typescript filename="Response Type"
+type Response = {
+  signedChallenge: {
+    publicKey: string
+    signature: string
+  }
+}
+
+````
+
+</Tabs.Tab>
+
+</Tabs>

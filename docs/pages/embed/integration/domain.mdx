@@ -1,0 +1,86 @@
+---
+title: "Using a Custom Domain"
+description: "The complete guide to NFID"
+---
+
+import { Steps } from "nextra/components"
+
+## Using a Custom Domain
+
+Anonymous delegations generate new identifiers for each `user account <> domain` pair. Follow these
+instructions if you want to ensure the same identifiers are generated across multiple of your
+domains (i.e. canister domain and human-readable domain):
+
+<Steps>
+
+### Ensure you have
+
+`agent-js`, `auth-client`, `authentication`, `candid`, `identity`, and `principal` >= v0.12.1
+
+### Ensure your canister
+
+Implements the `https_request` query call like
+[this](https://github.com/dfinity/interface-spec/blob/master/spec/index.md#https-interface-http-interface)
+
+### Set the CORS response header
+
+[Access-Control-Allow-Origin](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin)
+to allow the NFID origin `https://nfid.one`
+
+### Add alternativeOrigins JSON file
+
+To the `https://<canister_id>.ic0.app/.well-known/ii-alternative-origins`
+
+```json copy
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "II Alternative Origins Principal Derivation Origins",
+  "description": "An object containing the alternative frontend origins of the given canister, which are allowed to use a canonical canister URL (https://<canister_id>.ic0.app or https://<canister_id>.raw.ic0.app) for principal derivation.",
+  "type": "object",
+  "properties": {
+    "alternativeOrigins": {
+      "description": "List of allowed alternative frontend origins",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    }
+  },
+  "required": ["alternativeOrigins"]
+}
+```
+
+Example:
+
+```json copy
+{
+  "alternativeOrigins": ["https://alternative-1.com", "https://www.nice-frontend-name.org"]
+}
+```
+
+### Add NFID configuration parameters
+
+Add the `derivationOrigin` key and your frontend's canister URL as the value to the NFID
+configuration parameters when calling `getDelegation`
+
+```tsx copy
+import { Identity } from "@dfinity/agent";
+
+const delegationIdentity: Identity = await nfid.getDelegation({
+  targets: ["YOUR_CANISTER_ID_1", "YOUR_CANISTER_ID_2", "ETC"], // optional ICRC-28 implementation, but required to support universal NFID Wallet auth
+  derivationOrigin, "https://<canister_id>.ic0.app" // optional in case you're running on a custom domain
+});
+```
+
+</Steps>
+
+> To prevent misuse of this feature, the number of alternative origins _must not_ be greater
+> than 10.
+
+> If you use another application as your derivation origin, make sure you trust it completely.
+
+> View the
+> [Internet Identity specification](https://internetcomputer.org/docs/current/references/ii-spec/#alternative-frontend-origins)
+> for more information.

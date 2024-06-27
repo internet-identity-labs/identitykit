@@ -1,0 +1,29 @@
+{
+  "index": {
+    "title": "Welcome"
+  },
+  "embed": {
+    "title": "@nfid/embed"
+  },
+  "identity-kit": {
+    "title": "@nfid/identitykit"
+  },
+  "blog": {
+    "title": "Blog",
+    "type": "page"
+  },
+  "legal": {
+    "title": "Legal",
+    "type": "menu",
+    "items": {
+      "privacy": {
+        "title": "Privacy policy",
+        "href": "/legal/privacy"
+      },
+      "terms": {
+        "title": "Terms of use",
+        "href": "/legal/terms"
+      }
+    }
+  }
+}

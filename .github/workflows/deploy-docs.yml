@@ -1,0 +1,49 @@
+name: Deploy Docs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup DFX 15
+        uses: dfinity/setup-dfx@main
+        with:
+          dfx-version: 0.15.3
+
+      - name: Install dependencies
+        run: npm install --frozen-lockfile
+
+      - name: Build
+        run: npm run build-docs
+
+      - name: Setup DFX Identity
+        run: |
+          ID_NAME="icrc25_prod_identity"
+          IDENTITY_PEM_NAME_VAR="ICRC25_PROD_IDENTITY"
+          ID_PATH="$HOME/.config/dfx/identity/${ID_NAME}"
+          mkdir -p "${ID_PATH}"
+          echo "${!IDENTITY_PEM_NAME_VAR}" | base64 -d > "${ID_PATH}/identity.pem"
+          dfx identity use "${ID_NAME}"
+        env:
+          ICRC25_PROD_IDENTITY: ${{secrets.ICRC25_PROD_IDENTITY}}
+
+      - name: Deploy
+        run: |
+          echo "dfx deploy docs --network ic" >&2
+          if ! result=$(dfx deploy docs --yes --network ic); then
+            echo "Deploy failed ${result}" >&2
+            exit 1
+          fi

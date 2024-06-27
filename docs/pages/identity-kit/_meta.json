@@ -1,0 +1,7 @@
+{
+  "icrc-25-signer-interaction-standard": "ICRC-25: Signer Interactions",
+  "icrc-31-get-principals": "ICRC-31: Get principals",
+  "icrc-32-sign-challenge": "ICRC-32: Sign Challenge",
+  "icrc-34-get-delegation": "ICRC-34: Get Delegation",
+  "icrc-49-call-canister": "ICRC-49: Call Canister"
+}

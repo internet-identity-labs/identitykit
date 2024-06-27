@@ -1,0 +1,46 @@
+---
+title: "NFID Identity Kit"
+description: "The complete guide to NFID"
+---
+
+import { Steps } from "nextra/components"
+
+# NFID Identity Kit
+
+## THIS PACKAGE IS STILL A WIP!!
+
+## PLEASE JOIN THE STANDARDS WORKING GROUP FOR UPDATES
+
+https://github.com/dfinity/wg-identity-authentication?tab=readme-ov-file#meetings
+
+This repository contains the NFID Identity Kit, which is a set of libraries and tools for
+integrating standard-conformed ICP wallets into decentralised applications on the Internet Computer.
+Developers will be able to easily select which wallets they want to support in their dApps for
+authentication, signatures, and transfers.
+
+## Packages
+
+The following packages are included in this repository:
+
+- `@nfid/identitykit` - A library to integrate compatible ICP wallets into your application.
+- `@nfid/identitykit/react` - A library containing react specific components for integrating
+  compatible ICP wallets into your application.
+
+## Usage
+
+<Steps>
+### Install
+
+To use a **@nfid/identitykit**, install the necessary dependencies with the following command:
+
+```sh npm2yarn
+npm i @nfid/identitykit
+```
+
+### Import the library
+
+```typescript
+import { ConnectButton, ConnectModal } from "@nfid/identitykit"
+```
+
+</Steps>

@@ -1,0 +1,125 @@
+---
+title: "Auth Protocol"
+description: "The complete guide to NFID"
+---
+
+## Introduction
+
+When a client wants to authenticate a user, it uses a _session key_ (e.g., Ed25519 or ECDSA) and,
+through the authentication flow (details below), obtains a
+[delegation chain](https://internetcomputer.org/docs/current/references/ic-interface-spec/#certification-delegation)
+that allows the session key to sign for the user's main identity.
+
+There are two types of session keys - one for an external application (_client delegation_) to
+manage a scoped set of user permissions, and one for the main client (_NFID delegation_) to give
+users full administrative control of their identity.
+
+Non-ICP networks, like EVM, only need a `provider`.
+
+### Client Delegations
+
+The delegation chain consists of one delegation, called the _client delegation_, that delegates from
+the user identity to the session key. This delegation is created by the NFID Delegator smart
+contract and signed using a
+[smart contract (canister) signature](https://hydra.dfinity.systems/latest/dfinity-ci-build/ic-ref.pr-319/interface-spec/1/index.html#canister-signatures).
+This delegation is scoped to the client's canisters and has a maximum lifetime of 30 days, with a
+default of 30 minutes.
+
+### NFID Delegation
+
+The NFID client also manages an _NFID delegation_, delegating from the passkey's public key to a
+session key managed by this frontend, so that it can interact with its smart contracts without
+having to invoke the passkey for each signature.
+
+### Non-ICP Networks (i.e., EVM chains)
+
+When non-ICP clients want to authenticate a user, it receives a `provider`, constructed on the
+frontend by the _NFID delegation_.
+
+## From the Point of View of a Client ICP Application:
+
+1. The application frontend creates a session key pair (e.g., Ed25519).
+2. It installs a `message` event handler on its own `window`.
+3. It loads the URL `https://nfid.one/#authorize` in an `iframe`. Let `nfidWindow` be the `Window`
+   object returned from this.
+4. In the `nfidWindow`, the user logs in, and the `nfidWindow` invokes
+
+   ```javascript
+   window.opener.postMessage(msg, "*")
+   ```
+
+   where `msg` is
+
+   ```javascript
+   interface NFIDReady {
+     kind: "authorize-ready";
+   }
+   ```
+
+5. The client application, after receiving the `NFIDReady` message, invokes
+
+   ```javascript
+   nfidWindow.postMessage(msg, "https://nfid.one")
+   ```
+
+   where `msg` is a value of type
+
+   ```javascript
+   interface NFIDAuthRequest {
+     kind: "authorize-client";
+     sessionPublicKey: Uint8Array;
+     maxTimeToLive?: bigint;
+     derivationOrigin?: string;
+   }
+   ```
+
+   - the `sessionPublicKey` contains the public key of the session key pair.
+   - the `maxTimeToLive`, if present, indicates the desired time span (in nanoseconds) until the
+     requested delegation should expire.
+   - the `derivationOrigin`, if present, indicates an origin that should be used for principal
+     derivation instead of the client origin. Values must match the following regular expression:
+     `^https:\/\/[\w-]+(\.raw)?\.(ic0\.app|icp0\.io)$`. NFID will only accept values that are also
+     listed in the HTTP resource `https://<canister_id>.ic0.app/.well-known/ii-alternative-origins`
+     of the corresponding canister (see
+     [Alternative Frontend Origins](https://internetcomputer.org/docs/current/references/ii-spec#alternative-frontend-origins)).
+
+6. Now the client application window expects a message back, with data `event`.
+7. If `event.origin` is not `https://nfid.one`, ignore this message.
+8. The `event.data` value is a JS object with the following type:
+
+   ```javascript
+   interface NFIDAuthResponse {
+     kind: "authorize-client-success";
+     delegations: [{
+       delegation: {
+         pubkey: Uint8Array;
+         expiration: bigint;
+         targets?: Principal[];
+       };
+       signature: Uint8Array;
+     }];
+     userPublicKey: Uint8Array;
+   }
+   ```
+
+   where the `userPublicKey` is the user's Identity and `delegations` corresponds to the
+   CBOR-encoded delegation chain as used for
+   [authentication on the IC](https://internetcomputer.org/docs/current/references/ic-interface-spec#authentication).
+
+9. It could also receive a failure message of the following type
+
+   ```javascript
+   interface NFIDAuthResponse {
+     kind: "authorize-client-failure";
+     text: string;
+   }
+   ```
+
+   The client application frontend needs to be able to detect when any of the delegations in the
+   chain has expired and re-authorize the user in that case.
+
+The [@nfid/embed](../integration/quickstart) is a helpful package for developers to quickly get this
+set up.
+
+> Find more at the source
+> [IC reference](https://internetcomputer.org/docs/current/references/ii-spec#client-authentication-protocol).

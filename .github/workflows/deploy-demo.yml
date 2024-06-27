@@ -1,0 +1,63 @@
+name: Deploy Demo
+
+on:
+  workflow_dispatch:
+    inputs:
+      network:
+        description: "Network:"
+        required: true
+        type: choice
+        options:
+          - dev
+          - ic
+env:
+  NETWORK: ${{ github.event.inputs.network }}
+
+jobs:
+  deploy:
+    name: Deploy
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup DFX
+        uses: dfinity/setup-dfx@main
+        with:
+          dfx-version: 0.15.3
+
+      - name: Install dependencies
+        run: npm install --frozen-lockfile
+
+      - name: Build
+        run: npm run build-playground:"${NETWORK}"
+
+      - name: Setup DFX Identity
+        environment: ${{ github.event.inputs.network }}
+        run: |
+          ID_PATH="$HOME/.config/dfx/identity/dfx_identity"
+          mkdir -p "${ID_PATH}"
+          echo "${!IDENTITY_PEM_NAME_VAR}" | base64 -d > "${ID_PATH}/identity.pem"
+          dfx identity use dfx_identity
+        env:
+          IDENTITY_PEM_NAME_VAR: ${{secrets.DFX_IDENTITY}}
+
+      - name: Deploy
+        run: |
+          echo "dfx deploy signer --network "${NETWORK}"" >&2
+          if ! result=$(dfx deploy signer --yes --network "${NETWORK}"); then
+            echo "Deploy failed ${result}" >&2
+            exit 1
+          fi
+          echo "dfx deploy dapp --network "${NETWORK}"" >&2
+          if ! result=$(dfx deploy dapp --yes --network "${NETWORK}"); then
+            echo "Deploy failed ${result}" >&2
+            exit 1
+          fi
