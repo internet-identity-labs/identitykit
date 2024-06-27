@@ -18,6 +18,7 @@ jobs:
     name: Deploy
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.network }}
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -40,14 +41,14 @@ jobs:
         run: npm run build-playground:"${NETWORK}"
 
       - name: Setup DFX Identity
-        environment: ${{ github.event.inputs.network }}
         run: |
-          ID_PATH="$HOME/.config/dfx/identity/dfx_identity"
+          ID_NAME="dfx-identity"
+          ID_PATH="$HOME/.config/dfx/identity/${ID_NAME}"
           mkdir -p "${ID_PATH}"
-          echo "${!IDENTITY_PEM_NAME_VAR}" | base64 -d > "${ID_PATH}/identity.pem"
-          dfx identity use dfx_identity
+          echo "${IDENTITY}" | base64 -d > "${ID_PATH}/identity.pem"
+          dfx identity use "${ID_NAME}"
         env:
-          IDENTITY_PEM_NAME_VAR: ${{secrets.DFX_IDENTITY}}
+          IDENTITY: ${{secrets.DFX_IDENTITY}}
 
       - name: Deploy
         run: |

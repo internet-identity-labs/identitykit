@@ -16,7 +16,7 @@ on:
       - synchronize
 
 env:
-  IMAGE_NAME: nfid-public-test
+  IMAGE_NAME: identity-kit
 
 jobs:
   test:
