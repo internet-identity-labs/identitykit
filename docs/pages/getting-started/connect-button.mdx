@@ -1,0 +1,72 @@
+---
+title: "ConnectButton"
+date: "2024-06-03"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+# Using and customizing the ConnectButton
+
+This is the main component. It is responsible for rendering the connect/disconnect button, as well
+as chain-swapping UI.
+
+```typescript
+import { ConnectButton } from '@nfid/identity-kit';
+
+export const YourApp = () => {
+  return <ConnectButton />;
+};
+```
+
+> Note: Make sure your app is wrapped in the necessary providers.
+> [Read more](installation#wrap-providers).
+
+## Status
+
+Use the `isConnected` hook to check if a wallet is connected. The wallet address persists in
+localStorage until the user disconnects.
+
+```typescript
+import { useAccount, useDisconnect } from '@nfid/identity-kit';
+
+export function Account() {
+  const { address } = useAccount()
+
+  return (
+    <div>
+      {address}
+    </div>
+  )
+}
+```
+
+## Manual disconnect
+
+`ConnectButton` supports user disconnection, but you may want to hook into it yourself.
+
+```typescript
+import { useDisconnect } from '@nfid/identity-kit';
+
+export function Account() {
+  const { disconnect } = useDisconnect()
+
+  return (
+    <div>
+      <button onClick={() => disconnect()}>Disconnect</button>
+    </div>
+  )
+}
+```
+
+## Props
+
+The `ConnectButton` component exposes several props to customize its appearance, including toggling
+the visibility of different elements.
+
+### Label
+
+Use the `label` prop to set a custom ConnectButton text. Default is "Connect wallet".
+
+```typescript
+<ConnectButton label="Sign in" />
+```

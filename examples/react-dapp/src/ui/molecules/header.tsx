@@ -10,7 +10,7 @@ export const Header = () => {
       <img className="dark:hidden" src={IconSvgNFID} alt="nfid" />
       <img className="hidden dark:block" src={IconSvgNFIDWhite} alt="nfid" />
       <div className="flex items-center gap-10">
-        <p className="text-sm font-bold">Identity Kit Playground</p>
+        <p className="text-sm font-bold">NFID IdentityKit Docs</p>
         {theme === "light" ? (
           <img
             className="w-5 transition-opacity cursor-pointer hover:opacity-50"

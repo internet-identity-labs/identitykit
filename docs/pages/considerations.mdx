@@ -1,0 +1,132 @@
+---
+title: "Considerations"
+date: "2024-06-06"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+> This page is meant to be added to DFINITY docs as an overview to guide developers on working with
+> wallet addresses vs delegations
+
+# Before you begin
+
+The main consideration when building a dApp on ICP is whether or not you want it to work with user
+assets/data across the network.
+
+ICP and fungible/NFT token standards (ICRC-1 and ICRC-7 respectively) require the following user
+identifiers to lookup balances:
+
+- Principal identifier
+- (Optional) Subaccount
+
+There are two standard endpoints to request these identifiers from a user's ICP wallet:
+
+- get_accounts
+- get_delegation
+
+Accounts are simple string representations that any Web3 developer will be familiar with.
+
+Delegations are objects with the authority to sign transactions on behalf of the user.
+
+If you do, you should request a user's wallet address.
+
+If you want to isolate users for privacy reasons or otherwise, you should request a user's
+application-specific identifier that won't be seen anywhere else in the ecosystem.
+
+## Wallet addresses and delegations on ICP
+
+ICP's main identifier is referred to as a "principal". When smart contracts inspect messages, their
+callers are "principals".
+
+ICP then has a concept of a "subaccount", which is combined with a "principal" to identify addresses
+that can store assets. Subaccounts are simple string representations.
+
+A principal is a valid asset storage address in the case of a "null" subaccount.
+
+For the purposes of user authentication, users are principals + subaccounts, though most of the time
+will have null subaccounts.
+
+Delegations are a concept in ICP that grants authority to act on behalf of a principal for a period
+of time. They can be restricted with the ability to write only to a whitelist of canisters.
+
+## Authentication methods
+
+### 1. Get wallet address
+
+Wallet addresses are a user's unified identifier across dApps in the ICP ecosystem that may contain
+assets (i.e. fungible and non-fungible tokens) or other data (i.e. chat history in a chat dApp).
+
+Consider requesting a user's wallet address when building dApps that:
+
+- Look up balances/data for addresses, and
+- Are meant to give users more data to use across the ecosystem of ICP dApps
+
+| Advantages                                                   | Disadvantages                                                       |
+| ------------------------------------------------------------ | ------------------------------------------------------------------- |
+| Simple integration                                           | Wallet prompts can be confusing for new Web3 users                  |
+| Enables interoperability of data and assets across ecosystem | Would require a user signature to authenticate ownership of address |
+| Familiar Web3 experience                                     |                                                                     |
+
+### 2. Get wallet delegation
+
+Wallet delegations are wallet addresses authorized to make authenticated calls to _some_ ICP smart
+contract canisters without a wallet approval prompt, in particular those that you own.
+
+Consider requesting a user's wallet delegation when building dApps that:
+
+- Look up balances/data for addresses,
+- Are meant to give users more data to use across the ecosystem of ICP dApps, and
+- Remove wallet prompts when making calls to smart contract canisters under your control (i.e. for
+  chat and other social applications with many authenticated calls)
+
+| Advantages                                                   | Disadvantages                                      |
+| ------------------------------------------------------------ | -------------------------------------------------- |
+| No wallet prompts for canisters under your control           | More integration effort                            |
+| Enables interoperability of data and assets across ecosystem | Wallet prompts can be confusing for new Web3 users |
+| Familiar Web3 experience                                     |                                                    |
+
+### 3. Get session delegation
+
+Anonymous delegations are viable wallet addresses authorized to make authenticated calls to _every_
+ICP smart contract canister without wallet approval prompts. As a consequence of such flexibility,
+you should expect wallets to return delegations whose addresses are unique to your application,
+never to be used for any other application on the network.
+
+Consider requesting a user's anonymous delegation when building dApps that:
+
+- Are meant to give users isolated profiles from other dApps on the network
+
+| Advantages                                                                                       | Disadvantages                                                                      |
+| ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| No wallet prompts                                                                                | Users are isolated from the rest of the ecosystem by default (may be an advantage) |
+| Delegation identifiers are viable wallet addresses that won't be seen elsewhere in the ecosystem | More effort to make data interoperable across ecosystem (may be an advantage)      |
+
+View the [IdentityKit documentation]() to add wallet authentication to your application for any of
+these three methods.
+
+A simple example of this workflow is a basic 'Who am I?' application that uses Internet Identity to
+receive anonymous delegations. View the integrating with Internet Identity documentation for more
+information.
+
+## Methods of writing to ICP smart contract canisters
+
+There are two ways for writing to the ICP network.
+
+### 1. Transaction signatures
+
+A wallet can sign a transaction and send it to the network. This is the most familiar method in Web3
+where, for example, a user gets a wallet approval prompt to transfer an asset.
+
+### 2. Delegations
+
+A wallet can also provide an application frontend with a delagation that has the authority to write
+to the network on behalf of the user. This is a native feature of ICP that can provide frontends
+with the capability of supporting a UX without wallet prompts. In this case, an application will use
+this delegation to write to the network on behalf of the user such that there are either no wallet
+prompts at all (in the case of an application-specific delegation) or
+
+Wallet addresses on ICP are
+
+When building an application that enables users to have profiles or buy and sell assets, you must
+implement an authentication method. An authentication method allows users to connect their wallet
+addresses and vary in levels of integration complexity, security, and data privacy.

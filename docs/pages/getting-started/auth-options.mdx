@@ -1,0 +1,116 @@
+---
+title: "Auth options"
+date: "2024-06-19"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+# Working with accounts vs delegations
+
+Users may connect to your dApp in one of two ways:
+
+1. Provide an account.
+2. Provide a delegation.
+
+Accounts are standard wallet address strings users may have used across the ICP ecosystem, for
+example to store assets, participate in defi, or engage in a variety of other activity. You may
+freely query this account's data across any open smart contract canister endpoint in the ecosystem,
+but you will need the user's explicit approval to execute transactions.
+
+Delegations are accounts that have been pre-approved to execute transactions on the user's behalf,
+resulting in the removal of wallet approval prompts.
+
+## Getting the user's account
+
+Consider requesting a user's account when building dApps that:
+
+- Look up account balance/data,
+- Save user data meant to be composed with other ICP services, and
+- Are meant to give users the highest degree of security
+
+| Advantages                                                   | Disadvantages                                                       |
+| ------------------------------------------------------------ | ------------------------------------------------------------------- |
+| Simple integration                                           | Wallet prompts can be confusing for new Web3 users                  |
+| Enables interoperability of data and assets across ecosystem | Would require a user signature to authenticate ownership of address |
+| Familiar Web3 experience                                     |                                                                     |
+
+### Usage
+
+Add the `authOption="account"` prop.
+
+```typescript
+const App = () => {
+  return (
+    <IdentityKitProvider authOption="account" {...etc}>
+      {/* Your App */}
+    </IdentityKitProvider>
+  );
+};
+```
+
+## Getting the user's account delegation
+
+Account delegations allow developers to make authenticated calls to _some_ ICP smart contract
+canisters without a wallet approval prompt, in particular those that list the frontend as a "trusted
+origin" as per
+[ICRC-28](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md).
+
+Consider requesting a user's account delegation when building dApps that:
+
+- Look up account balance/data,
+- Save user data meant to be composed with other ICP services, and
+- Remove wallet prompts when making calls to smart contract canisters under your control (i.e. for
+  chat and other social applications requiring **many** authenticated calls)
+
+| Advantages                                                   | Disadvantages                                      |
+| ------------------------------------------------------------ | -------------------------------------------------- |
+| No wallet prompts for canisters under your control           | More integration effort                            |
+| Enables interoperability of data and assets across ecosystem | Wallet prompts can be confusing for new Web3 users |
+| Familiar Web3 experience                                     |                                                    |
+
+### Usage
+
+Add the `authOption="delegation"` prop and populate the `targets=""` prop with a list of your
+canister IDs that follow ICRC-28. In particular, that means each canister listed as a target must
+have a `icrc28_trusted_origins` endpoint that returns an array of frontend URLs allowed to make
+authenticated calls to that canister without wallet approval prompts.
+
+```typescript
+const App = () => {
+  return (
+    <IdentityKitProvider authOption="delegation" targets="" {...etc}>
+      {/* Your App */}
+    </IdentityKitProvider>
+  );
+};
+```
+
+## Getting the user's relying party delegation
+
+Relying party delegations are viable wallet addresses authorized to make authenticated calls to
+_every_ ICP smart contract canister without wallet approval prompts. As a consequence of such
+flexibility, you should expect wallets to return delegations whose addresses are unique to your
+application's URL, never to be used for any other application on the network.
+
+Consider requesting a user's relying party delegation when building dApps that:
+
+- Are meant to give users isolated profiles from other dApps on the network
+
+| Advantages                                                                                       | Disadvantages                                                                      |
+| ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| No wallet prompts                                                                                | Users are isolated from the rest of the ecosystem by default (may be an advantage) |
+| Delegation identifiers are viable wallet addresses that won't be seen elsewhere in the ecosystem | More effort to make data interoperable across ecosystem (may be an advantage)      |
+
+### Usage
+
+Add the `authOption="delegation"` prop.
+
+```typescript
+const App = () => {
+  return (
+    <IdentityKitProvider authOption="delegation" {...etc}>
+      {/* Your App */}
+    </IdentityKitProvider>
+  );
+};
+```

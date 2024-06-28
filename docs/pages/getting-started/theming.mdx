@@ -1,0 +1,31 @@
+---
+title: "Theming"
+date: "2024-06-04"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+# Using and customizing themes
+
+You can pick from a few pre-defined themes to match your branding.
+
+There are 3 built-in theme functions:
+
+- `lightTheme` (default)
+- `darkTheme`
+- `systemTheme`
+
+A theme function returns a theme object. You can pass the object to the `IdentityKitProvider`'s
+`theme` prop.
+
+```typescript
+import { IdentityKitProvider, darkTheme } from '@nfid/identitykit';
+// import lightTheme, darkTheme, or systemTheme
+// and pass into theme prop
+
+export const App = () => (
+  <IdentityKitProvider theme={systemTheme()} {...etc}>
+    {/* Your App */}
+  </IdentityKitProvider>
+);
+```

@@ -2,11 +2,17 @@
   "index": {
     "title": "Welcome"
   },
-  "embed": {
-    "title": "@nfid/embed"
+  "considerations": {
+    "title": "Considerations"
   },
-  "identity-kit": {
-    "title": "@nfid/identitykit"
+  "getting-started": {
+    "title": "Getting Started"
+  },
+  "guides": {
+    "title": "Guides"
+  },
+  "configuration": {
+    "title": "Configuration"
   },
   "blog": {
     "title": "Blog",
