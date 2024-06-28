@@ -2,8 +2,8 @@
   "index": {
     "title": "Welcome"
   },
-  "embed": {
-    "title": "@nfid/embed"
+  "considerations": {
+    "title": "Considerations"
   },
   "identity-kit": {
     "title": "@nfid/identitykit"

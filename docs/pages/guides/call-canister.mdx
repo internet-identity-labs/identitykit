@@ -1,0 +1,50 @@
+---
+title: "Call Canister"
+date: "2024-06-05"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+# Requesting canister calls
+
+The following guide teaches you how to call canisters (equivalent of sending and executing
+transactions in networks like Ethereum). The example below assumes a wallet is connected and uses
+the useCallCanister hook.
+
+## Steps
+
+### 1. Connect Wallet
+
+Follow the [connect-button](connect-button.mdx) guide to connect a wallet address.
+
+### 2. Create a new component
+
+```typescript
+import * as React from 'react'
+
+export function MintNFT() {
+  return (
+    <form>
+      <input name="canisterId" placeholder="canisterId" required />
+      <input name="functionName" placeholder="canisterId" required />
+      <input name="to" placeholder="Account" required />
+      <button type="submit">Mint</button>
+    </form>
+  )
+}
+```
+
+### 3. Add a form handler
+
+```typescript
+import * as React from 'react'
+
+export function MintNFT() {
+  return (
+    <form>
+      <input name="canisterId" placeholder="canisterId" required />
+      <input name="to" placeholder="Account" required />
+    </form>
+  )
+}
+```
