@@ -16,7 +16,7 @@ on:
       - synchronize
 
 env:
-  IMAGE_NAME: identity-kit
+  IMAGE_NAME: identitykit
 
 jobs:
   test:
