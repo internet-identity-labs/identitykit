@@ -62,3 +62,13 @@ jobs:
             echo "Deploy failed ${result}" >&2
             exit 1
           fi
+          echo "dfx deploy demo --network "${NETWORK}"" >&2
+          if ! result=$(dfx deploy demo --yes --network "${NETWORK}"); then
+            echo "Deploy failed ${result}" >&2
+            exit 1
+          fi
+          echo "dfx deploy signer-backend --network "${NETWORK}"" >&2
+          if ! result=$(dfx deploy signer-backend --yes --network "${NETWORK}"); then
+            echo "Deploy failed ${result}" >&2
+            exit 1
+          fi

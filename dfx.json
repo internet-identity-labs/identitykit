@@ -9,6 +9,15 @@
       ],
       "type": "assets"
     },
+    "demo": {
+      "frontend": {
+        "entrypoint": "examples/react-demo/dist/index.html"
+      },
+      "source": [
+        "examples/react-demo/dist/"
+      ],
+      "type": "assets"
+    },
     "dapp": {
       "frontend": {
         "entrypoint": "examples/react-dapp/dist/index.html"
@@ -22,7 +31,9 @@
       "frontend": {
         "entrypoint": "docs/out/index.html"
       },
-      "source": ["docs/out"],
+      "source": [
+        "docs/out"
+      ],
       "type": "assets"
     },
     "signer-backend": {
