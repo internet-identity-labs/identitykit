@@ -8,6 +8,7 @@ jobs:
     name: Deploy
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    environment: ic
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -31,14 +32,13 @@ jobs:
 
       - name: Setup DFX Identity
         run: |
-          ID_NAME="icrc25_prod_identity"
-          IDENTITY_PEM_NAME_VAR="ICRC25_PROD_IDENTITY"
+          ID_NAME="dfx-identity"
           ID_PATH="$HOME/.config/dfx/identity/${ID_NAME}"
           mkdir -p "${ID_PATH}"
-          echo "${!IDENTITY_PEM_NAME_VAR}" | base64 -d > "${ID_PATH}/identity.pem"
+          echo "${IDENTITY}" | base64 -d > "${ID_PATH}/identity.pem"
           dfx identity use "${ID_NAME}"
         env:
-          ICRC25_PROD_IDENTITY: ${{secrets.ICRC25_PROD_IDENTITY}}
+          IDENTITY: ${{secrets.DFX_IDENTITY}}
 
       - name: Deploy
         run: |
