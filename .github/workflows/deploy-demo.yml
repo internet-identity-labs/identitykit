@@ -52,6 +52,7 @@ jobs:
 
       - name: Deploy
         run: |
+          rustup target add wasm32-unknown-unknown
           echo "dfx deploy signer --network "${NETWORK}"" >&2
           if ! result=$(dfx deploy signer --yes --network "${NETWORK}"); then
             echo "Deploy failed ${result}" >&2
