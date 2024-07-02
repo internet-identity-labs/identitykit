@@ -116,6 +116,7 @@ export const Section: React.FC<ISection> = ({
                 }
               : requestObject.params
         )
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const mappedResult = res.map((x: any) => {
           return {
             owner: x.owner.toString(),
