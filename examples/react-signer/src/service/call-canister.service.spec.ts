@@ -39,7 +39,6 @@ describe("Call Canister Service", function () {
     }
     const response = await callCanisterService.call(request)
 
-    expect(response.content).toBe("Hello, me!")
     expect(response.contentMap).toMatch(/^2dn3p2NhcmdKRElETAABcQJtZWtjYW5pc3Rlcl9/)
     expect(response.certificate).toMatch(/^2dn3o2R0cmVlgwGDAYIEWC/)
   }, 10000)

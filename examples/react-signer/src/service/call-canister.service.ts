@@ -26,7 +26,6 @@ export interface CallCanisterRequest {
 export interface CallCanisterResponse {
   contentMap: string
   certificate: string
-  content: unknown[]
 }
 
 class CallCanisterService {
@@ -52,12 +51,10 @@ class CallCanisterService {
       const cborContentMap = Cbor.encode(response.meta.contentMap)
 
       const contentMap: string = Buffer.from(cborContentMap).toString("base64")
-      const content = response.result
 
       return {
         certificate,
         contentMap,
-        content,
       }
     } catch (error) {
       throw new GenericError("The call cannot be executed")

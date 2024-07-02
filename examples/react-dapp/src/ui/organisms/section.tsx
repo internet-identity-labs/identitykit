@@ -116,11 +116,18 @@ export const Section: React.FC<ISection> = ({
                 }
               : requestObject.params
         )
-        // TODO only for get accounts response (subaccount is ArrayBuffer)
         if (Array.isArray(res) && res[0].subaccount) {
-          res[0].subaccount = Buffer.from(new Uint8Array(res[0].subaccount)).toString("base64")
-          res[0].owner = res[0].owner.toString()
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const mappedResult = res.map((x: any) => {
+            return {
+              owner: x.owner.toString(),
+              subaccount: Buffer.from(new Uint8Array(x.subaccount)).toString("base64"),
+            }
+          })
+          setResponseValue(JSON.stringify(mappedResult, null, 2))
+          return
         }
+
         setResponseValue(JSON.stringify(res, null, 2))
       }
     } catch (e) {
