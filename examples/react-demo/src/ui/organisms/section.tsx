@@ -116,14 +116,19 @@ export const Section: React.FC<ISection> = ({
                 }
               : requestObject.params
         )
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const mappedResult = res.map((x: any) => {
-          return {
-            owner: x.owner.toString(),
-            subaccount: Buffer.from(new Uint8Array(x.subaccount)).toString("base64"),
-          }
-        })
-        setResponseValue(JSON.stringify(mappedResult, null, 2))
+        if (Array.isArray(res) && res[0].subaccount) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const mappedResult = res.map((x: any) => {
+            return {
+              owner: x.owner.toString(),
+              subaccount: Buffer.from(new Uint8Array(x.subaccount)).toString("base64"),
+            }
+          })
+          setResponseValue(JSON.stringify(mappedResult, null, 2))
+          return
+        }
+
+        setResponseValue(JSON.stringify(res, null, 2))
       }
     } catch (e) {
       if (e instanceof Error) {
