@@ -10,7 +10,7 @@
     "build-playground:dev": "dotenv -e .env.dev -- turbo run build --force --filter='@nfid/react-demo' --filter='@nfid/react-dapp' --filter='@nfid/react-signer'",
     "build-playground:ic": "dotenv -e .env.ic -- turbo run build --force --filter='@nfid/react-demo' --filter='@nfid/react-dapp' --filter='@nfid/react-signer'",
     "playground:docs": "turbo run dev --force --filter='@nfid/docs'",
-    "playground": "dotenv -- turbo run dev --force --filter=\"@nfid/react-dapp\" --filter=\"@nfid/react-signer\"",
+    "playground": "dotenv -- turbo run dev --force --filter=\"@nfid/react-demo\" --filter=\"@nfid/react-dapp\" --filter=\"@nfid/react-signer\"",
     "dev": "turbo dev",
     "lint:check": "turbo lint:check",
     "format:check": "prettier --check '**/*.{ts,tsx,md,mdx,css}'",
