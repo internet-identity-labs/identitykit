@@ -34,7 +34,9 @@ ci_echo_debug "npm run playground" >&2
 npm run playground >/dev/null 2>&1 &
 
 ci_echo_debug 'Waiting Until DEV Playground UP ...' >&2
+wait_until_up "http://localhost:3001" 120 5 '200|301|302|400'
 wait_until_up "http://localhost:3002" 120 5 '200|301|302|400'
+wait_until_up "http://localhost:3003" 120 5 '200|301|302|400'
 
 if ! pushd "examples/react-dapp" >/dev/null; then
     ci_echo_error "Can't switch directory to 'examples/react-dapp'" >&2
