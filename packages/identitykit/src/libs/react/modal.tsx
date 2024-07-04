@@ -40,9 +40,8 @@ export const IdentityKitModal = (props: { theme: IdentityKitTheme }) => {
   const customSignerUrl = watch("url")
 
   const submitHandler = () => {
-    const value = customSignerUrl
-    if (!value) return
-    setCustomSigner(value)
+    if (!customSignerUrl) return
+    setCustomSigner(customSignerUrl)
   }
 
   // theme inherits from system by default

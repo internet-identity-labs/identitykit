@@ -10,7 +10,6 @@ export interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   icon?: React.ReactNode
   text?: boolean
   type?: ButtonType
-  isSmall?: boolean
   as?: React.ElementType
 }
 
@@ -21,7 +20,6 @@ export const Button: React.FC<ButtonProps> = ({
   disabled,
   icon,
   id,
-  isSmall,
   block,
   as: Component = "button",
   ...buttonProps
