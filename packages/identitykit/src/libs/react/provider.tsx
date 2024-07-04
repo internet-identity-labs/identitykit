@@ -54,6 +54,17 @@ export const IdentityKitProvider: React.FC<IdentityKitProviderProps> = ({
     [signers, selectedSigner, setIsModalOpen]
   )
 
+  const setCustomSigner = useCallback((url: string) => {
+    const transport = new PostMessageTransport({
+      openWindow: () => openPopup(url, "Custom", 450, 640),
+    })
+
+    const createdSigner = new Signer({ transport })
+
+    setSelectedSigner(createdSigner)
+    setIsModalOpen(false)
+  }, [])
+
   return (
     <IdentityKitContext.Provider
       value={{
@@ -62,6 +73,7 @@ export const IdentityKitProvider: React.FC<IdentityKitProviderProps> = ({
         isModalOpen,
         toggleModal,
         selectSigner,
+        setCustomSigner,
       }}
     >
       <IdentityKitModal theme={theme} />
