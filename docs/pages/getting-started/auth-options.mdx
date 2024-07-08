@@ -12,18 +12,18 @@ Users will connect to your dApp by providing one of the following:
 1. An account string or
 2. A delegation object
 
-Accounts are wallet addresses. You may query other smart contract canisters for balances 
-and other data associated with the account, and request user approval via wallet approval 
-prompts to execute transactions.
+Accounts are wallet addresses. You may query other smart contract canisters for balances and other
+data associated with the account, and request user approval via wallet approval prompts to execute
+transactions.
 
-Delegations are accounts with the authority to execute transactions on the user's behalf,
-resulting in the removal of wallet approval prompts, and come in two forms:
+Delegations are accounts with the authority to execute transactions on the user's behalf, resulting
+in the removal of wallet approval prompts, and come in two forms:
 
-1. Account Delegations: Accounts with the authority to execute transactions to smart contract 
-canisters your application owns without wallet approval prompts.
-2. Relying Party Delegations: Accounts unique to your application's URL (never to be used 
-for any other application on the network) with the authority to execute transactions
-for any smart contract canister on the network.
+1. Account Delegations: Accounts with the authority to execute transactions to smart contract
+   canisters your application owns without wallet approval prompts.
+2. Relying Party Delegations: Accounts unique to your application's URL (never to be used for any
+   other application on the network) with the authority to execute transactions for any smart
+   contract canister on the network.
 
 ## When to request Accounts
 
@@ -71,10 +71,11 @@ Consider requesting a user's account delegation when building dApps that:
 ### Usage
 
 Add the `authOption="delegation"` prop and populate the `targets=""` prop with a list of your
-canister IDs that follow [ICRC-28](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md). 
-In particular, that means each canister listed as a target must
-have a `icrc28_trusted_origins` endpoint that returns an array of frontend URLs allowed to make
-authenticated calls to that canister without wallet approval prompts.
+canister IDs that follow
+[ICRC-28](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md).
+In particular, that means each canister listed as a target must have a `icrc28_trusted_origins`
+endpoint that returns an array of frontend URLs allowed to make authenticated calls to that canister
+without wallet approval prompts.
 
 ```typescript
 const App = () => {
