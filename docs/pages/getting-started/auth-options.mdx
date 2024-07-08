@@ -7,20 +7,25 @@ authors:
 
 # Working with accounts vs delegations
 
-Users may connect to your dApp in one of two ways:
+Users will connect to your dApp by providing one of the following:
 
-1. Provide an account.
-2. Provide a delegation.
+1. An account string or
+2. A delegation object
 
-Accounts are standard wallet address strings users may have used across the ICP ecosystem, for
-example to store assets, participate in defi, or engage in a variety of other activity. You may
-freely query this account's data across any open smart contract canister endpoint in the ecosystem,
-but you will need the user's explicit approval to execute transactions.
+Accounts are wallet addresses. You may query other smart contract canisters for balances 
+and other data associated with the account, and request user approval via wallet approval 
+prompts to execute transactions.
 
-Delegations are accounts that have been pre-approved to execute transactions on the user's behalf,
-resulting in the removal of wallet approval prompts.
+Delegations are accounts with the authority to execute transactions on the user's behalf,
+resulting in the removal of wallet approval prompts, and come in two forms:
 
-## Getting the user's account
+1. Account Delegations: Accounts with the authority to execute transactions to smart contract 
+canisters your application owns without wallet approval prompts.
+2. Relying Party Delegations: Accounts unique to your application's URL (never to be used 
+for any other application on the network) with the authority to execute transactions
+for any smart contract canister on the network.
+
+## When to request Accounts
 
 Consider requesting a user's account when building dApps that:
 
@@ -48,19 +53,14 @@ const App = () => {
 };
 ```
 
-## Getting the user's account delegation
-
-Account delegations allow developers to make authenticated calls to _some_ ICP smart contract
-canisters without a wallet approval prompt, in particular those that list the frontend as a "trusted
-origin" as per
-[ICRC-28](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md).
+## When to request Account Delegations
 
 Consider requesting a user's account delegation when building dApps that:
 
 - Look up account balance/data,
 - Save user data meant to be composed with other ICP services, and
 - Remove wallet prompts when making calls to smart contract canisters under your control (i.e. for
-  chat and other social applications requiring **many** authenticated calls)
+  chat and other social applications requiring many authenticated calls)
 
 | Advantages                                                   | Disadvantages                                      |
 | ------------------------------------------------------------ | -------------------------------------------------- |
@@ -71,7 +71,8 @@ Consider requesting a user's account delegation when building dApps that:
 ### Usage
 
 Add the `authOption="delegation"` prop and populate the `targets=""` prop with a list of your
-canister IDs that follow ICRC-28. In particular, that means each canister listed as a target must
+canister IDs that follow [ICRC-28](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md). 
+In particular, that means each canister listed as a target must
 have a `icrc28_trusted_origins` endpoint that returns an array of frontend URLs allowed to make
 authenticated calls to that canister without wallet approval prompts.
 
@@ -85,12 +86,7 @@ const App = () => {
 };
 ```
 
-## Getting the user's relying party delegation
-
-Relying party delegations are viable wallet addresses authorized to make authenticated calls to
-_every_ ICP smart contract canister without wallet approval prompts. As a consequence of such
-flexibility, you should expect wallets to return delegations whose addresses are unique to your
-application's URL, never to be used for any other application on the network.
+## When to request Relying Party Delegations
 
 Consider requesting a user's relying party delegation when building dApps that:
 

@@ -11,7 +11,7 @@ This is the main component. It is responsible for rendering the connect/disconne
 as chain-swapping UI.
 
 ```typescript
-import { ConnectButton } from '@nfid/identity-kit';
+import { ConnectButton } from '@nfid/identitykit';
 
 export const YourApp = () => {
   return <ConnectButton />;
@@ -27,7 +27,7 @@ Use the `isConnected` hook to check if a wallet is connected. The wallet address
 localStorage until the user disconnects.
 
 ```typescript
-import { useAccount, useDisconnect } from '@nfid/identity-kit';
+import { useAccount, useDisconnect } from '@nfid/identitykit';
 
 export function Account() {
   const { address } = useAccount()
@@ -45,7 +45,7 @@ export function Account() {
 `ConnectButton` supports user disconnection, but you may want to hook into it yourself.
 
 ```typescript
-import { useDisconnect } from '@nfid/identity-kit';
+import { useDisconnect } from '@nfid/identitykit';
 
 export function Account() {
   const { disconnect } = useDisconnect()
