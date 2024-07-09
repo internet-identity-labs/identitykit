@@ -1,5 +1,5 @@
 {
-  "request-transfer": "Request Transfer",
   "call-canister": "Call Canister",
+  "request-transfer": "Request Transfer",
   "migrate-domains": "Migrate Domains"
 }

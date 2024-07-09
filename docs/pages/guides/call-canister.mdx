@@ -15,36 +15,18 @@ the useCallCanister hook.
 
 ### 1. Connect Wallet
 
-Follow the [connect-button](connect-button.mdx) guide to connect a wallet address.
+Follow the [connect-button](/getting-started/connect-button) guide to connect a wallet address.
 
-### 2. Create a new component
-
-```typescript
-import * as React from 'react'
-
-export function MintNFT() {
-  return (
-    <form>
-      <input name="canisterId" placeholder="canisterId" required />
-      <input name="functionName" placeholder="canisterId" required />
-      <input name="to" placeholder="Account" required />
-      <button type="submit">Mint</button>
-    </form>
-  )
-}
-```
-
-### 3. Add a form handler
+### 2. Call canister
 
 ```typescript
-import * as React from 'react'
+user = IdentityKit.connectedWallet()
 
-export function MintNFT() {
-  return (
-    <form>
-      <input name="canisterId" placeholder="canisterId" required />
-      <input name="to" placeholder="Account" required />
-    </form>
-  )
-}
+user.execute(canisterID, method, args)
 ```
+
+Canister query methods will not result in a wallet approval pop-up, but canister state mutation methods
+may, depending on how users are connected ([Account, Account Delegation, or Relying Party Delegation](/getting-started/auth-options)).
+
+All smart contract canister interactions use the `execute` method on the `connectedWallet` object, 
+even for requests to [transfer user assets](/guides/request-transfer).
