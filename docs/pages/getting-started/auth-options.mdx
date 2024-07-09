@@ -16,31 +16,34 @@ The differences can be summarized in the table below:
 
 | Auth option              | Wallet address     | Wallet approval pop-up for executing state mutation calls to your own canisters | Wallet approval pop-up for executing state mutation calls to other canisters |
 | ------------------------ | ------------------ | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| Account                  | Global             | Yes                                                                             | Yes                                                                          | 
-| Account Delegation       | Global             | No                                                                              | Yes                                                                          | 
-| Relying Party Delegation | Unique to dApp URL | No                                                                              | No                                                                           | 
+| Account                  | Global             | Yes                                                                             | Yes                                                                          |
+| Account Delegation       | Global             | No                                                                              | Yes                                                                          |
+| Relying Party Delegation | Unique to dApp URL | No                                                                              | No                                                                           |
 
-Account objects are wallet addresses with standard web3 interactivity, namely that querying smart 
-contract canisters for information about that account, like balance lookups, **will not** result 
-in a wallet approval pop-up for that user, while executing calls that update the account's state 
-in a smart contract canister **will**.
+Account objects are wallet addresses with standard web3 interactivity, namely that querying smart
+contract canisters for information about that account, like balance lookups, **will not** result in
+a wallet approval pop-up for that user, while executing calls that update the account's state in a
+smart contract canister **will**.
 
 Delegations are accounts with the authority to execute transactions on the user's behalf, resulting
-in the removal of wallet approval pop-ups. A simple example is "Alice delegates to you the ability to 
-execute update calls to smart contract canisters A, B, and C on her behalf". 
+in the removal of wallet approval pop-ups. A simple example is "Alice delegates to you the ability
+to execute update calls to smart contract canisters A, B, and C on her behalf".
 
-The example above is what's called an "Account Delegation" where Alice connects with her wallet address
-and gives your dApp permission to execute calls as herself only to a whitelist of smart contract canisters as per
+The example above is what's called an "Account Delegation" where Alice connects with her wallet
+address and gives your dApp permission to execute calls as herself only to a whitelist of smart
+contract canisters as per
 [ICRC-28](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md).
-Update calls made to smart contract canisters outside the whitelist will result in a wallet approval pop-up
-for that user.
+Update calls made to smart contract canisters outside the whitelist will result in a wallet approval
+pop-up for that user.
 
-If you wish to remove all wallet prompts, you may request a delegation without a whitelist. This global permission 
-allows you to execute any smart contract canister call on behalf of the user, but since you could theoretically execute 
-sensitive transactions without explicit user permission (i.e. transfer assets), **wallets will generate delegations 
-with a wallet address unique to your application's URL**, hence the name for this type of delegation: "Relying Party Delegation".
-This means you will not know Alice is the one authenticating, since the wallet address for this delegation will be unique
-to your dApp's URL and never be seen again across the rest of the ICP ecosystem.
+If you wish to remove all wallet prompts, you may request a delegation without a whitelist. This
+global permission allows you to execute any smart contract canister call on behalf of the user, but
+since you could theoretically execute sensitive transactions without explicit user permission (i.e.
+transfer assets), **wallets will generate delegations with a wallet address unique to your
+application's URL**, hence the name for this type of delegation: "Relying Party Delegation". This
+means you will not know Alice is the one authenticating, since the wallet address for this
+delegation will be unique to your dApp's URL and never be seen again across the rest of the ICP
+ecosystem.
 
 ## Accounts
 
@@ -74,8 +77,8 @@ const App = () => {
 Consider requesting a user's account delegation when building dApps that:
 
 - Look up account balance/data, and
-- Remove wallet approval pop-ups when making calls to smart contract canisters under your dApp's control (i.e. for
-  chat and other social applications that save profile data)
+- Remove wallet approval pop-ups when making calls to smart contract canisters under your dApp's
+  control (i.e. for chat and other social applications that save profile data)
 
 | Advantages                                                   | Disadvantages                                      |
 | ------------------------------------------------------------ | -------------------------------------------------- |
@@ -105,10 +108,10 @@ Consider requesting a user's relying party delegation when building dApps that:
 
 - Are meant to give users isolated profiles from other dApps on the network
 
-| Advantages                                                                                       | Disadvantages                                                |
-| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
-| No wallet pop-ups                                                                                | Users are isolated from the rest of the ecosystem by default |
-|                                                                                                  | More effort to make data interoperable across ecosystem      |
+| Advantages        | Disadvantages                                                |
+| ----------------- | ------------------------------------------------------------ |
+| No wallet pop-ups | Users are isolated from the rest of the ecosystem by default |
+|                   | More effort to make data interoperable across ecosystem      |
 
 ### Usage
 
