@@ -1,4 +1,4 @@
-import { Locator, Page } from "@playwright/test"
+import { Page } from "@playwright/test"
 import { Section } from "./section"
 
 export class Icrc34DelegationSection extends Section {
