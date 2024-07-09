@@ -38,11 +38,6 @@ wait_until_up "http://localhost:3001" 120 5 '200|301|302|400'
 wait_until_up "http://localhost:3002" 120 5 '200|301|302|400'
 wait_until_up "http://localhost:3003" 120 5 '200|301|302|400'
 
-if ! pushd "examples/react-dapp" >/dev/null; then
-    ci_echo_error "Can't switch directory to 'examples/react-dapp'" >&2
-    exit 1
-fi
-
 ci_echo_info "Configuring playwright" >&2
 ci_echo_debug "npx playwright install" >&2
 npx playwright install
