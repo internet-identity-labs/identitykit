@@ -9,28 +9,47 @@ authors:
 
 Users will connect to your dApp by providing one of the following:
 
-1. An account string or
+1. An account object or
 2. A delegation object
 
-Accounts are wallet addresses. You may query other smart contract canisters for balances and other
-data associated with the account, and request user approval via wallet approval prompts to execute
-transactions.
+The differences can be summarized in the table below:
+
+| Auth option              | Wallet address     | Wallet approval pop-up for executing state mutation calls to your own canisters | Wallet approval pop-up for executing state mutation calls to other canisters |
+| ------------------------ | ------------------ | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Account                  | Global             | Yes                                                                             | Yes                                                                          |
+| Account Delegation       | Global             | No                                                                              | Yes                                                                          |
+| Relying Party Delegation | Unique to dApp URL | No                                                                              | No                                                                           |
+
+Account objects are wallet addresses with standard web3 interactivity, namely that querying smart
+contract canisters for information about that account, like balance lookups, **will not** result in
+a wallet approval pop-up for that user, while executing calls that update the account's state in a
+smart contract canister **will**.
 
 Delegations are accounts with the authority to execute transactions on the user's behalf, resulting
-in the removal of wallet approval prompts, and come in two forms:
+in the removal of wallet approval pop-ups. A simple example is "Alice delegates to you the ability
+to execute update calls to smart contract canisters A, B, and C on her behalf".
 
-1. Account Delegations: Accounts with the authority to execute transactions to smart contract
-   canisters your application owns without wallet approval prompts.
-2. Relying Party Delegations: Accounts unique to your application's URL (never to be used for any
-   other application on the network) with the authority to execute transactions for any smart
-   contract canister on the network.
+The example above is what's called an "Account Delegation" where Alice connects with her wallet
+address and gives your dApp permission to execute calls as herself only to a whitelist of smart
+contract canisters as per
+[ICRC-28](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md).
+Update calls made to smart contract canisters outside the whitelist will result in a wallet approval
+pop-up for that user.
 
-## When to request Accounts
+If you wish to remove all wallet prompts, you may request a delegation without a whitelist. This
+global permission allows you to execute any smart contract canister call on behalf of the user, but
+since you could theoretically execute sensitive transactions without explicit user permission (i.e.
+transfer assets), **wallets will generate delegations with a wallet address unique to your
+application's URL**, hence the name for this type of delegation: "Relying Party Delegation". This
+means you will not know Alice is the one authenticating, since the wallet address for this
+delegation will be unique to your dApp's URL and never be seen again across the rest of the ICP
+ecosystem.
+
+## Accounts
 
 Consider requesting a user's account when building dApps that:
 
-- Look up account balance/data,
-- Save user data meant to be composed with other ICP services, and
+- Look up account balance/data, and
 - Are meant to give users the highest degree of security
 
 | Advantages                                                   | Disadvantages                                                       |
@@ -53,19 +72,18 @@ const App = () => {
 };
 ```
 
-## When to request Account Delegations
+## Account Delegations
 
 Consider requesting a user's account delegation when building dApps that:
 
-- Look up account balance/data,
-- Save user data meant to be composed with other ICP services, and
-- Remove wallet prompts when making calls to smart contract canisters under your control (i.e. for
-  chat and other social applications requiring many authenticated calls)
+- Look up account balance/data, and
+- Remove wallet approval pop-ups when making calls to smart contract canisters under your dApp's
+  control (i.e. for chat and other social applications that save profile data)
 
 | Advantages                                                   | Disadvantages                                      |
 | ------------------------------------------------------------ | -------------------------------------------------- |
-| No wallet prompts for canisters under your control           | More integration effort                            |
-| Enables interoperability of data and assets across ecosystem | Wallet prompts can be confusing for new Web3 users |
+| No wallet approval pop-ups for canisters under your control  | Slightly more integration effort                   |
+| Enables interoperability of data and assets across ecosystem | Wallet pop-ups can be confusing for new Web3 users |
 | Familiar Web3 experience                                     |                                                    |
 
 ### Usage
@@ -73,9 +91,6 @@ Consider requesting a user's account delegation when building dApps that:
 Add the `authOption="delegation"` prop and populate the `targets=""` prop with a list of your
 canister IDs that follow
 [ICRC-28](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md).
-In particular, that means each canister listed as a target must have a `icrc28_trusted_origins`
-endpoint that returns an array of frontend URLs allowed to make authenticated calls to that canister
-without wallet approval prompts.
 
 ```typescript
 const App = () => {
@@ -87,16 +102,16 @@ const App = () => {
 };
 ```
 
-## When to request Relying Party Delegations
+## Relying Party Delegations
 
 Consider requesting a user's relying party delegation when building dApps that:
 
 - Are meant to give users isolated profiles from other dApps on the network
 
-| Advantages                                                                                       | Disadvantages                                                                      |
-| ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
-| No wallet prompts                                                                                | Users are isolated from the rest of the ecosystem by default (may be an advantage) |
-| Delegation identifiers are viable wallet addresses that won't be seen elsewhere in the ecosystem | More effort to make data interoperable across ecosystem (may be an advantage)      |
+| Advantages        | Disadvantages                                                |
+| ----------------- | ------------------------------------------------------------ |
+| No wallet pop-ups | Users are isolated from the rest of the ecosystem by default |
+|                   | More effort to make data interoperable across ecosystem      |
 
 ### Usage
 
