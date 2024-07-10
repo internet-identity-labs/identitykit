@@ -12,17 +12,17 @@ Action for executing a transaction on the ICP network.
 ## Import
 
 ```typescript
-import { connectedWallet } from '@nfid/identitykit'
+import { connectedWallet } from "@nfid/identitykit"
 ```
 
 ## Usage
 
 ```typescript
-import { connectedWallet } from '@nfid/identitykit'
+import { connectedWallet } from "@nfid/identitykit"
 
 const result = await connectedWallet.executeTransaction({
-  canisterId: 'gjv36-laaaa-aaaah-adyza-cai',
-  method: 'transfer',
+  canisterId: "gjv36-laaaa-aaaah-adyza-cai",
+  method: "transfer",
   args: data,
 })
 ```
