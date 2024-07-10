@@ -15,7 +15,7 @@
     "lint:check": "turbo lint:check",
     "format:check": "prettier --check '**/*.{ts,tsx,md,mdx,css}'",
     "test": "turbo test",
-    "test:e2e": "turbo test:e2e --filter='@nfid/react-dapp' && turbo test:e2e --filter='@nfid/react-demo'",
+    "test:e2e": "turbo test:e2e --force",
     "test:e2e:dev:dapp": "cd ./examples/react-dapp && npm run test:e2e:dev",
     "test:e2e:dev:demo": "cd ./examples/react-demo && npm run test:e2e:dev",
     "prepare": "husky",
