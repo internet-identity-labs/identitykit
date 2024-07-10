@@ -1,4 +1,5 @@
 {
+  "remove-wallet-pop-ups": "Remove Wallet Pop-ups",
   "call-canister": "Call Canister",
   "request-transfer": "Request Transfer",
   "migrate-domains": "Migrate Domains"

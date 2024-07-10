@@ -24,7 +24,7 @@ export const YourApp = () => {
 ## Status
 
 Use the `isConnected` hook to check if a wallet is connected. The wallet address persists in
-localStorage until the user disconnects.
+localStorage until the user disconnects (or the session expires in the case of a delegation).
 
 ```typescript
 import { useAccount, useDisconnect } from '@nfid/identitykit';

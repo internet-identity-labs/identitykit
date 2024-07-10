@@ -3,10 +3,11 @@ title: "NFID IdentityKit"
 description: "The complete guide to NFID IdentityKit"
 ---
 
+## Package status
 > This package is still a WIP. Please join the standards working group for updates:
 > https://github.com/dfinity/wg-identity-authentication?tab=readme-ov-file#meetings
 
-## The best way to connect an ICP wallet
+## The auth kit for ICP dApps
 
 [NFID IdentityKit](https://identitykit.xyz) is a React library that makes it easy to add wallet
 connection to your dapp. It's intuitive, responsive and customizable. Developers will be able to
@@ -14,6 +15,18 @@ easily select which wallets they want to support in their apps for authenticatio
 transfers.
 
 ## Features
+
+### Instant user onboarding
+
+NFID Wallet (the only on-chain single-signature wallet with email onboarding) and Internet Identity 
+(DFINITY Foundation's "wallet-less wallet") are two self-custody wallets users can get without 
+downloading a browser extension, mobile app, or writing down a seed phrase.
+
+### Uninterrupted user experiences
+
+Keep users immersed in your dapp by removing wallet approval pop-ups with [delegations](/guides/remove-wallet-pop-ups).
+Traditional Web3 UX requires users approve every transaction that updates smart contract state.
+With delegations, dapps can design user experiences with fewer (or no) wallet approval pop-ups.
 
 ### Wallet management
 
@@ -23,9 +36,9 @@ canister calls, and abstracts all the complexity behind an easy-to-use SDK.
 
 ### Customizable
 
-You can tweak IdentityKit UI to match your style. You can pick from two display modes - Featured and
-Compact - three color modes - light, dark, and system - and choose the order or display of the
-wallets you want to support.
+Tweak IdentityKit UI to match your style. You can pick from two [modal modes](/getting-started/modal-modes) - Featured and
+Compact - three [color themes](/getting-started/theming) - light, dark, and system - and choose the
+[order and display](/configuration/custom-wallets-list) of the wallets you want to support.
 
 ### Industry standard
 
@@ -34,9 +47,8 @@ with users:
 
 - ICRC-25 to get permissions and the wallet's supported standards
 - ICRC-27 to get wallet addresses
-- ICRC-49 to ask those wallet addresses to execute authenticated canister calls
-- ICRC-34 to get a key (either a key for the wallet address that can make authenticated calls to
-  your canisters, or one to make authenticated calls to any canister)
+- ICRC-49 to ask those wallet addresses to execute canister calls
+- ICRC-34 to get a user's delegation
 
 We've packaged those up into IdentityKit to make working with them easy for developers.
 
