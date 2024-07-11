@@ -17,6 +17,12 @@
   "miscellaneous": {
     "title": "Miscellaneous"
   },
+  "actions": {
+    "title": "Actions"
+  },
+  "miscellaneous": {
+    "title": "Miscellaneous"
+  },
   "blog": {
     "title": "Blog",
     "type": "page"
