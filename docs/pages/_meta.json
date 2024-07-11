@@ -11,6 +11,12 @@
   "configuration": {
     "title": "Configuration"
   },
+  "actions": {
+    "title": "Actions"
+  },
+  "miscellaneous": {
+    "title": "Miscellaneous"
+  },
   "blog": {
     "title": "Blog",
     "type": "page"
