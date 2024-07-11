@@ -1,0 +1,25 @@
+---
+title: "CustomConnect"
+date: "2024-07-11"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+# Toggling display for CustomConnect
+
+CustomConnect is the feature that supports wallets not yet listed in IdentityKit:
+
+- Your application may not have upgraded to the latest version or
+- A wallet may not have created an IdentityKit connector
+
+CustomConnect is on by default but can be turned off in the `IdentityKitProvider` prop:
+
+```typescript
+const App = () => {
+  return (
+    <IdentityKitProvider CustomConnect="false">
+      {/* Your App */}
+    </IdentityKitProvider>
+  );
+};
+```

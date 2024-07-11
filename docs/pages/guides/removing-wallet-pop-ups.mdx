@@ -1,0 +1,107 @@
+---
+title: "Remove Wallet Pop-ups"
+date: "2024-07-10"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+# Delegation Toolkit
+
+The following guide teaches you how to use delegations so that users don't see wallet pop-ups when
+executing calls to your application.
+
+## Steps
+
+### 1. ICRC-28 setup
+
+[ICRC-28](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md)
+describes the standard method for indicating that a backend canister smart contract trusts a
+frontend URL. Each of your backend canister smart contracts must implement this method.
+
+_**ICRC-1, ICRC-7, and other asset canister smart contracts are discouraged from implementing this
+method. Wallets may mark your application as a potential scam if you do.**_
+
+#### Rust implementation
+
+```rust
+#[update]
+fn icrc28_trusted_origins() -> Vec<String> {
+    return vec![
+        String::from("https://YOUR-URL.com"),
+        String::from("https://YOUR-OTHER-URL.com"),
+    ];
+}
+```
+
+### 3. ICRC-10 setup
+
+[ICRC-10](https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-10/ICRC-10.md) describes the standard
+method for simplifying the discovery of the supported standards of canisters on the Internet
+Computer.
+
+List ICRC-28 and any other standards your canisters support.
+
+#### Rust implementation
+
+```rust
+#[query]
+fn icrc10_supported_standards() -> Vec<Record> {
+  record { name = "ICRC-10"; url = "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-10/ICRC-10.md"; }
+  record { name = "ICRC-28"; url = "https://github.com/dfinity/ICRC/tree/main/ICRCs/ICRC-28/ICRC-28.md"; }
+  // list all other supported standards
+}
+```
+
+### 4. Set Canister Targets
+
+When users press the Connect Wallet button with the below configuration, their wallet will compare
+your application's URL with the return value from each canister's `icrc28_trusted_origins`. If your
+URL is not listed in the response from even one of the target canisters, the wallet will not allow
+users to continue with an Account Delegation.
+
+Add ` authOption="delegation"` and your list of `targets` to `IdentityKitProvider.
+
+```typescript
+const App = () => {
+  return (
+    <IdentityKitProvider authOption="delegation" targets=["canisterID1", "canisterID2",...] {...etc}>
+      {/* Your App */}
+    </IdentityKitProvider>
+  );
+};
+```
+
+### 5. Check Delegation
+
+Users will choose whether to continue to your application with a delegation for their main wallet
+address or for a wallet address specific to your app's URL. It's straightforward to know which
+you've received:
+
+```typescript
+if IdentityKit.connectedWallet.isDelegation {
+  if IdentityKit.connectedWallet.delegation.hasTargets {
+    // This is an Account Delegation for the user's main wallet address
+
+    // Every IdentityKit.connectedWallet.executeTransaction call to a
+    // target canister WILL NOT result in a wallet approval pop-up
+    //
+    // But every IdentityKit.connectedWallet.executeTransaction call
+    // to a non-target-canister WILL
+
+  } else {
+    // This is a Relying Party Delegation for the user's URL-specific wallet address
+
+    // Every IdentityKit.connectedWallet.executeTransaction call to any
+    // canister WILL NOT result in a wallet approval pop-up
+
+  }
+} else {
+  // Every IdentityKit.connectedWallet.executeTransaction call WILL
+  // result in a wallet approval pop-up
+}
+
+```
+
+## Resources
+
+Read about the differences working with [accounts and delegations](/miscellaneous/auth-options).

@@ -8,8 +8,14 @@
   "guides": {
     "title": "Guides"
   },
-  "configuration": {
-    "title": "Configuration"
+  "actions": {
+    "title": "Actions"
+  },
+  "hooks": {
+    "title": "Hooks"
+  },
+  "miscellaneous": {
+    "title": "Miscellaneous"
   },
   "actions": {
     "title": "Actions"

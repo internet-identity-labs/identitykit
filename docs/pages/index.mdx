@@ -26,7 +26,7 @@ downloading a browser extension, mobile app, or writing down a seed phrase.
 ### Uninterrupted user experiences
 
 Keep users immersed in your dapp by removing wallet approval pop-ups with
-[delegations](/guides/remove-wallet-pop-ups). Traditional Web3 UX requires users approve every
+[delegations](/guides/removing-wallet-pop-ups). Traditional Web3 UX requires users approve every
 transaction that updates smart contract state. With delegations, dapps can design user experiences
 with fewer (or no) wallet approval pop-ups.
 
@@ -41,31 +41,17 @@ canister calls, and abstracts all the complexity behind an easy-to-use SDK.
 Tweak IdentityKit UI to match your style. You can pick from two
 [modal modes](/getting-started/modal-modes) - Featured and Compact - three
 [color themes](/getting-started/theming) - light, dark, and system - and choose the
-[order and display](/configuration/custom-wallets-list) of the wallets you want to support.
+[order and display](/getting-started/wallets-list) of the wallets you want to support.
 
 ### Industry standard
 
 The NFID team worked with the community and DFINITY to create the standards apps need to interact
-with users:
+with users, and packaged them into IdentityKit to make working with them easy for developers:
 
 - ICRC-25 to get permissions and the wallet's supported standards
 - ICRC-27 to get wallet addresses
-- ICRC-49 to ask those wallet addresses to execute canister calls
-- ICRC-34 to get a user's delegation
+- ICRC-34 to get a wallet address delegation
+- ICRC-49 to execute authenticated canister calls
 
-We've packaged those up into IdentityKit to make working with them easy for developers.
-
-ICP wallets that plan to conform to ICRC standards and add themselves to IdentityKit:
-
-- NFID Wallet
-- Internet Identity
-- Plug Wallet
-- Oisy Wallet
-
-We do not plan to offer standalone support for NFID Wallet integration. Use IdentityKit and
-whitelist only NFID Wallet if that's the only wallet you want to support, though we do not recommend
-excluding wallets unless you know they do not support the standards you need.
-
-Use the [interactive playground](https://playground.nfid.one), view a live implementation in
-[NFID Vaults](https://nfidvaults.com), and then get started with
+Use the [interactive playground](https://playground.nfid.one) and get started with
 [installation](/getting-started/installation).
