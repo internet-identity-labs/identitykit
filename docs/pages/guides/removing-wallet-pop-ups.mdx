@@ -33,12 +33,32 @@ fn icrc28_trusted_origins() -> Vec<String> {
 }
 ```
 
-### 2. Set Canister Targets
+### 3. ICRC-10 setup
+
+[ICRC-10](https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-10/ICRC-10.md) describes the standard method
+for simplifying the discovery of the supported standards of canisters on the Internet Computer.
+
+List ICRC-28 and any other standards your canisters support.
+
+#### Rust implementation
+
+```rust
+#[query]
+fn icrc10_supported_standards() -> Vec<Record> {
+  record { name = "ICRC-10"; url = "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-10/ICRC-10.md"; }
+  record { name = "ICRC-28"; url = "https://github.com/dfinity/ICRC/tree/main/ICRCs/ICRC-28/ICRC-28.md"; }
+  // list all other supported standards
+}
+```
+
+### 4. Set Canister Targets
 
 When users press the Connect Wallet button with the below configuration, their wallet will compare
 your application's URL with the return value from each canister's `icrc28_trusted_origins`. If your
 URL is not listed in the response from even one of the target canisters, the wallet will not allow
 users to continue with an Account Delegation.
+
+Add ` authOption="delegation"` and your list of `targets` to `IdentityKitProvider.
 
 ```typescript
 const App = () => {
@@ -50,7 +70,7 @@ const App = () => {
 };
 ```
 
-### 3. Check Delegation
+### 5. Check Delegation
 
 Users will choose whether to continue to your application with a delegation for their main wallet
 address or for a wallet address specific to your app's URL. It's straightforward to know which

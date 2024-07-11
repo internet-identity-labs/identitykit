@@ -14,29 +14,27 @@ Users will connect to your dApp by providing one of the following:
 
 The differences can be summarized in the table below:
 
-| Auth option              | Wallet address     | Wallet approval pop-up for executing state mutation calls to your own canisters | Wallet approval pop-up for executing state mutation calls to other canisters |
-| ------------------------ | ------------------ | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| Account                  | Global             | Yes                                                                             | Yes                                                                          |
-| Account Delegation       | Global             | No                                                                              | Yes                                                                          |
-| Relying Party Delegation | Unique to dApp URL | No                                                                              | No                                                                           |
+| Auth option              | Wallet address     | Wallet approval pop-up for executing calls to your canisters | Wallet approval pop-up for executing calls to other canisters |
+| ------------------------ | ------------------ | ------------------------------------------------------------ | ------------------------------------------------------------- |
+| Account                  | Global             | Yes                                                          | Yes                                                           |
+| Account Delegation       | Global             | No                                                           | Yes                                                           |
+| Relying Party Delegation | Unique to dApp URL | No                                                           | No                                                            |
 
-Account objects are wallet addresses with standard web3 interactivity, namely that querying smart
-contract canisters for information about that account, like balance lookups, **will not** result in
-a wallet approval pop-up for that user, while executing calls that update the account's state in a
-smart contract canister **will**.
+Account objects are wallet addresses with standard web3 interactivity, namely that every call will
+require explicit user approval to execute.
 
 Delegations are accounts with the authority to execute transactions on the user's behalf, resulting
 in the removal of wallet approval pop-ups. A simple example is "Alice delegates to you the ability
-to execute update calls to smart contract canisters A, B, and C on her behalf".
+to execute calls to smart contract canisters A, B, and C on her behalf".
 
 The example above is what's called an "Account Delegation" where Alice connects with her wallet
 address and gives your dApp permission to execute calls as herself only to a whitelist of smart
 contract canisters as per
 [ICRC-28](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md).
-Update calls made to smart contract canisters outside the whitelist will result in a wallet approval
+Calls made to smart contract canisters outside the whitelist will result in a wallet approval
 pop-up for that user.
 
-If you wish to remove all wallet prompts, you may request a delegation without a whitelist. This
+If you wish to remove all wallet pop-ups, you may request a delegation without a whitelist. This
 global permission allows you to execute any smart contract canister call on behalf of the user, but
 since you could theoretically execute sensitive transactions without explicit user permission (i.e.
 transfer assets), **wallets will generate delegations with a wallet address unique to your
@@ -50,7 +48,7 @@ ecosystem.
 Consider requesting a user's account when building dApps that:
 
 - Look up account balance/data, and
-- Are meant to give users the highest degree of security
+- Are meant to give users the highest degree of security and autonomy
 
 | Advantages                                                   | Disadvantages                                                       |
 | ------------------------------------------------------------ | ------------------------------------------------------------------- |
@@ -74,7 +72,7 @@ const App = () => {
 
 ## Account Delegations
 
-Consider requesting a user's account delegation when building dApps that:
+Consider requesting a user's Account Delegation when building dApps that:
 
 - Look up account balance/data, and
 - Remove wallet approval pop-ups when making calls to smart contract canisters under your dApp's
@@ -83,14 +81,13 @@ Consider requesting a user's account delegation when building dApps that:
 | Advantages                                                   | Disadvantages                                      |
 | ------------------------------------------------------------ | -------------------------------------------------- |
 | No wallet approval pop-ups for canisters under your control  | Slightly more integration effort                   |
-| Enables interoperability of data and assets across ecosystem | Wallet pop-ups can be confusing for new Web3 users |
+| Enables interoperability of data and assets across ecosystem |                                                    |
 | Familiar Web3 experience                                     |                                                    |
 
 ### Usage
 
 Add the `authOption="delegation"` prop and populate the `targets=""` prop with a list of canister
-IDs that follow
-[ICRC-28](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md).
+IDs and follow the guide to [remove wallet approval pop-ups](/guides/removing-wallet-pop-ups).
 
 ```typescript
 const App = () => {
