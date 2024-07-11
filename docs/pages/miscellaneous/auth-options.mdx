@@ -31,8 +31,8 @@ The example above is what's called an "Account Delegation" where Alice connects 
 address and gives your dApp permission to execute calls as herself only to a whitelist of smart
 contract canisters as per
 [ICRC-28](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md).
-Calls made to smart contract canisters outside the whitelist will result in a wallet approval
-pop-up for that user.
+Calls made to smart contract canisters outside the whitelist will result in a wallet approval pop-up
+for that user.
 
 If you wish to remove all wallet pop-ups, you may request a delegation without a whitelist. This
 global permission allows you to execute any smart contract canister call on behalf of the user, but
@@ -78,11 +78,11 @@ Consider requesting a user's Account Delegation when building dApps that:
 - Remove wallet approval pop-ups when making calls to smart contract canisters under your dApp's
   control (i.e. for chat and other social applications that save profile data)
 
-| Advantages                                                   | Disadvantages                                      |
-| ------------------------------------------------------------ | -------------------------------------------------- |
-| No wallet approval pop-ups for canisters under your control  | Slightly more integration effort                   |
-| Enables interoperability of data and assets across ecosystem |                                                    |
-| Familiar Web3 experience                                     |                                                    |
+| Advantages                                                   | Disadvantages                    |
+| ------------------------------------------------------------ | -------------------------------- |
+| No wallet approval pop-ups for canisters under your control  | Slightly more integration effort |
+| Enables interoperability of data and assets across ecosystem |                                  |
+| Familiar Web3 experience                                     |                                  |
 
 ### Usage
 

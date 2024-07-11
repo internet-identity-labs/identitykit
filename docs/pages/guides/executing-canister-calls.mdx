@@ -7,8 +7,8 @@ authors:
 
 # Executing authenticated canister calls
 
-The following guide teaches you how to execute canister transactions such that the `caller` is
-your connected user.
+The following guide teaches you how to execute canister transactions such that the `caller` is your
+connected user.
 
 ## Steps
 
@@ -21,7 +21,7 @@ Follow the [connect-button](/getting-started/connect-button) guide to connect a 
 You'll need an idlFactory for each canister you want to call.
 
 ```typescript
-import { idlFactory } from '/path/to/did.js';
+import { idlFactory } from "/path/to/did.js"
 ```
 
 ### 3. Import agent
@@ -31,17 +31,18 @@ IdentityKit comes bundled with an agent that can be used to create actors for ca
 ```typescript
 import { useIdentityKit } from "@nfid/identitykit"
 
-const {agent} = useIdentityKit()
+const { agent } = useIdentityKit()
 ```
 
 ### 4. Create actors
 
-Create an actor for the canister you want to call with the idlFactory you imported and its canister ID.
+Create an actor for the canister you want to call with the idlFactory you imported and its canister
+ID.
 
 ```typescript
 const actor = await Actor.createActor(idlFactory, {
   agent,
-  CANISTER_ID_TO_CALL
+  CANISTER_ID_TO_CALL,
 })
 ```
 
@@ -63,5 +64,6 @@ The user may see a wallet approval pop-up depending on how they authenticated:
 | Account Delegation       | Global             | No                                                           | Yes                                                           |
 | Relying Party Delegation | Unique to dApp URL | No                                                           | No                                                            |
 
-Use the Delegation Toolkit to [remove wallet approval pop-ups for executing calls to your canisters](./removing-wallet-pop-ups)
+Use the Delegation Toolkit to
+[remove wallet approval pop-ups for executing calls to your canisters](./removing-wallet-pop-ups)
 and read more about the [differences between accounts and delegations](/miscellaneous/auth-options).
