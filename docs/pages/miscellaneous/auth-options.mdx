@@ -1,0 +1,125 @@
+---
+title: "Auth options"
+date: "2024-06-19"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+# Working with accounts vs delegations
+
+Users will connect to your dApp by providing one of the following:
+
+1. An account object or
+2. A delegation object
+
+The differences can be summarized in the table below:
+
+| Auth option              | Wallet address     | Wallet approval pop-up for executing calls to your canisters | Wallet approval pop-up for executing calls to other canisters |
+| ------------------------ | ------------------ | ------------------------------------------------------------ | ------------------------------------------------------------- |
+| Account                  | Global             | Yes                                                          | Yes                                                           |
+| Account Delegation       | Global             | No                                                           | Yes                                                           |
+| Relying Party Delegation | Unique to dApp URL | No                                                           | No                                                            |
+
+Account objects are wallet addresses with standard web3 interactivity, namely that every call will
+require explicit user approval to execute.
+
+Delegations are accounts with the authority to execute transactions on the user's behalf, resulting
+in the removal of wallet approval pop-ups. A simple example is "Alice delegates to you the ability
+to execute calls to smart contract canisters A, B, and C on her behalf".
+
+The example above is what's called an "Account Delegation" where Alice connects with her wallet
+address and gives your dApp permission to execute calls as herself only to a whitelist of smart
+contract canisters as per
+[ICRC-28](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md).
+Calls made to smart contract canisters outside the whitelist will result in a wallet approval pop-up
+for that user.
+
+If you wish to remove all wallet pop-ups, you may request a delegation without a whitelist. This
+global permission allows you to execute any smart contract canister call on behalf of the user, but
+since you could theoretically execute sensitive transactions without explicit user permission (i.e.
+transfer assets), **wallets will generate delegations with a wallet address unique to your
+application's URL**, hence the name for this type of delegation: "Relying Party Delegation". This
+means you will not know Alice is the one authenticating, since the wallet address for this
+delegation will be unique to your dApp's URL and never be seen again across the rest of the ICP
+ecosystem.
+
+## Accounts
+
+Consider requesting a user's account when building dApps that:
+
+- Look up account balance/data, and
+- Are meant to give users the highest degree of security and autonomy
+
+| Advantages                                                   | Disadvantages                                                       |
+| ------------------------------------------------------------ | ------------------------------------------------------------------- |
+| Simple integration                                           | Wallet prompts can be confusing for new Web3 users                  |
+| Enables interoperability of data and assets across ecosystem | Would require a user signature to authenticate ownership of address |
+| Familiar Web3 experience                                     |                                                                     |
+
+### Usage
+
+Add the `authOption="account"` prop.
+
+```typescript
+const App = () => {
+  return (
+    <IdentityKitProvider authOption="account" {...etc}>
+      {/* Your App */}
+    </IdentityKitProvider>
+  );
+};
+```
+
+## Account Delegations
+
+Consider requesting a user's Account Delegation when building dApps that:
+
+- Look up account balance/data, and
+- Remove wallet approval pop-ups when making calls to smart contract canisters under your dApp's
+  control (i.e. for chat and other social applications that save profile data)
+
+| Advantages                                                   | Disadvantages                    |
+| ------------------------------------------------------------ | -------------------------------- |
+| No wallet approval pop-ups for canisters under your control  | Slightly more integration effort |
+| Enables interoperability of data and assets across ecosystem |                                  |
+| Familiar Web3 experience                                     |                                  |
+
+### Usage
+
+Add the `authOption="delegation"` prop and populate the `targets=""` prop with a list of canister
+IDs and follow the guide to [remove wallet approval pop-ups](/guides/removing-wallet-pop-ups).
+
+```typescript
+const App = () => {
+  return (
+    <IdentityKitProvider authOption="delegation" targets="" {...etc}>
+      {/* Your App */}
+    </IdentityKitProvider>
+  );
+};
+```
+
+## Relying Party Delegations
+
+Consider requesting a user's relying party delegation when building dApps that:
+
+- Are meant to give users isolated profiles from other dApps on the network
+
+| Advantages        | Disadvantages                                                |
+| ----------------- | ------------------------------------------------------------ |
+| No wallet pop-ups | Users are isolated from the rest of the ecosystem by default |
+|                   | More effort to make data interoperable across ecosystem      |
+
+### Usage
+
+Add the `authOption="delegation"` prop.
+
+```typescript
+const App = () => {
+  return (
+    <IdentityKitProvider authOption="delegation" {...etc}>
+      {/* Your App */}
+    </IdentityKitProvider>
+  );
+};
+```

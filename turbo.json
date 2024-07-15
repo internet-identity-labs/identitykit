@@ -24,6 +24,7 @@
       "persistent": true
     },
     "test": {},
+    "test:e2e": {},
     "lint-staged": {}
   }
 }
