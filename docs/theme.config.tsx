@@ -5,7 +5,7 @@ import LogoLight from "./public/img/logo-light.png"
 import LogoDark from "./public/img/logo-dark.png"
 import { useConfig } from "nextra-theme-docs"
 
-const REPO_BASE = "https://github.com/internet-identity-labs/nfid"
+const REPO_BASE = "https://github.com/internet-identity-labs/identitykit"
 const TWITTER_LINK = "https://twitter.com/@IdentityMaxis"
 
 const theme = {

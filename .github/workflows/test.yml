@@ -71,7 +71,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Log in to registry
-        # This is where you will update the personal access token to GITHUB_TOKEN
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
 
       - name: Pull Build Push Image
@@ -139,7 +138,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Log in to registry
-        # This is where you will update the personal access token to GITHUB_TOKEN
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
 
       - name: Pull Image and preparing Env Vars
@@ -191,4 +189,9 @@ jobs:
       - name: Run tests
         env:
           CI_DEBUG: true
-        run: echo "Skipped until fixed"
+        run: |
+          docker run --rm \
+            -v $(pwd):/home/user/workdir \
+            -e CI_DEBUG="${CI_DEBUG}" \
+            ${IMAGE_ID}:${VERSION} \
+            "${TEST_ADD_PARAMS}"

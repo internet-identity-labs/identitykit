@@ -2,17 +2,26 @@
   "index": {
     "title": "Welcome"
   },
-  "considerations": {
-    "title": "Considerations"
-  },
   "getting-started": {
     "title": "Getting Started"
   },
   "guides": {
     "title": "Guides"
   },
-  "configuration": {
-    "title": "Configuration"
+  "actions": {
+    "title": "Actions"
+  },
+  "hooks": {
+    "title": "Hooks"
+  },
+  "miscellaneous": {
+    "title": "Miscellaneous"
+  },
+  "actions": {
+    "title": "Actions"
+  },
+  "miscellaneous": {
+    "title": "Miscellaneous"
   },
   "blog": {
     "title": "Blog",

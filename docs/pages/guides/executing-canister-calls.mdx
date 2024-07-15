@@ -1,0 +1,69 @@
+---
+title: "Execute Canister Calls"
+date: "2024-06-05"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+# Executing authenticated canister calls
+
+The following guide teaches you how to execute canister transactions such that the `caller` is your
+connected user.
+
+## Steps
+
+### 1. Connect Wallet
+
+Follow the [connect-button](/getting-started/connect-button) guide to connect a wallet address.
+
+### 2. Import idlFactories
+
+You'll need an idlFactory for each canister you want to call.
+
+```typescript
+import { idlFactory } from "/path/to/did.js"
+```
+
+### 3. Import agent
+
+IdentityKit comes bundled with an agent that can be used to create actors for calling canisters.
+
+```typescript
+import { useIdentityKit } from "@nfid/identitykit"
+
+const { agent } = useIdentityKit()
+```
+
+### 4. Create actors
+
+Create an actor for the canister you want to call with the idlFactory you imported and its canister
+ID.
+
+```typescript
+const actor = await Actor.createActor(idlFactory, {
+  agent,
+  CANISTER_ID_TO_CALL,
+})
+```
+
+### 5. Call canister
+
+Execute your calls.
+
+```typescript
+const result = await actor.{yourmethod}
+```
+
+## Note on UX
+
+The user may see a wallet approval pop-up depending on how they authenticated:
+
+| Auth option              | Wallet address     | Wallet approval pop-up for executing calls to your canisters | Wallet approval pop-up for executing calls to other canisters |
+| ------------------------ | ------------------ | ------------------------------------------------------------ | ------------------------------------------------------------- |
+| Account                  | Global             | Yes                                                          | Yes                                                           |
+| Account Delegation       | Global             | No                                                           | Yes                                                           |
+| Relying Party Delegation | Unique to dApp URL | No                                                           | No                                                            |
+
+Use the Delegation Toolkit to
+[remove wallet approval pop-ups for executing calls to your canisters](./removing-wallet-pop-ups)
+and read more about the [differences between accounts and delegations](/miscellaneous/auth-options).
