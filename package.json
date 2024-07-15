@@ -24,6 +24,8 @@
   "devDependencies": {
     "@nfid/eslint-config": "*",
     "@nfid/typescript-config": "*",
+    "@rollup/plugin-url": "^8.0.2",
+    "@svgr/rollup": "^8.1.0",
     "@types/jest": "^29.5.12",
     "dotenv-cli": "latest",
     "husky": "^9.0.11",

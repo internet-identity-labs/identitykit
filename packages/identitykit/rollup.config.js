@@ -3,6 +3,7 @@ import commonjs from "@rollup/plugin-commonjs"
 import typescript from "rollup-plugin-typescript2"
 import replace from "@rollup/plugin-replace"
 import postcss from "rollup-plugin-postcss"
+import svgr from "@svgr/rollup"
 import { getComponentsFolders } from "./scripts/buildUtils.js"
 import generatePackageJson from "rollup-plugin-generate-package-json"
 import tailwindcss from "tailwindcss"
@@ -31,6 +32,7 @@ const commonPlugins = [
     },
     plugins: [tailwindcss(tailwindConfig)],
   }),
+  svgr(),
 ]
 
 const SUBPACKAGES = "src/libs"
