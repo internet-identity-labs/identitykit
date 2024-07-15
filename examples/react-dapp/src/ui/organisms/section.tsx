@@ -108,6 +108,7 @@ export const Section: React.FC<ISection> = ({
           jsonrpc: "2.0",
           ...requestObject,
         }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         res = await (selectedSigner as any)?.["sendRequest"](req)
         const json = JSON.stringify(
           res,
