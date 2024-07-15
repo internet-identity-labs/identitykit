@@ -3,4 +3,6 @@ export type SignerConfig = {
   providerUrl: string
   label: string
   icon?: string
+  popupHeight?: number
+  popupWidth?: number
 }
