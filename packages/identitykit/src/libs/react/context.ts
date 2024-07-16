@@ -13,6 +13,9 @@ const defaultState: IdentityKitProvider = {
   selectSigner: () => {
     throw new Error("selectSigner not implemented")
   },
+  setCustomSigner: () => {
+    throw new Error("signer is not available on this url")
+  },
 }
 
 export const IdentityKitContext = createContext<IdentityKitProvider>(defaultState)

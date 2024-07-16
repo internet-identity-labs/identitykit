@@ -7,5 +7,6 @@ export interface IdentityKitProvider {
   isModalOpen: boolean
   toggleModal: () => void
   selectSigner: (signerId?: string) => SignerConfig | void
+  setCustomSigner: (url: string) => void
   signerIframeRef?: React.RefObject<HTMLIFrameElement>
 }
