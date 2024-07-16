@@ -13,7 +13,7 @@ import { Principal } from "@dfinity/principal"
 import { getRequestObject } from "../../utils/requests"
 import { DropdownSelect } from "../molecules/dropdown-select"
 import { Buffer } from "buffer"
-import { fromBase64, toBase64 } from "@slide-computer/signer"
+import { toBase64 } from "@slide-computer/signer"
 
 import "react-toastify/dist/ReactToastify.css"
 import { IdentityKitAgent } from "@nfid/identitykit"
@@ -102,19 +102,28 @@ export const Section: React.FC<ISection> = ({
           canisterId,
         })
         setIcrc49ActorResponse((await actor[requestObject.params.method]("me")) as string)
+      } else if (requestObject.method === "icrc34_delegation") {
+        const req = {
+          id: "8932ce44-a693-4d1a-a087-8468aafe536e",
+          jsonrpc: "2.0",
+          ...requestObject,
+        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        res = await (selectedSigner as any)?.["sendRequest"](req)
+        const json = JSON.stringify(
+          res,
+          (_, value) => (typeof value === "bigint" ? value.toString() : value),
+          2
+        )
+        setResponseValue(json)
+        return
       } else {
         // TODO for icrc25_request_permissions should pass params.scopes as arg and for icrc34_delegation change params to Principals
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         res = await (selectedSigner as any)?.[SignerMethod[requestObject.method]](
           SignerMethodParamsField[requestObject.method]
             ? requestObject.params[SignerMethodParamsField[requestObject.method]]
-            : requestObject.method === "icrc34_delegation"
-              ? {
-                  ...requestObject.params,
-                  targets: requestObject.params.targets.map((t: string) => Principal.fromText(t)),
-                  publicKey: fromBase64(requestObject.params.publicKey),
-                }
-              : requestObject.params
+            : requestObject.params
         )
         if (Array.isArray(res) && res[0].subaccount) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any

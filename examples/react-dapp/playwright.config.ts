@@ -15,7 +15,7 @@ export default defineConfig({
     actionTimeout: 0,
     ignoreHTTPSErrors: true,
     trace: "retain-on-failure",
-    baseURL: "http://localhost:3002",
+    baseURL: "http://localhost:3001",
   },
   projects: [
     {

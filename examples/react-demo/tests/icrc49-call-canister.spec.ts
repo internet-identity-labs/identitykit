@@ -78,7 +78,7 @@ test("should make canister call with no consent", async ({ section }) => {
   const popup = await section.openPopup()
 
   const textsExpected = [
-    "Request from http://localhost:3001",
+    "Request from http://localhost:3002",
     "Canister ID",
     "do25a-dyaaa-aaaak-qifua-cai",
     "Sender",
@@ -113,7 +113,7 @@ test("should make canister call with consent", async ({ section }) => {
   const popup = await section.openPopup()
 
   const textsExpected = [
-    "Request from http://localhost:3001",
+    "Request from http://localhost:3002",
     "Canister ID",
     "do25a-dyaaa-aaaak-qifua-cai",
     "Sender",
