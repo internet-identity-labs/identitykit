@@ -9,7 +9,7 @@ import BackIcon from "./assets/back.svg"
 
 import { Tooltip } from "./ui/tooltip"
 import { TooltipProvider } from "@radix-ui/react-tooltip"
-import { CustomSignerInput } from "./ui/input"
+import { SignerInput } from "./signer-input"
 
 export const IdentityKitModal = (props: { theme: IdentityKitTheme }) => {
   const { isModalOpen, selectedSigner, signers, selectSigner } = useContext(IdentityKitContext)
@@ -113,7 +113,7 @@ export const IdentityKitModal = (props: { theme: IdentityKitTheme }) => {
                     View all
                   </Button>
                 ) : (
-                  <CustomSignerInput />
+                  <SignerInput />
                 )}
               </div>
               <div></div>

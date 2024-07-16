@@ -1,10 +1,10 @@
 import { useContext } from "react"
-import { isValidURL } from "../../utils"
+import { isValidURL } from "./utils"
 import { useForm } from "react-hook-form"
-import { Button } from "../button"
-import { IdentityKitContext } from "../../context"
+import { IdentityKitContext } from "./context"
+import { Button } from "./ui/button"
 
-export const CustomSignerInput = () => {
+export const SignerInput = () => {
   const { setCustomSigner } = useContext(IdentityKitContext)
   const {
     register,
