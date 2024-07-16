@@ -1,6 +1,6 @@
-import { useContext } from "react"
-import { IdentityKitContext } from "./context"
+import { IdentityKitContext } from "@nfid/identitykit/react"
 import clsx from "clsx"
+import { useContext } from "react"
 
 export function ConnectWalletButton() {
   const { selectedSigner, toggleModal } = useContext(IdentityKitContext)

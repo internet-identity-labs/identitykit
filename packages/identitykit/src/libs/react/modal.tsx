@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react"
 import { IdentityKitContext } from "./context"
 import * as Dialog from "@radix-ui/react-dialog"
 import clsx from "clsx"
-import { IdentityKitTheme } from "./constants"
 import { Button } from "./ui/button"
 import InfoIcon from "./assets/info.svg"
 import BackIcon from "./assets/back.svg"
@@ -11,8 +10,9 @@ import { Tooltip } from "./ui/tooltip"
 import { TooltipProvider } from "@radix-ui/react-tooltip"
 import { SignerInput } from "./signer-input"
 
-export const IdentityKitModal = (props: { theme: IdentityKitTheme }) => {
-  const { isModalOpen, selectedSigner, signers, selectSigner } = useContext(IdentityKitContext)
+export const IdentityKitModal = () => {
+  const { isModalOpen, selectedSigner, signers, selectSigner, theme } =
+    useContext(IdentityKitContext)
   const [isViewAll, setIsViewAll] = useState(false)
 
   useEffect(() => {
@@ -25,14 +25,6 @@ export const IdentityKitModal = (props: { theme: IdentityKitTheme }) => {
       document.body.style.overflow = isModalOpen ? "hidden" : ""
     }, 0)
   }, [isModalOpen])
-
-  // theme inherits from system by default
-  const theme =
-    props.theme === IdentityKitTheme.SYSTEM
-      ? window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? IdentityKitTheme.DARK
-        : IdentityKitTheme.LIGHT
-      : props.theme
 
   return (
     <TooltipProvider>

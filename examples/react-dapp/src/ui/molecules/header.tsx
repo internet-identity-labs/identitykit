@@ -1,6 +1,6 @@
 import { useTheme } from "next-themes"
 import { IconSvgMoon, IconSvgNFID, IconSvgNFIDWhite, IconSvgSun } from "../atoms/icons"
-import { ConnectWalletButton } from "@nfid/identitykit/react"
+import { ConnectWalletButton } from "./connect-wallet-button"
 
 export const Header = () => {
   const { theme, setTheme } = useTheme()
