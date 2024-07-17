@@ -51,9 +51,24 @@ test("should check request and response has correct initial state", async ({ sec
 
 test("should request full list of permissions", async ({ section }) => {
   const response = [
-    { method: "icrc27_accounts" },
-    { method: "icrc34_delegation" },
-    { method: "icrc49_call_canister" },
+    {
+      scope: {
+        method: "icrc27_accounts",
+      },
+      state: "granted",
+    },
+    {
+      scope: {
+        method: "icrc34_delegation",
+      },
+      state: "granted",
+    },
+    {
+      scope: {
+        method: "icrc49_call_canister",
+      },
+      state: "granted",
+    },
   ]
 
   await section.approvePermissions()
