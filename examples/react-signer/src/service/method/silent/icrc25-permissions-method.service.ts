@@ -1,4 +1,4 @@
-import { Icrc25DtoResponse, RPCMessage, RPCSuccessResponse, ScopeResponse } from "../../../type"
+import { RPCMessage, RPCSuccessResponse, ScopeResponse } from "../../../type"
 import { SilentMethodService } from "./silent-method.service"
 import { authService } from "../../auth.service"
 

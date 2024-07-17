@@ -1,10 +1,4 @@
-import {
-  RPCMessage,
-  RPCSuccessResponse,
-  Icrc25DtoRequest,
-  Icrc25DtoResponse,
-  ScopeResponse,
-} from "../../../type"
+import { RPCMessage, RPCSuccessResponse, Icrc25DtoRequest, ScopeResponse } from "../../../type"
 import { authService } from "../../auth.service"
 import { ComponentData, InteractiveMethodService } from "./interactive-method.service"
 
