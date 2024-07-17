@@ -66,6 +66,7 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
       isPublicAccountsAllowed,
     }
   }
+
   private formatDelegationChain(chain: DelegationChain) {
     return {
       signerDelegation: chain.delegations.map((signedDelegation) => {
@@ -106,13 +107,15 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
     icrc34Dto: Icrc34Dto,
     sessionPublicKey: Ed25519PublicKey
   ): Promise<DelegationChain> {
+    const maxTimeToLive = icrc34Dto.maxTimeToLive ? Number(icrc34Dto.maxTimeToLive) : 28800000000000
+
     if (accountKeyIdentity.type === AccountType.GLOBAL) {
       const targets = icrc34Dto.targets.map((x) => Principal.fromText(x))
 
       return await DelegationChain.create(
         accountKeyIdentity.keyIdentity,
         sessionPublicKey,
-        new Date(Date.now() + Number(icrc34Dto.maxTimeToLive)),
+        new Date(Date.now() + maxTimeToLive),
         { targets }
       )
     }
@@ -120,7 +123,7 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
     return await DelegationChain.create(
       accountKeyIdentity.keyIdentity,
       sessionPublicKey,
-      new Date(Date.now() + Number(icrc34Dto.maxTimeToLive))
+      new Date(Date.now() + maxTimeToLive)
     )
   }
 }
