@@ -21,10 +21,21 @@ export interface RPCErrorResponse extends RPCBase {
   }
 }
 
-export interface Icrc25Dto {
-  scopes: Scope[]
+export interface Icrc25DtoRequest {
+  scopes: ScopeRequest[]
 }
 
-export interface Scope {
+export interface ScopeRequest {
   method: string
+}
+
+export interface Icrc25DtoResponse {
+  scopes: ScopeResponse[]
+}
+
+export interface ScopeResponse {
+  scope: {
+    method: string
+  }
+  state: string
 }

@@ -1,4 +1,4 @@
-import { RPCMessage, RPCSuccessResponse, Icrc25Dto } from "../../../type"
+import { RPCMessage, RPCSuccessResponse, Icrc25DtoRequest, ScopeResponse } from "../../../type"
 import { authService } from "../../auth.service"
 import { ComponentData, InteractiveMethodService } from "./interactive-method.service"
 
@@ -16,16 +16,20 @@ class Icrc25RequestPermissionsMethodService extends InteractiveMethodService {
   }
 
   public async onApprove(message: MessageEvent<RPCMessage>): Promise<void> {
-    const icrc25Message = message.data.params as unknown as Icrc25Dto
+    const icrc25Message = message.data.params as unknown as Icrc25DtoRequest
     const permissions = icrc25Message.scopes.map((x) => x.method)
 
     await authService.savePermissions(permissions)
+
+    const scopes: ScopeResponse[] = permissions.map((x) => {
+      return { scope: { method: x }, state: "granted" }
+    })
 
     const response: RPCSuccessResponse = {
       origin: message.origin,
       jsonrpc: message.data.jsonrpc,
       id: message.data.id,
-      result: icrc25Message,
+      result: { scopes },
     }
 
     window.opener.postMessage(response, message.origin)
@@ -34,7 +38,7 @@ class Icrc25RequestPermissionsMethodService extends InteractiveMethodService {
   public async getСomponentData(
     message: MessageEvent<RPCMessage>
   ): Promise<PermissionsComponentData> {
-    const icrc25Message = message.data.params as unknown as Icrc25Dto
+    const icrc25Message = message.data.params as unknown as Icrc25DtoRequest
     const permissions = icrc25Message.scopes.map((el) => el.method)
     const baseData = await super.getСomponentData(message)
     return {

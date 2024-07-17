@@ -51,9 +51,24 @@ test("should retrieve empty permissions", async ({ section }) => {
 
 test("should retrieve full list of permissions", async ({ section, requestPermissionSection }) => {
   const response = [
-    { method: "icrc27_accounts" },
-    { method: "icrc34_delegation" },
-    { method: "icrc49_call_canister" },
+    {
+      scope: {
+        method: "icrc27_accounts",
+      },
+      state: "granted",
+    },
+    {
+      scope: {
+        method: "icrc34_delegation",
+      },
+      state: "granted",
+    },
+    {
+      scope: {
+        method: "icrc49_call_canister",
+      },
+      state: "granted",
+    },
   ]
 
   await requestPermissionSection.approvePermissions()

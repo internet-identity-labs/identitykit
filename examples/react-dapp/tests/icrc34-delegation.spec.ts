@@ -67,19 +67,17 @@ test("should request global delegation with targets", async ({ section }) => {
   const actualResponse = await section.getResponseJson()
 
   expect(actualResponse).toMatchObject({
-    delegations: [
+    signerDelegation: [
       {
         delegation: {
           expiration: expect.anything(),
-          pubkey:
-            "302a300506032b65700321006cada6fc331867814ea411f92109c7d165fe2f5fa2b75624a36d38392490ad50",
-          targets: ["00000000015041680101"],
+          pubkey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
+          targets: ["do25a-dyaaa-aaaak-qifua-cai"],
         },
         signature: expect.anything(),
       },
     ],
-    publicKey:
-      "302a300506032b65700321003b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29",
+    publicKey: "MCowBQYDK2VwAyEAO2onvM62pC1io6jQKm8Nc2UyFXcd4kOmOsBIoYtZ2ik=",
   })
 })
 
@@ -101,17 +99,15 @@ test("should request session delegation with no targets", async ({ section }) =>
   const actualResponse = await section.getResponseJson()
 
   expect(actualResponse).toMatchObject({
-    delegations: [
+    signerDelegation: [
       {
         delegation: {
           expiration: expect.anything(),
-          pubkey:
-            "302a300506032b65700321006cada6fc331867814ea411f92109c7d165fe2f5fa2b75624a36d38392490ad50",
+          pubkey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
         },
         signature: expect.anything(),
       },
     ],
-    publicKey:
-      "302a300506032b65700321003008adc857dfcd0477a7aaa01a657ca6923ce76c07645704b1e872deb1253baa",
+    publicKey: "MCowBQYDK2VwAyEAMAityFffzQR3p6qgGmV8ppI852wHZFcEsehy3rElO6o=",
   })
 })
