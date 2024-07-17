@@ -16,8 +16,8 @@ import { IdentityKitProvider } from '@nfid/identitykit';
 
 export const App = () => (
   <IdentityKitProvider
-    modalMode="featured" 
-    featuredWallet="nfidWallet" 
+    modalMode="featured"
+    featuredWallet="nfidWallet"
     {...etc}
   >
     {/* Your App */}
@@ -26,6 +26,7 @@ export const App = () => (
 ```
 
 Available options for `featuredWallet`:
+
 - `nfidWallet`
 
 We also provide a compact mode, which looks like this:
@@ -40,7 +41,7 @@ import { IdentityKitProvider } from '@nfid/identitykit';
 
 export const App = () => (
   <IdentityKitProvider
-    modalMode="compact" 
+    modalMode="compact"
     {...etc}
   >
     {/* Your App */}

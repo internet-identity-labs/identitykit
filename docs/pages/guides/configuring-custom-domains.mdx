@@ -7,9 +7,12 @@ authors:
 
 # Configuring custom domains
 
-This guide assumes you've already [configured your derivationOrigin](./deploying-to-production#derivationorigin-steps).
+This guide assumes you've already
+[configured your derivationOrigin](./deploying-to-production#derivationorigin-steps).
 
-There are three steps for letting your users authenticate from yourcustomdomain.com instead of your-canister-id.icp0.io:
+There are three steps for letting your users authenticate from yourcustomdomain.com instead of
+your-canister-id.icp0.io:
+
 1. Configure the `ic-domains` file
 2. Add your domain to `ii-alternative-origins`
 3. Configure your DNS settings
@@ -58,22 +61,23 @@ yourothercustomdomain.com
 ### 3. Configure DNS
 
 Here is a DNS entry example for yourcustomdomain.com with canister ID 3y5ko-7qaaa-aaaal-aaaaq-cai.
-Replace the `_acme-challenge` CNAME content's `yourcustomdomain.com` and `_canister-id` TXT content 
+Replace the `_acme-challenge` CNAME content's `yourcustomdomain.com` and `_canister-id` TXT content
 with your own values.
 
-| Type        | Name             | Content                                      |
-| ----------- | ---------------- | -------------------------------------------- | 
-| CNAME       | @                | icp1.io                                      |
-| CNAME       | _acme-challenge  | _acme-challenge.yourcustomdomain.com.icp2.io |
-| TXT         | _canister-id     | 3y5ko-7qaaa-aaaal-aaaaq-cai                  |
+| Type  | Name             | Content                                       |
+| ----- | ---------------- | --------------------------------------------- |
+| CNAME | @                | icp1.io                                       |
+| CNAME | \_acme-challenge | \_acme-challenge.yourcustomdomain.com.icp2.io |
+| TXT   | \_canister-id    | 3y5ko-7qaaa-aaaal-aaaaq-cai                   |
 
-Here is a DNS entry example for app.yourcustomdomain.com with canister ID 3y5ko-7qaaa-aaaal-aaaaq-cai:
+Here is a DNS entry example for app.yourcustomdomain.com with canister ID
+3y5ko-7qaaa-aaaal-aaaaq-cai:
 
-| Type        | Name                 | Content                                          |
-| ----------- | -------------------- | ------------------------------------------------ | 
-| CNAME       | app                  | icp1.io                                          |
-| CNAME       | _acme-challenge.app  | _acme-challenge.app.yourcustomdomain.com.icp2.io |
-| TXT         | _canister-id         | 3y5ko-7qaaa-aaaal-aaaaq-cai                      |
+| Type  | Name                 | Content                                           |
+| ----- | -------------------- | ------------------------------------------------- |
+| CNAME | app                  | icp1.io                                           |
+| CNAME | \_acme-challenge.app | \_acme-challenge.app.yourcustomdomain.com.icp2.io |
+| TXT   | \_canister-id        | 3y5ko-7qaaa-aaaal-aaaaq-cai                       |
 
 ### 4. Register with boundary nodes
 
@@ -91,6 +95,7 @@ EOF
 ```
 
 If the request was successful, you'll get this response:
+
 ```
 {"id":"REQUEST_ID"}
 ```
@@ -101,5 +106,6 @@ You're now ready to deploy!
 
 ## Troubleshooting
 
-Follow [this documentation](https://internetcomputer.org/docs/current/developer-docs/web-apps/custom-domains/using-custom-domains) 
+Follow
+[this documentation](https://internetcomputer.org/docs/current/developer-docs/web-apps/custom-domains/using-custom-domains)
 for common troubleshooting steps.

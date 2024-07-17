@@ -23,9 +23,9 @@ method. Wallets may mark your application as a potential scam if you do.**_
 
 #### Rust implementation
 
-Add the following to each of your backend canisters (and any you deploy dynamically).
-You should have one item for every domain that should have authority to call your canisters on behalf of connected
-wallets without prompting them with transaction approval messages.
+Add the following to each of your backend canisters (and any you deploy dynamically). You should
+have one item for every domain that should have authority to call your canisters on behalf of
+connected wallets without prompting them with transaction approval messages.
 
 ```rust
 #[update]
@@ -79,7 +79,7 @@ const App = () => {
       walletsList=["nfidWallet", "plug", "oisy"]
       modalMode="featured"
       featuredWallet="nfidWallet"
-      theme={systemTheme()} 
+      theme={systemTheme()}
       {...etc}
     >
       {/* Your App */}
