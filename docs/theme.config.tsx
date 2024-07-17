@@ -3,6 +3,8 @@ import { GitHubLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons"
 
 import LogoLight from "./public/img/logo-light.png"
 import LogoDark from "./public/img/logo-dark.png"
+import MetaImage from "./public/img/meta1200x630.png"
+
 import { useConfig } from "nextra-theme-docs"
 
 const REPO_BASE = "https://github.com/internet-identity-labs/identitykit"
@@ -43,9 +45,7 @@ const theme = {
     const ogTitle = frontMatter.title || "NFID IdentityKit Docs"
     const ogDescription = frontMatter.description || "NFID IdentityKit Docs"
 
-    const ogImage = frontMatter.image
-      ? `https://docs.nfid.one${frontMatter.image}`
-      : "https://3y5ko-7qaaa-aaaal-aaaaq-cai.ic0.app/assets/nfid_og.png"
+    const ogImage = frontMatter.image ? `https://docs.nfid.one${frontMatter.image}` : MetaImage.src
 
     return (
       <>

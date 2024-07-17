@@ -1,0 +1,105 @@
+---
+title: "Configuring custom domains"
+date: "2024-07-16"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+# Configuring custom domains
+
+This guide assumes you've already [configured your derivationOrigin](./deploying-to-production#derivationorigin-steps).
+
+There are three steps for letting your users authenticate from yourcustomdomain.com instead of your-canister-id.icp0.io:
+1. Configure the `ic-domains` file
+2. Add your domain to `ii-alternative-origins`
+3. Configure your DNS settings
+4. Update the ICP boundary nodes
+
+## Steps
+
+### 1. Add `ic-domains` file
+
+Add `ic-domains` (no file extension) file to `.well-known` folder:
+
+```typescript
+yourcustomdomain.com
+yourothercustomdomain.com
+```
+
+```typescript
+// your folder structure should look like this
+├── dfx.json
+├── path
+│   ├── to
+│   │   ├── frontend
+│   │   │   ├── .ic-assets.json
+│   │   │   ├── .well-known
+│   │   │   │   ├── ii-alternative-origins
+│   │   │   │   └── ic-domains
+```
+
+### 2. Update `ii-alternative-origins` file
+
+```typescript
+{
+  "alternativeOrigins": [
+    "https://your-canister-id.icp0.io",
+    "https://your-canister-id.raw.icp0.io",
+    "https://your-canister-id.ic0.app",
+    "https://your-canister-id.raw.ic0.app",
+    "https://your-canister-id.icp0.icp-api.io",
+    "https://your-canister-id.icp-api.io",
+    "https://yourcustomdomain.com",
+    "https://yourothercustomdomain.com"
+  ]
+}
+```
+
+### 3. Configure DNS
+
+Here is a DNS entry example for yourcustomdomain.com with canister ID 3y5ko-7qaaa-aaaal-aaaaq-cai.
+Replace the `_acme-challenge` CNAME content's `yourcustomdomain.com` and `_canister-id` TXT content 
+with your own values.
+
+| Type        | Name             | Content                                      |
+| ----------- | ---------------- | -------------------------------------------- | 
+| CNAME       | @                | icp1.io                                      |
+| CNAME       | _acme-challenge  | _acme-challenge.yourcustomdomain.com.icp2.io |
+| TXT         | _canister-id     | 3y5ko-7qaaa-aaaal-aaaaq-cai                  |
+
+Here is a DNS entry example for app.yourcustomdomain.com with canister ID 3y5ko-7qaaa-aaaal-aaaaq-cai:
+
+| Type        | Name                 | Content                                          |
+| ----------- | -------------------- | ------------------------------------------------ | 
+| CNAME       | app                  | icp1.io                                          |
+| CNAME       | _acme-challenge.app  | _acme-challenge.app.yourcustomdomain.com.icp2.io |
+| TXT         | _canister-id         | 3y5ko-7qaaa-aaaal-aaaaq-cai                      |
+
+### 4. Register with boundary nodes
+
+Replace CUSTOM_DOMAIN with your custom domain, and re-run this command for each domain.
+
+```
+curl -sLv -X POST \
+    -H 'Content-Type: application/json' \
+    https://icp0.io/registrations \
+    --data @- <<EOF
+{
+    "name": "CUSTOM_DOMAIN"
+}
+EOF
+```
+
+If the request was successful, you'll get this response:
+```
+{"id":"REQUEST_ID"}
+```
+
+### 5. Deploy to production
+
+You're now ready to deploy!
+
+## Troubleshooting
+
+Follow [this documentation](https://internetcomputer.org/docs/current/developer-docs/web-apps/custom-domains/using-custom-domains) 
+for common troubleshooting steps.

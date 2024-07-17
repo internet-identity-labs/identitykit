@@ -1,0 +1,133 @@
+---
+title: "Deploying to production"
+date: "2024-07-16"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+# Deploying to production
+
+There are two steps for deploying to production:
+1. Configure the `derivationOrigin`
+2. Configure `IdentityKitProvider` for production
+
+## derivationOrigin steps
+
+Some ICP wallets use your URL to generate wallet addresses, so it's best practice to ensure your user's wallet
+addresses don't change if your URL ever changes by configuring your `derivationOrigin` before your first
+production deployment.
+
+Your folder structure will look like this by the end of these 3 steps.
+
+```typescript
+├── dfx.json
+├── path
+│   ├── to
+│   │   ├── frontend
+│   │   │   ├── .ic-assets.json
+│   │   │   ├── .well-known
+│   │   │   │   └── ii-alternative-origins
+```
+
+### 1. Get your canister ID URL
+
+Obtain your canister ID URL by deploying your project to ICP mainnet.
+You've probably already done this so you should already know what it is.
+
+### 2. `.ic-assets.json` file
+
+Add `.ic-assets.json` to your your `project/frontend/src` folder:
+
+```typescript
+[
+  {
+    "match": ".well-known",
+    "ignore": false
+  },
+  {
+    "match": ".well-known/ii-alternative-origins",
+    "headers": {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json"
+    },
+    "ignore": false
+  }
+]
+```
+
+### 3. `.well-known` folder
+
+Add `.well-known` to your your `project/frontend/src` folder.
+
+### 4. `ii-alternative-origins` file
+
+Add `ii-alternative-origins` file to `.well-known` folder and all the combinations of URLs users might access
+your application from:
+
+```typescript
+{
+  "alternativeOrigins": [
+    "https://your-canister-id.icp0.io",
+    "https://your-canister-id.raw.icp0.io",
+    "https://your-canister-id.ic0.app",
+    "https://your-canister-id.raw.ic0.app",
+    "https://your-canister-id.icp0.icp-api.io",
+    "https://your-canister-id.icp-api.io"
+  ]
+}
+```
+
+## IdentityKitProvider steps
+
+### 1. Add `production` prop
+
+[Make production ICP wallets available](/miscellaneous/local-development) by setting `production` to `true`.
+
+```typescript
+const App = () => {
+  return (
+    <IdentityKitProvider
+      authOption="account"
+      walletsList=["NFIDWallet", "Plug", "Oisy"]
+      modalMode="featured"
+      featuredWallet="NFIDWallet"
+      theme={systemTheme()} 
+      production="true"
+    >
+      {/* Your App */}
+    </IdentityKitProvider>
+  );
+};
+```
+
+### 2. Add `derivationOrigin` prop
+
+Setting your `derivationOrigin` to the default canister deployment location (https://your-canister-id.icp0.io)
+will ensure your users authenticate against that origin even if you [change your frontend URL](./configuring-custom-domain).
+
+```typescript
+const App = () => {
+  return (
+    <IdentityKitProvider
+      authOption="account"
+      walletsList=["NFIDWallet", "Plug", "Oisy"]
+      modalMode="featured"
+      featuredWallet="NFIDWallet"
+      theme={systemTheme()} 
+      production="true"
+      derivationOrigin="https://your-canister-id.icp0.io"
+    >
+      {/* Your App */}
+    </IdentityKitProvider>
+  );
+};
+```
+
+### 3. Deploy to production
+
+You're now ready to deploy!
+
+## Troubleshooting
+
+Follow [this documentation](https://internetcomputer.org/docs/current/developer-docs/identity/internet-identity/alternative-origins)
+for common troubleshooting steps.

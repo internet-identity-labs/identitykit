@@ -7,6 +7,10 @@ authors:
 
 # Get up and running with IdentityKit
 
+### Prerequisites
+
+- An ICP project with a frontend canister.
+
 ### Install
 
 Install IdentityKit and its peer dependencies:
@@ -24,17 +28,24 @@ npm i @nfid/identitykit
 ### Import
 
 ```typescript
-import { ConnectButton, ConnectModal } from "@nfid/identitykit"
+import { ConnectButton, ConnectModal, IdentityKitProvider, systemTheme } from "@nfid/identitykit"
 ```
 
 ### Wrap provider
 
-Wrap your application with `IdentityKitProvider`.
+Wrap your application with `IdentityKitProvider`. IdentityKit is in development mode
+by default, which exposes the development wallet as the only selectable wallet until
+production mode is set.
 
 ```typescript
 const App = () => {
   return (
-    <IdentityKitProvider authOption="account">
+    <IdentityKitProvider
+      authOption="account"
+      modalMode="featured"
+      featuredWallet="nfidWallet"
+      theme={systemTheme()}
+    >
       {/* Your App */}
     </IdentityKitProvider>
   );

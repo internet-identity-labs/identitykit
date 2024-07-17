@@ -22,7 +22,10 @@ IdentityKitProvider:
 import { IdentityKitProvider } from '@nfid/identitykit';
 
 export const App = () => (
-  <IdentityKitProvider walletsList=[walletsList] {...etc}>
+  <IdentityKitProvider
+    walletsList=[walletsList]
+    {...etc}
+  >
     {/* Your App */}
   </IdentityKitProvider>
 );

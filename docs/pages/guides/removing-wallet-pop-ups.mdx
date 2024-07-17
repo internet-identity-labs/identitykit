@@ -23,12 +23,22 @@ method. Wallets may mark your application as a potential scam if you do.**_
 
 #### Rust implementation
 
+Add the following to each of your backend canisters (and any you deploy dynamically).
+You should have one item for every domain that should have authority to call your canisters on behalf of connected
+wallets without prompting them with transaction approval messages.
+
 ```rust
 #[update]
 fn icrc28_trusted_origins() -> Vec<String> {
     return vec![
-        String::from("https://YOUR-URL.com"),
-        String::from("https://YOUR-OTHER-URL.com"),
+        String::from("https://your-canister-id.icp0.io"),
+        String::from("https://your-canister-id.raw.icp0.io"),
+        String::from("https://your-canister-id.ic0.app"),
+        String::from("https://your-canister-id.raw.ic0.app"),
+        String::from("https://your-canister-id.icp0.icp-api.io"),
+        String::from("https://your-canister-id.icp-api.io"),
+        String::from("https://yourcustomdomain.com"),
+        String::from("https://yourothercustomdomain.com")
     ];
 }
 ```
@@ -36,10 +46,9 @@ fn icrc28_trusted_origins() -> Vec<String> {
 ### 3. ICRC-10 setup
 
 [ICRC-10](https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-10/ICRC-10.md) describes the standard
-method for simplifying the discovery of the supported standards of canisters on the Internet
-Computer.
+method for simplifying the discovery of a canister's supported standards on the Internet Computer.
 
-List ICRC-28 and any other standards your canisters support.
+List ICRC-28 and any other standards your canisters support for each of your canisters.
 
 #### Rust implementation
 
@@ -59,12 +68,20 @@ your application's URL with the return value from each canister's `icrc28_truste
 URL is not listed in the response from even one of the target canisters, the wallet will not allow
 users to continue with an Account Delegation.
 
-Add ` authOption="delegation"` and your list of `targets` to `IdentityKitProvider.
+Add `authOption="delegation"` and your list of `targets` to `IdentityKitProvider`.
 
 ```typescript
 const App = () => {
   return (
-    <IdentityKitProvider authOption="delegation" targets=["canisterID1", "canisterID2",...] {...etc}>
+    <IdentityKitProvider
+      authOption="delegation"
+      targets=["canisterID1", "canisterID2",...]
+      walletsList=["nfidWallet", "plug", "oisy"]
+      modalMode="featured"
+      featuredWallet="nfidWallet"
+      theme={systemTheme()} 
+      {...etc}
+    >
       {/* Your App */}
     </IdentityKitProvider>
   );
@@ -82,22 +99,16 @@ if IdentityKit.connectedWallet.isDelegation {
   if IdentityKit.connectedWallet.delegation.hasTargets {
     // This is an Account Delegation for the user's main wallet address
 
-    // Every IdentityKit.connectedWallet.executeTransaction call to a
-    // target canister WILL NOT result in a wallet approval pop-up
-    //
-    // But every IdentityKit.connectedWallet.executeTransaction call
-    // to a non-target-canister WILL
+    // Every transaction to a target canister WILL NOT result in a wallet approval pop-up
+    // But every transaction to a non-target-canister WILL
 
   } else {
     // This is a Relying Party Delegation for the user's URL-specific wallet address
 
-    // Every IdentityKit.connectedWallet.executeTransaction call to any
-    // canister WILL NOT result in a wallet approval pop-up
-
+    // Every transaction to any canister WILL NOT result in a wallet approval pop-up
   }
 } else {
-  // Every IdentityKit.connectedWallet.executeTransaction call WILL
-  // result in a wallet approval pop-up
+  // Every transaction WILL result in a wallet approval pop-up
 }
 
 ```

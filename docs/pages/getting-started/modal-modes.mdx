@@ -11,6 +11,23 @@ By default, IdentityKit's `modalMode` is set to `featured` (and looks like this)
 
 ![NFID Featured Mode](../../../docs/public/img/featured-mode-light.png)
 
+```typescript
+import { IdentityKitProvider } from '@nfid/identitykit';
+
+export const App = () => (
+  <IdentityKitProvider
+    modalMode="featured" 
+    featuredWallet="nfidWallet" 
+    {...etc}
+  >
+    {/* Your App */}
+  </IdentityKitProvider>
+);
+```
+
+Available options for `featuredWallet`:
+- `nfidWallet`
+
 We also provide a compact mode, which looks like this:
 
 ![NFID Compact Mode](../../../docs/public/img/compact-mode-light.png)
@@ -22,7 +39,10 @@ IdentityKitProvider:
 import { IdentityKitProvider } from '@nfid/identitykit';
 
 export const App = () => (
-  <IdentityKitProvider modalMode="compact" {...etc}>
+  <IdentityKitProvider
+    modalMode="compact" 
+    {...etc}
+  >
     {/* Your App */}
   </IdentityKitProvider>
 );
