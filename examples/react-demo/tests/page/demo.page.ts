@@ -15,6 +15,15 @@ export class DemoPage {
 
   async login() {
     await this.connectButton.click()
-    await this.mockedSignerButton.click()
+
+    const [popup] = await Promise.all([
+      this.page.waitForEvent("popup"),
+      this.mockedSignerButton.click(),
+    ])
+
+    await popup.click("#approve")
+    await popup.click("#acc_2")
+    await popup.click("#approve")
+    await popup.close()
   }
 }

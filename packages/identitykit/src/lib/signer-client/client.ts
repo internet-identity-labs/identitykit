@@ -135,6 +135,14 @@ export class SignerClient {
   }): Promise<void> {
     const baseIdentity = await this.getBaseIdentity()
     try {
+      const permissions = await this.options.signer.permissions()
+      if (!permissions.find((x) => "icrc34_delegation" === x.scope.method)) {
+        await this.options.signer.requestPermissions([
+          {
+            method: "icrc34_delegation",
+          },
+        ])
+      }
       const delegationChain = await this.options.signer.delegation({
         publicKey: baseIdentity.getPublicKey().toDer(),
         maxTimeToLive: options?.maxTimeToLive,
