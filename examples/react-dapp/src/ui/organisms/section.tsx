@@ -75,6 +75,7 @@ export const Section: React.FC<ISection> = ({
     }
 
     const requestObject = getRequestObject(requestValue)
+
     let res
 
     try {
@@ -105,6 +106,21 @@ export const Section: React.FC<ISection> = ({
       } else if (requestObject.method === "icrc34_delegation") {
         const req = {
           id: "8932ce44-a693-4d1a-a087-8468aafe536e",
+          jsonrpc: "2.0",
+          ...requestObject,
+        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        res = await (selectedSigner as any)?.["sendRequest"](req)
+        const json = JSON.stringify(
+          res,
+          (_, value) => (typeof value === "bigint" ? value.toString() : value),
+          2
+        )
+        setResponseValue(json)
+        return
+      } else if (requestObject.method === "icrc27_accounts") {
+        const req = {
+          id: "8c417beb-e7b1-4925-94b3-c737697e51bf",
           jsonrpc: "2.0",
           ...requestObject,
         }

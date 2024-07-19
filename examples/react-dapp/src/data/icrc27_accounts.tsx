@@ -3,6 +3,9 @@ import { ISection } from "../ui/organisms/section.js"
 
 export const basicRequest = {
   method: "icrc27_accounts",
+  params: {
+    derivationOrigin: "https://3y5ko-7qaaa-aaaal-aaaaq-cai.icp0.io",
+  },
 }
 
 export const icrc27AccountsSection: ISection = {
@@ -23,6 +26,11 @@ export const icrc27AccountsSection: ISection = {
   getCodeSnippet: function (requestJSON: string): string {
     const basicRequest = JSON.parse(requestJSON)
     return `await IdentityKit.init()
-const accounts = await IdentityKit.request(${JSON.stringify(basicRequest, null, 2)})`
+const accounts = await IdentityKit.request({
+  "method": "${basicRequest.method}",
+  "params": {
+    "derivationOrigin": "https://3y5ko-7qaaa-aaaal-aaaaq-cai.icp0.io", // optional
+  }
+})`
   },
 }
