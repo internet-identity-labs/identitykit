@@ -37,6 +37,7 @@ const delegation = await IdentityKit.request({
   "params": {
     "publicKey": "${basicRequest.params.publicKey}",
     "targets": ${JSON.stringify(basicRequest.params.targets)}, // optional
+    "derivationOrigin": "https://3y5ko-7qaaa-aaaal-aaaaq-cai.icp0.io", // optional
     "maxTimeToLive": "${basicRequest.params.maxTimeToLive}"
   }
 })`
