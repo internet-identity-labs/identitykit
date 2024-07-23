@@ -1,7 +1,7 @@
 import { DelegationChain, DelegationIdentity, Ed25519KeyIdentity } from "@dfinity/identity"
 import { JsonnableEd25519KeyIdentity } from "@dfinity/identity/lib/cjs/identity/ed25519.js"
 import { callCanisterService, CallCanisterRequest } from "./call-canister.service"
-import { Agent, HttpAgent, Identity } from "@nfid/agent"
+import { Agent, HttpAgent, Identity } from "@dfinity/agent"
 import { IDL } from "@dfinity/candid"
 
 const IC_HOSTNAME = "https://ic0.app"
@@ -26,7 +26,7 @@ describe("Call Canister Service", function () {
       {}
     )
     const delegation = DelegationIdentity.fromDelegation(sessionKey, chain)
-    const agent: Agent = new HttpAgent({
+    const agent: Agent = HttpAgent.createSync({
       host: IC_HOSTNAME,
       identity: delegation as unknown as Identity,
     })
@@ -40,6 +40,6 @@ describe("Call Canister Service", function () {
     const response = await callCanisterService.call(request)
 
     expect(response.contentMap).toMatch(/^2dn3p2NhcmdKRElETAABcQJtZWtjYW5pc3Rlcl9/)
-    expect(response.certificate).toMatch(/^2dn3o2R0cmVlgwGDAYIEWC/)
+    expect(response.certificate).toMatch(/^2dn3o2pkZWxlZ2F0aW9uomtj/)
   }, 10000)
 })

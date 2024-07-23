@@ -8,7 +8,7 @@ import {
   HttpAgent,
   LookupResultFound,
   ReadStateResponse,
-} from "@nfid/agent"
+} from "@dfinity/agent"
 import { GenericError } from "./exception-handler.service"
 
 const CANDID_UI_CANISTER = "a4gq6-oaaaa-aaaab-qaa4q-cai"

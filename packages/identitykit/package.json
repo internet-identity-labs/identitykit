@@ -47,6 +47,7 @@
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/themes": "^3.0.5",
     "@slide-computer/signer-agent": "^2.6.2",
+    "@slide-computer/signer": "^2.6.2",
     "@slide-computer/signer-storage": "^2.6.2",
     "@slide-computer/signer-web": "^2.6.2",
     "buffer": "^6.0.3",
