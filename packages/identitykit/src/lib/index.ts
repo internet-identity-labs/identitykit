@@ -1,6 +1,15 @@
-export { Agent as IdentityKitAgent } from "./agent"
-export { SignerClient as IdentityKitSignerClient } from "./signer-client"
+export { SignerAgent as IdentityKitSignerAgent } from "./signer-agent"
+export {
+  SignerClient as IdentityKitSignerClient,
+  DelegationSignerClient as IdentityKitDelegationSignerClient,
+  AccountsSignerClient as IdentityKitAccountsSignerClient,
+} from "./signer-client"
 export * from "./identity-kit"
 
 export { type SignerConfig } from "./types"
-export { type SignerClientOptions as IdentityKitSignerClientOptions } from "./signer-client"
+export {
+  type SignerClientOptions as IdentityKitSignerClientOptions,
+  type DelegationSignerClientOptions as IdentityKitDelegationSignerClientOptions,
+  type AccountsSignerClientOptions as IdentityKitAccountsSignerClientOptions,
+} from "./signer-client"
+export { type SignerAgentOptions as IdentityKitSignerAgentOptions } from "./signer-agent"
