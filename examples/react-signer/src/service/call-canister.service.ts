@@ -73,6 +73,7 @@ class CallCanisterService {
 
     return {
       contentMap: requestDetails,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       certificate: new Uint8Array(Cbor.encode((certificate as any).cert)),
     }
   }
