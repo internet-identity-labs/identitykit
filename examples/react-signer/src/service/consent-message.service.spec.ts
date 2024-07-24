@@ -1,4 +1,4 @@
-import { Agent, HttpAgent } from "@nfid/agent"
+import { Agent, HttpAgent } from "@dfinity/agent"
 import { consentMessageService } from "./consent-message.service"
 import { IDL } from "@dfinity/candid"
 
