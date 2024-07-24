@@ -26,14 +26,14 @@
     "@nfid/typescript-config": "*",
     "@types/jest": "^29.5.12",
     "dotenv-cli": "latest",
-    "husky": "^9.0.11",
+    "husky": "^9.1.1",
     "jest": "^29.7.0",
     "lint-staged": "^15.2.5",
-    "prettier": "^3.3.0",
-    "ts-jest": "^29.1.4",
+    "prettier": "^3.3.3",
+    "ts-jest": "^29.2.3",
     "ts-node": "^10.9.2",
-    "turbo": "^2.0.5",
-    "typescript": "^5.4.5"
+    "turbo": "^2.0.9",
+    "typescript": "^5.5.4"
   },
   "workspaces": [
     "config/*",
