@@ -6,3 +6,4 @@ export {
   ConnectWalletButton as IdentityKitConnectWalletButton,
   ConnectWalletDropdown as IdentityKitConnectWalletDropdown,
 } from "./connect-wallet"
+export { formatIcp } from "./utils"

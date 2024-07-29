@@ -15,7 +15,7 @@ export function ConnectWallet({
 }) {
   const { selectedSigner, toggleModal, selectSigner, identityKit } = useContext(IdentityKitContext)
   const [connectedAccount, setConnectedAccount] = useState<string | undefined>()
-  const [icpBalance, setIcpBalance] = useState<undefined | string>()
+  const [icpBalance, setIcpBalance] = useState<undefined | number>()
 
   const ikConnectedAccount = _get(identityKit, "signerClient.connectedUser.owner")
 
@@ -62,6 +62,7 @@ export function ConnectWallet({
       onDisconnect={() => {
         identityKit.signerClient!.logout()
         selectSigner(undefined)
+        setConnectedAccount(undefined)
       }}
     />
   )

@@ -1,10 +1,11 @@
 import clsx from "clsx"
 import { MouseEventHandler } from "react"
+import { formatIcp } from "../utils"
 
 export type ButtonProps = {
   onClick?: MouseEventHandler<HTMLButtonElement>
   connectedAccount?: string
-  icpBalance?: string
+  icpBalance?: number
   className?: string
 }
 
@@ -34,7 +35,7 @@ export function Button({ onClick, connectedAccount, icpBalance, className }: But
           </small>
           <div className="bg-white px-[5px] rounded-md">
             <small className="text-black font-normal text-xs">
-              {icpBalance && `${icpBalance} ICP`}
+              {icpBalance !== undefined && `${formatIcp(icpBalance)} ICP`}
             </small>
           </div>
         </>
