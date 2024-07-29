@@ -7,7 +7,7 @@ import { useState, ComponentType } from "react"
 
 export type DropdownProps = {
   className?: string
-  icpBalance?: string
+  icpBalance?: number
   connectedAccount: string
   buttonComponent?: ComponentType<ButtonProps>
   onDisconnect: () => unknown

@@ -20,11 +20,11 @@ export class IdentityKit {
     public readonly signerAgentOptions: Omit<SignerAgentOptions, "account">
   ) {}
 
-  async getIcpBalance(): Promise<string> {
+  async getIcpBalance(): Promise<number> {
     const connectedUser = this.signerClient.connectedUser
     if (!connectedUser) throw new Error("Not authenticated")
 
-    return (
+    const balance = (
       await LedgerCanister.create().accountBalance({
         accountIdentifier: AccountIdentifier.fromPrincipal({
           principal: Principal.from(connectedUser.owner),
@@ -33,5 +33,7 @@ export class IdentityKit {
         certified: false,
       })
     ).toString()
+
+    return Number(balance) / 10 ** 8
   }
 }

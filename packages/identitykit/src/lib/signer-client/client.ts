@@ -70,7 +70,6 @@ export abstract class SignerClient {
     ) {
       this.idleManager?.registerCallback(async () => {
         await this.logout()
-        location.reload()
       })
     }
   }
