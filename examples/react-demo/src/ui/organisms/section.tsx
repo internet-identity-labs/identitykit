@@ -16,7 +16,7 @@ import { Buffer } from "buffer"
 import { toBase64 } from "@slide-computer/signer"
 
 import "react-toastify/dist/ReactToastify.css"
-import { IdentityKitAgent } from "@nfid/identitykit"
+import { IdentityKitSignerAgent } from "@nfid/identitykit"
 import { idlFactory } from "../../idl/service_idl"
 
 export interface IRequestExample {
@@ -82,7 +82,7 @@ export const Section: React.FC<ISection> = ({
         setIcrc49SignerResponse(null)
         setIcrc49ActorResponse(null)
         const { sender, canisterId } = requestObject.params
-        const agent = new IdentityKitAgent({
+        const agent = new IdentityKitSignerAgent({
           signer: {
             ...selectedSigner,
             // custom call canister here just to save certificate and contentMap to local state

@@ -1,6 +1,7 @@
 import { useTheme } from "next-themes"
 import { IconSvgMoon, IconSvgNFID, IconSvgNFIDWhite, IconSvgSun } from "../atoms/icons"
-import { ConnectWalletButton } from "@nfid/identitykit/react"
+import { IdentityKitConnectWallet } from "@nfid/identitykit/react"
+import { toast } from "react-toastify"
 
 export const Header = () => {
   const { theme, setTheme } = useTheme()
@@ -26,7 +27,11 @@ export const Header = () => {
             onClick={() => setTheme("light")}
           />
         )}
-        <ConnectWalletButton />
+        <IdentityKitConnectWallet
+          onError={(e) => {
+            toast.error(e.message)
+          }}
+        />
       </div>
     </div>
   )

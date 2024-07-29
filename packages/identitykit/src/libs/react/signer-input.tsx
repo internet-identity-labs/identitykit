@@ -1,11 +1,11 @@
 import { useContext } from "react"
-import { isValidURL } from "./utils"
+import { validateUrl } from "./utils"
 import { useForm } from "react-hook-form"
 import { IdentityKitContext } from "./context"
 import { Button } from "./ui/button"
 
 export const SignerInput = () => {
-  const { setCustomSigner } = useContext(IdentityKitContext)
+  const { selectCustomSigner } = useContext(IdentityKitContext)
   const {
     register,
     formState: { errors },
@@ -21,7 +21,7 @@ export const SignerInput = () => {
 
   const submitHandler = () => {
     if (!customSignerUrl) return
-    setCustomSigner(customSignerUrl)
+    selectCustomSigner(customSignerUrl)
   }
 
   return (
@@ -34,7 +34,7 @@ export const SignerInput = () => {
           type="text"
           {...register("url", {
             required: true,
-            validate: (value) => isValidURL(value),
+            validate: validateUrl,
           })}
         />
         <Button

@@ -4,7 +4,7 @@ const mockedProviderUrl = import.meta.env.VITE_MOCKED_SIGNER_PROVIDER_URL
 
 const NFID: SignerConfig = {
   id: "NFID",
-  providerUrl: "https://dev.nfid.one/embed",
+  providerUrl: "https://dev.nfid.one/rpc",
   popupHeight: 640,
   popupWidth: 450,
   label: "NFID (Coming soon)",
