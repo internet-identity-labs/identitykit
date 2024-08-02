@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react"
 import { Signer } from "@slide-computer/signer"
-import { PostMessageTransport } from "@slide-computer/signer-web"
 import { DEFAULT_SIZES } from "../constants"
-import { openPopup } from "../utils"
 import { SignerConfig } from "../../../lib"
+import { TransportBuilder } from "../../../lib/service"
+import { TransportType } from "../../../lib/types"
 
 export function useSigner({
   signers,
@@ -25,14 +25,17 @@ export function useSigner({
       const signer = signers.find((s) => s.id === signerId)
       if (!signer) throw new Error(`Signer with id ${signerId} not found`)
 
-      const { providerUrl, label, popupWidth, popupHeight } = signer
+      const { transportType, providerUrl, label, popupWidth, popupHeight } = signer
 
       const width = popupWidth || DEFAULT_SIZES.width
       const height = popupHeight || DEFAULT_SIZES.height
 
-      // TODO should have openWindow according to transport
-      const transport = new PostMessageTransport({
-        openWindow: () => openPopup(providerUrl, label, width, height),
+      const transport = TransportBuilder.build({
+        transportType,
+        url: providerUrl,
+        label,
+        width,
+        height,
       })
       const createdSigner = new Signer({ transport })
       cb(createdSigner)
@@ -46,8 +49,12 @@ export function useSigner({
   )
 
   const selectCustomSigner = useCallback((url: string) => {
-    const transport = new PostMessageTransport({
-      openWindow: () => openPopup(url, "Custom", 450, 640),
+    const transport = TransportBuilder.build({
+      transportType: TransportType.POPUP,
+      url,
+      label: "Custom",
+      width: 450,
+      height: 640,
     })
 
     const createdSigner = new Signer({ transport })
