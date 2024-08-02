@@ -3,7 +3,11 @@
   "extends": ["//"],
   "tasks": {
     "build": {
-      "env": ["VITE_MOCKED_SIGNER_PROVIDER_URL", "VITE_TARGET_CANISTER"]
+      "env": [
+        "VITE_MOCKED_SIGNER_PROVIDER_URL",
+        "VITE_MOCKED_NFID_SIGNER_PROVIDER_URL",
+        "VITE_TARGET_CANISTER"
+      ]
     }
   }
 }
