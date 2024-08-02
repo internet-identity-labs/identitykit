@@ -6,6 +6,7 @@ export function ConnectWalletButton() {
   const { selectedSigner, toggleModal } = useContext(IdentityKitContext)
   return (
     <button
+      id={"connect"}
       type="button"
       disabled={!!selectedSigner}
       onClick={toggleModal}

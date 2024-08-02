@@ -70,7 +70,9 @@ export function Dropdown({
                 onDisconnect()
               }}
             >
-              <small className="font-semibold text-black dark:text-white">Disconnect</small>
+              <small id={"disconnect"} className="font-semibold text-black dark:text-white">
+                Disconnect
+              </small>
               <LogoutIcon />
             </div>
           </MenuItem>

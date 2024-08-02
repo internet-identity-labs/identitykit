@@ -12,6 +12,7 @@ export type ButtonProps = {
 export function Button({ onClick, connectedAccount, icpBalance, className }: ButtonProps) {
   return (
     <button
+      id={"connect"}
       type="button"
       onClick={onClick}
       className={clsx(

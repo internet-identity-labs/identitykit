@@ -13,21 +13,27 @@ export class Icrc34DelegationSection extends Section {
   }
 
   async isDisabledGlobalAccount(popup: Page): Promise<boolean> {
+    await popup.waitForSelector("#acc_1")
     return await popup.locator("#acc_1").isDisabled()
   }
 
   async isDisabledSessionAccount(popup: Page): Promise<boolean> {
+    await popup.waitForSelector("#acc_2")
     return await popup.locator("#acc_2").isDisabled()
   }
 
   async selectGlobalAccount(popup: Page): Promise<void> {
+    await popup.waitForSelector("#acc_1")
     await popup.click("#acc_1")
+    await popup.waitForSelector("#approve")
     await popup.click("#approve")
     await popup.close()
   }
 
   async selectSessionAccount(popup: Page): Promise<void> {
+    await popup.waitForSelector("#acc_2")
     await popup.click("#acc_2")
+    await popup.waitForSelector("#approve")
     await popup.click("#approve")
     await popup.close()
   }
