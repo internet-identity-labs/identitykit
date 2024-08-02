@@ -11,7 +11,7 @@ import { Section } from "./ui/organisms/section"
 import { ToastContainer } from "react-toastify"
 import { SectionContainer } from "./ui/organisms/section-container"
 import { IdentityKitProvider, IdentityKitTheme } from "@nfid/identitykit/react"
-import { MockedSigner, NFID } from "./signers"
+import { MockedSigner, NFID, SignerConfig } from "@nfid/identitykit"
 import { useTheme } from "next-themes"
 import { IdentityKitAuthKindType, IdentityKitAuthKind } from "@nfid/identitykit"
 import { useState } from "react"
@@ -25,12 +25,19 @@ const icrc27data = [icrc27AccountsSection]
 const icrc34data = [icrc34DelegationSection]
 const icrc49data = [icrc49CallCanisterSection]
 
+const mockedSignerProviderUrl = import.meta.env.VITE_MOCKED_SIGNER_PROVIDER_URL
+const nfidSignerProviderUrl = import.meta.env.VITE_MOCKED_NFID_SIGNER_PROVIDER_URL
+
 function App() {
   const { theme } = useTheme()
   const [authKind, setAuthKind] = useState<IdentityKitAuthKindType>(IdentityKitAuthKind.DELEGATION)
+
+  const nfid: SignerConfig = { ...NFID, providerUrl: nfidSignerProviderUrl }
+  const mockedSigner: SignerConfig = { ...MockedSigner, providerUrl: mockedSignerProviderUrl }
+
   return (
     <IdentityKitProvider
-      signers={[NFID, MockedSigner]}
+      signers={[nfid, mockedSigner]}
       theme={theme as IdentityKitTheme}
       authKind={authKind}
     >

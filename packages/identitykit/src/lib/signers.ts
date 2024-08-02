@@ -1,10 +1,9 @@
-import { SignerConfig } from "@nfid/identitykit"
-
-const mockedProviderUrl = import.meta.env.VITE_MOCKED_SIGNER_PROVIDER_URL
+import { SignerConfig, TransportType } from "./types"
 
 const NFID: SignerConfig = {
   id: "NFID",
-  providerUrl: "https://dev.nfid.one/rpc",
+  providerUrl: "https://nfid.one/rpc",
+  transportType: TransportType.POPUP,
   popupHeight: 640,
   popupWidth: 450,
   label: "NFID Dev",
@@ -13,7 +12,8 @@ const NFID: SignerConfig = {
 
 const MockedSigner: SignerConfig = {
   id: "MockedSigner",
-  providerUrl: mockedProviderUrl,
+  providerUrl: "https://icrc-25-example-signer.nfid.one",
+  transportType: TransportType.POPUP,
   popupHeight: 640,
   popupWidth: 450,
   label: "Mocked Signer Wallet",
