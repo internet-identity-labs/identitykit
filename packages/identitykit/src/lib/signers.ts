@@ -2,7 +2,7 @@ import { SignerConfig, TransportType } from "./types"
 
 const NFID: SignerConfig = {
   id: "NFID",
-  providerUrl: "https://dev.nfid.one/rpc",
+  providerUrl: "https://nfid.one/rpc",
   transportType: TransportType.POPUP,
   popupHeight: 640,
   popupWidth: 450,
@@ -12,7 +12,7 @@ const NFID: SignerConfig = {
 
 const MockedSigner: SignerConfig = {
   id: "MockedSigner",
-  providerUrl: "https://icrc-25-example-signer-dev.nfid.one",
+  providerUrl: "https://icrc-25-example-signer.nfid.one",
   transportType: TransportType.POPUP,
   popupHeight: 640,
   popupWidth: 450,
