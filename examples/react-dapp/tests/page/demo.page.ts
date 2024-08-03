@@ -1,4 +1,5 @@
 import { Locator, Page } from "@playwright/test"
+import userService from "../helpers/accounts-service.js"
 
 export class DemoPage {
   private readonly connectButton: Locator
@@ -24,6 +25,10 @@ export class DemoPage {
     await account.click()
   }
 
+  async setAccount(anchor: number) {
+    await userService(this.page).setAuth(anchor)
+  }
+
   async logout() {
     //TODO replace refreshing of a page with commented steps when dapp is ready
     // await this.connectButton.click()
@@ -31,3 +36,5 @@ export class DemoPage {
     await this.page.reload({ waitUntil: "load" })
   }
 }
+
+export default (page: Page) => new DemoPage(page)

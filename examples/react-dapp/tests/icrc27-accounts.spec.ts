@@ -54,10 +54,14 @@ test.describe("ICRC25 accounts", () => {
     section,
     demoPage,
     requestPermissionSection,
+    page,
   }) => {
     for (const account of accounts) {
       await demoPage.login(account)
       await requestPermissionSection.approvePermissions()
+      if (account.toString() == page.locator("#signer_NFID").toString()) {
+        await demoPage.setAccount(10974)
+      }
       const response = {
         accounts: [
           {
