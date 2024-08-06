@@ -1,4 +1,4 @@
-import { useState, useCallback, PropsWithChildren, useEffect, useRef } from "react"
+import { useState, useCallback, PropsWithChildren } from "react"
 import { SignerConfig } from "../../lib/types"
 import { IdentityKitContext } from "./context"
 import { IdentityKitModal } from "./modal"
