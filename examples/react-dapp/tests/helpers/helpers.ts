@@ -7,7 +7,6 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 export async function waitForLoaderDisappear(page: Page) {
-  await page.locator("#loader").waitFor({ state: "visible" })
   await page.locator("#loader").waitFor({ state: "detached" })
 }
 

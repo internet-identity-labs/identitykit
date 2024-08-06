@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test"
+import { Locator, Page } from "@playwright/test"
 import { Section } from "./section"
 
 export class Icrc25RequestPermissionsSection extends Section {
@@ -6,7 +6,7 @@ export class Icrc25RequestPermissionsSection extends Section {
     super(page, "icrc25_request_permissions")
   }
 
-  async approvePermissions(timeout: number = 30000): Promise<void> {
+  async approvePermissions(account: Locator, timeout: number = 30000): Promise<void> {
     const approveOperation = async () => {
       const [popup] = await Promise.all([
         this.page.waitForEvent("popup"),
@@ -16,20 +16,21 @@ export class Icrc25RequestPermissionsSection extends Section {
       popup.on("close", () => {
         isPopupClosed = true
       })
-
-      while (!isPopupClosed) {
-        try {
-          await popup.waitForSelector("#approve", { state: "attached", timeout: 2000 })
-          await popup.click("#approve")
-          break
-        } catch (e) {
-          if (isPopupClosed) {
+      if (account.toString() == "locator('#signer_MockedSigner')".toString()) {
+        while (!isPopupClosed) {
+          try {
+            await popup.waitForSelector("#approve", { state: "attached", timeout: 2000 })
+            await popup.click("#approve")
             break
+          } catch (e) {
+            if (isPopupClosed) {
+              break
+            }
           }
         }
-      }
-      if (!isPopupClosed) {
-        await popup.waitForEvent("close")
+        if (!isPopupClosed) {
+          await popup.waitForEvent("close")
+        }
       }
     }
 

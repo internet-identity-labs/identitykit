@@ -1,7 +1,7 @@
 import { Locator, Page } from "@playwright/test"
 
 export abstract class Section {
-  protected readonly submitButton: Locator
+  readonly submitButton: Locator
   private readonly requestSection: Locator
   private readonly responseSection: Locator
 

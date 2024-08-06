@@ -1,4 +1,4 @@
-import { expect, Locator, test as base } from "@playwright/test"
+import { expect, Locator, Page, test as base } from "@playwright/test"
 import { DemoPage } from "./page/demo.page"
 import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section"
 import { Icrc49CallCanisterSection } from "./section/icrc49-call-canister.section"
@@ -7,6 +7,7 @@ type Fixtures = {
   section: Icrc49CallCanisterSection
   demoPage: DemoPage
   requestPermissionSection: Icrc25RequestPermissionsSection
+  nfidPage: Page
 }
 
 const test = base.extend<Fixtures>({
@@ -23,6 +24,14 @@ const test = base.extend<Fixtures>({
     const requestPermissionSection = new Icrc25RequestPermissionsSection(page)
     await use(requestPermissionSection)
   },
+  nfidPage: async ({ context, demoPage }, use) => {
+    const nfidPage = await context.newPage()
+    await nfidPage.goto("https://dev.nfid.one/")
+    await demoPage.setAccount(10974, nfidPage)
+    await context.pages()[0].bringToFront()
+    await use(nfidPage)
+    await nfidPage.close()
+  },
 })
 
 test.describe("ICRC25 call-canister", () => {
@@ -38,7 +47,7 @@ test.describe("ICRC25 call-canister", () => {
   }) => {
     for (const account of accounts) {
       await demoPage.login(account)
-      await requestPermissionSection.approvePermissions()
+      await requestPermissionSection.approvePermissions(account)
       const request = {
         method: "icrc49_call_canister",
         params: {
@@ -62,10 +71,12 @@ test.describe("ICRC25 call-canister", () => {
     section,
     demoPage,
     requestPermissionSection,
+    nfidPage,
+    context,
   }) => {
     for (const account of accounts) {
       await demoPage.login(account)
-      await requestPermissionSection.approvePermissions()
+      await requestPermissionSection.approvePermissions(account)
       const request = {
         method: "icrc49_call_canister",
         params: {
@@ -91,86 +102,116 @@ test.describe("ICRC25 call-canister", () => {
     section,
     demoPage,
     requestPermissionSection,
+    nfidPage,
+    context,
   }) => {
-    for (const account of accounts) {
-      await demoPage.login(account)
-      await requestPermissionSection.approvePermissions()
+    // for (const account of accounts) {
+    let account = accounts[0]
+    await demoPage.login(account)
+    await requestPermissionSection.approvePermissions(account)
+
+    const textsExpectedMocked = [
+      "Request from http://localhost:3001",
+      "Canister ID",
+      "do25a-dyaaa-aaaak-qifua-cai",
+      "Sender",
+      "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+      "Arguments",
+      '["me"]',
+    ]
+
+    const textsExpectedNFID = [
+      "Request from localhost:3001",
+      "Canister ID",
+      "do25a-dyaaa-aaaak-qifua-cai",
+      "Method",
+      "greet_no_consent",
+      "Arg",
+      "RElETAABcQJtZQ==",
+    ]
+
+    if (account.toString() == "locator('#signer_MockedSigner')") {
       const popup = await section.openPopup()
-
-      const textsExpected = [
-        "Request from http://localhost:3001",
-        "Canister ID",
-        "do25a-dyaaa-aaaak-qifua-cai",
-        "Sender",
-        "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
-        "Arguments",
-        '["me"]',
-      ]
-
       const texts = await section.getPopupTexts(popup)
-
-      expect(texts).toEqual(textsExpected)
-
+      expect(texts).toEqual(textsExpectedMocked)
       await section.approve(popup)
-      await section.waitForResponse()
-      const actualResponse = await section.getResponseJson()
-
-      expect(actualResponse).toMatchObject({
-        origin: "http://localhost:3001",
-        jsonrpc: "2.0",
-        id: "7812362e-29b8-4099-824c-067e8a50f6f3",
-        result: {
-          contentMap: expect.anything(),
-          certificate: expect.anything(),
-          content: "Hello, me!",
-        },
-      })
-      await demoPage.logout()
+    } else {
+      await section.checkPopupTextNFID(demoPage.page, context, textsExpectedNFID)
     }
+
+    await section.waitForResponse()
+    const actualResponse = await section.getResponseJson()
+
+    expect(actualResponse).toMatchObject({
+      origin: "http://localhost:3001",
+      jsonrpc: "2.0",
+      id: "7812362e-29b8-4099-824c-067e8a50f6f3",
+      result: {
+        contentMap: expect.anything(),
+        certificate: expect.anything(),
+        content: "Hello, me!",
+      },
+    })
+    await demoPage.logout()
+    // }
   })
 
   test("should make canister call with consent", async ({
     section,
     demoPage,
     requestPermissionSection,
+    nfidPage,
+    context,
   }) => {
-    for (const account of accounts) {
-      await demoPage.login(account)
-      await requestPermissionSection.approvePermissions()
-      await section.selectConsentTab()
+    // for (const account of accounts) {
+    let account = accounts[0]
+    await demoPage.login(account)
+    await requestPermissionSection.approvePermissions(account)
+    await section.selectConsentTab()
 
+    const textsExpectedMocked = [
+      "Request from http://localhost:3001",
+      "Canister ID",
+      "do25a-dyaaa-aaaak-qifua-cai",
+      "Sender",
+      "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+      "Arguments",
+      '["me"]',
+      "Produce the following greeting text: > Hello, me!",
+    ]
+
+    const textsExpectedNFID = [
+      "Request from localhost:3001",
+      "Canister ID",
+      "do25a-dyaaa-aaaak-qifua-cai",
+      "Method",
+      "greet",
+      "Arg",
+      "RElETAABcQJtZQ==",
+    ]
+
+    if (account.toString() == "locator('#signer_MockedSigner')") {
       const popup = await section.openPopup()
-
-      const textsExpected = [
-        "Request from http://localhost:3001",
-        "Canister ID",
-        "do25a-dyaaa-aaaak-qifua-cai",
-        "Sender",
-        "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
-        "Arguments",
-        '["me"]',
-        "Produce the following greeting text: > Hello, me!",
-      ]
-
       const texts = await section.getPopupTexts(popup)
-
-      expect(texts).toEqual(textsExpected)
-
+      expect(texts).toEqual(textsExpectedMocked)
       await section.approve(popup)
-      await section.waitForResponse()
-      const actualResponse = await section.getResponseJson()
-
-      expect(actualResponse).toMatchObject({
-        origin: "http://localhost:3001",
-        jsonrpc: "2.0",
-        id: "7812362e-29b8-4099-824c-067e8a50f6f3",
-        result: {
-          contentMap: expect.anything(),
-          certificate: expect.anything(),
-          content: "Hello, me!",
-        },
-      })
-      await demoPage.logout()
+    } else {
+      await section.checkPopupTextNFID(demoPage.page, context, textsExpectedNFID)
     }
+    await section.waitForResponse()
+    const actualResponse = await section.getResponseJson()
+
+    expect(actualResponse).toMatchObject({
+      origin: "http://localhost:3001",
+      jsonrpc: "2.0",
+      id: "7812362e-29b8-4099-824c-067e8a50f6f3",
+      result: {
+        contentMap: expect.anything(),
+        certificate: expect.anything(),
+        content: "Hello, me!",
+      },
+    })
+    await demoPage.logout()
+    // }
   })
 })

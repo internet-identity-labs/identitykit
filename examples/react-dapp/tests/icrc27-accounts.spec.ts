@@ -1,4 +1,4 @@
-import { expect, Locator, test as base } from "@playwright/test"
+import { expect, Locator, Page, test as base } from "@playwright/test"
 import { DemoPage } from "./page/demo.page"
 import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section"
 import { Icrc25AccountsSection } from "./section/icrc27-accounts.section"
@@ -7,6 +7,7 @@ type Fixtures = {
   section: Icrc25AccountsSection
   demoPage: DemoPage
   requestPermissionSection: Icrc25RequestPermissionsSection
+  nfidPage: Page
 }
 
 const test = base.extend<Fixtures>({
@@ -18,6 +19,14 @@ const test = base.extend<Fixtures>({
     const demoPage = new DemoPage(page)
     await demoPage.goto()
     await use(demoPage)
+  },
+  nfidPage: async ({ context, demoPage }, use) => {
+    const nfidPage = await context.newPage()
+    await nfidPage.goto("https://dev.nfid.one/")
+    await demoPage.setAccount(10974, nfidPage)
+    await context.pages()[0].bringToFront()
+    await use(nfidPage)
+    await nfidPage.close()
   },
   requestPermissionSection: async ({ page }, use) => {
     const requestPermissionSection = new Icrc25RequestPermissionsSection(page)
@@ -54,15 +63,13 @@ test.describe("ICRC25 accounts", () => {
     section,
     demoPage,
     requestPermissionSection,
-    page,
+    nfidPage,
+    context,
   }) => {
     for (const account of accounts) {
       await demoPage.login(account)
-      await requestPermissionSection.approvePermissions()
-      if (account.toString() == page.locator("#signer_NFID").toString()) {
-        await demoPage.setAccount(10974)
-      }
-      const response = {
+      await requestPermissionSection.approvePermissions(account)
+      const responseMocked = {
         accounts: [
           {
             owner: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
@@ -74,12 +81,24 @@ test.describe("ICRC25 accounts", () => {
           },
         ],
       }
+      const responseNFID = {
+        accounts: [
+          {
+            owner: "7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae",
+            subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          },
+        ],
+      }
 
-      await section.selectAccounts()
+      account.toString() == "locator('#signer_MockedSigner')".toString()
+        ? await section.selectAccountsMocked()
+        : await section.selectAccountsNFID(demoPage.page, context, 30000)
       await section.waitForResponse()
 
       const actualResponse = await section.getResponseJson()
-      expect(actualResponse).toStrictEqual(response)
+      expect(actualResponse).toStrictEqual(
+        account.toString() == "locator('#signer_MockedSigner')" ? responseMocked : responseNFID
+      )
       await demoPage.logout()
     }
   })

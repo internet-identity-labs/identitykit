@@ -91,7 +91,7 @@ test.describe("ICRC25 Request Permissions", () => {
         },
       ]
 
-      await section.approvePermissions()
+      await section.approvePermissions(account)
       await section.clickSubmitButton()
       const actualResponse = await section.getResponseJson()
       expect(actualResponse).toStrictEqual(

@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test"
-import userService from "../helpers/accounts-service.js"
+import { UserService } from "../helpers/accounts-service.js"
 
 export class DemoPage {
   private readonly connectButton: Locator
@@ -25,8 +25,9 @@ export class DemoPage {
     await account.click()
   }
 
-  async setAccount(anchor: number) {
-    await userService(this.page).setAuth(anchor)
+  async setAccount(anchor: number, page: Page) {
+    const service = new UserService(page)
+    await service.setAuth(anchor, page)
   }
 
   async logout() {

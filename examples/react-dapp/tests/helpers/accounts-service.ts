@@ -5,7 +5,7 @@ import { Page } from "@playwright/test"
 /**
  * The Subject interface declares a set of methods for managing subscribers.
  */
-class UserService {
+export class UserService {
   /**
    * @type {number} For the sake of simplicity, the Subject's state, essential
    * to all subscribers, is stored in this variable.
@@ -34,55 +34,63 @@ class UserService {
     fail("All users borrowed")
   }
 
-  async setAuth(anchor: number, timeout?: 50000): Promise<void> {
-    const testUser: TestUser = await userService(this.page).takeStaticUserByAnchor(anchor)
+  async setAuth(anchor: number, page: Page, timeout: number = 50000): Promise<void> {
+    await waitForLoaderDisappear(page)
+    const testUser: TestUser = await this.takeStaticUserByAnchor(anchor)
     let errors: string[] = []
 
-    const result = await Promise.race([
-      this.page.evaluate(
-        async ({ testUser }) => {
-          return new Promise<string>((resolve) => {
-            // @ts-ignore
-            if (typeof setAuthState === "function") {
-              try {
-                // @ts-ignore
-                setAuthState(testUser.authstate)
-                  .then((functionResult: string | Error) => {
-                    resolve(String(functionResult))
-                  })
-                  .catch((error: Error) => {
-                    resolve("error: " + error.message)
-                  })
-              } catch (e) {
-                const errorMessage =
-                  e instanceof Error
-                    ? `setAuthState error: ${e.message}`
-                    : `setAuthState got unknown error`
-                resolve(errorMessage)
+    while (true) {
+      const result = await Promise.race([
+        this.page.evaluate(
+          async ({ testUser }) => {
+            return new Promise<string>((resolve) => {
+              // @ts-ignore
+              if (typeof setAuthState === "function") {
+                try {
+                  // @ts-ignore
+                  setAuthState(testUser.authstate)
+                    .then((functionResult: string | Error) => {
+                      resolve(String(functionResult))
+                    })
+                    .catch((error: Error) => {
+                      resolve("error: " + error.message)
+                    })
+                } catch (e) {
+                  const errorMessage =
+                    e instanceof Error
+                      ? `setAuthState error: ${e.message}`
+                      : `setAuthState got unknown error`
+                  resolve(errorMessage)
+                }
+              } else {
+                resolve("setAuthState function is not available")
               }
-            } else {
-              resolve("setAuthState function is not available")
-            }
-          })
-        },
-        { testUser }
-      ),
-      new Promise<string>((_, reject) =>
-        setTimeout(() => reject(new Error("SetAuth timed out")), timeout)
-      ),
-    ]).catch((error) => `error: ${error.message}`)
+            })
+          },
+          { testUser }
+        ),
+        new Promise<string>((_, reject) =>
+          setTimeout(() => reject(new Error("SetAuth timed out")), timeout)
+        ),
+      ]).catch((error) => `error: ${error.message}`)
 
-    if (result.startsWith("error:") || result.startsWith("setAuthState error:")) {
-      errors.push(result)
+      if (result.startsWith("error:") || result.startsWith("setAuthState error:")) {
+        errors.push(result)
+      }
+
+      const state = await this.getAuthStateFromDB()
+      errors.push(...state.errors)
+
+      if (
+        state.identity?.toString() === testUser.authstate.identity.toString() &&
+        JSON.stringify(state.delegation) === JSON.stringify(testUser.authstate.delegation)
+      ) {
+        break
+      }
+      await new Promise((resolve) => setTimeout(resolve, 1000))
     }
 
-    const state = await this.getAuthStateFromDB()
-    errors.push(...state.errors)
-
-    if (
-      state.identity?.toString() !== testUser.authstate.identity.toString() ||
-      JSON.stringify(state.delegation) !== JSON.stringify(testUser.authstate.delegation)
-    ) {
+    if (errors.length > 0) {
       throw new Error(`Failed to set up authstate. Current state is: ${errors.join(", ")}`)
     }
   }
@@ -199,6 +207,3 @@ class UserService {
     }
   }
 }
-
-const userService = (page: Page) => new UserService(page)
-export default userService

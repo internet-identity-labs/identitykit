@@ -69,8 +69,8 @@ test.describe("ICRC25 Permissions", () => {
   }) => {
     for (const account of accounts) {
       await demoPage.login(account)
-      await requestPermissionSection.approvePermissions()
-      const response = [
+      await requestPermissionSection.approvePermissions(account)
+      const responseMocked = [
         {
           scope: {
             method: "icrc27_accounts",
@@ -90,7 +90,7 @@ test.describe("ICRC25 Permissions", () => {
           state: "granted",
         },
       ]
-      const response2 = [
+      const responseNFID = [
         {
           method: "icrc27_accounts",
         },
@@ -106,7 +106,7 @@ test.describe("ICRC25 Permissions", () => {
 
       const actualResponse = await section.getResponseJson()
       expect(actualResponse).toStrictEqual(
-        account.toString() == "locator('#signer_MockedSigner')" ? response : response2
+        account.toString() == "locator('#signer_MockedSigner')" ? responseMocked : responseNFID
       )
       await demoPage.logout()
     }
