@@ -27,6 +27,7 @@ export class AccountsSignerClient extends SignerClient {
 
   public async login(): Promise<string> {
     const permissions = await this.options.signer.permissions()
+
     if (
       // TODO hot fix for nfid wallet, permissions have old format
       !permissions.find((x) =>

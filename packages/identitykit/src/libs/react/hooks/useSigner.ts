@@ -37,6 +37,7 @@ export function useSigner({
         width,
         height,
       })
+
       const createdSigner = new Signer({ transport })
       cb(createdSigner)
 

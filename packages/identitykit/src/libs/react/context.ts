@@ -9,7 +9,6 @@ const defaultState: IdentityKitProvider = {
   selectedSigner: undefined,
   savedSigner: undefined,
   isModalOpen: false,
-  signerIframeRef: undefined,
   toggleModal: () => {
     throw new Error("toggleModal not implemented")
   },

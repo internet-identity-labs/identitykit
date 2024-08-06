@@ -30,7 +30,6 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <Component
       id={id}
-      onClick={async () => 1}
       disabled={disabled}
       className={clsx(
         "transition duration-75",
@@ -44,14 +43,16 @@ export const Button: React.FC<ButtonProps> = ({
             "hover:shadow-md hover:shadow-[#0D9488]/40 hover:bg-[#00A899]",
             "active:border-teal-700 active:bg-teal-700",
             "focus:ring-0 focus:ring-offset-0 focus:ring-transparent",
-            "disabled:shadow-none disabled:bg-gray-300 disabled:border-gray-300"
+            "disabled:shadow-none disabled:bg-gray-300 disabled:border-gray-300",
+            "dark:disabled:bg-zinc-700 dark:disabled:border-zinc-700"
           ),
         isSecondary &&
           clsx(
-            "text-[#146F68] border-transparent",
-            "hover:bg-gray-100",
-            "active:bg-gray-200",
-            "disabled:bg-white disabled:border-transparent disabled:text-secondary"
+            "text-[#146F68] dark:text-teal-500 border-transparent",
+            "hover:bg-gray-100 dark:hover:bg-zinc-800",
+            "active:bg-gray-200 dark:active:bg-zinc-900",
+            "disabled:text-gray-400",
+            "dark:disabled:text-zinc-600"
           ),
         block && clsx("w-full block"),
         className

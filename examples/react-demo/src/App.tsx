@@ -38,6 +38,7 @@ function App() {
   return (
     <IdentityKitProvider
       signers={[nfid, mockedSigner]}
+      featuredSigner={nfid}
       theme={theme as IdentityKitTheme}
       authKind={authKind}
     >

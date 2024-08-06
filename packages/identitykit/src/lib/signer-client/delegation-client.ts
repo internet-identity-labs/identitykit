@@ -115,8 +115,9 @@ export class DelegationSignerClient extends SignerClient {
      */
     maxTimeToLive?: bigint
   }): Promise<string> {
-    const baseIdentity = await this.getBaseIdentity()
     const permissions = await this.options.signer.permissions()
+    const baseIdentity = await this.getBaseIdentity()
+    // const permissions = await this.options.signer.permissions()
     // TODO hot fix for nfid wallet, permissions have old format
     if (
       !permissions.find((x) =>
