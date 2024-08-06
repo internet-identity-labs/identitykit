@@ -20,7 +20,7 @@ export function Copied(props: React.SVGProps<SVGSVGElement>) {
         d="M11.332 12.2222L13.2544 14L17.1098 10"
         stroke={colors.green[500]}
         stroke-width="1.8"
-        stroke-linecap="round"
+        strokeLinecap="round"
       />
       <path
         fill-rule="evenodd"

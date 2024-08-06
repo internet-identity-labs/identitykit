@@ -36,6 +36,7 @@ export const SignerInput = () => {
             required: true,
             validate: validateUrl,
           })}
+          name="url"
         />
         <Button
           disabled={Boolean(errors.url) || !customSignerUrl}

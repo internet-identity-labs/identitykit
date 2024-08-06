@@ -9,6 +9,7 @@ import BackIcon from "./assets/back.svg"
 import { Tooltip } from "./ui/tooltip"
 import { TooltipProvider } from "@radix-ui/react-tooltip"
 import { SignerInput } from "./signer-input"
+import { VisuallyHidden } from "@radix-ui/themes"
 
 export const IdentityKitModal = () => {
   const { isModalOpen, selectedSigner, signers, selectSigner, theme } =
@@ -36,6 +37,7 @@ export const IdentityKitModal = () => {
           <Dialog.Content
             id="identity-kit-modal"
             data-identity-kit-theme={theme}
+            aria-describedby={undefined}
             className={clsx(
               { flex: isModalOpen, hidden: !isModalOpen },
               {
@@ -46,6 +48,9 @@ export const IdentityKitModal = () => {
               ` flex-col fixed p-0 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[1010]`
             )}
           >
+            <VisuallyHidden>
+              <Dialog.Title />
+            </VisuallyHidden>
             <div className="h-full">
               <div className="p-[30px] bg-[#FAFAFA] dark:bg-black gap-[10px] flex flex-col rounded-xl">
                 <div className="flex items-center justify-between mb-[10px]">
