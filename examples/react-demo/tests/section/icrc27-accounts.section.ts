@@ -8,6 +8,7 @@ export class Icrc25AccountsSection extends Section {
 
   async selectAccounts(): Promise<void> {
     const [popup] = await Promise.all([this.page.waitForEvent("popup"), this.submitButton.click()])
+
     await popup.click("#acc_0")
     await popup.click("#acc_1")
     await popup.click("#approve")

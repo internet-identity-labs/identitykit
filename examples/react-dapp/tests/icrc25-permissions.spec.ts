@@ -39,12 +39,9 @@ test.describe("ICRC25 Permissions", () => {
   }) => {
     for (const account of accounts) {
       await demoPage.login(account)
-      const request = {
-        method: "icrc25_permissions",
-      }
 
       const initialRequest = await section.getRequestJson()
-      expect(initialRequest).toStrictEqual(request)
+      expect(initialRequest).toStrictEqual({ method: "icrc25_permissions" })
 
       const initialResponse = await section.getResponseJson()
       expect(initialResponse).toStrictEqual({})

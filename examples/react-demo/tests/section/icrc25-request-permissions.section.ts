@@ -8,6 +8,7 @@ export class Icrc25RequestPermissionsSection extends Section {
 
   async approvePermissions(): Promise<void> {
     const [popup] = await Promise.all([this.page.waitForEvent("popup"), this.submitButton.click()])
+
     await popup.click("#approve")
     await popup.close()
   }
