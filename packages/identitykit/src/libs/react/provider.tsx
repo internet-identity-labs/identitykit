@@ -17,6 +17,7 @@ interface IdentityKitProviderProps<
 > extends PropsWithChildren {
   authKind?: T
   signers: SignerConfig[]
+  featuredSigner?: SignerConfig
   theme?: IdentityKitTheme
   signerClientOptions?: T extends typeof IdentityKitAuthKind.DELEGATION
     ? Omit<IdentityKitDelegationSignerClientOptions, "signer">
@@ -35,10 +36,10 @@ export const IdentityKitProvider = <T extends IdentityKitAuthKindType>({
   signerClientOptions,
   signerAgentOptions,
   authKind,
+  featuredSigner,
   ...props
 }: IdentityKitProviderProps<T>) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-
   const toggleModal = useCallback(() => {
     setIsModalOpen((prev) => !prev)
   }, [])
@@ -68,6 +69,7 @@ export const IdentityKitProvider = <T extends IdentityKitAuthKindType>({
         selectSigner,
         selectCustomSigner,
         theme,
+        featuredSigner,
         identityKit: identityKit!,
       }}
     >

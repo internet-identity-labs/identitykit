@@ -1,8 +1,8 @@
 import { useContext } from "react"
-import { validateUrl } from "./utils"
+import { validateUrl } from "../utils"
 import { useForm } from "react-hook-form"
-import { IdentityKitContext } from "./context"
-import { Button } from "./ui/button"
+import { IdentityKitContext } from "../context"
+import { Button } from "../ui/button"
 
 export const SignerInput = () => {
   const { selectCustomSigner } = useContext(IdentityKitContext)
@@ -26,16 +26,17 @@ export const SignerInput = () => {
 
   return (
     <div>
-      <div className="text-black font-bold my-[20px]">Custom Connect</div>
+      <div className="text-black dark:text-white font-bold my-[20px]">CustomConnect</div>
       <div className="flex items-center gap-[12px] relative">
         <input
-          className="rounded-xl border border-gray-400 px-[10px] h-[48px] flex-1 flex-shrink text-sm text-gray-400 focus:border-gray-400"
+          className="rounded-xl border border-gray-400 px-[10px] h-[48px] flex-1 flex-shrink text-sm text-gray-400 focus:border-gray-400 dark:text-white"
           placeholder="https://wallet.url"
           type="text"
           {...register("url", {
             required: true,
             validate: validateUrl,
           })}
+          name="url"
         />
         <Button
           disabled={Boolean(errors.url) || !customSignerUrl}
