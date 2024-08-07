@@ -1,6 +1,7 @@
-import { expect, Locator, test as base } from "@playwright/test"
-import { DemoPage } from "./page/demo.page"
-import { Icrc25SupportedStandardsSection } from "./section/icrc25-supported-standards.section"
+import { expect, test as base } from "@playwright/test"
+import { Account, DemoPage } from "./page/demo.page.ts"
+import { Icrc25SupportedStandardsSection } from "./section/icrc25-supported-standards.section.ts"
+import { ExpectedTexts } from "./section/expectedTexts.ts"
 
 type Fixtures = {
   section: Icrc25SupportedStandardsSection
@@ -20,7 +21,7 @@ const test = base.extend<Fixtures>({
 })
 
 test.describe("ICRC25 Supported standards", () => {
-  let accounts: Locator[] = []
+  let accounts: Account[] = []
 
   test.beforeEach(async ({ page }) => {
     accounts = await DemoPage.getAccounts(page)
@@ -31,12 +32,9 @@ test.describe("ICRC25 Supported standards", () => {
   }) => {
     for (const account of accounts) {
       await demoPage.login(account)
-      const request = {
-        method: "icrc25_supported_standards",
-      }
 
       const initialRequest = await section.getRequestJson()
-      expect(initialRequest).toStrictEqual(request)
+      expect(initialRequest).toStrictEqual({ method: "icrc25_supported_standards" })
 
       const initialResponse = await section.getResponseJson()
       expect(initialResponse).toStrictEqual({})
@@ -47,38 +45,11 @@ test.describe("ICRC25 Supported standards", () => {
   test("should return list of supported standards", async ({ section, demoPage }) => {
     for (const account of accounts) {
       await demoPage.login(account)
-      const response = [
-        {
-          name: "ICRC-25",
-          url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-25/ICRC-25.md",
-        },
-        {
-          name: "ICRC-27",
-          url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-27/ICRC-27.md",
-        },
-        {
-          name: "ICRC-28",
-          url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-28/ICRC-28.md",
-        },
-        {
-          name: "ICRC-29",
-          url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-29/ICRC-29.md",
-        },
-        {
-          name: "ICRC-34",
-          url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-34/ICRC-34.md",
-        },
-        {
-          name: "ICRC-49",
-          url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-49/ICRC-49.md",
-        },
-      ]
-
       await section.clickSubmitButton()
       await section.waitForResponse()
 
       const actualResponse = await section.getResponseJson()
-      expect(actualResponse).toStrictEqual(response)
+      expect(actualResponse).toStrictEqual(ExpectedTexts.General.ListOfSupportedStandards)
       await demoPage.logout()
     }
   })

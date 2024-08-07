@@ -1,7 +1,8 @@
-import { expect, Locator, Page, test as base } from "@playwright/test"
-import { DemoPage } from "./page/demo.page"
-import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section"
-import { Icrc25AccountsSection } from "./section/icrc27-accounts.section"
+import { expect, Page, test as base } from "@playwright/test"
+import { Account, AccountType, DemoPage } from "./page/demo.page.ts"
+import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
+import { Icrc25AccountsSection } from "./section/icrc27-accounts.section.ts"
+import { ExpectedTexts } from "./section/expectedTexts.ts"
 
 type Fixtures = {
   section: Icrc25AccountsSection
@@ -35,7 +36,7 @@ const test = base.extend<Fixtures>({
 })
 
 test.describe("ICRC25 accounts", () => {
-  let accounts: Locator[] = []
+  let accounts: Account[] = []
 
   test.beforeEach(async ({ page }) => {
     accounts = await DemoPage.getAccounts(page)
@@ -46,12 +47,9 @@ test.describe("ICRC25 accounts", () => {
   }) => {
     for (const account of accounts) {
       await demoPage.login(account)
-      const request = {
-        method: "icrc27_accounts",
-      }
 
       const initialRequest = await section.getRequestJson()
-      expect(initialRequest).toStrictEqual(request)
+      expect(initialRequest).toStrictEqual({ method: "icrc27_accounts" })
 
       const initialResponse = await section.getResponseJson()
       expect(initialResponse).toStrictEqual({})
@@ -69,35 +67,17 @@ test.describe("ICRC25 accounts", () => {
     for (const account of accounts) {
       await demoPage.login(account)
       await requestPermissionSection.approvePermissions(account)
-      const responseMocked = {
-        accounts: [
-          {
-            owner: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
-            subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
-          },
-          {
-            owner: "6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae",
-            subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=",
-          },
-        ],
-      }
-      const responseNFID = {
-        accounts: [
-          {
-            owner: "7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae",
-            subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
-          },
-        ],
-      }
 
-      account.toString() == "locator('#signer_MockedSigner')".toString()
+      account.type === AccountType.MockedSigner
         ? await section.selectAccountsMocked()
         : await section.selectAccountsNFID(demoPage.page, context, 30000)
-      await section.waitForResponse()
 
+      await section.waitForResponse()
       const actualResponse = await section.getResponseJson()
       expect(actualResponse).toStrictEqual(
-        account.toString() == "locator('#signer_MockedSigner')" ? responseMocked : responseNFID
+        account.type === AccountType.MockedSigner
+          ? ExpectedTexts.Mocked.ListOfAccountsResponse
+          : ExpectedTexts.NFID.ListOfAccountsResponse
       )
       await demoPage.logout()
     }

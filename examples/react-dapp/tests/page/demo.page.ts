@@ -10,9 +10,15 @@ export class DemoPage {
     this.disconnectButton = this.page.locator("#disconnect")
   }
 
-  static async getAccounts(page): Promise<Locator[]> {
-    const mockedSignerButton = page.locator("#signer_MockedSigner")
-    const NFIDSignerButton = page.locator("#signer_NFID")
+  static async getAccounts(page): Promise<Account[]> {
+    const mockedSignerButton: Account = {
+      locator: page.locator("#signer_MockedSigner"),
+      type: AccountType.MockedSigner,
+    }
+    const NFIDSignerButton: Account = {
+      locator: page.locator("#signer_NFID"),
+      type: AccountType.NFID,
+    }
     return [mockedSignerButton, NFIDSignerButton]
   }
 
@@ -20,9 +26,9 @@ export class DemoPage {
     await this.page.goto("/")
   }
 
-  async login(account: Locator) {
+  async login(account: Account) {
     await this.connectButton.click()
-    await account.click()
+    await account.locator.click()
   }
 
   async setAccount(anchor: number, page: Page) {
@@ -36,6 +42,16 @@ export class DemoPage {
     // await this.disconnectButton.click()
     await this.page.reload({ waitUntil: "load" })
   }
+}
+
+export interface Account {
+  locator: Locator
+  type: AccountType
+}
+
+export enum AccountType {
+  MockedSigner = "MockedSigner",
+  NFID = "NFID",
 }
 
 export default (page: Page) => new DemoPage(page)

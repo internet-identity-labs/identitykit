@@ -1,7 +1,8 @@
-import { expect, Locator, test as base } from "@playwright/test"
-import { DemoPage } from "./page/demo.page"
-import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section"
-import { Icrc25PermissionsSection } from "./section/icrc25-permissions.section"
+import { expect, test as base } from "@playwright/test"
+import { Account, AccountType, DemoPage } from "./page/demo.page.ts"
+import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
+import { Icrc25PermissionsSection } from "./section/icrc25-permissions.section.ts"
+import { ExpectedTexts } from "./section/expectedTexts.ts"
 
 type Fixtures = {
   section: Icrc25PermissionsSection
@@ -26,7 +27,7 @@ const test = base.extend<Fixtures>({
 })
 
 test.describe("ICRC25 Permissions", () => {
-  let accounts: Locator[] = []
+  let accounts: Account[] = []
 
   test.beforeEach(async ({ page }) => {
     accounts = await DemoPage.getAccounts(page)
@@ -70,43 +71,14 @@ test.describe("ICRC25 Permissions", () => {
     for (const account of accounts) {
       await demoPage.login(account)
       await requestPermissionSection.approvePermissions(account)
-      const responseMocked = [
-        {
-          scope: {
-            method: "icrc27_accounts",
-          },
-          state: "granted",
-        },
-        {
-          scope: {
-            method: "icrc34_delegation",
-          },
-          state: "granted",
-        },
-        {
-          scope: {
-            method: "icrc49_call_canister",
-          },
-          state: "granted",
-        },
-      ]
-      const responseNFID = [
-        {
-          method: "icrc27_accounts",
-        },
-        {
-          method: "icrc34_delegation",
-        },
-        {
-          method: "icrc49_call_canister",
-        },
-      ]
       await section.clickSubmitButton()
       await section.waitForResponse()
 
       const actualResponse = await section.getResponseJson()
       expect(actualResponse).toStrictEqual(
-        account.toString() == "locator('#signer_MockedSigner')" ? responseMocked : responseNFID
+        account.type === AccountType.MockedSigner
+          ? ExpectedTexts.Mocked.FullPermissionsList
+          : ExpectedTexts.NFID.FullPermissionsList
       )
       await demoPage.logout()
     }

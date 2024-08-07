@@ -1,12 +1,13 @@
-import { Locator, Page } from "@playwright/test"
+import { Page } from "@playwright/test"
 import { Section } from "./section"
+import { Account } from "../page/demo.page.js"
 
 export class Icrc25RequestPermissionsSection extends Section {
   constructor(public readonly page: Page) {
     super(page, "icrc25_request_permissions")
   }
 
-  async approvePermissions(account: Locator, timeout: number = 30000): Promise<void> {
+  async approvePermissions(account: Account, timeout: number = 30000): Promise<void> {
     const approveOperation = async () => {
       const [popup] = await Promise.all([
         this.page.waitForEvent("popup"),

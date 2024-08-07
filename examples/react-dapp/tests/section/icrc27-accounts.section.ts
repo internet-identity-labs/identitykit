@@ -15,15 +15,13 @@ export class Icrc25AccountsSection extends Section {
   }
 
   async selectAccountsNFID(page: Page, context: BrowserContext, timeout: number): Promise<void> {
-    const section = this
-
     async function tryClickApprove(): Promise<void> {
       let popup
       while (true) {
         try {
           await page.waitForTimeout(1000)
-          if (!(await section.submitButton.isDisabled())) {
-            await section.submitButton.click()
+          if (!(await this.submitButton.isDisabled())) {
+            await this.submitButton.click()
             popup = await page.waitForEvent("popup", { timeout: 5000 })
           }
           if (popup)

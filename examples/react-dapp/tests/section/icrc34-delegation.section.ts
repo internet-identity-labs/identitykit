@@ -1,4 +1,4 @@
-import { BrowserContext, Page } from "@playwright/test"
+import { BrowserContext, expect, Page } from "@playwright/test"
 import { Section } from "./section"
 
 export class Icrc34DelegationSection extends Section {
@@ -70,7 +70,12 @@ export class Icrc34DelegationSection extends Section {
     ])
   }
 
-  async selectSessionAccountMocked(popup: Page): Promise<void> {
+  async selectSessionAccountMocked(checkMethod: (value) => void): Promise<void> {
+    const popup = await this.openPopup()
+    const isDisabledGlobalAccount = await this.isDisabledGlobalAccount(popup)
+    checkMethod(isDisabledGlobalAccount)
+    const isDisabledSessionAccount = await this.isDisabledSessionAccount(popup)
+    expect(isDisabledSessionAccount).toBeFalsy()
     await popup.click("#acc_2")
     await popup.click("#approve")
     await popup.close()

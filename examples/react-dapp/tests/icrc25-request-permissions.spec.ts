@@ -1,6 +1,7 @@
-import { expect, Locator, test as base } from "@playwright/test"
-import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section"
-import { DemoPage } from "./page/demo.page"
+import { expect, test as base } from "@playwright/test"
+import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
+import { Account, AccountType, DemoPage } from "./page/demo.page.ts"
+import { ExpectedTexts } from "./section/expectedTexts.ts"
 
 type Fixtures = {
   section: Icrc25RequestPermissionsSection
@@ -19,7 +20,7 @@ const test = base.extend<Fixtures>({
   },
 })
 test.describe("ICRC25 Request Permissions", () => {
-  let accounts: Locator[] = []
+  let accounts: Account[] = []
 
   test.beforeEach(async ({ page }) => {
     accounts = await DemoPage.getAccounts(page)
@@ -30,25 +31,8 @@ test.describe("ICRC25 Request Permissions", () => {
   }) => {
     for (const account of accounts) {
       await demoPage.login(account)
-      const request = {
-        method: "icrc25_request_permissions",
-        params: {
-          scopes: [
-            {
-              method: "icrc27_accounts",
-            },
-            {
-              method: "icrc34_delegation",
-            },
-            {
-              method: "icrc49_call_canister",
-            },
-          ],
-        },
-      }
-
       const initialRequest = await section.getRequestJson()
-      expect(initialRequest).toStrictEqual(request)
+      expect(initialRequest).toStrictEqual(ExpectedTexts.General.InitialPermissionsRequestState)
 
       const initialResponse = await section.getResponseJson()
       expect(initialResponse).toStrictEqual({})
@@ -59,43 +43,13 @@ test.describe("ICRC25 Request Permissions", () => {
   test("should request full list of permissions", async ({ section, demoPage }) => {
     for (const account of accounts) {
       await demoPage.login(account)
-      const response = [
-        {
-          scope: {
-            method: "icrc27_accounts",
-          },
-          state: "granted",
-        },
-        {
-          scope: {
-            method: "icrc34_delegation",
-          },
-          state: "granted",
-        },
-        {
-          scope: {
-            method: "icrc49_call_canister",
-          },
-          state: "granted",
-        },
-      ]
-      const response2 = [
-        {
-          method: "icrc27_accounts",
-        },
-        {
-          method: "icrc34_delegation",
-        },
-        {
-          method: "icrc49_call_canister",
-        },
-      ]
-
       await section.approvePermissions(account)
       await section.clickSubmitButton()
       const actualResponse = await section.getResponseJson()
       expect(actualResponse).toStrictEqual(
-        account.toString() == "locator('#signer_MockedSigner')" ? response : response2
+        account.type === AccountType.MockedSigner
+          ? ExpectedTexts.Mocked.GrantedPermissions
+          : ExpectedTexts.NFID.GrantedPermissions
       )
       await demoPage.logout()
     }

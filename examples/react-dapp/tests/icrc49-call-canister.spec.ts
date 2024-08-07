@@ -1,7 +1,8 @@
-import { expect, Locator, Page, test as base } from "@playwright/test"
-import { DemoPage } from "./page/demo.page"
-import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section"
-import { Icrc49CallCanisterSection } from "./section/icrc49-call-canister.section"
+import { expect, Page, test as base } from "@playwright/test"
+import { Account, AccountType, DemoPage } from "./page/demo.page.ts"
+import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
+import { Icrc49CallCanisterSection } from "./section/icrc49-call-canister.section.ts"
+import { ExpectedTexts } from "./section/expectedTexts.ts"
 
 type Fixtures = {
   section: Icrc49CallCanisterSection
@@ -35,34 +36,23 @@ const test = base.extend<Fixtures>({
 })
 
 test.describe("ICRC25 call-canister", () => {
-  let accounts: Locator[] = []
+  let accounts: Account[] = []
 
   test.beforeEach(async ({ page }) => {
     accounts = await DemoPage.getAccounts(page)
   })
-  test("should check request and response has correct initial state", async ({
+
+  test("should check request and response has correct initial state for no consent case", async ({
     section,
     demoPage,
     requestPermissionSection,
   }) => {
     for (const account of accounts) {
-      await demoPage.login(account)
-      await requestPermissionSection.approvePermissions(account)
-      const request = {
-        method: "icrc49_call_canister",
-        params: {
-          canisterId: "do25a-dyaaa-aaaak-qifua-cai",
-          sender: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
-          method: "greet_no_consent",
-          arg: "RElETAABcQJtZQ==",
-        },
-      }
-
-      const initialRequest = await section.getRequestJson()
-      expect(initialRequest).toStrictEqual(request)
-
-      const initialResponse = await section.getResponseJson()
-      expect(initialResponse).toStrictEqual({})
+      await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
+      await section.checkRequestResponse(
+        section,
+        ExpectedTexts.General.NoConsentCaseInitialCanisterCallState
+      )
       await demoPage.logout()
     }
   })
@@ -71,29 +61,14 @@ test.describe("ICRC25 call-canister", () => {
     section,
     demoPage,
     requestPermissionSection,
-    nfidPage,
-    context,
   }) => {
     for (const account of accounts) {
-      await demoPage.login(account)
-      await requestPermissionSection.approvePermissions(account)
-      const request = {
-        method: "icrc49_call_canister",
-        params: {
-          canisterId: "do25a-dyaaa-aaaak-qifua-cai",
-          sender: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
-          method: "greet",
-          arg: "RElETAABcQJtZQ==",
-        },
-      }
-
+      await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
       await section.selectConsentTab()
-
-      const initialRequest = await section.getRequestJson()
-      expect(initialRequest).toStrictEqual(request)
-
-      const initialResponse = await section.getResponseJson()
-      expect(initialResponse).toStrictEqual({})
+      await section.checkRequestResponse(
+        section,
+        ExpectedTexts.General.ConsentCaseInitialCanisterCallState
+      )
       await demoPage.logout()
     }
   })
@@ -102,116 +77,57 @@ test.describe("ICRC25 call-canister", () => {
     section,
     demoPage,
     requestPermissionSection,
-    nfidPage,
     context,
+    nfidPage,
   }) => {
-    // for (const account of accounts) {
-    let account = accounts[0]
-    await demoPage.login(account)
-    await requestPermissionSection.approvePermissions(account)
-
-    const textsExpectedMocked = [
-      "Request from http://localhost:3001",
-      "Canister ID",
-      "do25a-dyaaa-aaaak-qifua-cai",
-      "Sender",
-      "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
-      "Arguments",
-      '["me"]',
-    ]
-
-    const textsExpectedNFID = [
-      "Request from localhost:3001",
-      "Canister ID",
-      "do25a-dyaaa-aaaak-qifua-cai",
-      "Method",
-      "greet_no_consent",
-      "Arg",
-      "RElETAABcQJtZQ==",
-    ]
-
-    if (account.toString() == "locator('#signer_MockedSigner')") {
+    const account = accounts[0]
+    await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
+    if (account.type === AccountType.MockedSigner) {
       const popup = await section.openPopup()
       const texts = await section.getPopupTexts(popup)
-      expect(texts).toEqual(textsExpectedMocked)
+      expect(texts).toEqual(ExpectedTexts.Mocked.NoConsentCaseCanisterCallRequest)
       await section.approve(popup)
     } else {
-      await section.checkPopupTextNFID(demoPage.page, context, textsExpectedNFID)
+      await section.checkPopupTextNFID(
+        demoPage.page,
+        context,
+        ExpectedTexts.NFID.NoConsentCaseCanisterCall
+      )
     }
 
     await section.waitForResponse()
     const actualResponse = await section.getResponseJson()
 
-    expect(actualResponse).toMatchObject({
-      origin: "http://localhost:3001",
-      jsonrpc: "2.0",
-      id: "7812362e-29b8-4099-824c-067e8a50f6f3",
-      result: {
-        contentMap: expect.anything(),
-        certificate: expect.anything(),
-        content: "Hello, me!",
-      },
-    })
+    expect(actualResponse).toMatchObject(ExpectedTexts.Mocked.NoConsentCaseCanisterCallResponse)
     await demoPage.logout()
-    // }
   })
 
   test("should make canister call with consent", async ({
     section,
     demoPage,
     requestPermissionSection,
-    nfidPage,
     context,
+    nfidPage,
   }) => {
-    // for (const account of accounts) {
-    let account = accounts[0]
-    await demoPage.login(account)
-    await requestPermissionSection.approvePermissions(account)
-    await section.selectConsentTab()
-
-    const textsExpectedMocked = [
-      "Request from http://localhost:3001",
-      "Canister ID",
-      "do25a-dyaaa-aaaak-qifua-cai",
-      "Sender",
-      "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
-      "Arguments",
-      '["me"]',
-      "Produce the following greeting text: > Hello, me!",
-    ]
-
-    const textsExpectedNFID = [
-      "Request from localhost:3001",
-      "Canister ID",
-      "do25a-dyaaa-aaaak-qifua-cai",
-      "Method",
-      "greet",
-      "Arg",
-      "RElETAABcQJtZQ==",
-    ]
-
-    if (account.toString() == "locator('#signer_MockedSigner')") {
+    const account = accounts[0]
+    await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
+    if (account.type === AccountType.MockedSigner) {
       const popup = await section.openPopup()
       const texts = await section.getPopupTexts(popup)
-      expect(texts).toEqual(textsExpectedMocked)
+      expect(texts).toEqual(ExpectedTexts.Mocked.ConsentCaseCanisterCallRequest)
       await section.approve(popup)
     } else {
-      await section.checkPopupTextNFID(demoPage.page, context, textsExpectedNFID)
+      await section.checkPopupTextNFID(
+        demoPage.page,
+        context,
+        ExpectedTexts.NFID.ConsentCaseCanisterCall
+      )
     }
+
     await section.waitForResponse()
     const actualResponse = await section.getResponseJson()
 
-    expect(actualResponse).toMatchObject({
-      origin: "http://localhost:3001",
-      jsonrpc: "2.0",
-      id: "7812362e-29b8-4099-824c-067e8a50f6f3",
-      result: {
-        contentMap: expect.anything(),
-        certificate: expect.anything(),
-        content: "Hello, me!",
-      },
-    })
+    expect(actualResponse).toMatchObject(ExpectedTexts.Mocked.ConsentCaseCanisterCallResponse)
     await demoPage.logout()
-    // }
   })
 })

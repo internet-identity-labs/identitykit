@@ -1,5 +1,7 @@
 import { BrowserContext, expect, Page } from "@playwright/test"
 import { Section } from "./section"
+import { Account, DemoPage } from "../page/demo.page.js"
+import { Icrc25RequestPermissionsSection } from "./icrc25-request-permissions.section.js"
 
 export class Icrc49CallCanisterSection extends Section {
   constructor(public readonly page: Page) {
@@ -24,14 +26,12 @@ export class Icrc49CallCanisterSection extends Section {
 
   async getPopupTextsNFID(popup: Page): Promise<string[]> {
     let text: string[] = []
-
-    await popup.waitForSelector("div.flex.flex-col.flex-1.h-full p")
-    const requestFromText = await popup
+    const header = await popup
       .locator(".items-center.mt-10.text-sm.text-center a")
       .locator("..")
       .textContent()
-    if (requestFromText) {
-      text.push(requestFromText.trim())
+    if (header) {
+      text.push(header.trim())
     }
     text = text.concat(await popup.locator("div.flex.flex-col.flex-1.h-full p").allInnerTexts())
     return text
@@ -39,6 +39,23 @@ export class Icrc49CallCanisterSection extends Section {
 
   async approve(popup: Page): Promise<void> {
     await popup.click("#approve", { timeout: 50000 })
+  }
+
+  async loginAndApprovePermissions(
+    demoPage: DemoPage,
+    requestPermissionSection: Icrc25RequestPermissionsSection,
+    account: Account
+  ) {
+    await demoPage.login(account)
+    await requestPermissionSection.approvePermissions(account)
+  }
+
+  async checkRequestResponse(section: Icrc49CallCanisterSection, expectedRequest) {
+    const initialRequest = await section.getRequestJson()
+    expect(initialRequest).toStrictEqual(expectedRequest)
+
+    const initialResponse = await section.getResponseJson()
+    expect(initialResponse).toStrictEqual({})
   }
 
   async checkPopupTextNFID(
