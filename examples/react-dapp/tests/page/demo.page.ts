@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test"
-import { UserService } from "../helpers/accounts-service.js"
+import { UserService } from "../helpers/accounts-service.ts"
 
 export class DemoPage {
   private readonly connectButton: Locator
@@ -37,9 +37,6 @@ export class DemoPage {
   }
 
   async logout() {
-    //TODO replace refreshing of a page with commented steps when dapp is ready
-    // await this.connectButton.click()
-    // await this.disconnectButton.click()
     await this.page.reload({ waitUntil: "load" })
   }
 }
@@ -52,6 +49,11 @@ export interface Account {
 export enum AccountType {
   MockedSigner = "MockedSigner",
   NFID = "NFID",
+}
+
+export enum ProfileType {
+  Global = "Global",
+  Session = "Session",
 }
 
 export default (page: Page) => new DemoPage(page)

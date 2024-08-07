@@ -1,5 +1,5 @@
 import { fail } from "assert"
-import { readFile as readJSONFile, waitForLoaderDisappear } from "./helpers.js"
+import { readFile as readJSONFile, waitForLoaderDisappear } from "./helpers.ts"
 import { Page } from "@playwright/test"
 
 /**

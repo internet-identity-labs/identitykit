@@ -1,5 +1,5 @@
 import { BrowserContext, Page } from "@playwright/test"
-import { Section } from "./section"
+import { Section } from "./section.ts"
 
 export class Icrc25AccountsSection extends Section {
   constructor(public readonly page: Page) {

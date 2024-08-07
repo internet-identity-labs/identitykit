@@ -1,7 +1,7 @@
 import { BrowserContext, expect, Page } from "@playwright/test"
-import { Section } from "./section"
-import { Account, DemoPage } from "../page/demo.page.js"
-import { Icrc25RequestPermissionsSection } from "./icrc25-request-permissions.section.js"
+import { Section } from "./section.ts"
+import { Account, DemoPage } from "../page/demo.page.ts"
+import { Icrc25RequestPermissionsSection } from "./icrc25-request-permissions.section.ts"
 
 export class Icrc49CallCanisterSection extends Section {
   constructor(public readonly page: Page) {

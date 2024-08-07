@@ -1,5 +1,5 @@
 import { expect, Page, test as base } from "@playwright/test"
-import { Account, AccountType, DemoPage } from "./page/demo.page.ts"
+import { Account, AccountType, DemoPage, ProfileType } from "./page/demo.page.ts"
 import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
 import { Icrc34DelegationSection } from "./section/icrc34-delegation.section.ts"
 import { ExpectedTexts } from "./section/expectedTexts.ts"
@@ -69,10 +69,10 @@ test.describe("ICRC25 delegation", () => {
     await requestPermissionSection.approvePermissions(account)
 
     if (account.type === AccountType.MockedSigner) {
-      await section.selectSessionAccountMocked((isGlobalDisabled) =>
+      await section.selectProfileMocked(ProfileType.Global, (isGlobalDisabled) =>
         expect(isGlobalDisabled).toBeFalsy()
       )
-    } else await section.selectGlobalAccountNFID(demoPage.page, context, 30000)
+    } else await section.selectProfileNFID(demoPage.page, context, 30000)
 
     await section.waitForResponse()
     const actualResponse = await section.getResponseJson()
@@ -94,10 +94,10 @@ test.describe("ICRC25 delegation", () => {
       await section.setRequestWithNoTargets()
 
       if (account.type === AccountType.MockedSigner) {
-        await section.selectSessionAccountMocked((isGlobalDisabled) =>
+        await section.selectProfileMocked(ProfileType.Session, (isGlobalDisabled) =>
           expect(isGlobalDisabled).toBeTruthy()
         )
-      } else await section.selectSessionAccountNFID(demoPage.page, context, 55000)
+      } else await section.selectProfileNFID(demoPage.page, context, 55000)
 
       await section.waitForResponse()
       const actualResponse = await section.getResponseJson()
@@ -106,7 +106,6 @@ test.describe("ICRC25 delegation", () => {
           ? ExpectedTexts.Mocked.NoTargetsDelegationResponse
           : ExpectedTexts.NFID.NoTargetsDelegationResponse
       )
-
       await demoPage.logout()
     }
   })
