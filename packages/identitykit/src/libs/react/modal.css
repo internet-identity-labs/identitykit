@@ -1,0 +1,7 @@
+.gradient-border {
+  position: relative;
+  padding: 1px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ed71ff, #899dff 51%, #63ffeb);
+  background-clip: border-box;
+}

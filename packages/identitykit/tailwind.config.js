@@ -8,7 +8,6 @@ module.exports = {
       colors: {
         ...colors,
         primary: "#146F68",
-        signerDarkBg: "#242427",
         signerDarkHoverBg: "#34343A",
       },
       keyframes: {

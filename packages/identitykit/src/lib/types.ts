@@ -6,6 +6,7 @@ export type SignerConfig = {
   icon?: string
   popupHeight?: number
   popupWidth?: number
+  description?: string
 }
 
 export enum TransportType {
