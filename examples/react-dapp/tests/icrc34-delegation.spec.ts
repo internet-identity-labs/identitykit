@@ -64,6 +64,7 @@ test.describe("ICRC25 delegation", () => {
     nfidPage,
     context,
   }) => {
+    await nfidPage.title()
     const account = accounts[0]
     await demoPage.login(account)
     await requestPermissionSection.approvePermissions(account)
@@ -88,6 +89,7 @@ test.describe("ICRC25 delegation", () => {
     nfidPage,
     context,
   }) => {
+    await nfidPage.title()
     for (const account of accounts) {
       await demoPage.login(account)
       await requestPermissionSection.approvePermissions(account)

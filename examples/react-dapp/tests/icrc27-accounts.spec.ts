@@ -64,6 +64,7 @@ test.describe("ICRC25 accounts", () => {
     nfidPage,
     context,
   }) => {
+    await nfidPage.title()
     for (const account of accounts) {
       await demoPage.login(account)
       await requestPermissionSection.approvePermissions(account)

@@ -10,7 +10,7 @@ type AuthState = {
   identity: string
 }
 
-type TestUser = {
+export type TestUser = {
   seed: string
   icpAddress: string
   btcAddress: string

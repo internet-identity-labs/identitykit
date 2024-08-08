@@ -80,6 +80,7 @@ test.describe("ICRC25 call-canister", () => {
     context,
     nfidPage,
   }) => {
+    await nfidPage.title()
     const account = accounts[0]
     await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
     if (account.type === AccountType.MockedSigner) {
@@ -109,6 +110,7 @@ test.describe("ICRC25 call-canister", () => {
     context,
     nfidPage,
   }) => {
+    await nfidPage.title()
     const account = accounts[0]
     await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
     if (account.type === AccountType.MockedSigner) {

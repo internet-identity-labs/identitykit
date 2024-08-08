@@ -1,6 +1,7 @@
 import { fail } from "assert"
 import { readFile as readJSONFile, waitForLoaderDisappear } from "./helpers.ts"
 import { Page } from "@playwright/test"
+import { TestUser } from "../types.ts"
 
 /**
  * The Subject interface declares a set of methods for managing subscribers.
@@ -37,9 +38,10 @@ export class UserService {
   async setAuth(anchor: number, page: Page, timeout: number = 50000): Promise<void> {
     await waitForLoaderDisappear(page)
     const testUser: TestUser = await this.takeStaticUserByAnchor(anchor)
-    let errors: string[] = []
+    const errors: string[] = []
+    let isLoggedIn = false
 
-    while (true) {
+    while (!isLoggedIn) {
       const result = await Promise.race([
         this.page.evaluate(
           async ({ testUser }) => {
@@ -73,7 +75,6 @@ export class UserService {
           setTimeout(() => reject(new Error("SetAuth timed out")), timeout)
         ),
       ]).catch((error) => `error: ${error.message}`)
-
       if (result.startsWith("error:") || result.startsWith("setAuthState error:")) {
         errors.push(result)
       }
@@ -85,7 +86,7 @@ export class UserService {
         state.identity?.toString() === testUser.authstate.identity.toString() &&
         JSON.stringify(state.delegation) === JSON.stringify(testUser.authstate.delegation)
       ) {
-        break
+        isLoggedIn = true
       }
       await new Promise((resolve) => setTimeout(resolve, 1000))
     }
@@ -101,7 +102,7 @@ export class UserService {
     errors: string[]
   }> {
     return await this.page.evaluate(async () => {
-      let errors: string[] = []
+      const errors: string[] = []
       try {
         const dbRequest = indexedDB.open("authstate")
         return await new Promise((resolve) => {
@@ -151,7 +152,7 @@ export class UserService {
     errors: string[]
   }> {
     return await this.page.evaluate(async (dbName) => {
-      let errors: string[] = []
+      const errors: string[] = []
       return new Promise((resolve) => {
         const request = indexedDB.open(dbName)
         request.onupgradeneeded = () => {
@@ -172,38 +173,5 @@ export class UserService {
         }
       })
     }, dbName)
-  }
-
-  async waitForDBAndDeleteDB(
-    waitForDB: string,
-    deleteDB: string
-  ): Promise<{
-    result: boolean
-    errors: string[]
-  }> {
-    let errors: string[] = []
-    await this.page.waitForTimeout(1000)
-    const dbCheckResult = await this.checkDatabaseExists(waitForDB)
-    errors.push(...dbCheckResult.errors)
-
-    if (!dbCheckResult.result) {
-      await this.page.evaluate(async (deleteDB) => {
-        return new Promise((resolve) => {
-          const deleteRequest = indexedDB.deleteDatabase(deleteDB)
-          deleteRequest.onsuccess = () => resolve(true)
-          deleteRequest.onerror = () => resolve(false)
-        })
-      }, deleteDB)
-
-      await this.page.reload()
-      await waitForLoaderDisappear(this.page)
-    }
-
-    const recheckResults = await this.checkDatabaseExists(waitForDB)
-    errors.push(...recheckResults.errors)
-    return {
-      result: recheckResults.result,
-      errors,
-    }
   }
 }

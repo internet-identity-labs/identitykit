@@ -35,7 +35,8 @@ export class Icrc34DelegationSection extends Section {
   async selectProfileNFID(page: Page, context: BrowserContext, timeout: number): Promise<void> {
     async function tryClickApprove(this): Promise<void> {
       let popup
-      while (true) {
+      let done = false
+      while (!done) {
         try {
           await page.waitForTimeout(1000)
           if (!(await this.submitButton.isDisabled())) {
@@ -51,14 +52,16 @@ export class Icrc34DelegationSection extends Section {
           await context.pages()[2].locator('//button[.//text()="Approve"]').click()
           await page.waitForTimeout(1000)
           await popup.close()
-        } catch (e) {}
+        } catch (e) {
+          /* empty */
+        }
         await page.waitForTimeout(1000)
         if (
           (await page
             .locator(`#${this.section} #response-section div.cm-line > span:nth-child(2)`)
             .count()) > 0
         )
-          break
+          done = true
       }
     }
 

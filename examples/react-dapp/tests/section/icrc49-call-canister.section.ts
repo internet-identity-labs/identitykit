@@ -63,7 +63,8 @@ export class Icrc49CallCanisterSection extends Section {
     context: BrowserContext,
     textsExpected: string[]
   ): Promise<void> {
-    while (true) {
+    let done = false
+    while (!done) {
       try {
         await page.waitForTimeout(1000)
         if (!(await this.submitButton.isDisabled())) {
@@ -74,8 +75,10 @@ export class Icrc49CallCanisterSection extends Section {
           .pages()[2]
           .locator('//button[.//text()="Try again"]')
           .waitFor({ state: "attached", timeout: 5000 })
-        break
-      } catch (e) {}
+        done = true
+      } catch (e) {
+        /* empty */
+      }
     }
     expect(await this.getPopupTextsNFID(await context.pages()[2])).toEqual(textsExpected)
     // await context.pages()[2].locator("//button[.//text()=\"Approve\"]").click()
