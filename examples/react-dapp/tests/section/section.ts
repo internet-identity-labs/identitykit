@@ -20,6 +20,7 @@ export abstract class Section {
   }
 
   async getResponseJson(): Promise<string> {
+    await this.responseSection.waitFor({ state: "visible" })
     const json = (await this.responseSection.textContent()) ?? "{}"
     return JSON.parse(json)
   }
