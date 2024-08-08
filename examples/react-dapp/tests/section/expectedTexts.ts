@@ -193,24 +193,42 @@ export class ExpectedTexts {
   static readonly NFID = {
     GrantedPermissions: [
       {
-        method: "icrc27_accounts",
+        scope: {
+          method: "icrc27_accounts",
+        },
+        state: "granted",
       },
       {
-        method: "icrc34_delegation",
+        scope: {
+          method: "icrc34_delegation",
+        },
+        state: "granted",
       },
       {
-        method: "icrc49_call_canister",
+        scope: {
+          method: "icrc49_call_canister",
+        },
+        state: "granted",
       },
     ],
     GetCurrentPermissionsResponse: [
       {
-        method: "icrc27_accounts",
+        scope: {
+          method: "icrc27_accounts",
+        },
+        state: "granted",
       },
       {
-        method: "icrc34_delegation",
+        scope: {
+          method: "icrc34_delegation",
+        },
+        state: "granted",
       },
       {
-        method: "icrc49_call_canister",
+        scope: {
+          method: "icrc49_call_canister",
+        },
+        state: "granted",
       },
     ],
     ListOfAccountsResponse: {
