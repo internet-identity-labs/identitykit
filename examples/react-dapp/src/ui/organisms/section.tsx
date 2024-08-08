@@ -135,6 +135,24 @@ export const Section: React.FC<ISection> = ({
         )
         setResponseValue(json)
         return
+      } else if (
+        requestObject.method === "icrc25_request_permissions" ||
+        requestObject.method === "icrc25_permissions"
+      ) {
+        const req = {
+          id: "1c417beb-e7b1-4925-94b3-c737697e53bf",
+          jsonrpc: "2.0",
+          ...requestObject,
+        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        res = await (selectedSigner as any)?.["sendRequest"](req)
+        const json = JSON.stringify(
+          res,
+          (_, value) => (typeof value === "bigint" ? value.toString() : value),
+          2
+        )
+        setResponseValue(json)
+        return
       } else {
         // TODO for icrc25_request_permissions should pass params.scopes as arg and for icrc34_delegation change params to Principals
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -154,7 +172,7 @@ export const Section: React.FC<ISection> = ({
           setResponseValue(JSON.stringify(mappedResult, null, 2))
           return
         }
-
+        console.log({ res })
         setResponseValue(JSON.stringify(res, null, 2))
       }
     } catch (e) {
