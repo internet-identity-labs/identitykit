@@ -19,6 +19,8 @@ fn get_trusted_origins() -> Vec<String> {
         String::from("https://dev.demo.identitykit.xyz"),
         String::from("http://localhost:3001"),
         String::from("http://localhost:3002"),
+        String::from("https://nfid.one"),
+        String::from("https://dev.nfid.one"),
     ];
 }
 
