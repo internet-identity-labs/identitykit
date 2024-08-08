@@ -81,6 +81,7 @@ export class Icrc49CallCanisterSection extends Section {
       }
     }
     expect(await this.getPopupTextsNFID(await context.pages()[2])).toEqual(textsExpected)
+    //TODO uncomment after fix of nfid wallet delegation
     // await context.pages()[2].locator("//button[.//text()=\"Approve\"]").click()
     await context.pages()[2].close()
   }

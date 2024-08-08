@@ -35,7 +35,7 @@ const test = base.extend<Fixtures>({
   },
 })
 
-test.describe("ICRC25 accounts", () => {
+test.describe("ICRC27 accounts", () => {
   let accounts: Account[] = []
 
   test.beforeEach(async ({ page }) => {
@@ -71,7 +71,7 @@ test.describe("ICRC25 accounts", () => {
 
       account.type === AccountType.MockedSigner
         ? await section.selectAccountsMocked()
-        : await section.selectAccountsNFID(demoPage.page, context, 30000)
+        : await section.selectAccountsNFID(demoPage.page, context)
 
       await section.waitForResponse()
       const actualResponse = await section.getResponseJson()

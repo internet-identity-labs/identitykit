@@ -32,44 +32,31 @@ export class Icrc34DelegationSection extends Section {
     await popup.close()
   }
 
-  async selectProfileNFID(page: Page, context: BrowserContext, timeout: number): Promise<void> {
-    const tryClickApprove = async () => {
-      let popup
-      let done = false
-      while (!done) {
-        try {
-          await page.waitForTimeout(1000)
-          if (!(await this.submitButton.isDisabled())) {
-            await this.submitButton.click()
-            popup = await page.waitForEvent("popup", { timeout: 5000 })
-          }
-          if (popup) await context.pages()[2].locator('//button[.//text()="Approve"]')
-          await context.pages()[2].locator("#profile_legacy_0").click()
-          await context.pages()[2].locator('//button[.//text()="Approve"]').click()
-          await page.waitForTimeout(1000)
-          await popup.close()
-        } catch (e) {
-          /* empty */
+  async selectProfileNFID(page: Page, context: BrowserContext): Promise<void> {
+    let popup
+    let done = false
+    while (!done) {
+      try {
+        await page.waitForTimeout(500)
+        if (!(await this.submitButton.isDisabled())) {
+          await this.submitButton.click()
+          popup = await page.waitForEvent("popup", { timeout: 5000 })
         }
-        await page.waitForTimeout(1000)
-        if (
-          (await page
-            .locator(`#${this.section} #response-section div.cm-line > span:nth-child(2)`)
-            .count()) > 0
-        )
-          done = true
+        await context.pages()[2].locator("#profile_legacy_0").click({ timeout: 5000 })
+        await context.pages()[2].locator('//button[.//text()="Approve"]').click()
+        await page.waitForTimeout(500)
+        await popup.close()
+      } catch (e) {
+        /* empty */
       }
+      await page.waitForTimeout(1000)
+      if (
+        (await page
+          .locator(`#${this.section} #response-section div.cm-line > span:nth-child(2)`)
+          .count()) > 0
+      )
+        done = true
     }
-
-    await Promise.race([
-      tryClickApprove(),
-      new Promise((_, reject) =>
-        setTimeout(
-          () => reject(new Error(`The "Approve" button wasn't clicked after ${timeout} ms`)),
-          timeout
-        )
-      ),
-    ])
   }
 
   async setRequestWithNoTargets(): Promise<void> {

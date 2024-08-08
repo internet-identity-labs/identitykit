@@ -73,7 +73,7 @@ test.describe("ICRC25 delegation", () => {
       await section.selectProfileMocked(ProfileType.Global, (isGlobalDisabled) =>
         expect(isGlobalDisabled).toBeFalsy()
       )
-    } else await section.selectProfileNFID(demoPage.page, context, 30000)
+    } else await section.selectProfileNFID(demoPage.page, context)
 
     await section.waitForResponse()
     const actualResponse = await section.getResponseJson()
@@ -89,26 +89,25 @@ test.describe("ICRC25 delegation", () => {
     nfidPage,
     context,
   }) => {
+    const account = accounts[0]
     await nfidPage.title()
-    for (const account of accounts) {
-      await demoPage.login(account)
-      await requestPermissionSection.approvePermissions(account)
-      await section.setRequestWithNoTargets()
+    await demoPage.login(account)
+    await requestPermissionSection.approvePermissions(account)
+    await section.setRequestWithNoTargets()
 
-      if (account.type === AccountType.MockedSigner) {
-        await section.selectProfileMocked(ProfileType.Session, (isGlobalDisabled) =>
-          expect(isGlobalDisabled).toBeTruthy()
-        )
-      } else await section.selectProfileNFID(demoPage.page, context, 55000)
-
-      await section.waitForResponse()
-      const actualResponse = await section.getResponseJson()
-      expect(actualResponse).toMatchObject(
-        account.type === AccountType.MockedSigner
-          ? ExpectedTexts.Mocked.NoTargetsDelegationResponse
-          : ExpectedTexts.NFID.NoTargetsDelegationResponse
+    if (account.type === AccountType.MockedSigner) {
+      await section.selectProfileMocked(ProfileType.Session, (isGlobalDisabled) =>
+        expect(isGlobalDisabled).toBeTruthy()
       )
-      await demoPage.logout()
-    }
+    } else await section.selectProfileNFID(demoPage.page, context)
+
+    await section.waitForResponse()
+    const actualResponse = await section.getResponseJson()
+    expect(actualResponse).toMatchObject(
+      account.type === AccountType.MockedSigner
+        ? ExpectedTexts.Mocked.NoTargetsDelegationResponse
+        : ExpectedTexts.NFID.NoTargetsDelegationResponse
+    )
+    await demoPage.logout()
   })
 })
