@@ -4,13 +4,13 @@ export default defineConfig({
   testDir: "./tests",
   timeout: 70000,
   fullyParallel: true,
-  workers: 1,
+  workers: 3,
   retries: 0,
   expect: {
     timeout: 2000,
   },
   use: {
-    headless: true,
+    headless: false,
     viewport: { width: 1440, height: 960 },
     actionTimeout: 0,
     ignoreHTTPSErrors: true,

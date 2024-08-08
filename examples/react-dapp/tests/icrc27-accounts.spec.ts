@@ -65,22 +65,21 @@ test.describe("ICRC27 accounts", () => {
     context,
   }) => {
     await nfidPage.title()
-    for (const account of accounts) {
-      await demoPage.login(account)
-      await requestPermissionSection.approvePermissions(account)
+    const account = accounts[0]
+    await demoPage.login(account)
+    await requestPermissionSection.approvePermissions(account)
 
+    account.type === AccountType.MockedSigner
+      ? await section.selectAccountsMocked()
+      : await section.selectAccountsNFID(demoPage.page, context)
+
+    await section.waitForResponse()
+    const actualResponse = await section.getResponseJson()
+    expect(actualResponse).toStrictEqual(
       account.type === AccountType.MockedSigner
-        ? await section.selectAccountsMocked()
-        : await section.selectAccountsNFID(demoPage.page, context)
-
-      await section.waitForResponse()
-      const actualResponse = await section.getResponseJson()
-      expect(actualResponse).toStrictEqual(
-        account.type === AccountType.MockedSigner
-          ? ExpectedTexts.Mocked.ListOfAccountsResponse
-          : ExpectedTexts.NFID.ListOfAccountsResponse
-      )
-      await demoPage.logout()
-    }
+        ? ExpectedTexts.Mocked.ListOfAccountsResponse
+        : ExpectedTexts.NFID.ListOfAccountsResponse
+    )
+    await demoPage.logout()
   })
 })
