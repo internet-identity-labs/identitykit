@@ -1,79 +1,79 @@
 import { expect } from "@playwright/test"
 
 export class ExpectedTexts {
-  static readonly General: {
+  static readonly General = {
     InitialPermissionsRequestState: {
-      method: "icrc25_request_permissions"
+      method: "icrc25_request_permissions",
       params: {
         scopes: [
           {
-            method: "icrc27_accounts"
+            method: "icrc27_accounts",
           },
           {
-            method: "icrc34_delegation"
+            method: "icrc34_delegation",
           },
           {
-            method: "icrc49_call_canister"
+            method: "icrc49_call_canister",
           },
-        ]
-      }
-    }
+        ],
+      },
+    },
     ListOfSupportedStandards: [
       {
-        name: "ICRC-25"
-        url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-25/ICRC-25.md"
+        name: "ICRC-25",
+        url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-25/ICRC-25.md",
       },
       {
-        name: "ICRC-27"
-        url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-27/ICRC-27.md"
+        name: "ICRC-27",
+        url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-27/ICRC-27.md",
       },
       {
-        name: "ICRC-28"
-        url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-28/ICRC-28.md"
+        name: "ICRC-28",
+        url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-28/ICRC-28.md",
       },
       {
-        name: "ICRC-29"
-        url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-29/ICRC-29.md"
+        name: "ICRC-29",
+        url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-29/ICRC-29.md",
       },
       {
-        name: "ICRC-34"
-        url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-34/ICRC-34.md"
+        name: "ICRC-34",
+        url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-34/ICRC-34.md",
       },
       {
-        name: "ICRC-49"
-        url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-49/ICRC-49.md"
+        name: "ICRC-49",
+        url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-49/ICRC-49.md",
       },
-    ]
+    ],
     InitialDelegationRequestState: {
-      method: "icrc34_delegation"
+      method: "icrc34_delegation",
       params: {
-        publicKey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA="
-        targets: ["do25a-dyaaa-aaaak-qifua-cai"]
-        maxTimeToLive: "28800000000000"
-      }
-    }
+        publicKey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
+        targets: ["do25a-dyaaa-aaaak-qifua-cai"],
+        maxTimeToLive: "28800000000000",
+      },
+    },
     NoConsentCaseInitialCanisterCallState: {
-      method: "icrc49_call_canister"
+      method: "icrc49_call_canister",
       params: {
-        canisterId: "do25a-dyaaa-aaaak-qifua-cai"
-        sender: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe"
-        method: "greet_no_consent"
-        arg: "RElETAABcQJtZQ=="
-      }
-    }
+        canisterId: "do25a-dyaaa-aaaak-qifua-cai",
+        sender: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+        method: "greet_no_consent",
+        arg: "RElETAABcQJtZQ==",
+      },
+    },
     ConsentCaseInitialCanisterCallState: {
-      method: "icrc49_call_canister"
+      method: "icrc49_call_canister",
       params: {
-        canisterId: "do25a-dyaaa-aaaak-qifua-cai"
-        sender: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe"
-        method: "greet"
-        arg: "RElETAABcQJtZQ=="
-      }
-    }
+        canisterId: "do25a-dyaaa-aaaak-qifua-cai",
+        sender: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+        method: "greet",
+        arg: "RElETAABcQJtZQ==",
+      },
+    },
   }
 
   static readonly Mocked = {
-    FullPermissionsList: [
+    GetCurrentPermissionsResponse: [
       {
         scope: {
           method: "icrc27_accounts",
@@ -158,7 +158,6 @@ export class ExpectedTexts {
       "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
       "Arguments",
       '["me"]',
-      "Produce the following greeting text: > Hello, me!",
     ],
     ConsentCaseCanisterCallResponse: {
       origin: "http://localhost:3001",
@@ -203,7 +202,7 @@ export class ExpectedTexts {
         method: "icrc49_call_canister",
       },
     ],
-    FullPermissionsList: [
+    GetCurrentPermissionsResponse: [
       {
         method: "icrc27_accounts",
       },

@@ -74,8 +74,8 @@ test.describe("ICRC25 Permissions", () => {
       const actualResponse = await section.getResponseJson()
       expect(actualResponse).toStrictEqual(
         account.type === AccountType.MockedSigner
-          ? ExpectedTexts.Mocked.FullPermissionsList
-          : ExpectedTexts.NFID.FullPermissionsList
+          ? ExpectedTexts.Mocked.GetCurrentPermissionsResponse
+          : ExpectedTexts.NFID.GetCurrentPermissionsResponse
       )
       await demoPage.logout()
     }

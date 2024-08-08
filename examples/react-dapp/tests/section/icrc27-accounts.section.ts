@@ -15,7 +15,7 @@ export class Icrc25AccountsSection extends Section {
   }
 
   async selectAccountsNFID(page: Page, context: BrowserContext, timeout: number): Promise<void> {
-    async function tryClickApprove(): Promise<void> {
+    const tryClickApprove = async () => {
       let popup
       let done = false
       while (!done) {

@@ -46,10 +46,10 @@ export class UserService {
         this.page.evaluate(
           async ({ testUser }) => {
             return new Promise<string>((resolve) => {
-              // @ts-ignore
+              // @ts-expect-error: setAuthState function exists on NFID.one side
               if (typeof setAuthState === "function") {
                 try {
-                  // @ts-ignore
+                  // @ts-expect-error: setAuthState function exists on NFID.one side
                   setAuthState(testUser.authstate)
                     .then((functionResult: string | Error) => {
                       resolve(String(functionResult))

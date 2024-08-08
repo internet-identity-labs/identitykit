@@ -33,7 +33,7 @@ export class Icrc34DelegationSection extends Section {
   }
 
   async selectProfileNFID(page: Page, context: BrowserContext, timeout: number): Promise<void> {
-    async function tryClickApprove(this): Promise<void> {
+    const tryClickApprove = async () => {
       let popup
       let done = false
       while (!done) {
@@ -43,11 +43,7 @@ export class Icrc34DelegationSection extends Section {
             await this.submitButton.click()
             popup = await page.waitForEvent("popup", { timeout: 5000 })
           }
-          if (popup)
-            await context
-              .pages()[2]
-              .locator('//button[.//text()="Approve"]')
-              .waitFor({ state: "attached", timeout: 5000 })
+          if (popup) await context.pages()[2].locator('//button[.//text()="Approve"]')
           await context.pages()[2].locator("#profile_legacy_0").click()
           await context.pages()[2].locator('//button[.//text()="Approve"]').click()
           await page.waitForTimeout(1000)

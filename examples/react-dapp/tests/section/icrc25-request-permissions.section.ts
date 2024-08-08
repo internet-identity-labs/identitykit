@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test"
 import { Section } from "./section.ts"
-import { Account } from "../page/demo.page.ts"
+import { Account, AccountType } from "../page/demo.page.ts"
 
 export class Icrc25RequestPermissionsSection extends Section {
   constructor(public readonly page: Page) {
@@ -14,23 +14,16 @@ export class Icrc25RequestPermissionsSection extends Section {
         this.submitButton.click(),
       ])
       let isPopupClosed = false
-      popup.on("close", () => {
-        isPopupClosed = true
-      })
-      if (account.toString() == "locator('#signer_MockedSigner')".toString()) {
+      if (account.type == AccountType.MockedSigner) {
         while (!isPopupClosed) {
           try {
             await popup.waitForSelector("#approve", { state: "attached", timeout: 2000 })
             await popup.click("#approve")
-            break
+            await popup.close()
+            isPopupClosed = true
           } catch (e) {
-            if (isPopupClosed) {
-              break
-            }
+            /* empty */
           }
-        }
-        if (!isPopupClosed) {
-          await popup.waitForEvent("close")
         }
       }
     }
