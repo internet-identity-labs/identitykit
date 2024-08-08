@@ -29,8 +29,9 @@ export abstract class Section {
   }
 
   async waitForResponse(): Promise<void> {
-    await this.page.waitForSelector(
-      `#${this.section} #response-section div.cm-line > span:nth-child(2)`
-    )
+    await this.page
+      .locator(`#${this.section} #response-section div.cm-line > span:nth-child(2)`)
+      .last()
+      .waitFor({ state: "visible" })
   }
 }
