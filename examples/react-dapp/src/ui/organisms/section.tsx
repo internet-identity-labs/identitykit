@@ -172,7 +172,7 @@ export const Section: React.FC<ISection> = ({
           setResponseValue(JSON.stringify(mappedResult, null, 2))
           return
         }
-        console.log({ res })
+
         setResponseValue(JSON.stringify(res, null, 2))
       }
     } catch (e) {
