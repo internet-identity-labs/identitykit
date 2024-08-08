@@ -20,7 +20,6 @@ export class Icrc49CallCanisterSection extends Section {
   }
 
   async getPopupTexts(popup: Page): Promise<string[]> {
-    await popup.waitForSelector(`div > small`)
     return await popup.locator(`div > small`).allInnerTexts()
   }
 
