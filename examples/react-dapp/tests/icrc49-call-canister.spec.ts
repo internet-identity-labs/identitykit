@@ -3,11 +3,13 @@ import { Account, AccountType, DemoPage } from "./page/demo.page.ts"
 import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
 import { Icrc49CallCanisterSection } from "./section/icrc49-call-canister.section.ts"
 import { ExpectedTexts } from "./section/expectedTexts.ts"
+import { Icrc25AccountsSection } from "./section/icrc27-accounts.section.ts"
 
 type Fixtures = {
   section: Icrc49CallCanisterSection
   demoPage: DemoPage
   requestPermissionSection: Icrc25RequestPermissionsSection
+  accountsSection: Icrc25AccountsSection
   nfidPage: Page
 }
 
@@ -24,6 +26,10 @@ const test = base.extend<Fixtures>({
   requestPermissionSection: async ({ page }, use) => {
     const requestPermissionSection = new Icrc25RequestPermissionsSection(page)
     await use(requestPermissionSection)
+  },
+  accountsSection: async ({ page }, use) => {
+    const accountsSection = new Icrc25AccountsSection(page)
+    await use(accountsSection)
   },
   nfidPage: async ({ context, demoPage }, use) => {
     const nfidPage = await context.newPage()
@@ -78,29 +84,37 @@ test.describe("ICRC25 call-canister", () => {
     demoPage,
     requestPermissionSection,
     context,
+    accountsSection,
     nfidPage,
   }) => {
     await nfidPage.title()
-    const account = accounts[0]
-    await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
-    if (account.type === AccountType.MockedSigner) {
-      const popup = await section.openPopup()
-      const texts = await section.getPopupTexts(popup)
-      expect(texts).toEqual(ExpectedTexts.Mocked.NoConsentCaseCanisterCallRequest)
-      await section.approve(popup)
-    } else {
-      await section.checkPopupTextNFID(
-        demoPage.page,
-        context,
-        ExpectedTexts.NFID.NoConsentCaseCanisterCall
-      )
+    for (const account of accounts) {
+      await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
+      if (account.type === AccountType.MockedSigner) {
+        const popup = await section.openPopup()
+        const texts = await section.getPopupTexts(popup)
+        expect(texts).toEqual(ExpectedTexts.Mocked.NoConsentCaseCanisterCallRequest)
+        await section.approve(popup)
+      } else {
+        await accountsSection.selectAccountsNFID(demoPage.page, context)
+        await accountsSection.waitForResponse()
+        const owner = (await accountsSection.getResponseJson()) as {
+          accounts?: { owner: string }[]
+        }
+        await section.setRequestJson(owner.accounts![0].owner!)
+        await section.submitButton.click()
+        await section.checkPopupTextNFID(
+          demoPage.page,
+          context,
+          ExpectedTexts.NFID.NoConsentCaseCanisterCall
+        )
+      }
+      await section.waitForResponse()
+      const actualResponse = await section.getResponseJson()
+
+      expect(actualResponse).toMatchObject(ExpectedTexts.Mocked.NoConsentCaseCanisterCallResponse)
+      await demoPage.logout()
     }
-
-    await section.waitForResponse()
-    const actualResponse = await section.getResponseJson()
-
-    expect(actualResponse).toMatchObject(ExpectedTexts.Mocked.NoConsentCaseCanisterCallResponse)
-    await demoPage.logout()
   })
 
   test("should make canister call with consent", async ({
@@ -108,28 +122,37 @@ test.describe("ICRC25 call-canister", () => {
     demoPage,
     requestPermissionSection,
     context,
+    accountsSection,
     nfidPage,
   }) => {
     await nfidPage.title()
-    const account = accounts[0]
-    await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
-    if (account.type === AccountType.MockedSigner) {
-      const popup = await section.openPopup()
-      const texts = await section.getPopupTexts(popup)
-      expect(texts).toEqual(ExpectedTexts.Mocked.ConsentCaseCanisterCallRequest)
-      await section.approve(popup)
-    } else {
-      await section.checkPopupTextNFID(
-        demoPage.page,
-        context,
-        ExpectedTexts.NFID.ConsentCaseCanisterCall
-      )
+    for (const account of accounts) {
+      await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
+      if (account.type === AccountType.MockedSigner) {
+        const popup = await section.openPopup()
+        const texts = await section.getPopupTexts(popup)
+        expect(texts).toEqual(ExpectedTexts.Mocked.ConsentCaseCanisterCallRequest)
+        await section.approve(popup)
+      } else {
+        await accountsSection.selectAccountsNFID(demoPage.page, context)
+        await accountsSection.waitForResponse()
+        const owner = (await accountsSection.getResponseJson()) as {
+          accounts?: { owner: string }[]
+        }
+        await section.setRequestJson(owner.accounts![0].owner!)
+        await section.submitButton.click()
+        await section.checkPopupTextNFID(
+          demoPage.page,
+          context,
+          ExpectedTexts.NFID.ConsentCaseCanisterCall
+        )
+      }
+
+      await section.waitForResponse()
+      const actualResponse = await section.getResponseJson()
+
+      expect(actualResponse).toMatchObject(ExpectedTexts.Mocked.ConsentCaseCanisterCallResponse)
+      await demoPage.logout()
     }
-
-    await section.waitForResponse()
-    const actualResponse = await section.getResponseJson()
-
-    expect(actualResponse).toMatchObject(ExpectedTexts.Mocked.ConsentCaseCanisterCallResponse)
-    await demoPage.logout()
   })
 })

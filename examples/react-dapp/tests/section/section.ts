@@ -14,6 +14,20 @@ export abstract class Section {
     this.submitButton = this.page.locator(`#${this.section} #submit`)
   }
 
+  async setRequestJson(sender: string) {
+    const request = {
+      method: "icrc49_call_canister",
+      params: {
+        canisterId: "do25a-dyaaa-aaaak-qifua-cai",
+        sender: sender,
+        method: "greet_no_consent",
+        arg: "RElETAABcQJtZQ==",
+      },
+    }
+    await this.requestSection.clear()
+    await this.requestSection.fill(JSON.stringify(request, null, 2))
+  }
+
   async getRequestJson(): Promise<string> {
     const json = (await this.requestSection.textContent()) ?? "{}"
     return JSON.parse(json)
