@@ -1,13 +1,14 @@
-import { expect } from "@playwright/test"
-import { test as base } from "@playwright/test"
-import { DemoPage } from "./page/demo.page"
-import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section"
-import { Icrc34DelegationSection } from "./section/icrc34-delegation.section"
+import { expect, Page, test as base } from "@playwright/test"
+import { Account, AccountType, DemoPage, ProfileType } from "./page/demo.page.ts"
+import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
+import { Icrc34DelegationSection } from "./section/icrc34-delegation.section.ts"
+import { ExpectedTexts } from "./section/expectedTexts.ts"
 
 type Fixtures = {
   section: Icrc34DelegationSection
   demoPage: DemoPage
   requestPermissionSection: Icrc25RequestPermissionsSection
+  nfidPage: Page
 }
 
 const test = base.extend<Fixtures>({
@@ -15,99 +16,98 @@ const test = base.extend<Fixtures>({
     const section = new Icrc34DelegationSection(page)
     await use(section)
   },
-  demoPage: [
-    async ({ page }, use) => {
-      const demoPage = new DemoPage(page)
-      await demoPage.goto()
-      await demoPage.login()
-      await use(demoPage)
-    },
-    { auto: true },
-  ],
-  requestPermissionSection: [
-    async ({ page }, use) => {
-      const requestPermissionSection = new Icrc25RequestPermissionsSection(page)
-      await requestPermissionSection.approvePermissions()
-      await use(requestPermissionSection)
-    },
-    { auto: true },
-  ],
+  demoPage: async ({ page }, use) => {
+    const demoPage = new DemoPage(page)
+    await demoPage.goto()
+    await use(demoPage)
+  },
+  requestPermissionSection: async ({ page }, use) => {
+    const requestPermissionSection = new Icrc25RequestPermissionsSection(page)
+    await use(requestPermissionSection)
+  },
+  nfidPage: async ({ context, demoPage }, use) => {
+    const nfidPage = await context.newPage()
+    await nfidPage.goto("https://dev.nfid.one/")
+    await demoPage.setAccount(10974, nfidPage)
+    await context.pages()[0].bringToFront()
+    await use(nfidPage)
+    await nfidPage.close()
+  },
 })
 
-test("should check request and response has correct initial state", async ({ section }) => {
-  const request = {
-    method: "icrc34_delegation",
-    params: {
-      publicKey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
-      targets: ["do25a-dyaaa-aaaak-qifua-cai"],
-      maxTimeToLive: "28800000000000",
-    },
-  }
+test.describe("ICRC25 delegation", () => {
+  let accounts: Account[] = []
 
-  const initialRequest = await section.getRequestJson()
-  expect(initialRequest).toStrictEqual(request)
-
-  const initialResponse = await section.getResponseJson()
-  expect(initialResponse).toStrictEqual({})
-})
-
-test("should request global delegation with targets", async ({ section }) => {
-  const popup = await section.openPopup()
-
-  const isDisabledGlobalAccount = await section.isDisabledGlobalAccount(popup)
-  expect(isDisabledGlobalAccount).toBeFalsy()
-
-  const isDisabledSessionAccount = await section.isDisabledSessionAccount(popup)
-  expect(isDisabledSessionAccount).toBeFalsy()
-
-  await section.selectGlobalAccount(popup)
-
-  await section.waitForResponse()
-
-  const actualResponse = await section.getResponseJson()
-
-  expect(actualResponse).toMatchObject({
-    signerDelegation: [
-      {
-        delegation: {
-          expiration: expect.anything(),
-          pubkey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
-          targets: ["do25a-dyaaa-aaaak-qifua-cai"],
-        },
-        signature: expect.anything(),
-      },
-    ],
-    publicKey: "MCowBQYDK2VwAyEAO2onvM62pC1io6jQKm8Nc2UyFXcd4kOmOsBIoYtZ2ik=",
+  test.beforeEach(async ({ page }) => {
+    accounts = await DemoPage.getAccounts(page)
   })
-})
+  test("should check request and response has correct initial state", async ({
+    section,
+    demoPage,
+  }) => {
+    for (const account of accounts) {
+      await demoPage.login(account)
 
-test("should request session delegation with no targets", async ({ section }) => {
-  await section.setRequestWithNoTargets()
+      const initialRequest = await section.getRequestJson()
+      expect(initialRequest).toStrictEqual(ExpectedTexts.General.InitialDelegationRequestState)
 
-  const popup = await section.openPopup()
+      const initialResponse = await section.getResponseJson()
+      expect(initialResponse).toStrictEqual({})
+      await demoPage.logout()
+    }
+  })
 
-  const isDisabledGlobalAccount = await section.isDisabledGlobalAccount(popup)
-  expect(isDisabledGlobalAccount).toBeTruthy()
+  test("should request global delegation with targets", async ({
+    section,
+    demoPage,
+    requestPermissionSection,
+    nfidPage,
+    context,
+  }) => {
+    await nfidPage.title()
+    const account = accounts[0]
+    await demoPage.login(account)
+    await requestPermissionSection.approvePermissions(account)
 
-  const isDisabledSessionAccount = await section.isDisabledSessionAccount(popup)
-  expect(isDisabledSessionAccount).toBeFalsy()
+    if (account.type === AccountType.MockedSigner) {
+      await section.selectProfileMocked(ProfileType.Global, (isGlobalDisabled) =>
+        expect(isGlobalDisabled).toBeFalsy()
+      )
+    } else await section.selectProfileNFID(demoPage.page, context)
 
-  await section.selectSessionAccount(popup)
+    await section.waitForResponse()
+    const actualResponse = await section.getResponseJson()
 
-  await section.waitForResponse()
+    expect(actualResponse).toMatchObject(ExpectedTexts.Mocked.DelegationWithTargetsResponse)
+    await demoPage.logout()
+  })
 
-  const actualResponse = await section.getResponseJson()
+  test("should request session delegation with no targets", async ({
+    section,
+    demoPage,
+    requestPermissionSection,
+    nfidPage,
+    context,
+  }) => {
+    const account = accounts[0]
+    await nfidPage.title()
+    await demoPage.login(account)
+    await requestPermissionSection.approvePermissions(account)
+    await section.setRequestWithNoTargets()
 
-  expect(actualResponse).toMatchObject({
-    signerDelegation: [
-      {
-        delegation: {
-          expiration: expect.anything(),
-          pubkey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
-        },
-        signature: expect.anything(),
-      },
-    ],
-    publicKey: "MCowBQYDK2VwAyEAMAityFffzQR3p6qgGmV8ppI852wHZFcEsehy3rElO6o=",
+    if (account.type === AccountType.MockedSigner) {
+      await section.selectProfileMocked(ProfileType.Session, (isGlobalDisabled) =>
+        expect(isGlobalDisabled).toBeTruthy()
+      )
+    } else await section.selectProfileNFID(demoPage.page, context)
+
+    await section.waitForResponse()
+    const actualResponse = await section.getResponseJson()
+    expect(actualResponse).toMatchObject(
+      account.type === AccountType.MockedSigner
+        ? ExpectedTexts.Mocked.NoTargetsDelegationResponse
+        : ExpectedTexts.NFID.NoTargetsDelegationResponse
+    )
+    await demoPage.logout()
   })
 })

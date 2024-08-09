@@ -1,8 +1,8 @@
-import { expect } from "@playwright/test"
-import { test as base } from "@playwright/test"
-import { DemoPage } from "./page/demo.page"
-import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section"
-import { Icrc25PermissionsSection } from "./section/icrc25-permissions.section"
+import { expect, test as base } from "@playwright/test"
+import { Account, AccountType, DemoPage } from "./page/demo.page.ts"
+import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
+import { Icrc25PermissionsSection } from "./section/icrc25-permissions.section.ts"
+import { ExpectedTexts } from "./section/expectedTexts.ts"
 
 type Fixtures = {
   section: Icrc25PermissionsSection
@@ -12,69 +12,72 @@ type Fixtures = {
 
 const test = base.extend<Fixtures>({
   section: async ({ page }, use) => {
-    const demoPage = new Icrc25PermissionsSection(page)
-    await use(demoPage)
+    const section = new Icrc25PermissionsSection(page)
+    await use(section)
   },
   requestPermissionSection: async ({ page }, use) => {
     const requestPermissionSection = new Icrc25RequestPermissionsSection(page)
     await use(requestPermissionSection)
   },
-  demoPage: [
-    async ({ page }, use) => {
-      const demoPage = new DemoPage(page)
-      await demoPage.goto()
-      await demoPage.login()
-      await use(demoPage)
-    },
-    { auto: true },
-  ],
+  demoPage: async ({ page }, use) => {
+    const demoPage = new DemoPage(page)
+    await demoPage.goto()
+    await use(demoPage)
+  },
 })
 
-test("should check request and response has correct initial state", async ({ section }) => {
-  const request = {
-    method: "icrc25_permissions",
-  }
+test.describe("ICRC25 Permissions", () => {
+  let accounts: Account[] = []
 
-  const initialRequest = await section.getRequestJson()
-  expect(initialRequest).toStrictEqual(request)
+  test.beforeEach(async ({ page }) => {
+    accounts = await DemoPage.getAccounts(page)
+  })
 
-  const initialResponse = await section.getResponseJson()
-  expect(initialResponse).toStrictEqual({})
-})
+  test("should check request and response has correct initial state", async ({
+    section,
+    demoPage,
+  }) => {
+    for (const account of accounts) {
+      await demoPage.login(account)
 
-test("should retrieve empty permissions", async ({ section }) => {
-  await section.clickSubmitButton()
+      const initialRequest = await section.getRequestJson()
+      expect(initialRequest).toStrictEqual({ method: "icrc25_permissions" })
 
-  const actualResponse = await section.getResponseJson()
-  expect(actualResponse).toStrictEqual({})
-})
+      const initialResponse = await section.getResponseJson()
+      expect(initialResponse).toStrictEqual({})
+      await demoPage.logout()
+    }
+  })
 
-test("should retrieve full list of permissions", async ({ section, requestPermissionSection }) => {
-  const response = [
-    {
-      scope: {
-        method: "icrc27_accounts",
-      },
-      state: "granted",
-    },
-    {
-      scope: {
-        method: "icrc34_delegation",
-      },
-      state: "granted",
-    },
-    {
-      scope: {
-        method: "icrc49_call_canister",
-      },
-      state: "granted",
-    },
-  ]
+  test("should retrieve empty permissions", async ({ section, demoPage }) => {
+    for (const account of accounts) {
+      await demoPage.login(account)
+      await section.clickSubmitButton()
 
-  await requestPermissionSection.approvePermissions()
-  await section.clickSubmitButton()
-  await section.waitForResponse()
+      const actualResponse = await section.getResponseJson()
+      expect(actualResponse).toStrictEqual({})
+      await demoPage.logout()
+    }
+  })
 
-  const actualResponse = await section.getResponseJson()
-  expect(actualResponse).toStrictEqual(response)
+  test("should retrieve full list of permissions", async ({
+    section,
+    requestPermissionSection,
+    demoPage,
+  }) => {
+    for (const account of accounts) {
+      await demoPage.login(account)
+      await requestPermissionSection.approvePermissions(account)
+      await section.clickSubmitButton()
+      await section.waitForResponse()
+
+      const actualResponse = await section.getResponseJson()
+      expect(actualResponse).toStrictEqual(
+        account.type === AccountType.MockedSigner
+          ? ExpectedTexts.Mocked.GetCurrentPermissionsResponse
+          : ExpectedTexts.NFID.GetCurrentPermissionsResponse
+      )
+      await demoPage.logout()
+    }
+  })
 })
