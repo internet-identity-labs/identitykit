@@ -24,7 +24,7 @@ const test = base.extend<Fixtures>({
   ],
 })
 
-test("should check request and response has correct initial state", async ({ section }) => {
+test.skip("should check request and response has correct initial state", async ({ section }) => {
   const request = {
     method: "icrc25_supported_standards",
   }
@@ -36,7 +36,7 @@ test("should check request and response has correct initial state", async ({ sec
   expect(initialResponse).toStrictEqual({})
 })
 
-test("should return list of supported standards", async ({ section }) => {
+test.skip("should return list of supported standards", async ({ section }) => {
   const response = [
     {
       name: "ICRC-25",

@@ -74,14 +74,6 @@ export abstract class SignerClient {
     }
   }
 
-  abstract login(options?: {
-    /**
-     * Expiration of the authentication in nanoseconds
-     * @default  BigInt(8) hours * BigInt(3_600_000_000_000) nanoseconds
-     */
-    maxTimeToLive?: bigint
-  }): Promise<string>
-
   abstract logout(options?: { returnTo?: string }): Promise<void>
 
   protected async setConnectedUser(owner: string, subAccount?: SubAccount): Promise<void> {

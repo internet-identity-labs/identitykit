@@ -10,7 +10,7 @@ import {
   IdentityKitDelegationSignerClientOptions,
   IdentityKitSignerAgentOptions,
 } from "../../lib"
-import { useCreateIdentityKit, useSigner, useTheme } from "./hooks"
+import { useCreateIdentityKit, useLogoutOnIdle, useSigner, useTheme } from "./hooks"
 
 interface IdentityKitProviderProps<
   T extends IdentityKitAuthKindType = typeof IdentityKitAuthKind.DELEGATION,
@@ -49,9 +49,20 @@ export const IdentityKitProvider = <T extends IdentityKitAuthKindType>({
     closeModal: () => setIsModalOpen(false),
   })
 
-  const identityKit = useCreateIdentityKit({
+  const { shouldLogoutByIdle, logoutByIdle } = useLogoutOnIdle()
+
+  const { signerClient, setSignerClient } = useCreateIdentityKit({
     selectedSigner: selectedSigner ?? savedSigner,
-    signerClientOptions,
+    signerClientOptions: {
+      ...signerClientOptions,
+      idleOptions: {
+        ...signerClientOptions?.idleOptions,
+        onIdle: () => {
+          signerClientOptions?.idleOptions?.onIdle?.()
+          logoutByIdle()
+        },
+      },
+    },
     signerAgentOptions,
     authKind,
   })
@@ -70,7 +81,10 @@ export const IdentityKitProvider = <T extends IdentityKitAuthKindType>({
         selectCustomSigner,
         theme,
         featuredSigner,
-        identityKit: identityKit!,
+        signerAgentOptions: signerAgentOptions,
+        signerClient,
+        setSignerClient,
+        shouldLogoutByIdle,
       }}
     >
       <IdentityKitModal />

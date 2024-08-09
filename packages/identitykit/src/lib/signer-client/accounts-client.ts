@@ -6,6 +6,7 @@ import {
 } from "@slide-computer/signer-storage"
 import { SubAccount } from "@dfinity/ledger-icp"
 import { IdleManager } from "./idle-manager"
+import { Principal } from "@dfinity/principal"
 import {
   STORAGE_CONNECTED_OWNER_KEY,
   STORAGE_KEY,
@@ -25,25 +26,25 @@ export class AccountsSignerClient extends SignerClient {
     return new AccountsSignerClient(options, storage)
   }
 
-  public async login(): Promise<string> {
+  public async login(): Promise<{
+    signerResponse: {
+      owner: Principal
+      subaccount?: ArrayBuffer
+    }[]
+    connectedAccount: string
+  }> {
     const permissions = await this.options.signer.permissions()
+    const permission = permissions.find((x) => "icrc27_accounts" === x.scope.method)
 
-    if (
-      // TODO hot fix for nfid wallet, permissions have old format
-      !permissions.find((x) =>
-        x.scope
-          ? "icrc27_accounts" === x.scope.method
-          : // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            "icrc27_accounts" === (x as any).method
-      )
-    ) {
+    if (!permission || permission.state === "ask_on_use" || permission.state === "denied") {
       await this.options.signer.requestPermissions([
         {
           method: "icrc27_accounts",
         },
       ])
     }
-    const account = (await this.options.signer.accounts())[0]
+    const accounts = await this.options.signer.accounts()
+    const account = accounts[0]
 
     if (!account.subaccount) {
       if (!this.options?.idleOptions?.disableIdle && !this.idleManager) {
@@ -51,7 +52,10 @@ export class AccountsSignerClient extends SignerClient {
         this.registerDefaultIdleCallback()
       }
       await this.setConnectedUser(account.owner.toString())
-      return account.owner.toString()
+      return {
+        signerResponse: accounts,
+        connectedAccount: account.owner.toString(),
+      }
     }
 
     const subAccount = SubAccount.fromBytes(new Uint8Array(account.subaccount))
@@ -66,7 +70,10 @@ export class AccountsSignerClient extends SignerClient {
       this.idleManager = IdleManager.create(this.options.idleOptions)
       this.registerDefaultIdleCallback()
     }
-    return account.owner.toString()
+    return {
+      signerResponse: accounts,
+      connectedAccount: account.owner.toString(),
+    }
   }
 
   public async logout(options: { returnTo?: string } = {}): Promise<void> {
