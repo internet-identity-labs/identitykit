@@ -48,7 +48,7 @@ export const IdentityKitProvider = <T extends IdentityKitAuthKindType>({
     closeModal: () => setIsModalOpen(false),
   })
 
-  const identityKit = useCreateIdentityKit({
+  const { signerClient, setSignerClient } = useCreateIdentityKit({
     selectedSigner: selectedSigner ?? savedSigner,
     signerClientOptions,
     signerAgentOptions,
@@ -68,7 +68,9 @@ export const IdentityKitProvider = <T extends IdentityKitAuthKindType>({
         selectSigner,
         selectCustomSigner,
         theme,
-        identityKit: identityKit!,
+        signerAgentOptions: signerAgentOptions,
+        signerClient,
+        setSignerClient,
       }}
     >
       <IdentityKitModal />

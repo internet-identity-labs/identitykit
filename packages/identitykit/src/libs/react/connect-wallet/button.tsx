@@ -1,15 +1,21 @@
 import clsx from "clsx"
-import { MouseEventHandler } from "react"
+import { MouseEventHandler, PropsWithChildren } from "react"
 import { formatIcp } from "../utils"
 
-export type ButtonProps = {
+export type ButtonProps = PropsWithChildren<{
   onClick?: MouseEventHandler<HTMLButtonElement>
   connectedAccount?: string
   icpBalance?: number
   className?: string
-}
+}>
 
-export function Button({ onClick, connectedAccount, icpBalance, className }: ButtonProps) {
+export function Button({
+  onClick,
+  connectedAccount,
+  icpBalance,
+  className,
+  children,
+}: ButtonProps) {
   return (
     <button
       type="button"
@@ -25,7 +31,9 @@ export function Button({ onClick, connectedAccount, icpBalance, className }: But
         className
       )}
     >
-      {!connectedAccount ? (
+      {children ? (
+        children
+      ) : !connectedAccount ? (
         <small>Connect wallet</small>
       ) : (
         <>

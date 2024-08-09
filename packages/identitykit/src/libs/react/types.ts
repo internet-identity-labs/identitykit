@@ -1,7 +1,7 @@
 import { SignerConfig } from "../../lib/types"
 import { Signer } from "@slide-computer/signer"
 import { IdentityKitTheme } from "./constants"
-import { IdentityKit } from "../../lib/identity-kit"
+import { IdentityKitSignerAgentOptions, IdentityKitSignerClient } from "../../lib"
 
 export interface IdentityKitProvider {
   signers: SignerConfig[]
@@ -13,5 +13,10 @@ export interface IdentityKitProvider {
   selectCustomSigner: (url: string) => void
   signerIframeRef?: React.RefObject<HTMLIFrameElement>
   theme: IdentityKitTheme
-  identityKit: IdentityKit
+  signerAgentOptions?: {
+    signer?: IdentityKitSignerAgentOptions["signer"]
+    agent?: IdentityKitSignerAgentOptions["agent"]
+  }
+  signerClient?: IdentityKitSignerClient
+  setSignerClient: (sc?: IdentityKitSignerClient) => void
 }

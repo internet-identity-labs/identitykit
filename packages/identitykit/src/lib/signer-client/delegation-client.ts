@@ -26,6 +26,7 @@ import {
   SignerClient,
   SignerClientOptions,
 } from "./client"
+import { IdentityKit } from "../identity-kit"
 
 const ECDSA_KEY_LABEL = "ECDSA"
 const ED25519_KEY_LABEL = "Ed25519"
@@ -114,7 +115,7 @@ export class DelegationSignerClient extends SignerClient {
      * @default  BigInt(8) hours * BigInt(3_600_000_000_000) nanoseconds
      */
     maxTimeToLive?: bigint
-  }): Promise<string> {
+  }): Promise<{ signerResponse: string; account: string }> {
     const baseIdentity = await this.getBaseIdentity()
     const permissions = await this.options.signer.permissions()
     // TODO hot fix for nfid wallet, permissions have old format
@@ -147,7 +148,10 @@ export class DelegationSignerClient extends SignerClient {
       this.registerDefaultIdleCallback()
     }
 
-    return this.identity.getPrincipal().toString()
+    return {
+      account: this.identity.getPrincipal().toString(),
+      signerResponse: JSON.stringify(delegationChain, null, 2),
+    }
   }
 
   public async logout(options: { returnTo?: string } = {}): Promise<void> {

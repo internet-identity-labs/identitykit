@@ -80,7 +80,7 @@ export abstract class SignerClient {
      * @default  BigInt(8) hours * BigInt(3_600_000_000_000) nanoseconds
      */
     maxTimeToLive?: bigint
-  }): Promise<string>
+  }): Promise<{ signerResponse: string; account: string }>
 
   abstract logout(options?: { returnTo?: string }): Promise<void>
 

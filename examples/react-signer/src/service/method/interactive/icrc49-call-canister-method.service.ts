@@ -4,7 +4,7 @@ import { accountService } from "../../account.service"
 import { callCanisterService } from "../../call-canister.service"
 import { DelegationChain, DelegationIdentity, Ed25519KeyIdentity } from "@dfinity/identity"
 import { consentMessageService } from "../../consent-message.service"
-import { Agent, HttpAgent, Identity } from "@dfinity/agent"
+import { Agent, Ed25519PublicKey, HttpAgent, Identity } from "@dfinity/agent"
 import { interfaceFactoryService } from "../../interface-factory.service"
 import { IDL } from "@dfinity/candid"
 import { GenericError } from "../../exception-handler.service"
@@ -79,6 +79,12 @@ class Icrc49CallCanisterMethodService extends InteractiveMethodService {
     message: MessageEvent<RPCMessage>
   ): Promise<CallCanisterComponentData> {
     const icrc49Dto = message.data.params as unknown as Icrc49Dto
+
+    // console.log("here", icrc49Dto)
+
+    // await new Promise((resolve) => {
+    //   setTimeout(resolve, 40000000)
+    // })
 
     const key = await accountService.getAccountKeyIdentityByPrincipal(icrc49Dto.sender)
 
