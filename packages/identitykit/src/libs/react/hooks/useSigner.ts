@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
 import { Signer } from "@slide-computer/signer"
-import { DEFAULT_SIZES } from "../constants"
 import { SignerConfig } from "../../../lib"
 import { TransportBuilder } from "../../../lib/service"
 import { TransportType } from "../../../lib/types"
