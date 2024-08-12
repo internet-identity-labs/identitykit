@@ -6,12 +6,16 @@ import { IdentityKitContext } from "./context"
 import { ModalHeader } from "./components/modal-header"
 import { SelectWalletList } from "./components/select-wallet-list"
 import "./modal.css"
+import useClickOutside from "./hooks/use-click-outside"
 
 export const IdentityKitModal = () => {
-  const { isModalOpen, signers, selectSigner, theme, featuredSigner } =
+  const { isModalOpen, toggleModal, signers, selectSigner, theme, featuredSigner } =
     useContext(IdentityKitContext)
 
   const [isViewAll, setIsViewAll] = useState(false)
+  const ref = useClickOutside<HTMLDivElement>(() => {
+    isModalOpen && toggleModal()
+  })
 
   useEffect(() => {
     setTimeout(() => {
@@ -44,6 +48,7 @@ export const IdentityKitModal = () => {
             )}
           />
           <Dialog.Content
+            ref={ref}
             id="identity-kit-modal"
             data-identity-kit-theme={theme}
             aria-describedby={undefined}

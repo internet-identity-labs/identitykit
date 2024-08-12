@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
 import { Signer } from "@slide-computer/signer"
-import { DEFAULT_SIZES } from "../constants"
 import { SignerConfig } from "../../../lib"
 import { TransportBuilder } from "../../../lib/service"
 import { TransportType } from "../../../lib/types"
@@ -25,17 +24,11 @@ export function useSigner({
       const signer = signers.find((s) => s.id === signerId)
       if (!signer) throw new Error(`Signer with id ${signerId} not found`)
 
-      const { transportType, providerUrl, label, popupWidth, popupHeight } = signer
-
-      const width = popupWidth || DEFAULT_SIZES.width
-      const height = popupHeight || DEFAULT_SIZES.height
+      const { transportType, providerUrl } = signer
 
       const transport = TransportBuilder.build({
         transportType,
         url: providerUrl,
-        label,
-        width,
-        height,
       })
 
       const createdSigner = new Signer({ transport })
@@ -53,9 +46,6 @@ export function useSigner({
     const transport = TransportBuilder.build({
       transportType: TransportType.POPUP,
       url,
-      label: "Custom",
-      width: 450,
-      height: 640,
     })
 
     const createdSigner = new Signer({ transport })

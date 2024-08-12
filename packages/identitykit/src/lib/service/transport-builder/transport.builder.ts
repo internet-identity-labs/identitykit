@@ -6,10 +6,7 @@ import { getExtensionTransportBuilder } from "./extension-transport.builder"
 
 export interface TransportBuilderRequest {
   transportType: TransportType
-  label: string
   url: string
-  width: number
-  height: number
 }
 
 export class TransportBuilder {
