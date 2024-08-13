@@ -4,8 +4,8 @@
 
 IdentityKit is a React library that makes it easy to add wallet connection to your dapp.
 
-🔥 Out-of-the-box wallet management
-✅ Easily customizable
+🔥 Out-of-the-box wallet management\
+✅ Easily customizable\
 🦄 Built on top of ICRC standards
 
 ## Quick start
