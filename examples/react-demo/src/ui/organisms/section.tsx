@@ -11,7 +11,11 @@ import { getRequestObject } from "../../utils/requests"
 import { DropdownSelect } from "../molecules/dropdown-select"
 
 import "react-toastify/dist/ReactToastify.css"
-import { idlFactory } from "../../idl/service_idl"
+import { idlFactory as demoIDL } from "../../idl/service_idl"
+import { idlFactory as ledgerIDL } from "../../idl/ledger"
+import { AccountIdentifier } from "@dfinity/ledger-icp"
+import { fromHexString } from "ictool"
+import { Principal } from "@dfinity/principal"
 
 import Blur from "react-css-blur"
 
@@ -26,6 +30,12 @@ export interface ISection {
   description: JSX.Element
   requestsExamples: IRequestExample[]
   getCodeSnippet: (requestJSON: string) => string
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const canistersIDLs: { [key: string]: any } = {
+  "ryjl3-tyaaa-aaaaa-aaaba-cai": ledgerIDL,
+  "do25a-dyaaa-aaaak-qifua-cai": demoIDL,
 }
 
 export const Section: React.FC<ISection> = ({
@@ -46,7 +56,13 @@ export const Section: React.FC<ISection> = ({
     if (signerClient?.connectedUser?.owner) {
       const rVal = JSON.parse(requestValue)
       rVal.params.sender = signerClient?.connectedUser?.owner
-      setRequestValue(JSON.stringify(rVal, null, 2))
+      setRequestValue(
+        JSON.stringify(
+          rVal,
+          (_, value) => (typeof value === "bigint" ? value.toString() : value),
+          2
+        )
+      )
     }
   }, [signerClient?.connectedUser?.owner, requestValue])
 
@@ -67,12 +83,31 @@ export const Section: React.FC<ISection> = ({
       if (requestObject.method === "icrc49_call_canister") {
         setIcrc49ActorResponse(undefined)
         const { canisterId } = requestObject.params
-        const actor = Actor.createActor(idlFactory, {
+        const actor = Actor.createActor(canistersIDLs[canisterId], {
           agent: signerAgent,
           canisterId,
         })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        setIcrc49ActorResponse((await actor[requestObject.params.method]("me")) as any)
+
+        if (
+          requestObject.params?.canisterId === "ryjl3-tyaaa-aaaaa-aaaba-cai" &&
+          requestObject.params?.method === "transfer"
+        ) {
+          const address = AccountIdentifier.fromPrincipal({
+            principal: Principal.fromText("do25a-dyaaa-aaaak-qifua-cai"),
+          }).toHex()
+
+          const transferArgs = {
+            to: fromHexString(address),
+            fee: { e8s: BigInt(10000) },
+            memo: BigInt(0),
+            from_subaccount: [],
+            created_at_time: [],
+            amount: { e8s: BigInt(1000) },
+          }
+          setIcrc49ActorResponse((await actor[requestObject.params.method](transferArgs)) as string)
+        } else {
+          setIcrc49ActorResponse((await actor[requestObject.params.method]("me")) as string)
+        }
       }
     } catch (e) {
       if (e instanceof Error) {
@@ -85,7 +120,13 @@ export const Section: React.FC<ISection> = ({
   }
 
   useEffect(() => {
-    setResponseValue(JSON.stringify(icrc49ActorResponse, null, 2))
+    setResponseValue(
+      JSON.stringify(
+        icrc49ActorResponse,
+        (_, value) => (typeof value === "bigint" ? value.toString() : value),
+        2
+      )
+    )
   }, [icrc49ActorResponse])
 
   const codeSection = useMemo(() => {
@@ -103,7 +144,7 @@ export const Section: React.FC<ISection> = ({
   return (
     <Blur radius={!signerClient?.connectedUser ? "5px" : "0"} transition="400ms">
       <div id={id}>
-        <small className="mb-5 block">{description}</small>
+        <small className="block mb-5">{description}</small>
         {requestsOptions.length > 1 ? (
           <DropdownSelect
             id="select-request"

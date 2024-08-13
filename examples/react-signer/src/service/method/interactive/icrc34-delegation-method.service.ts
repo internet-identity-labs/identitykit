@@ -124,7 +124,8 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
         accountKeyIdentity.keyIdentity,
         sessionPublicKey,
         new Date(Date.now() + maxTimeToLive),
-        { targets }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        { targets: targets as any }
       )
     }
 
