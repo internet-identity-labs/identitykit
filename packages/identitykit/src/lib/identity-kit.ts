@@ -13,15 +13,19 @@ type ObjectValuesType<T> = T[keyof T]
 export type IdentityKitAuthKindType = ObjectValuesType<typeof IdentityKitAuthKind>
 
 export class IdentityKit {
-  public signerAgent!: SignerAgent
+  public static signerAgent: SignerAgent
+  public static signerClient?: SignerClient
 
-  constructor(
-    public readonly signerClient: SignerClient,
-    public readonly signerAgentOptions: Omit<SignerAgentOptions, "account">
-  ) {}
+  static create(signerClient: SignerClient) {
+    this.signerClient = signerClient
+  }
 
-  async getIcpBalance(): Promise<number> {
-    const connectedUser = this.signerClient.connectedUser
+  static setSignerAgent(options: SignerAgentOptions) {
+    IdentityKit.signerAgent = new SignerAgent(options)
+  }
+
+  static async getIcpBalance(): Promise<number> {
+    const connectedUser = IdentityKit.signerClient?.connectedUser
     if (!connectedUser) throw new Error("Not authenticated")
 
     const balance = (

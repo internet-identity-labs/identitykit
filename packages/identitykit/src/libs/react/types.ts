@@ -1,7 +1,8 @@
 import { SignerConfig } from "../../lib/types"
 import { Signer } from "@slide-computer/signer"
 import { IdentityKitTheme } from "./constants"
-import { IdentityKit } from "../../lib/identity-kit"
+import { IdentityKitSignerAgentOptions } from "../../lib"
+import { AccountsSignerClient, DelegationSignerClient } from "../../lib/signer-client"
 
 export interface IdentityKitProvider {
   signers: SignerConfig[]
@@ -13,5 +14,11 @@ export interface IdentityKitProvider {
   selectSigner: (signerId?: string) => SignerConfig | void
   selectCustomSigner: (url: string) => void
   theme: IdentityKitTheme
-  identityKit: IdentityKit
+  signerAgentOptions?: {
+    signer?: IdentityKitSignerAgentOptions["signer"]
+    agent?: IdentityKitSignerAgentOptions["agent"]
+  }
+  signerClient?: DelegationSignerClient | AccountsSignerClient
+  setSignerClient: (sc?: DelegationSignerClient | AccountsSignerClient) => void
+  shouldLogoutByIdle?: boolean
 }

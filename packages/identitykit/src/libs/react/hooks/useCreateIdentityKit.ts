@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react"
+import { useCallback, useEffect, useState } from "react"
 import {
   IdentityKitAuthKindType,
   IdentityKit,
@@ -10,13 +10,13 @@ import {
   IdentityKitSignerAgentOptions,
 } from "../../../lib"
 import { Signer } from "@slide-computer/signer"
+import { AccountsSignerClient, DelegationSignerClient } from "../../../lib/signer-client"
 
 export function useCreateIdentityKit<
   T extends IdentityKitAuthKindType = typeof IdentityKitAuthKind.DELEGATION,
 >({
   selectedSigner,
   signerClientOptions = {},
-  signerAgentOptions = {},
   authKind,
 }: {
   selectedSigner?: Signer
@@ -28,16 +28,18 @@ export function useCreateIdentityKit<
     signer?: IdentityKitSignerAgentOptions["signer"]
     agent?: IdentityKitSignerAgentOptions["agent"]
   }
-}): null | IdentityKit {
-  const [identityKit, setIdentityKit] = useState<null | IdentityKit>(null)
-  const signerClient =
+}) {
+  const [signerClient, setSignerClient] = useState<
+    DelegationSignerClient | AccountsSignerClient | undefined
+  >()
+  const signerClientClass =
     !authKind || authKind === IdentityKitAuthKind.DELEGATION
       ? IdentityKitDelegationSignerClient
       : IdentityKitAccountsSignerClient
 
   const createIdentityKitSignerClient = useCallback(async () => {
     if (selectedSigner) {
-      return await signerClient.create({
+      return await signerClientClass.create({
         signer: selectedSigner,
         keyType: "Ed25519",
         ...signerClientOptions,
@@ -46,18 +48,15 @@ export function useCreateIdentityKit<
     return null
   }, [selectedSigner])
 
-  const createIdentityKit = useCallback(async () => {
-    const signerClient = await createIdentityKitSignerClient()
-    if (signerClient !== null)
-      return new IdentityKit(signerClient, { signer: selectedSigner!, ...signerAgentOptions })
-    return null
-  }, [createIdentityKitSignerClient])
-
   useEffect(() => {
-    createIdentityKit().then((ik) => {
-      setIdentityKit(ik)
-    })
-  }, [createIdentityKit])
+    if (selectedSigner)
+      createIdentityKitSignerClient().then((signerClient) => {
+        if (signerClient) {
+          IdentityKit.create(signerClient)
+          setSignerClient(signerClient as DelegationSignerClient | AccountsSignerClient)
+        }
+      })
+  }, [createIdentityKitSignerClient, selectedSigner])
 
-  return identityKit
+  return { signerClient, setSignerClient }
 }

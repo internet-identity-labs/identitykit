@@ -1,8 +1,14 @@
 import { createContext, useContext } from "react"
 import { IdentityKitProvider } from "./types"
 import { Signer } from "@slide-computer/signer"
-import { IdentityKit, SignerConfig } from "../../lib"
+import {
+  IdentityKit,
+  IdentityKitSignerAgent,
+  IdentityKitSignerAgentOptions,
+  SignerConfig,
+} from "../../lib"
 import { IdentityKitTheme } from "./constants"
+import { AccountsSignerClient, DelegationSignerClient } from "../../lib/signer-client"
 
 const defaultState: IdentityKitProvider = {
   signers: [],
@@ -19,22 +25,31 @@ const defaultState: IdentityKitProvider = {
     throw new Error("signer is not available on this url")
   },
   theme: IdentityKitTheme.SYSTEM,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  identityKit: {} as any,
+  signerAgentOptions: {} as {
+    signer?: IdentityKitSignerAgentOptions["signer"]
+    agent?: IdentityKitSignerAgentOptions["agent"]
+  },
+  setSignerClient: () => {
+    throw new Error("setSignerClient not implemented")
+  },
 }
 
 export const IdentityKitContext = createContext<IdentityKitProvider>(defaultState)
 
 export function useIdentityKit(): {
   selectedSigner?: Signer
+  savedSigner?: Signer
   selectSigner: (signerId?: string | undefined) => void | SignerConfig
-  identityKit: IdentityKit
+  signerClient?: DelegationSignerClient | AccountsSignerClient
+  signerAgent: IdentityKitSignerAgent
 } {
-  const { selectedSigner, selectSigner, identityKit } = useContext(IdentityKitContext)
+  const { selectedSigner, selectSigner, signerClient, savedSigner } = useContext(IdentityKitContext)
 
   return {
     selectedSigner,
+    savedSigner,
     selectSigner,
-    identityKit,
+    signerClient,
+    signerAgent: IdentityKit.signerAgent,
   }
 }

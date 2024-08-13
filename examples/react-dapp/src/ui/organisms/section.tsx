@@ -13,7 +13,6 @@ import { Principal } from "@dfinity/principal"
 import { getRequestObject } from "../../utils/requests"
 import { DropdownSelect } from "../molecules/dropdown-select"
 import { Buffer } from "buffer"
-import { toBase64 } from "@slide-computer/signer"
 
 import "react-toastify/dist/ReactToastify.css"
 import { IdentityKitSignerAgent } from "@nfid/identitykit"
@@ -84,26 +83,16 @@ export const Section: React.FC<ISection> = ({
         setIcrc49ActorResponse(null)
         const { sender, canisterId } = requestObject.params
         const agent = new IdentityKitSignerAgent({
-          signer: {
-            ...selectedSigner,
-            // custom call canister here just to save certificate and contentMap to local state
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            callCanister: async (params: any) => {
-              const response = await selectedSigner.callCanister(params)
-              setIcrc49SignerResponse({
-                certificate: toBase64(response.certificate),
-                contentMap: toBase64(response.contentMap),
-              })
-              return response
-            },
-          },
+          signer: selectedSigner,
           account: Principal.fromText(sender),
         })
         const actor = Actor.createActor(idlFactory, {
           agent,
           canisterId,
         })
-        setIcrc49ActorResponse((await actor[requestObject.params.method]("me")) as string)
+        setResponseValue(
+          JSON.stringify((await actor[requestObject.params.method]("me")) as string, null, 2)
+        )
       } else if (requestObject.method === "icrc34_delegation") {
         const req = {
           id: "8932ce44-a693-4d1a-a087-8468aafe536e",

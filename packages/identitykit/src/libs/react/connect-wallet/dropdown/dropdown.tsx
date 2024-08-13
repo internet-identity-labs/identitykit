@@ -1,5 +1,5 @@
 import { Button, ButtonProps } from "../button"
-import { useState, ComponentType } from "react"
+import { useState, ComponentType, ReactNode } from "react"
 import { Menu, MenuAddressItem, MenuItems, MenuLogoutItem, MenuProps } from "./menu"
 import { MenuButton, MenuButtonProps } from "@headlessui/react"
 
@@ -24,13 +24,15 @@ export function Dropdown({
   return (
     <Menu {...props}>
       <MenuButton
-        as={({ className, ...props }: MenuButtonProps) => (
+        as={({ className, children, ...props }: MenuButtonProps) => (
           <ButtonComponent
             connectedAccount={connectedAccount}
             icpBalance={icpBalance}
             className={className as string}
             {...props}
-          />
+          >
+            {children as ReactNode}
+          </ButtonComponent>
         )}
       />
 

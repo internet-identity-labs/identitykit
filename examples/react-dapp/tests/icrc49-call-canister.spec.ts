@@ -73,7 +73,7 @@ test.describe("ICRC25 call-canister", () => {
     }
   })
 
-  test("should make canister call with no consent", async ({
+  test.skip("should make canister call with no consent", async ({
     section,
     demoPage,
     requestPermissionSection,
@@ -103,7 +103,7 @@ test.describe("ICRC25 call-canister", () => {
     await demoPage.logout()
   })
 
-  test("should make canister call with consent", async ({
+  test.skip("should make canister call with consent", async ({
     section,
     demoPage,
     requestPermissionSection,

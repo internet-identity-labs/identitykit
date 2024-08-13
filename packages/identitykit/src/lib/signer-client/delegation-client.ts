@@ -114,19 +114,12 @@ export class DelegationSignerClient extends SignerClient {
      * @default  BigInt(8) hours * BigInt(3_600_000_000_000) nanoseconds
      */
     maxTimeToLive?: bigint
-  }): Promise<string> {
+  }): Promise<{ signerResponse: DelegationChain; connectedAccount: string }> {
     const baseIdentity = await this.getBaseIdentity()
     const permissions = await this.options.signer.permissions()
+    const permission = permissions.find((x) => "icrc34_delegation" === x.scope.method)
 
-    // TODO hot fix for nfid wallet, permissions have old format
-    if (
-      !permissions.find((x) =>
-        x.scope
-          ? "icrc34_delegation" === x.scope.method
-          : // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            "icrc34_delegation" === (x as any).method
-      )
-    ) {
+    if (!permission || permission.state === "ask_on_use" || permission.state === "denied") {
       await this.options.signer.requestPermissions([
         {
           method: "icrc34_delegation",
@@ -148,7 +141,10 @@ export class DelegationSignerClient extends SignerClient {
       this.registerDefaultIdleCallback()
     }
 
-    return this.identity.getPrincipal().toString()
+    return {
+      signerResponse: delegationChain,
+      connectedAccount: this.identity.getPrincipal().toString(),
+    }
   }
 
   public async logout(options: { returnTo?: string } = {}): Promise<void> {
