@@ -20,7 +20,7 @@ Install IdentityKit and its peer dependencies:
   compatible ICP wallets into your application.
 
 ```sh npm2yarn
-npm i @nfid/identitykit
+npm i @nfid/identitykit @nfid/identitykit/react
 ```
 
 > Note: IdentityKit is a React library.
@@ -28,23 +28,17 @@ npm i @nfid/identitykit
 ### Import
 
 ```typescript
-import { ConnectButton, ConnectModal, IdentityKitProvider, systemTheme } from "@nfid/identitykit"
+import { IdentityKitProvider } from "@nfid/identitykit/react"
 ```
 
 ### Wrap provider
 
-Wrap your application with `IdentityKitProvider`. IdentityKit is in development mode by default,
-which exposes the development wallet as the only selectable wallet until production mode is set.
+Wrap your application with `IdentityKitProvider`.
 
 ```typescript
 const App = () => {
   return (
-    <IdentityKitProvider
-      authOption="account"
-      modalMode="featured"
-      featuredWallet="nfidWallet"
-      theme={systemTheme()}
-    >
+    <IdentityKitProvider>
       {/* Your App */}
     </IdentityKitProvider>
   );
@@ -56,10 +50,10 @@ const App = () => {
 Then, in your app, import and render the `ConnectButton` component.
 
 ```typescript
-import { ConnectButton } from '@nfid/identitykit';
+import { ConnectWalletButton } from "@nfid/identitykit/react"
 
 export const YourApp = () => {
-  return <ConnectButton />;
+  return <ConnectWalletButton />;
 };
 ```
 
