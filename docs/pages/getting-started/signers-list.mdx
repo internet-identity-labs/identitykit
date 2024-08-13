@@ -1,0 +1,35 @@
+---
+title: "Signers List"
+date: "2024-06-04"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+# THIS PAGE IS A WIP
+
+![Static Badge](https://img.shields.io/badge/status-wip-red)
+
+---
+
+# Customizing the list of wallets you support
+
+By default, IdentityKit's `signers` is set to the order in which wallets adopted ICP wallet
+standards:
+
+- NFID Wallet (signerName: NFIDW)
+- Plug Wallet (signerName: PLUG)
+- Oisy Wallet (signerName: OISY)
+- Internet Identity (signerName: II)
+
+To reorder your wallets list, just add `signers=[signers]` as a prop in your IdentityKitProvider:
+
+```typescript
+export const App = () => (
+  <IdentityKitProvider
+    signers={[NFIDW]}
+    {...etc}
+  >
+    {/* Your App */}
+  </IdentityKitProvider>
+);
+```

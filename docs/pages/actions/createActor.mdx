@@ -7,7 +7,7 @@ authors:
 
 # createActor
 
-Action for executing a transaction on the ICP network.
+Action for creating an actor to execute a transaction on the ICP network.
 
 ## Import
 
@@ -22,10 +22,10 @@ import { idlFactory } from "/path/to/did.js"
 import { useIdentityKit } from "@nfid/identitykit"
 import { idlFactory } from '/path/to/did.js';
 
-const {agent} = useIdentityKit()
+const { signerAgent } = useIdentityKit()
 
 const actor = await Actor.createActor(idlFactory, {
-  agent,
+  signerAgent,
   CANISTER_ID_TO_CALL
 })
 
