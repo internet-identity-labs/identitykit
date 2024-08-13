@@ -15,13 +15,16 @@
   },
   "dependencies": {
     "@codemirror/lang-json": "^6.0.1",
+    "@dfinity/ledger-icp": "^2.4.0",
     "@nfid/identitykit": "*",
     "@radix-ui/themes": "^3.0.5",
     "@uiw/codemirror-extensions-langs": "^4.23.0",
     "@uiw/codemirror-theme-basic": "^4.23.0",
     "@uiw/react-codemirror": "^4.23.0",
     "clsx": "^2.1.1",
+    "ictool": "^1.1.1",
     "react": "^18.2.0",
+    "react-css-blur": "^1.1.1",
     "react-dom": "^18.2.0",
     "react-toastify": "^10.0.5"
   },

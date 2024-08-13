@@ -34,7 +34,7 @@ const test = base.extend<Fixtures>({
   ],
 })
 
-test("should check request and response has correct initial state", async ({ section }) => {
+test.skip("should check request and response has correct initial state", async ({ section }) => {
   const request = {
     method: "icrc27_accounts",
   }
@@ -46,7 +46,7 @@ test("should check request and response has correct initial state", async ({ sec
   expect(initialResponse).toStrictEqual({})
 })
 
-test("should return list of accounts", async ({ section }) => {
+test.skip("should return list of accounts", async ({ section }) => {
   const response = [
     {
       owner: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",

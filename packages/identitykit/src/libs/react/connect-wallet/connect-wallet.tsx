@@ -1,47 +1,87 @@
-import { useContext, useEffect, useState, ComponentType } from "react"
+import { useContext, useEffect, useState, ComponentType, useCallback } from "react"
 import { IdentityKitContext } from "../context"
-import _get from "lodash.get"
 import { Button, ButtonProps } from "./button"
 import { Dropdown, DropdownProps } from "./dropdown"
+import { IdentityKit } from "../../../lib/identity-kit"
+import { Principal } from "@dfinity/principal"
 
 export function ConnectWallet({
-  onError,
+  onConnectFailure,
+  onConnectSuccess,
+  onDisconnect,
   buttonComponent,
   dropdownComponent,
+  triggerManualDisconnect,
 }: {
-  onError?: (e: Error) => unknown
+  onConnectFailure?: (e: Error) => unknown
+  onConnectSuccess?: (signerResponse: object) => unknown
+  onDisconnect?: () => unknown
   buttonComponent?: ComponentType<ButtonProps>
   dropdownComponent?: ComponentType<DropdownProps>
+  triggerManualDisconnect?: boolean
 }) {
-  const { selectedSigner, toggleModal, selectSigner, identityKit } = useContext(IdentityKitContext)
-  const [connectedAccount, setConnectedAccount] = useState<string | undefined>()
+  const {
+    selectedSigner,
+    savedSigner,
+    toggleModal,
+    selectSigner,
+    signerAgentOptions,
+    signerClient,
+    setSignerClient,
+    shouldLogoutByIdle,
+  } = useContext(IdentityKitContext)
   const [icpBalance, setIcpBalance] = useState<undefined | number>()
 
-  const ikConnectedAccount = _get(identityKit, "signerClient.connectedUser.owner")
+  const connectedAccount = signerClient?.connectedUser?.owner
 
   useEffect(() => {
-    if (selectedSigner && identityKit !== null && !connectedAccount) {
-      identityKit.signerClient
+    if (selectedSigner && signerClient && !connectedAccount) {
+      signerClient
         .login()
-        .then(setConnectedAccount)
+        .then((res) => {
+          IdentityKit.setSignerAgent({
+            ...signerAgentOptions,
+            signer: selectedSigner,
+            account: Principal.from(res.connectedAccount),
+          })
+          onConnectSuccess?.(res.signerResponse)
+        })
         .catch((e) => {
           selectSigner(undefined)
-          onError?.(e)
+          onConnectFailure?.(e)
         })
     }
-  }, [selectedSigner, identityKit, connectedAccount, setConnectedAccount])
+  }, [selectedSigner, connectedAccount, signerClient])
 
   useEffect(() => {
-    setConnectedAccount(ikConnectedAccount)
-  }, [ikConnectedAccount])
+    if (!selectedSigner && savedSigner && signerClient?.connectedUser?.owner) {
+      IdentityKit.setSignerAgent({
+        ...signerAgentOptions,
+        signer: savedSigner,
+        account: Principal.fromText(signerClient?.connectedUser?.owner),
+      })
+    }
+  }, [selectedSigner, savedSigner, signerClient])
 
   useEffect(() => {
-    if (connectedAccount && !icpBalance) {
-      identityKit.getIcpBalance().then((b) => {
+    if (connectedAccount && signerClient && !icpBalance) {
+      IdentityKit.getIcpBalance().then((b) => {
         setIcpBalance(b)
       })
     }
-  }, [connectedAccount, setIcpBalance])
+  }, [setIcpBalance, signerClient, connectedAccount])
+
+  const disconnect = useCallback(() => {
+    signerClient?.logout()
+    IdentityKit.signerClient = undefined
+    setSignerClient(undefined)
+    selectSigner(undefined)
+    onDisconnect?.()
+  }, [signerClient, setSignerClient, IdentityKit.signerClient, selectSigner, onDisconnect])
+
+  useEffect(() => {
+    if (triggerManualDisconnect || shouldLogoutByIdle) disconnect()
+  }, [triggerManualDisconnect, shouldLogoutByIdle])
 
   const ButtonComponent = buttonComponent ?? Button
   const DropdownComponent = dropdownComponent ?? Dropdown
@@ -57,13 +97,10 @@ export function ConnectWallet({
 
   return (
     <DropdownComponent
+      buttonComponent={ButtonComponent}
       connectedAccount={connectedAccount}
       icpBalance={icpBalance}
-      onDisconnect={() => {
-        identityKit.signerClient!.logout()
-        selectSigner(undefined)
-        setConnectedAccount(undefined)
-      }}
+      onDisconnect={disconnect}
     />
   )
 }

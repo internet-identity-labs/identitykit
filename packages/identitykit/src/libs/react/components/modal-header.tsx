@@ -13,6 +13,7 @@ export const ModalHeader = ({ onBack, isViewAll }: ModalHeaderProps) => {
       <div className="flex items-center gap-[10px]">
         {isViewAll && (
           <svg
+            data-testid="svg"
             onClick={onBack}
             className="text-black cursor-pointer dark:text-white"
             width="24"
@@ -57,7 +58,7 @@ export const ModalHeader = ({ onBack, isViewAll }: ModalHeaderProps) => {
         }
         className="px-3 bg-black w-[320px] z-[1011] -mr-[15px]"
       >
-        <img className="cursor-pointer" src={InfoIcon} />
+        <img className="cursor-pointer" data-testid="info" src={InfoIcon} />
       </Tooltip>
     </div>
   )
