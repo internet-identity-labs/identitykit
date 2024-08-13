@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Title } from "../atoms/title"
 import { RequestSection } from "../molecules/request-section"
 import { ResponseSection } from "../molecules/response-section"
@@ -17,6 +18,7 @@ import { Buffer } from "buffer"
 import "react-toastify/dist/ReactToastify.css"
 import { IdentityKitSignerAgent } from "@nfid/identitykit"
 import { idlFactory } from "../../idl/service_idl"
+import { toBase64 } from "@slide-computer/signer"
 
 export interface IRequestExample {
   title: string
@@ -31,7 +33,6 @@ export interface ISection {
   getCodeSnippet: (requestJSON: string) => string
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const SignerMethod: any = {
   icrc25_request_permissions: "requestPermissions",
   icrc25_permissions: "permissions",
@@ -40,7 +41,6 @@ const SignerMethod: any = {
   icrc34_delegation: "delegation",
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const SignerMethodParamsField: any = {
   icrc25_request_permissions: "scopes",
 }
@@ -82,17 +82,27 @@ export const Section: React.FC<ISection> = ({
         setIcrc49SignerResponse(null)
         setIcrc49ActorResponse(null)
         const { sender, canisterId } = requestObject.params
+
         const agent = new IdentityKitSignerAgent({
-          signer: selectedSigner,
+          signer: new Proxy(selectedSigner, {
+            get(target, prop) {
+              return async (params: any) => {
+                const response = await (target as any)[prop](params)
+                setIcrc49SignerResponse({
+                  certificate: toBase64(response.certificate),
+                  contentMap: toBase64(response.contentMap),
+                })
+                return response
+              }
+            },
+          }),
           account: Principal.fromText(sender),
         })
         const actor = Actor.createActor(idlFactory, {
           agent,
           canisterId,
         })
-        setResponseValue(
-          JSON.stringify((await actor[requestObject.params.method]("me")) as string, null, 2)
-        )
+        setIcrc49ActorResponse((await actor[requestObject.params.method]("me")) as string)
       } else if (requestObject.method === "icrc34_delegation") {
         const req = {
           id: "8932ce44-a693-4d1a-a087-8468aafe536e",
@@ -100,7 +110,6 @@ export const Section: React.FC<ISection> = ({
           ...requestObject,
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         res = await (selectedSigner as any)?.["sendRequest"](req)
         const json = JSON.stringify(
           res,
@@ -115,7 +124,6 @@ export const Section: React.FC<ISection> = ({
           jsonrpc: "2.0",
           ...requestObject,
         }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         res = await (selectedSigner as any)?.["sendRequest"](req)
         const json = JSON.stringify(
           res,
@@ -126,14 +134,12 @@ export const Section: React.FC<ISection> = ({
         return
       } else {
         // TODO for icrc25_request_permissions should pass params.scopes as arg and for icrc34_delegation change params to Principals
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         res = await (selectedSigner as any)?.[SignerMethod[requestObject.method]](
           SignerMethodParamsField[requestObject.method]
             ? requestObject.params[SignerMethodParamsField[requestObject.method]]
             : requestObject.params
         )
         if (Array.isArray(res) && res[0].subaccount) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const mappedResult = res.map((x: any) => {
             return {
               owner: x.owner.toString(),
@@ -166,7 +172,7 @@ export const Section: React.FC<ISection> = ({
             origin: "http://localhost:3001",
             jsonrpc: "2.0",
             id: "7812362e-29b8-4099-824c-067e8a50f6f3",
-            result: { contentMap, certificate, content: icrc49ActorResponse },
+            result: { contentMap, certificate },
           },
           null,
           2

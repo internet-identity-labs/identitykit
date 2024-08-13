@@ -41,7 +41,7 @@ function App({
           setShouldDisconnectWallet(true)
         }}
         accountsResponseJson={
-          authKind === IdentityKitAuthKind.ACCOUNTS && !authKindSwitched
+          authKind === IdentityKitAuthKind.ACCOUNTS && authKindSwitched
             ? connectWalletSignerResponse
             : undefined
         }

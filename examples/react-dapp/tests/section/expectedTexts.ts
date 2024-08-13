@@ -166,7 +166,6 @@ export class ExpectedTexts {
       result: {
         contentMap: expect.anything(),
         certificate: expect.anything(),
-        content: "Hello, me!",
       },
     },
     NoConsentCaseCanisterCallRequest: [
@@ -185,7 +184,6 @@ export class ExpectedTexts {
       result: {
         contentMap: expect.anything(),
         certificate: expect.anything(),
-        content: "Hello, me!",
       },
     },
   }
