@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { render } from "@testing-library/react"
 import { MenuItem } from "@headlessui/react"
 import { Item } from "./item"
