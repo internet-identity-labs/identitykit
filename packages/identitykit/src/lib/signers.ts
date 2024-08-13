@@ -4,8 +4,7 @@ const NFID: SignerConfig = {
   id: "NFID",
   description:
     "Quickly sign in or create an anonymous, self-sovereign wallet with your email address or passkey.",
-  providerUrl: "http://localhost:9090/rpc",
-  // providerUrl: "https://nfid.one/rpc",
+  providerUrl: "https://nfid.one/rpc",
   transportType: TransportType.POPUP,
   popupHeight: 575,
   popupWidth: 450,
