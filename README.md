@@ -1,5 +1,5 @@
 # NFID IdentityKit
----
+
 **The best way to connect an ICP wallet**
 
 IdentityKit is a React library that makes it easy to add wallet connection to your dapp.
