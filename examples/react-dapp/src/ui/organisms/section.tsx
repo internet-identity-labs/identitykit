@@ -41,7 +41,6 @@ const canistersIDLs: { [key: string]: any } = {
   "do25a-dyaaa-aaaak-qifua-cai": demoIDL,
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const SignerMethod: any = {
   icrc25_request_permissions: "requestPermissions",
   icrc25_permissions: "permissions",

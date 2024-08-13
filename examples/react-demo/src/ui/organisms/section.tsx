@@ -32,6 +32,7 @@ export interface ISection {
   getCodeSnippet: (requestJSON: string) => string
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const canistersIDLs: { [key: string]: any } = {
   "ryjl3-tyaaa-aaaaa-aaaba-cai": ledgerIDL,
   "do25a-dyaaa-aaaak-qifua-cai": demoIDL,
