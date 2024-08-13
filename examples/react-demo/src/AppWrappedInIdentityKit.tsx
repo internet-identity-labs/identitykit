@@ -23,7 +23,7 @@ export function AppWrappedInIdentityKit() {
     <IdentityKitProvider
       signers={[nfid, mockedSigner]}
       featuredSigner={nfid}
-      theme={theme?.toUpperCase() as IdentityKitTheme}
+      theme={theme as IdentityKitTheme}
       authKind={authKind}
     >
       <App authKind={authKind} setAuthKind={setAuthKind} />
