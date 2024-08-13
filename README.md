@@ -16,7 +16,8 @@ Import IdentityKit into an existing ICP react project.
 npm i @nfid/identitykit
 ```
 
-Wrap your app in the `IdentityKitProvider`. Feel free to put the `ConnectWalletButton` component elsewhere in your app's codebase. 
+Wrap your app in the `IdentityKitProvider`. Feel free to put the `ConnectWalletButton` component
+elsewhere in your app's codebase.
 
 ```
 import { IdentityKitProvider, ConnectWalletButton } from "@nfid/identitykit/react"
@@ -40,9 +41,11 @@ For full documentation, visit [identitykit.xyz](https://identitykit.xyz).
 ### Try it out
 
 This is a short list of live IdentityKit implementations:
+
 - https://demo.identitykit.xyz
 - https://standards.identitykit.xyz (to view low-level ICRC standards implementations)
 
 ## Contributing
 
-We will write out a more comprehensive guide to making contributions, but until then please connect with the team directly in [Discord](https://discord.gg/bJK5HE6KDn).
+We will write out a more comprehensive guide to making contributions, but until then please connect
+with the team directly in [Discord](https://discord.gg/bJK5HE6KDn).
