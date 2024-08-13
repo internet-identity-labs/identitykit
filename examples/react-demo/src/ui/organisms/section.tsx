@@ -11,7 +11,8 @@ import { getRequestObject } from "../../utils/requests"
 import { DropdownSelect } from "../molecules/dropdown-select"
 
 import "react-toastify/dist/ReactToastify.css"
-import { idlFactory } from "../../idl/service_idl"
+import { idlFactory as demoIDL } from "../../idl/service_idl"
+import { idlFactory as ledgerIDL } from "../../idl/ledger"
 import { AccountIdentifier } from "@dfinity/ledger-icp"
 import { fromHexString } from "ictool"
 import { Principal } from "@dfinity/principal"
@@ -29,6 +30,11 @@ export interface ISection {
   description: JSX.Element
   requestsExamples: IRequestExample[]
   getCodeSnippet: (requestJSON: string) => string
+}
+
+const canistersIDLs: { [key: string]: any } = {
+  "ryjl3-tyaaa-aaaaa-aaaba-cai": ledgerIDL,
+  "do25a-dyaaa-aaaak-qifua-cai": demoIDL,
 }
 
 export const Section: React.FC<ISection> = ({
@@ -49,7 +55,13 @@ export const Section: React.FC<ISection> = ({
     if (signerClient?.connectedUser?.owner) {
       const rVal = JSON.parse(requestValue)
       rVal.params.sender = signerClient?.connectedUser?.owner
-      setRequestValue(JSON.stringify(rVal, null, 2))
+      setRequestValue(
+        JSON.stringify(
+          rVal,
+          (_, value) => (typeof value === "bigint" ? value.toString() : value),
+          2
+        )
+      )
     }
   }, [signerClient?.connectedUser?.owner, requestValue])
 
@@ -70,10 +82,11 @@ export const Section: React.FC<ISection> = ({
       if (requestObject.method === "icrc49_call_canister") {
         setIcrc49ActorResponse(undefined)
         const { canisterId } = requestObject.params
-        const actor = Actor.createActor(idlFactory, {
+        const actor = Actor.createActor(canistersIDLs[canisterId], {
           agent: signerAgent,
           canisterId,
         })
+
         if (
           requestObject.params?.canisterId === "ryjl3-tyaaa-aaaaa-aaaba-cai" &&
           requestObject.params?.method === "transfer"
@@ -106,7 +119,13 @@ export const Section: React.FC<ISection> = ({
   }
 
   useEffect(() => {
-    setResponseValue(JSON.stringify(icrc49ActorResponse, null, 2))
+    setResponseValue(
+      JSON.stringify(
+        icrc49ActorResponse,
+        (_, value) => (typeof value === "bigint" ? value.toString() : value),
+        2
+      )
+    )
   }, [icrc49ActorResponse])
 
   const codeSection = useMemo(() => {
