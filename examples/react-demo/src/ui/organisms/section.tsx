@@ -54,15 +54,17 @@ export const Section: React.FC<ISection> = ({
 
   useEffect(() => {
     if (signerClient?.connectedUser?.owner) {
-      const rVal = JSON.parse(requestValue)
-      rVal.params.sender = signerClient?.connectedUser?.owner
-      setRequestValue(
-        JSON.stringify(
-          rVal,
-          (_, value) => (typeof value === "bigint" ? value.toString() : value),
-          2
+      if (isValidJSON(requestValue)) {
+        const rVal = JSON.parse(requestValue)
+        if (rVal.params.sender) rVal.params.sender = signerClient?.connectedUser?.owner
+        setRequestValue(
+          JSON.stringify(
+            rVal,
+            (_, value) => (typeof value === "bigint" ? value.toString() : value),
+            2
+          )
         )
-      )
+      }
     }
   }, [signerClient?.connectedUser?.owner, requestValue])
 
