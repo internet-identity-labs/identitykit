@@ -89,6 +89,6 @@ const actor = Actor.createActor(idlFactory, {
   agent: signerAgent,
   canisterId: "${basicRequest.params.canisterId}",
 })
-const response = await actor.${basicRequest.params.method}(args)`
+const response = await actor.${basicRequest.params.method}("me")`
   },
 }

@@ -59,7 +59,7 @@ export const icrc49CallCanisterSection: ISection = {
     const basicRequest = JSON.parse(requestJSON)
     if (basicRequest.params?.canisterId === "ryjl3-tyaaa-aaaaa-aaaba-cai") {
       return `const { IdentityKitAgent } = useIdentityKit()
-      
+
 const agent = new IdentityKitAgent({
   getPrincipal: () => Principal.fromText("${basicRequest.params.sender}"),
 })
@@ -92,6 +92,6 @@ const actor = Actor.createActor(idlFactory, {
   agent,
   canisterId: "${basicRequest.params.canisterId}",
 })
-const response = await actor.${basicRequest.params.method}(args)`
+const response = await actor.${basicRequest.params.method}("me")`
   },
 }
