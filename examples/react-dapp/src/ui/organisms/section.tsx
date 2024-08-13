@@ -17,8 +17,11 @@ import { Buffer } from "buffer"
 
 import "react-toastify/dist/ReactToastify.css"
 import { IdentityKitSignerAgent } from "@nfid/identitykit"
-import { idlFactory } from "../../idl/service_idl"
 import { toBase64 } from "@slide-computer/signer"
+import { idlFactory as demoIDL } from "../../idl/service_idl"
+import { idlFactory as ledgerIDL } from "../../idl/ledger"
+import { AccountIdentifier } from "@dfinity/ledger-icp"
+import { fromHexString } from "ictool"
 
 export interface IRequestExample {
   title: string
@@ -33,6 +36,12 @@ export interface ISection {
   getCodeSnippet: (requestJSON: string) => string
 }
 
+const canistersIDLs: { [key: string]: any } = {
+  "ryjl3-tyaaa-aaaaa-aaaba-cai": ledgerIDL,
+  "do25a-dyaaa-aaaak-qifua-cai": demoIDL,
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const SignerMethod: any = {
   icrc25_request_permissions: "requestPermissions",
   icrc25_permissions: "permissions",
@@ -76,7 +85,7 @@ export const Section: React.FC<ISection> = ({
     const requestObject = getRequestObject(requestValue)
 
     let res
-
+    console.log({ requestObject })
     try {
       if (requestObject.method === "icrc49_call_canister") {
         setIcrc49SignerResponse(null)
@@ -98,11 +107,31 @@ export const Section: React.FC<ISection> = ({
           }),
           account: Principal.fromText(sender),
         })
-        const actor = Actor.createActor(idlFactory, {
+        const actor = Actor.createActor(canistersIDLs[canisterId], {
           agent,
           canisterId,
         })
-        setIcrc49ActorResponse((await actor[requestObject.params.method]("me")) as string)
+
+        if (
+          requestObject.params?.canisterId === "ryjl3-tyaaa-aaaaa-aaaba-cai" &&
+          requestObject.params?.method === "transfer"
+        ) {
+          const address = AccountIdentifier.fromPrincipal({
+            principal: Principal.fromText("do25a-dyaaa-aaaak-qifua-cai"),
+          }).toHex()
+
+          const transferArgs = {
+            to: fromHexString(address),
+            fee: { e8s: BigInt(10000) },
+            memo: BigInt(0),
+            from_subaccount: [],
+            created_at_time: [],
+            amount: { e8s: BigInt(1000) },
+          }
+          setIcrc49ActorResponse((await actor[requestObject.params.method](transferArgs)) as string)
+        } else {
+          setIcrc49ActorResponse((await actor[requestObject.params.method]("me")) as string)
+        }
       } else if (requestObject.method === "icrc34_delegation") {
         const req = {
           id: "8932ce44-a693-4d1a-a087-8468aafe536e",
@@ -146,11 +175,23 @@ export const Section: React.FC<ISection> = ({
               subaccount: Buffer.from(new Uint8Array(x.subaccount)).toString("base64"),
             }
           })
-          setResponseValue(JSON.stringify(mappedResult, null, 2))
+          setResponseValue(
+            JSON.stringify(
+              mappedResult,
+              (_, value) => (typeof value === "bigint" ? value.toString() : value),
+              2
+            )
+          )
           return
         }
 
-        setResponseValue(JSON.stringify(res, null, 2))
+        setResponseValue(
+          JSON.stringify(
+            res,
+            (_, value) => (typeof value === "bigint" ? value.toString() : value),
+            2
+          )
+        )
       }
     } catch (e) {
       if (e instanceof Error) {
@@ -174,7 +215,7 @@ export const Section: React.FC<ISection> = ({
             id: "7812362e-29b8-4099-824c-067e8a50f6f3",
             result: { contentMap, certificate },
           },
-          null,
+          (_, value) => (typeof value === "bigint" ? value.toString() : value),
           2
         )
       )

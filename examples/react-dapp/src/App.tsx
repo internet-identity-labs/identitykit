@@ -28,7 +28,8 @@ const nfidSignerProviderUrl = import.meta.env.VITE_MOCKED_NFID_SIGNER_PROVIDER_U
 
 function App() {
   const { theme } = useTheme()
-  const nfid: SignerConfig = { ...NFID, providerUrl: nfidSignerProviderUrl }
+  // const nfid: SignerConfig = { ...NFID, providerUrl: nfidSignerProviderUrl }
+  const nfid: SignerConfig = { ...NFID, providerUrl: "http://localhost:9090/rpc" }
   const mockedSigner: SignerConfig = { ...MockedSigner, providerUrl: mockedSignerProviderUrl }
   return (
     <IdentityKitProvider signers={[nfid, mockedSigner]} theme={theme as IdentityKitTheme}>

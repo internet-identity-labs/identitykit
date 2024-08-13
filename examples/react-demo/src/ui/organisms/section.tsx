@@ -12,6 +12,9 @@ import { DropdownSelect } from "../molecules/dropdown-select"
 
 import "react-toastify/dist/ReactToastify.css"
 import { idlFactory } from "../../idl/service_idl"
+import { AccountIdentifier } from "@dfinity/ledger-icp"
+import { fromHexString } from "ictool"
+import { Principal } from "@dfinity/principal"
 
 import Blur from "react-css-blur"
 
@@ -71,8 +74,26 @@ export const Section: React.FC<ISection> = ({
           agent: signerAgent,
           canisterId,
         })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        setIcrc49ActorResponse((await actor[requestObject.params.method]("me")) as any)
+        if (
+          requestObject.params?.canisterId === "ryjl3-tyaaa-aaaaa-aaaba-cai" &&
+          requestObject.params?.method === "transfer"
+        ) {
+          const address = AccountIdentifier.fromPrincipal({
+            principal: Principal.fromText("do25a-dyaaa-aaaak-qifua-cai"),
+          }).toHex()
+
+          const transferArgs = {
+            to: fromHexString(address),
+            fee: { e8s: BigInt(10000) },
+            memo: BigInt(0),
+            from_subaccount: [],
+            created_at_time: [],
+            amount: { e8s: BigInt(1000) },
+          }
+          setIcrc49ActorResponse((await actor[requestObject.params.method](transferArgs)) as string)
+        } else {
+          setIcrc49ActorResponse((await actor[requestObject.params.method]("me")) as string)
+        }
       }
     } catch (e) {
       if (e instanceof Error) {
@@ -103,7 +124,7 @@ export const Section: React.FC<ISection> = ({
   return (
     <Blur radius={!signerClient?.connectedUser ? "5px" : "0"} transition="400ms">
       <div id={id}>
-        <small className="mb-5 block">{description}</small>
+        <small className="block mb-5">{description}</small>
         {requestsOptions.length > 1 ? (
           <DropdownSelect
             id="select-request"
