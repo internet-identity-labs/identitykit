@@ -85,7 +85,7 @@ export const Section: React.FC<ISection> = ({
     const requestObject = getRequestObject(requestValue)
 
     let res
-    console.log({ requestObject })
+
     try {
       if (requestObject.method === "icrc49_call_canister") {
         setIcrc49SignerResponse(null)
