@@ -14,7 +14,8 @@ executing calls to your application.
 
 ### 1. On-chain wallet support
 
-On-chain wallets will run a security check to ensure your frontend can safely call your canisters on the user's behalf.
+On-chain wallets will run a security check to ensure your frontend can safely call your canisters on
+the user's behalf.
 
 #### Rust implementation
 
@@ -38,10 +39,12 @@ fn icrc28_trusted_origins() -> Vec<String> {
 }
 ```
 
-> Note: ICRC-1, ICRC-7, and other asset canister smart contracts are discouraged from implementing this
-method. Wallets may mark your application as a scam if you do.
+> Note: ICRC-1, ICRC-7, and other asset canister smart contracts are discouraged from implementing
+> this method. Wallets may mark your application as a scam if you do.
 
-Read more about the [ICRC-28](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md) standard.
+Read more about the
+[ICRC-28](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md)
+standard.
 
 ### 3. ICRC-10 setup
 
