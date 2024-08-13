@@ -23,10 +23,22 @@ Add the following to each of your backend canisters (and any you deploy dynamica
 have one item for every domain that should have authority to call your canisters on behalf of
 connected wallets without prompting them with transaction approval messages.
 
+Add the following to each of your backend canisters (and any you deploy dynamically). You should
+have one item for every domain that should have authority to call your canisters on behalf of
+connected wallets without prompting them with transaction approval messages.
+
 ```rust
 #[update]
 fn icrc28_trusted_origins() -> Vec<String> {
     return vec![
+        String::from("https://your-canister-id.icp0.io"),
+        String::from("https://your-canister-id.raw.icp0.io"),
+        String::from("https://your-canister-id.ic0.app"),
+        String::from("https://your-canister-id.raw.ic0.app"),
+        String::from("https://your-canister-id.icp0.icp-api.io"),
+        String::from("https://your-canister-id.icp-api.io"),
+        String::from("https://yourcustomdomain.com"),
+        String::from("https://yourothercustomdomain.com")
         String::from("https://your-canister-id.icp0.io"),
         String::from("https://your-canister-id.raw.icp0.io"),
         String::from("https://your-canister-id.ic0.app"),
@@ -52,7 +64,9 @@ standard.
 
 [ICRC-10](https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-10/ICRC-10.md) describes the standard
 method for simplifying the discovery of a canister's supported standards on the Internet Computer.
+method for simplifying the discovery of a canister's supported standards on the Internet Computer.
 
+List ICRC-28 and any other standards your canisters support for each of your canisters.
 List ICRC-28 and any other standards your canisters support for each of your canisters.
 
 #### Rust implementation
@@ -68,6 +82,7 @@ fn icrc10_supported_standards() -> Vec<Record> {
 
 ### 4. List your canisters as targets
 
+Add `authOption="delegation"` and your list of `targets` to `IdentityKitProvider`.
 Add `authOption="delegation"` and your list of `targets` to `IdentityKitProvider`.
 
 ```typescript
