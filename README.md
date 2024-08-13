@@ -1,56 +1,51 @@
-# NFID Open Source Software
+# NFID IdentityKit
 
-## Overview
+**The best way to connect an ICP wallet**
 
-This monorepo is managed with [Turborepo](https://turbo.build/repo/docs/). It hosts identity related
-open source software developed by Internet Identity Labs.
+IdentityKit is a React library that makes it easy to add wallet connection to your dapp.
 
-## What's inside?
+🔥 Out-of-the-box wallet management\
+✅ Easily customizable\
+🦄 Built on top of ICRC standards
 
-This repo includes the following packages/apps:
+## Quick start
 
-### Docs
-
-`docs`: [Next.js Docs site](https://docs-dev.nfid.one/) hosted on
-[vercel](https://vercel.com/internet-identity-labs/nfid-identity-kit-docs)
-
-### Packages
-
-#### `packages/identitykit`: source code deployed to [@nfid/identitykit](https://www.npmjs.com/package/@nfid/identitykit)
-
-### Config
-
-#### `config/eslint-config-custom`: `eslint` configurations
-
-- **`eslint-config-next`** - Next.js configuration
-- **`eslint-config-prettier`** - Prettier configuration
-
-#### `config/tsconfig`: Shared TypeScript configuration files
-
-- **`base.json`** - Base TypeScript configuration
-- **`nextjs.json`** - Next.js TypeScript configuration
-- **`react-library.json`** - React Library TypeScript configuration
-
-## Usage
-
-### Test
+Import IdentityKit into an existing ICP react project.
 
 ```
-npm run test
+npm i @nfid/identitykit
 ```
 
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-npm run build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
+Wrap your app in the `IdentityKitProvider`. Feel free to put the `ConnectWalletButton` component
+elsewhere in your app's codebase.
 
 ```
-npm run dev
+import { IdentityKitProvider, ConnectWalletButton } from "@nfid/identitykit/react"
+
+const App = () => {
+  return (
+    <IdentityKitProvider>
+
+      {/* Your App */}
+      <ConnectWalletButton />
+
+    </IdentityKitProvider>
+  );
+};
 ```
+
+## Documentation
+
+For full documentation, visit [identitykit.xyz](https://identitykit.xyz).
+
+### Try it out
+
+This is a short list of live IdentityKit implementations:
+
+- https://demo.identitykit.xyz
+- https://standards.identitykit.xyz (to view low-level ICRC standards implementations)
+
+## Contributing
+
+We will write out a more comprehensive guide to making contributions, but until then please connect
+with the team directly in [Discord](https://discord.gg/bJK5HE6KDn).

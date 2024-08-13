@@ -1,25 +1,24 @@
 ---
-title: "ConnectButton"
+title: "ConnectWalletButton"
 date: "2024-06-03"
 authors:
   - name: "Dan Ostrovsky"
 ---
 
-# Using and customizing the ConnectButton
+# Using and customizing the ConnectWalletButton
 
-This is the main component. It is responsible for rendering the connect/disconnect button, as well
-as chain-swapping UI.
+This is the main component. It is responsible for rendering the connect/disconnect button.
 
 ```typescript
-import { ConnectButton } from '@nfid/identitykit';
+import { ConnectWalletButton } from "@nfid/identitykit/react"
 
 export const YourApp = () => {
-  return <ConnectButton />;
+  return <ConnectWalletButton />;
 };
 ```
 
 > Note: Make sure your app is wrapped in the necessary providers.
-> [Read more](installation#wrap-providers).
+> [Read more](installation#wrap-provider).
 
 ## Status
 
@@ -42,7 +41,7 @@ export function Account() {
 
 ## Manual disconnect
 
-`ConnectButton` supports user disconnection, but you may want to hook into it yourself.
+`ConnectWalletButton` supports user disconnection, but you may want to hook into it yourself.
 
 ```typescript
 import { useDisconnect } from '@nfid/identitykit';
@@ -60,13 +59,13 @@ export function Account() {
 
 ## Props
 
-The `ConnectButton` component exposes several props to customize its appearance, including toggling
-the visibility of different elements.
+The `ConnectWalletButton` component exposes several props to customize its appearance, including
+toggling the visibility of different elements.
 
 ### Label
 
-Use the `label` prop to set a custom ConnectButton text. Default is "Connect wallet".
+Use the `label` prop to set a custom ConnectWalletButton text. Default is "Connect wallet".
 
 ```typescript
-<ConnectButton label="Sign in" />
+<ConnectWalletButton label="Sign in" />
 ```
