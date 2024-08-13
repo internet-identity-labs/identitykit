@@ -11,7 +11,7 @@ import { Section } from "./ui/organisms/section"
 import { ToastContainer } from "react-toastify"
 import { SectionContainer } from "./ui/organisms/section-container"
 import { IdentityKitProvider, IdentityKitTheme } from "@nfid/identitykit/react"
-import { MockedSigner, NFID } from "./signers"
+import { MockedSigner, NFID, SignerConfig } from "@nfid/identitykit"
 import { useTheme } from "next-themes"
 
 const icrc25data = [
@@ -23,10 +23,15 @@ const icrc27data = [icrc27AccountsSection]
 const icrc34data = [icrc34DelegationSection]
 const icrc49data = [icrc49CallCanisterSection]
 
+const mockedSignerProviderUrl = import.meta.env.VITE_MOCKED_SIGNER_PROVIDER_URL
+const nfidSignerProviderUrl = import.meta.env.VITE_MOCKED_NFID_SIGNER_PROVIDER_URL
+
 function App() {
   const { theme } = useTheme()
+  const nfid: SignerConfig = { ...NFID, providerUrl: nfidSignerProviderUrl }
+  const mockedSigner: SignerConfig = { ...MockedSigner, providerUrl: mockedSignerProviderUrl }
   return (
-    <IdentityKitProvider signers={[NFID, MockedSigner]} theme={theme as IdentityKitTheme}>
+    <IdentityKitProvider signers={[nfid, mockedSigner]} theme={theme as IdentityKitTheme}>
       <div className="h-full min-h-screen bg-white dark:bg-dark px-[30px] pb-20">
         <ToastContainer />
         <Header />

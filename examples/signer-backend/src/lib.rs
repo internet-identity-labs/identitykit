@@ -13,12 +13,14 @@ mod types;
 #[update]
 fn get_trusted_origins() -> Vec<String> {
     return vec![
-        String::from("https://identity-kit.nfid.one"),
-        String::from("https://dev.identity-kit.nfid.one"),
+        String::from("https://standards.identitykit.xyz"),
+        String::from("https://dev.standards.identitykit.xyz"),
         String::from("https://demo.identitykit.xyz"),
         String::from("https://dev.demo.identitykit.xyz"),
         String::from("http://localhost:3001"),
         String::from("http://localhost:3002"),
+        String::from("https://nfid.one"),
+        String::from("https://dev.nfid.one"),
     ];
 }
 

@@ -4,7 +4,7 @@ import {
   type _SERVICE as ConsentMessageCanister,
 } from "../idl/consent"
 import { idlFactory as ConsentMessageCanisterIDL } from "../idl/consent_idl"
-import { Agent } from "@nfid/agent"
+import { Agent } from "@dfinity/agent"
 import { GenericError } from "./exception-handler.service"
 
 export const consentMessageService = {

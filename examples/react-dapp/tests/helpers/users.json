@@ -1,0 +1,443 @@
+[
+  {
+    "seed": "10974 same candy swim dry violin end asthma lake similar bronze dragon obtain recall panther essence cheese pitch flip slot nerve insane village protect load",
+    "icpAdress": "2858402a5b7768278c8cde81bbe22f564746dec009dcbac7a9f092ed0a04d4b1",
+    "account": {
+      "anchor": 10974,
+      "accessPoints": [
+        {
+          "icon": "",
+          "device": "NFID Chrome on Mac OS",
+          "browser": "Chrome",
+          "lastUsed": 1662318242345156000,
+          "principalId": "gyu2j-2ni7o-o6yjt-n7lyh-x3sxq-zh7hp-sjvqe-t7oul-4eehb-2gvtt-jae"
+        },
+        {
+          "icon": "document",
+          "device": "Recovery phrase",
+          "browser": "Chrome",
+          "lastUsed": 1678184414695934700,
+          "principalId": "fwpnd-r2y37-lv4ue-vyo3g-4u7zt-f5ncq-2ytan-zjs7b-2ioqf-n7j6u-gqe"
+        },
+        {
+          "icon": "",
+          "device": "NFID Chrome on Mac OS",
+          "browser": "Chrome",
+          "lastUsed": 1678184164733329000,
+          "principalId": "xnxbw-3qubw-pc2f7-6uu6l-sy7xq-ghk7l-mpxib-3ttyv-uw2x7-vfdhf-2ae"
+        }
+      ],
+      "accounts": [],
+      "principalId": "fwpnd-r2y37-lv4ue-vyo3g-4u7zt-f5ncq-2ytan-zjs7b-2ioqf-n7j6u-gqe"
+    },
+    "credentials": {
+      "credentialId": "iTBmgYJvePfeVZt5G5CZvEv4WEzT8U93yWQs_Ok-knk",
+      "isResidentCredential": false,
+      "privateKey": "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgNoFFhHD8Zku-2pcIi5e4bheMamq7xGKdEe_k2mxWmlahRANCAATD0jfdhhFFg_FTDRNPa75NEYIejTp-P81lCveROtEoovcliW3pXXhdkqGNqAUwx-h3mqJPcYlwhCyTYj3IR6a6",
+      "signCount": 1
+    },
+    "authstate": {
+      "delegation": {
+        "delegations": [
+          {
+            "delegation": {
+              "expiration": "1809f73b8cbd1740",
+              "pubkey": "302a300506032b6570032100b6bd00af4dacb95539c843b4bc6004d20c20bf30093b43aab7835ad7bd4fa663",
+              "targets": [
+                "00000000013005F80101",
+                "00000000014000800101",
+                "0000000000D0006E0101",
+                "00000000015002820101",
+                "00000000000000020101",
+                "00000000000000040101",
+                "0000000001B0098C0101",
+                "0000000001C00F360101",
+                "0000000001F006F20101",
+                "0000000001E006F50101",
+                "000000000140269F0101",
+                "000000000150174F0101"
+              ]
+            },
+            "signature": "e1261404a66858e1a7a2f4cb4860fd6459bc8307142d819e3bd0bcde6f9a8f06d04cce3320c441e55405799ce64a56499c462f42dd13f2caf4f954fd888a550c"
+          }
+        ],
+        "publicKey": "302a300506032b657003210004ca99c1c39964ba48817eece3a70469c2a81fb90139554be8fbf7f53e014f99"
+      },
+      "identity": [
+        "302a300506032b6570032100b6bd00af4dacb95539c843b4bc6004d20c20bf30093b43aab7835ad7bd4fa663",
+        "07b1daa55578ba38fc87bff991ef2b379ac24772778d617229f5ed68f0eff4f4"
+      ]
+    }
+  },
+  {
+    "seed": "25795 renew sugar usage mimic theory excuse cushion oyster combine sad grain model hen small parrot trumpet employ amateur hotel beyond combine clean rule swing",
+    "icpAddress": "91b7f326f970d04eb34956bfb3000b2f47d4044e330ffb5d2a88eae86c7214f0",
+    "btcAddress": "mvyMknk9BfFAQp8tuErvozWaB6BsDtB2v1",
+    "ethAddress": "",
+    "account": {
+      "anchor": 25795,
+      "accessPoints": [
+        {
+          "icon": "mobile",
+          "device": "NFID Chrome on Mac OS",
+          "browser": "Chrome",
+          "lastUsed": 1675875842931145200,
+          "principalId": "k3qst-by7cm-2ijp3-rfdiu-oc4ji-lkyvr-xkw4g-n2xat-rzqcq-cccwq-jae"
+        }
+      ],
+      "accounts": [],
+      "principalId": "k3qst-by7cm-2ijp3-rfdiu-oc4ji-lkyvr-xkw4g-n2xat-rzqcq-cccwq-jae"
+    },
+    "credentials": {
+      "credentialId": "Md9X0nep07OMl0vQHestjprGLoUhZD6mOOLl0yY4N2k",
+      "isResidentCredential": false,
+      "privateKey": "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgqbOhXdCEGBZBlaiVlvZDZN1_yWn3TYuGo-60q6PidbChRANCAARFK_0WLcAtl3Toq5WuhABZ0HhbihJ5735_0pFQ6oX2vlZaDjvsbC2r-UVxMGkgMHxdW4AZUj-dxSydgd-7ykUO",
+      "signCount": 1
+    },
+    "authstate": {
+      "delegation": {
+        "delegations": [
+          {
+            "delegation": {
+              "expiration": "1809f73b8ccc5980",
+              "pubkey": "302a300506032b65700321008780d5c2a2a95c3cb6b3c9f6971451f12850630768ba8953746aea7d81ddc907",
+              "targets": [
+                "00000000013005F80101",
+                "00000000014000800101",
+                "0000000000D0006E0101",
+                "00000000015002820101",
+                "00000000000000020101",
+                "00000000000000040101",
+                "0000000001B0098C0101",
+                "0000000001C00F360101",
+                "0000000001F006F20101",
+                "0000000001E006F50101",
+                "000000000140269F0101",
+                "000000000150174F0101"
+              ]
+            },
+            "signature": "cde998b8e5c10e30c6a9ab37b8c524c7b122d7976ba72f309f9eb13f6121ecc421ec86cba2c235304638b2a7d3b298ea0299dcbe4677640104c6e4bbf01fc604"
+          }
+        ],
+        "publicKey": "302a300506032b6570032100367af97571f7e1c5c03cb761a00103440a5d9b5018bef0b371ca56422277744c"
+      },
+      "identity": [
+        "302a300506032b65700321008780d5c2a2a95c3cb6b3c9f6971451f12850630768ba8953746aea7d81ddc907",
+        "541be566ad8ae87eb22713d3651704f6248faa874a80501e7269bc57c69060da"
+      ]
+    }
+  },
+  {
+    "seed": "28542 antique earth oval next hidden lizard dragon pipe phone together maid fence lounge ostrich kick absorb give urge wool sniff custom edge ramp kind",
+    "account": {
+      "anchor": 28542,
+      "accessPoints": [
+        {
+          "icon": "ii",
+          "device": "Internet Identity",
+          "browser": "mfetv-wnv5k-nhjqj-bkiu3-7tuts-nenuw-mjggg-36ilv-tdwqx-e77gv-2qe",
+          "lastUsed": 1678788179957424000,
+          "principalId": "mfetv-wnv5k-nhjqj-bkiu3-7tuts-nenuw-mjggg-36ilv-tdwqx-e77gv-2qe"
+        }
+      ],
+      "accounts": [],
+      "principalId": "mfetv-wnv5k-nhjqj-bkiu3-7tuts-nenuw-mjggg-36ilv-tdwqx-e77gv-2qe"
+    },
+    "credentials": {
+      "credentialId": "lAL5cRLvwsz8lTHVwXmyjcwosI1_YVMmU8dtVEioAAE",
+      "isResidentCredential": false,
+      "privateKey": "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgiw6dmUokOKWdhC2fWmJnyvLmyP019j3TuwpY5pqVmvmhRANCAAQt_L1ib-8fxDgK0J9XJLWUXUJJV4TDehDt2ga5R3RIOx_2RKvLr0FM3LsYgalGyWvwposmzG2mWxFH85BjNyx0",
+      "signCount": 1
+    },
+    "authstate": {
+      "delegation": {
+        "delegations": [
+          {
+            "delegation": {
+              "expiration": "1809f73b8cdb9bc0",
+              "pubkey": "302a300506032b65700321002ba8c9e93d034abb8ea67546f7ee380b721a45a1105b7b61a30e5abb7123a25a",
+              "targets": [
+                "00000000013005F80101",
+                "00000000014000800101",
+                "0000000000D0006E0101",
+                "00000000015002820101",
+                "00000000000000020101",
+                "00000000000000040101",
+                "0000000001B0098C0101",
+                "0000000001C00F360101",
+                "0000000001F006F20101",
+                "0000000001E006F50101",
+                "000000000140269F0101",
+                "000000000150174F0101"
+              ]
+            },
+            "signature": "5dda5be19517ec7ef4311a85bbbad174dc2f03a2277848a3d1a21289603869b60d42a8e1ea0001a96c971ba62c85f7242881b305de368386aea1405519f4bb0c"
+          }
+        ],
+        "publicKey": "302a300506032b65700321000402c7c2ee61065280f1679dab11a0a6e77e770622209b027f02c4a558f2437d"
+      },
+      "identity": [
+        "302a300506032b65700321002ba8c9e93d034abb8ea67546f7ee380b721a45a1105b7b61a30e5abb7123a25a",
+        "6578c84d514de7c7ba9885ac9a0a6b484c48e2d821ce7898957760d7b56d3c0e"
+      ]
+    }
+  },
+  {
+    "seed": "10271 conduct mushroom funny work margin mountain squeeze punch curious hockey truck such trust chef arctic ethics wet potato steak olympic pattern orchard sign brief",
+    "icpAddress": "6e3e59a21b85aeeeead81dca887163c4ad11f65dd3435c1632141f8889a8413e",
+    "account": {
+      "anchor": 10271,
+      "accessPoints": [],
+      "accounts": [],
+      "principalId": "joc5w-xritp-tf7vs-s3k6k-djg4v-654wm-ahhd6-exlky-b5p3d-cpgfw-cqe"
+    },
+    "credentials": {
+      "credentialId": "GFDZaYJtTosCJZo5spLkV_wlfRAwbGget5_DLQeRhng",
+      "isResidentCredential": false,
+      "privateKey": "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgI3iaZKYxEJaVPCVL6y65HZ0QEMuvsB7hpXkdS9Qz5sqhRANCAATrPOZltELyvPuL18BhpM-7XHThbxLNwtN9sFezORgdkDKy57M5lPEAMAn73_h90eAmZooe3qJUxVzdsHxkRMJH",
+      "signCount": 1
+    },
+    "authstate": {
+      "delegation": {
+        "delegations": [
+          {
+            "delegation": {
+              "expiration": "1809f73b8cdb9bc0",
+              "pubkey": "302a300506032b657003210087e00387cecb3e58655cac15ca391b306ea37c801d3f6bd05a2d1b12e60b874b",
+              "targets": [
+                "00000000013005F80101",
+                "00000000014000800101",
+                "0000000000D0006E0101",
+                "00000000015002820101",
+                "00000000000000020101",
+                "00000000000000040101",
+                "0000000001B0098C0101",
+                "0000000001C00F360101",
+                "0000000001F006F20101",
+                "0000000001E006F50101",
+                "000000000140269F0101",
+                "000000000150174F0101"
+              ]
+            },
+            "signature": "bbb458107a06678b6bf5a8f508279fe94579a37cfc751e940795f63ad1dc782ead8608a1ccdd5144a3c48364a5b0ff9d2a01a77e36dbb770a391226ef0880c04"
+          }
+        ],
+        "publicKey": "302a300506032b65700321003d3a5c523ea914ba3c0d12523ce43fc0f39f1f17764c28f47e7ec156a1d0eb0e"
+      },
+      "identity": [
+        "302a300506032b657003210087e00387cecb3e58655cac15ca391b306ea37c801d3f6bd05a2d1b12e60b874b",
+        "6d5925411334cd6e43505f2af0dfc6025f9e896de68b10a445ee5fe3fe273991"
+      ]
+    }
+  },
+  {
+    "seed": "28565 paper section mutual copy industry addict quiz bargain limb school play impact raw index clean bomb movie ribbon razor siren inflict virtual green bacon",
+    "account": {
+      "anchor": 28565,
+      "accessPoints": [
+        {
+          "icon": "document",
+          "device": "Recovery phrase",
+          "browser": "Chrome",
+          "lastUsed": 1678802926010841300,
+          "principalId": "6es3a-f4iva-jhp5q-li235-oinnl-c6w3h-lzd2s-q5elw-xnslc-vpq2o-yqe"
+        }
+      ],
+      "accounts": [],
+      "principalId": "6es3a-f4iva-jhp5q-li235-oinnl-c6w3h-lzd2s-q5elw-xnslc-vpq2o-yqe"
+    },
+    "credentials": {
+      "credentialId": "zM6gVC3Wmai_8fNx6TWzCL35uGRODQbOjY4opaMpm_8",
+      "isResidentCredential": false,
+      "privateKey": "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgEznBGKhvkbV7ZM1CfQGDkEf7rfEB4oQ0QnpsmbbSq_ShRANCAATe0Ms4Od9ASoeYkBmXox3CiTE2KcAAxaCFnKZc2ACxO4oXZKLqLUeKmdn0HnkjvYJDp1wZrSXzqg26lsNaHkvG",
+      "signCount": 1
+    },
+    "authstate": {
+      "delegation": {
+        "delegations": [
+          {
+            "delegation": {
+              "expiration": "1809f73b8ceade00",
+              "pubkey": "302a300506032b6570032100f0a49e909be73528e85b424595a840ff925cde2284bdbc0226be5a0e634f2a5a",
+              "targets": [
+                "00000000013005F80101",
+                "00000000014000800101",
+                "0000000000D0006E0101",
+                "00000000015002820101",
+                "00000000000000020101",
+                "00000000000000040101",
+                "0000000001B0098C0101",
+                "0000000001C00F360101",
+                "0000000001F006F20101",
+                "0000000001E006F50101",
+                "000000000140269F0101",
+                "000000000150174F0101"
+              ]
+            },
+            "signature": "d96ba64c8610131b4e25b0f147388b1468e8f002ac3a8f51ff84fbe0c5c2adbbec11392466bf7944ee5dccf8ed63e252b27d453b979302b461ef21878afeaf0f"
+          }
+        ],
+        "publicKey": "302a300506032b65700321009f317ae64c03b78b5e6cbe9364a393a0703cc6d167ef4ab7ca8bd44d56e198ee"
+      },
+      "identity": [
+        "302a300506032b6570032100f0a49e909be73528e85b424595a840ff925cde2284bdbc0226be5a0e634f2a5a",
+        "d63de6febdaae7952f04d1f33b22f92906d9bf78d584a67343933d5aeb1af96c"
+      ]
+    }
+  },
+  {
+    "seed": "28567 magnet lounge quality praise book near music siege powder neither type will grace banner crisp frost damp night large despair risk leader exercise around",
+    "account": {
+      "anchor": 28567,
+      "accessPoints": [
+        {
+          "icon": "document",
+          "device": "Recovery phrase",
+          "browser": "Chrome",
+          "lastUsed": 1678805006186499000,
+          "principalId": "sycyk-ibjm3-m2asl-ntznb-vtvvf-t4ii3-lef4u-bwral-hf5xv-b2w5l-kae"
+        }
+      ],
+      "accounts": [],
+      "principalId": "sycyk-ibjm3-m2asl-ntznb-vtvvf-t4ii3-lef4u-bwral-hf5xv-b2w5l-kae"
+    },
+    "credentials": {
+      "credentialId": "1xaJFVeaxiFO4RjqqMzVfmXRugEE0OicfcKSsSWoGU4",
+      "isResidentCredential": false,
+      "privateKey": "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgbUHhcdZkbA2ztN5K_4Z4qLwZDJIUOMFW1Eb5DNtevhihRANCAAQSNgeeQQVi84WeENkuAG-3MH2bl7wAlPNOUfmohQ3IYYDpjkFlHLj_7h8zAlvk7W0AF7LqykHO0GHfnv2Zkc2y",
+      "signCount": 1
+    },
+    "authstate": {
+      "delegation": {
+        "delegations": [
+          {
+            "delegation": {
+              "expiration": "1809f73b8ceade00",
+              "pubkey": "302a300506032b6570032100fd6956dd6ce9092d936b5033854597363cd56230a914333f6ae4df7f19349bbf",
+              "targets": [
+                "00000000013005F80101",
+                "00000000014000800101",
+                "0000000000D0006E0101",
+                "00000000015002820101",
+                "00000000000000020101",
+                "00000000000000040101",
+                "0000000001B0098C0101",
+                "0000000001C00F360101",
+                "0000000001F006F20101",
+                "0000000001E006F50101",
+                "000000000140269F0101",
+                "000000000150174F0101"
+              ]
+            },
+            "signature": "b0a999e8a9e422486c6b6c46e598facb99e0e5d27806f70ff4245764ef50a91c1a6906610d27f87e4d55eb146895e10e24d152385a8f2d96fbbc2744515d4f09"
+          }
+        ],
+        "publicKey": "302a300506032b6570032100150af78da203baa411aef0842e36d8801d90d18da7e9bf75732982de2348ad20"
+      },
+      "identity": [
+        "302a300506032b6570032100fd6956dd6ce9092d936b5033854597363cd56230a914333f6ae4df7f19349bbf",
+        "4b0fe6e6c17418f6c35b04c941fd60c302ad4eddfc39182860386a258b06f7c2"
+      ]
+    }
+  },
+  {
+    "seed": "28593 demand attract toilet sure inform below barely moon tank clarify curve muscle theory sting indoor fringe hobby degree ten moment across device reduce supreme",
+    "account": {
+      "anchor": 28593,
+      "btcAddress": "mhb5nMJapMHx2ZGYBwMaPUqz1byj6rA5BN",
+      "accessPoints": [
+        {
+          "icon": "document",
+          "device": "Recovery phrase",
+          "browser": "",
+          "lastUsed": 1678805271205030000,
+          "principalId": "yxv24-rqedf-eenoy-7squy-kbufo-ax75y-rgbsy-3nrip-pffte-rtiuv-2qe"
+        }
+      ],
+      "accounts": [],
+      "principalId": "yxv24-rqedf-eenoy-7squy-kbufo-ax75y-rgbsy-3nrip-pffte-rtiuv-2qe"
+    },
+    "credentials": {
+      "credentialId": "e3YpueMxNozoWQ4ykbCPLw6WN_LxOsTPLWcW_05izM4",
+      "isResidentCredential": false,
+      "privateKey": "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgrcrESgIxeWppqQgxiDsKGFMVdsGiBfrMvocWJJCIFR6hRANCAATeb_mWdKne9scE1ZzhdBtrjY-ZRGB_2Ucd_0IB-N5dznEWmgz-213E6i_oXy3UEfElaCx111GhbK1ie75b5hoU",
+      "signCount": 1
+    },
+    "authstate": {
+      "delegation": {
+        "delegations": [
+          {
+            "delegation": {
+              "expiration": "1809f73b8cfa2040",
+              "pubkey": "302a300506032b6570032100beb7d86cb65a9a69eecf834dfb7ea73c2ec4ca845d739eff695dd791dc405e0d",
+              "targets": [
+                "00000000013005F80101",
+                "00000000014000800101",
+                "0000000000D0006E0101",
+                "00000000015002820101",
+                "00000000000000020101",
+                "00000000000000040101",
+                "0000000001B0098C0101",
+                "0000000001C00F360101",
+                "0000000001F006F20101",
+                "0000000001E006F50101",
+                "000000000140269F0101",
+                "000000000150174F0101"
+              ]
+            },
+            "signature": "ba01a80b285eb70180698d3ab120d690d5840e3d579b3947df23b8235c3c3764a3220fe50d4a37b056e810e934336a467aaedbf544af8c2b869780f7e816010d"
+          }
+        ],
+        "publicKey": "302a300506032b6570032100f50bba52bd753e6e8e8a657d8980a6636876daaef828428cabe5c044f57949fc"
+      },
+      "identity": [
+        "302a300506032b6570032100beb7d86cb65a9a69eecf834dfb7ea73c2ec4ca845d739eff695dd791dc405e0d",
+        "38038a16a4f342143dbd3e83ee43f398225d258519b665aed51d7decebbf6c60"
+      ]
+    }
+  },
+  {
+    "seed": "31870 perfect metal mask good club pluck result stomach scene abuse faint gasp violin glimpse donor will lonely sheriff upper voice evil morning autumn idle",
+    "account": {
+      "anchor": 31870
+    },
+    "credentials": {
+      "credentialId": "Xj0QZ-uZ1EBP0cW5oSWr1gnbHsoFlA-n4ohCODalsiY",
+      "isResidentCredential": false,
+      "privateKey": "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgeWnP99gbBGCAsdz_gwWl-fTctkEdPic0kjDGB7fLnK-hRANCAARMxxKPIcqpisr3fVPQ9j5LIOrZCgFxhMMbgUTg_4menXFPEO6M14FBV5SgYdcuozPdN2wM5l3eCyNUVsgaGYBP",
+      "signCount": 1
+    },
+    "authstate": {
+      "delegation": {
+        "delegations": [
+          {
+            "delegation": {
+              "expiration": "1809f73b8d096280",
+              "pubkey": "302a300506032b65700321007d52db289c1668f004bad398ab7e529361d3422ca9a3e1ac2f35305b44ecf633",
+              "targets": [
+                "00000000013005F80101",
+                "00000000014000800101",
+                "0000000000D0006E0101",
+                "00000000015002820101",
+                "00000000000000020101",
+                "00000000000000040101",
+                "0000000001B0098C0101",
+                "0000000001C00F360101",
+                "0000000001F006F20101",
+                "0000000001E006F50101",
+                "000000000140269F0101",
+                "000000000150174F0101"
+              ]
+            },
+            "signature": "5571eed14f92521cedb4968488e99f4d2df84b3f7404c51ac5d1e0017e93339270d6ae40af06b81b8cd1ed9ee9dbf1c6571c1952960132998f6b28c5db556006"
+          }
+        ],
+        "publicKey": "302a300506032b6570032100d25b38a6a309402e2577b9de5a92d337ae8860e777699d02fd1efdbebd16d190"
+      },
+      "identity": [
+        "302a300506032b65700321007d52db289c1668f004bad398ab7e529361d3422ca9a3e1ac2f35305b44ecf633",
+        "e817c539be3c3f32591884ca3df24057c19060c34b4c477d1a7ad0de2293201d"
+      ]
+    }
+  }
+]

@@ -1,27 +1,43 @@
-import { HttpAgent, Actor } from "@dfinity/agent"
-import { idlFactory } from "./idl/ledger"
-import { DelegationType, SignerClient } from "./signer-client"
+import { AccountIdentifier, LedgerCanister } from "@dfinity/ledger-icp"
+import { Principal } from "@dfinity/principal"
+import { SignerClient } from "./signer-client"
+import { SignerAgent, SignerAgentOptions } from "./signer-agent"
 
-const LEDGER_CANISTER_ID = "ryjl3-tyaaa-aaaaa-aaaba-cai"
+export const IdentityKitAuthKind = {
+  DELEGATION: "DELEGATION",
+  ACCOUNTS: "ACCOUNTS",
+} as const
+
+type ObjectValuesType<T> = T[keyof T]
+
+export type IdentityKitAuthKindType = ObjectValuesType<typeof IdentityKitAuthKind>
 
 export class IdentityKit {
-  constructor(public readonly signerClient: SignerClient) {}
+  public static signerAgent: SignerAgent
+  public static signerClient?: SignerClient
 
-  async getIcpBalance(): Promise<string> {
-    const identity = this.signerClient.getIdentity()
-    if (!identity) throw new Error("Not authenticated")
+  static create(signerClient: SignerClient) {
+    this.signerClient = signerClient
+  }
 
-    const delegationType = await this.signerClient.getDelegationType()
-    if (delegationType === DelegationType.ANONYMOUS) {
-      throw new Error("Cannot get icp balance of anonymous delegation")
-    }
+  static setSignerAgent(options: SignerAgentOptions) {
+    IdentityKit.signerAgent = new SignerAgent(options)
+  }
 
-    const agent = new HttpAgent()
-    const actor = Actor.createActor(idlFactory, {
-      agent,
-      canisterId: LEDGER_CANISTER_ID,
-    })
+  static async getIcpBalance(): Promise<number> {
+    const connectedUser = IdentityKit.signerClient?.connectedUser
+    if (!connectedUser) throw new Error("Not authenticated")
 
-    return (await actor.account_balance({ account: identity.getPrincipal().toString() })) as string
+    const balance = (
+      await LedgerCanister.create().accountBalance({
+        accountIdentifier: AccountIdentifier.fromPrincipal({
+          principal: Principal.from(connectedUser.owner),
+          subAccount: connectedUser.subAccount,
+        }),
+        certified: false,
+      })
+    ).toString()
+
+    return Number(balance) / 10 ** 8
   }
 }

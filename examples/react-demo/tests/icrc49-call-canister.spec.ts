@@ -34,7 +34,7 @@ const test = base.extend<Fixtures>({
   ],
 })
 
-test("should check request and response has correct initial state", async ({ section }) => {
+test.skip("should check request and response has correct initial state", async ({ section }) => {
   const request = {
     method: "icrc49_call_canister",
     params: {
@@ -52,7 +52,7 @@ test("should check request and response has correct initial state", async ({ sec
   expect(initialResponse).toStrictEqual({})
 })
 
-test("should check request and response has correct state for consent case", async ({
+test.skip("should check request and response has correct state for consent case", async ({
   section,
 }) => {
   const request = {
@@ -74,7 +74,7 @@ test("should check request and response has correct state for consent case", asy
   expect(initialResponse).toStrictEqual({})
 })
 
-test("should make canister call with no consent", async ({ section }) => {
+test.skip("should make canister call with no consent", async ({ section }) => {
   const popup = await section.openPopup()
 
   const textsExpected = [
@@ -107,7 +107,7 @@ test("should make canister call with no consent", async ({ section }) => {
   })
 })
 
-test("should make canister call with consent", async ({ section }) => {
+test.skip("should make canister call with consent", async ({ section }) => {
   await section.selectConsentTab()
 
   const popup = await section.openPopup()

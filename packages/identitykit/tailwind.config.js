@@ -7,7 +7,7 @@ module.exports = {
     extend: {
       colors: {
         ...colors,
-        signerDarkBg: "#242427",
+        primary: "#146F68",
         signerDarkHoverBg: "#34343A",
       },
       keyframes: {

@@ -1,20 +1,59 @@
 import { Locator, Page } from "@playwright/test"
+import { UserService } from "../helpers/accounts-service.ts"
 
 export class DemoPage {
   private readonly connectButton: Locator
-  private readonly mockedSignerButton: Locator
+  private readonly disconnectButton: Locator
 
   constructor(public readonly page: Page) {
-    this.connectButton = this.page.getByText("Connect wallet")
-    this.mockedSignerButton = this.page.getByText("Mocked Signer Wallet")
+    this.connectButton = this.page.locator("#connect")
+    this.disconnectButton = this.page.locator("#disconnect")
+  }
+
+  static async getAccounts(page): Promise<Account[]> {
+    const mockedSignerButton: Account = {
+      locator: page.locator("#signer_MockedSigner"),
+      type: AccountType.MockedSigner,
+    }
+    const NFIDSignerButton: Account = {
+      locator: page.locator("#signer_NFID"),
+      type: AccountType.NFID,
+    }
+    return [mockedSignerButton, NFIDSignerButton]
   }
 
   async goto() {
     await this.page.goto("/")
   }
 
-  async login() {
+  async login(account: Account) {
     await this.connectButton.click()
-    await this.mockedSignerButton.click()
+    await account.locator.click()
+  }
+
+  async setAccount(anchor: number, page: Page) {
+    const service = new UserService(page)
+    await service.setAuth(anchor, page)
+  }
+
+  async logout() {
+    await this.page.reload({ waitUntil: "load" })
   }
 }
+
+export interface Account {
+  locator: Locator
+  type: AccountType
+}
+
+export enum AccountType {
+  MockedSigner = "MockedSigner",
+  NFID = "NFID",
+}
+
+export enum ProfileType {
+  Global = "Global",
+  Session = "Session",
+}
+
+export default (page: Page) => new DemoPage(page)

@@ -1,7 +1,7 @@
 import { Locator, Page } from "@playwright/test"
 
 export abstract class Section {
-  protected readonly submitButton: Locator
+  readonly submitButton: Locator
   private readonly requestSection: Locator
   private readonly responseSection: Locator
 
@@ -20,6 +20,7 @@ export abstract class Section {
   }
 
   async getResponseJson(): Promise<string> {
+    await this.responseSection.waitFor({ state: "visible" })
     const json = (await this.responseSection.textContent()) ?? "{}"
     return JSON.parse(json)
   }
@@ -29,8 +30,9 @@ export abstract class Section {
   }
 
   async waitForResponse(): Promise<void> {
-    await this.page.waitForSelector(
-      `#${this.section} #response-section div.cm-line > span:nth-child(2)`
-    )
+    await this.page
+      .locator(`#${this.section} #response-section div.cm-line > span:nth-child(2)`)
+      .last()
+      .waitFor({ state: "visible" })
   }
 }

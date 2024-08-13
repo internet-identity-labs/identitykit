@@ -1,0 +1,70 @@
+---
+title: "Adding a new signer to IdentityKit"
+date: "2024-08-05"
+authors:
+  - name: "Dmytro Sheremet"
+---
+
+# Adding a New Signer to IdentityKit
+
+To add your wallet as a signer to IdentityKit, follow these four steps:
+
+1. Clone the IdentityKit repository.
+2. Add your wallet configuration.
+3. Create a pull request.
+4. Wait for approval and merge of the pull request.
+
+## Steps
+
+### 1. Clone the IdentityKit repository
+
+First, clone the IdentityKit repository to your local machine. Open your terminal and run the
+following command:
+
+```bash
+git clone https://github.com/internet-identity-labs/identitykit.git
+```
+
+### 2. Add your wallet configuration
+
+Open the `packages/identitykit/src/lib/signers.ts` file in your preferred code editor and add your
+wallet configuration. Ensure that each field is correctly filled out:
+
+- id: A unique identifier for your wallet. Make sure it is unique to avoid conflicts.
+- providerUrl: The URL to connect to your wallet. This URL should be compatible with
+  [ICRC standards](https://github.com/dfinity/wg-identity-authentication/tree/main).
+- transportType: The method your wallet uses to communicate with the client's dApp. If your wallet
+  is an extension, use `TransportType.EXTENSION`. For web dApps, you can choose between
+  `TransportType.POPUP` and `TransportType.IFRAME`, each with its own advantages and disadvantages.
+- popupHeight and popupWidth: The dimensions of the sign-in window.
+- label: The display name of your wallet.
+- icon: A base64-encoded SVG image representing your wallet.
+
+Here is an example configuration:
+
+```typescript
+const YourWalletSigner: SignerConfig = {
+  id: "YourWalletSignerIdentifier",
+  providerUrl: "https://your-wallet-rpc-url.com",
+  transportType: TransportType.POPUP,
+  popupHeight: 640,
+  popupWidth: 450,
+  label: "Your Wallet Name",
+  icon: "data:image/svg+xml;base64,PHN2ZyB3aWR0ac+Cg==",
+}
+```
+
+### 3. Create a pull request
+
+After adding your wallet configuration, commit your changes and push them to the repository. Then,
+create a pull request (PR).
+
+### 4. Wait for approval and merge of the pull request
+
+Wait for the maintainers to review and approve your pull request. Once approved, it will be merged
+into the main branch, and the new version of the
+[@nfid/identitykit NPM package](https://www.npmjs.com/package/@nfid/identitykit) will be released.
+
+---
+
+By following these steps, you will successfully add your wallet as a signer to IdentityKit.

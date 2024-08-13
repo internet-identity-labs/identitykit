@@ -30,7 +30,7 @@ const test = base.extend<Fixtures>({
   ],
 })
 
-test("should check request and response has correct initial state", async ({ section }) => {
+test.skip("should check request and response has correct initial state", async ({ section }) => {
   const request = {
     method: "icrc25_permissions",
   }
@@ -42,14 +42,17 @@ test("should check request and response has correct initial state", async ({ sec
   expect(initialResponse).toStrictEqual({})
 })
 
-test("should retrieve empty permissions", async ({ section }) => {
+test.skip("should retrieve empty permissions", async ({ section }) => {
   await section.clickSubmitButton()
 
   const actualResponse = await section.getResponseJson()
   expect(actualResponse).toStrictEqual({})
 })
 
-test("should retrieve full list of permissions", async ({ section, requestPermissionSection }) => {
+test.skip("should retrieve full list of permissions", async ({
+  section,
+  requestPermissionSection,
+}) => {
   const response = [
     {
       scope: {

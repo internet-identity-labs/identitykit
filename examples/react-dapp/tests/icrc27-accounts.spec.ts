@@ -1,13 +1,14 @@
-import { expect } from "@playwright/test"
-import { test as base } from "@playwright/test"
-import { DemoPage } from "./page/demo.page"
-import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section"
-import { Icrc25AccountsSection } from "./section/icrc27-accounts.section"
+import { expect, Page, test as base } from "@playwright/test"
+import { Account, AccountType, DemoPage } from "./page/demo.page.ts"
+import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
+import { Icrc25AccountsSection } from "./section/icrc27-accounts.section.ts"
+import { ExpectedTexts } from "./section/expectedTexts.ts"
 
 type Fixtures = {
   section: Icrc25AccountsSection
   demoPage: DemoPage
   requestPermissionSection: Icrc25RequestPermissionsSection
+  nfidPage: Page
 }
 
 const test = base.extend<Fixtures>({
@@ -15,52 +16,70 @@ const test = base.extend<Fixtures>({
     const section = new Icrc25AccountsSection(page)
     await use(section)
   },
-  demoPage: [
-    async ({ page }, use) => {
-      const demoPage = new DemoPage(page)
-      await demoPage.goto()
-      await demoPage.login()
-      await use(demoPage)
-    },
-    { auto: true },
-  ],
-  requestPermissionSection: [
-    async ({ page }, use) => {
-      const requestPermissionSection = new Icrc25RequestPermissionsSection(page)
-      await requestPermissionSection.approvePermissions()
-      await use(requestPermissionSection)
-    },
-    { auto: true },
-  ],
+  demoPage: async ({ page }, use) => {
+    const demoPage = new DemoPage(page)
+    await demoPage.goto()
+    await use(demoPage)
+  },
+  nfidPage: async ({ context, demoPage }, use) => {
+    const nfidPage = await context.newPage()
+    await nfidPage.goto("https://dev.nfid.one/")
+    await demoPage.setAccount(10974, nfidPage)
+    await context.pages()[0].bringToFront()
+    await use(nfidPage)
+    await nfidPage.close()
+  },
+  requestPermissionSection: async ({ page }, use) => {
+    const requestPermissionSection = new Icrc25RequestPermissionsSection(page)
+    await use(requestPermissionSection)
+  },
 })
 
-test("should check request and response has correct initial state", async ({ section }) => {
-  const request = {
-    method: "icrc27_accounts",
-  }
+test.describe("ICRC27 accounts", () => {
+  let accounts: Account[] = []
 
-  const initialRequest = await section.getRequestJson()
-  expect(initialRequest).toStrictEqual(request)
+  test.beforeEach(async ({ page }) => {
+    accounts = await DemoPage.getAccounts(page)
+  })
+  test("should check request and response has correct initial state", async ({
+    section,
+    demoPage,
+  }) => {
+    for (const account of accounts) {
+      await demoPage.login(account)
 
-  const initialResponse = await section.getResponseJson()
-  expect(initialResponse).toStrictEqual({})
-})
+      const initialRequest = await section.getRequestJson()
+      expect(initialRequest).toStrictEqual({ method: "icrc27_accounts" })
 
-test("should return list of accounts", async ({ section }) => {
-  const response = [
-    {
-      owner: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
-      subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
-    },
-    {
-      owner: "6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae",
-      subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=",
-    },
-  ]
+      const initialResponse = await section.getResponseJson()
+      expect(initialResponse).toStrictEqual({})
+      await demoPage.logout()
+    }
+  })
 
-  await section.selectAccounts()
-  await section.waitForResponse()
+  test("should return list of accounts", async ({
+    section,
+    demoPage,
+    requestPermissionSection,
+    nfidPage,
+    context,
+  }) => {
+    await nfidPage.title()
+    const account = accounts[0]
+    await demoPage.login(account)
+    await requestPermissionSection.approvePermissions(account)
 
-  const actualResponse = await section.getResponseJson()
-  expect(actualResponse).toStrictEqual(response)
+    account.type === AccountType.MockedSigner
+      ? await section.selectAccountsMocked()
+      : await section.selectAccountsNFID(demoPage.page, context)
+
+    await section.waitForResponse()
+    const actualResponse = await section.getResponseJson()
+    expect(actualResponse).toStrictEqual(
+      account.type === AccountType.MockedSigner
+        ? ExpectedTexts.Mocked.ListOfAccountsResponse
+        : ExpectedTexts.NFID.ListOfAccountsResponse
+    )
+    await demoPage.logout()
+  })
 })

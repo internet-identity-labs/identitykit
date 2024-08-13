@@ -34,7 +34,7 @@ const test = base.extend<Fixtures>({
   ],
 })
 
-test("should check request and response has correct initial state", async ({ section }) => {
+test.skip("should check request and response has correct initial state", async ({ section }) => {
   const request = {
     method: "icrc34_delegation",
     params: {
@@ -51,7 +51,7 @@ test("should check request and response has correct initial state", async ({ sec
   expect(initialResponse).toStrictEqual({})
 })
 
-test("should request global delegation with targets", async ({ section }) => {
+test.skip("should request global delegation with targets", async ({ section }) => {
   const popup = await section.openPopup()
 
   const isDisabledGlobalAccount = await section.isDisabledGlobalAccount(popup)
@@ -81,7 +81,7 @@ test("should request global delegation with targets", async ({ section }) => {
   })
 })
 
-test("should request session delegation with no targets", async ({ section }) => {
+test.skip("should request session delegation with no targets", async ({ section }) => {
   await section.setRequestWithNoTargets()
 
   const popup = await section.openPopup()

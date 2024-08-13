@@ -49,6 +49,14 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
     message: MessageEvent<RPCMessage>
   ): Promise<DelegationComponentData> {
     const icrc34Dto = message.data.params as unknown as Icrc34Dto
+
+    try {
+      Ed25519PublicKey.fromDer(fromBase64(icrc34Dto.publicKey))
+    } catch (e) {
+      console.error("Icrc34DelegationMethodService getСomponentData", e)
+      throw new GenericError("Incorrect public key")
+    }
+
     const accounts = await accountService.getAccounts()
     const isPublicAccountsAllowed = await this.isPublicAccountsAllowed(
       icrc34Dto.targets,
@@ -116,7 +124,8 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
         accountKeyIdentity.keyIdentity,
         sessionPublicKey,
         new Date(Date.now() + maxTimeToLive),
-        { targets }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        { targets: targets as any }
       )
     }
 

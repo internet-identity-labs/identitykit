@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Title } from "../atoms/title"
 import { RequestSection } from "../molecules/request-section"
 import { ResponseSection } from "../molecules/response-section"
@@ -13,11 +14,14 @@ import { Principal } from "@dfinity/principal"
 import { getRequestObject } from "../../utils/requests"
 import { DropdownSelect } from "../molecules/dropdown-select"
 import { Buffer } from "buffer"
-import { toBase64 } from "@slide-computer/signer"
 
 import "react-toastify/dist/ReactToastify.css"
-import { IdentityKitAgent } from "@nfid/identitykit"
-import { idlFactory } from "../../idl/service_idl"
+import { IdentityKitSignerAgent } from "@nfid/identitykit"
+import { toBase64 } from "@slide-computer/signer"
+import { idlFactory as demoIDL } from "../../idl/service_idl"
+import { idlFactory as ledgerIDL } from "../../idl/ledger"
+import { AccountIdentifier } from "@dfinity/ledger-icp"
+import { fromHexString } from "ictool"
 
 export interface IRequestExample {
   title: string
@@ -32,7 +36,11 @@ export interface ISection {
   getCodeSnippet: (requestJSON: string) => string
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const canistersIDLs: { [key: string]: any } = {
+  "ryjl3-tyaaa-aaaaa-aaaba-cai": ledgerIDL,
+  "do25a-dyaaa-aaaak-qifua-cai": demoIDL,
+}
+
 const SignerMethod: any = {
   icrc25_request_permissions: "requestPermissions",
   icrc25_permissions: "permissions",
@@ -41,7 +49,6 @@ const SignerMethod: any = {
   icrc34_delegation: "delegation",
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const SignerMethodParamsField: any = {
   icrc25_request_permissions: "scopes",
 }
@@ -75,6 +82,7 @@ export const Section: React.FC<ISection> = ({
     }
 
     const requestObject = getRequestObject(requestValue)
+
     let res
 
     try {
@@ -82,33 +90,68 @@ export const Section: React.FC<ISection> = ({
         setIcrc49SignerResponse(null)
         setIcrc49ActorResponse(null)
         const { sender, canisterId } = requestObject.params
-        const agent = new IdentityKitAgent({
-          signer: {
-            ...selectedSigner,
-            // custom call canister here just to save certificate and contentMap to local state
-            callCanister: async (params) => {
-              const response = await selectedSigner.callCanister(params)
-              setIcrc49SignerResponse({
-                certificate: toBase64(response.certificate),
-                contentMap: toBase64(response.contentMap),
-              })
-              return response
+
+        const agent = new IdentityKitSignerAgent({
+          signer: new Proxy(selectedSigner, {
+            get(target, prop) {
+              return async (params: any) => {
+                const response = await (target as any)[prop](params)
+                setIcrc49SignerResponse({
+                  certificate: toBase64(response.certificate),
+                  contentMap: toBase64(response.contentMap),
+                })
+                return response
+              }
             },
-          },
+          }),
           account: Principal.fromText(sender),
         })
-        const actor = Actor.createActor(idlFactory, {
+        const actor = Actor.createActor(canistersIDLs[canisterId], {
           agent,
           canisterId,
         })
-        setIcrc49ActorResponse((await actor[requestObject.params.method]("me")) as string)
+
+        if (
+          requestObject.params?.canisterId === "ryjl3-tyaaa-aaaaa-aaaba-cai" &&
+          requestObject.params?.method === "transfer"
+        ) {
+          const address = AccountIdentifier.fromPrincipal({
+            principal: Principal.fromText("do25a-dyaaa-aaaak-qifua-cai"),
+          }).toHex()
+
+          const transferArgs = {
+            to: fromHexString(address),
+            fee: { e8s: BigInt(10000) },
+            memo: BigInt(0),
+            from_subaccount: [],
+            created_at_time: [],
+            amount: { e8s: BigInt(1000) },
+          }
+          setIcrc49ActorResponse((await actor[requestObject.params.method](transferArgs)) as string)
+        } else {
+          setIcrc49ActorResponse((await actor[requestObject.params.method]("me")) as string)
+        }
       } else if (requestObject.method === "icrc34_delegation") {
         const req = {
           id: "8932ce44-a693-4d1a-a087-8468aafe536e",
           jsonrpc: "2.0",
           ...requestObject,
         }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+        res = await (selectedSigner as any)?.["sendRequest"](req)
+        const json = JSON.stringify(
+          res,
+          (_, value) => (typeof value === "bigint" ? value.toString() : value),
+          2
+        )
+        setResponseValue(json)
+        return
+      } else if (requestObject.method === "icrc27_accounts") {
+        const req = {
+          id: "8c417beb-e7b1-4925-94b3-c737697e51bf",
+          jsonrpc: "2.0",
+          ...requestObject,
+        }
         res = await (selectedSigner as any)?.["sendRequest"](req)
         const json = JSON.stringify(
           res,
@@ -119,25 +162,35 @@ export const Section: React.FC<ISection> = ({
         return
       } else {
         // TODO for icrc25_request_permissions should pass params.scopes as arg and for icrc34_delegation change params to Principals
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         res = await (selectedSigner as any)?.[SignerMethod[requestObject.method]](
           SignerMethodParamsField[requestObject.method]
             ? requestObject.params[SignerMethodParamsField[requestObject.method]]
             : requestObject.params
         )
         if (Array.isArray(res) && res[0].subaccount) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const mappedResult = res.map((x: any) => {
             return {
               owner: x.owner.toString(),
               subaccount: Buffer.from(new Uint8Array(x.subaccount)).toString("base64"),
             }
           })
-          setResponseValue(JSON.stringify(mappedResult, null, 2))
+          setResponseValue(
+            JSON.stringify(
+              mappedResult,
+              (_, value) => (typeof value === "bigint" ? value.toString() : value),
+              2
+            )
+          )
           return
         }
 
-        setResponseValue(JSON.stringify(res, null, 2))
+        setResponseValue(
+          JSON.stringify(
+            res,
+            (_, value) => (typeof value === "bigint" ? value.toString() : value),
+            2
+          )
+        )
       }
     } catch (e) {
       if (e instanceof Error) {
@@ -159,9 +212,9 @@ export const Section: React.FC<ISection> = ({
             origin: "http://localhost:3001",
             jsonrpc: "2.0",
             id: "7812362e-29b8-4099-824c-067e8a50f6f3",
-            result: { contentMap, certificate, content: icrc49ActorResponse },
+            result: { contentMap, certificate },
           },
-          null,
+          (_, value) => (typeof value === "bigint" ? value.toString() : value),
           2
         )
       )
