@@ -4,8 +4,6 @@ export type SignerConfig = {
   label: string
   transportType: TransportType
   icon?: string
-  popupHeight?: number
-  popupWidth?: number
   description?: string
 }
 
