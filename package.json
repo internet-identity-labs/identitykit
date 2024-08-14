@@ -5,7 +5,7 @@
   "scripts": {
     "build": "echo '💀 DONT REMOVE THIS 💀'",
     "build-ci": "turbo build",
-    "build-identitykit": "turbo build --force --filter='@nfid/identitykit",
+    "build-identitykit": "turbo build --force --filter='@nfid/identitykit'",
     "build-docs": "turbo build --force --filter='@nfid/docs'",
     "build-playground:dev": "dotenv -e .env.dev -- turbo run build --force --filter='@nfid/react-demo' --filter='@nfid/react-dapp' --filter='@nfid/react-signer'",
     "build-playground:ic": "dotenv -e .env.ic -- turbo run build --force --filter='@nfid/react-demo' --filter='@nfid/react-dapp' --filter='@nfid/react-signer'",
