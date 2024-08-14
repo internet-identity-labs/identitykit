@@ -13,4 +13,4 @@ export {
   type AccountsSignerClientOptions as IdentityKitAccountsSignerClientOptions,
 } from "./signer-client"
 export { type SignerAgentOptions as IdentityKitSignerAgentOptions } from "./signer-agent"
-export { NFID, MockedSigner } from "./signers"
+export { NFIDW, MockedSigner } from "./signers"

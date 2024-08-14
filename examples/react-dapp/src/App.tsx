@@ -11,7 +11,7 @@ import { Section } from "./ui/organisms/section"
 import { ToastContainer } from "react-toastify"
 import { SectionContainer } from "./ui/organisms/section-container"
 import { IdentityKitProvider, IdentityKitTheme } from "@nfid/identitykit/react"
-import { MockedSigner, NFID, SignerConfig } from "@nfid/identitykit"
+import { MockedSigner, NFIDW, SignerConfig } from "@nfid/identitykit"
 import { useTheme } from "next-themes"
 
 const icrc25data = [
@@ -28,10 +28,10 @@ const nfidSignerProviderUrl = import.meta.env.VITE_MOCKED_NFID_SIGNER_PROVIDER_U
 
 function App() {
   const { theme } = useTheme()
-  const nfid: SignerConfig = { ...NFID, providerUrl: nfidSignerProviderUrl }
+  const nfidw: SignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
   const mockedSigner: SignerConfig = { ...MockedSigner, providerUrl: mockedSignerProviderUrl }
   return (
-    <IdentityKitProvider signers={[nfid, mockedSigner]} theme={theme as IdentityKitTheme}>
+    <IdentityKitProvider signers={[nfidw, mockedSigner]} theme={theme as IdentityKitTheme}>
       <div className="h-full min-h-screen bg-white dark:bg-dark px-[30px] pb-20">
         <ToastContainer />
         <Header />

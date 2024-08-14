@@ -16,8 +16,8 @@ export class DemoPage {
       type: AccountType.MockedSigner,
     }
     const NFIDSignerButton: Account = {
-      locator: page.locator("#signer_NFID"),
-      type: AccountType.NFID,
+      locator: page.locator("#signer_NFIDW"),
+      type: AccountType.NFIDW,
     }
     return [mockedSignerButton, NFIDSignerButton]
   }
@@ -48,7 +48,7 @@ export interface Account {
 
 export enum AccountType {
   MockedSigner = "MockedSigner",
-  NFID = "NFID",
+  NFIDW = "NFIDW",
 }
 
 export enum ProfileType {

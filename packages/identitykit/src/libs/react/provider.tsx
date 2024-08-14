@@ -4,22 +4,21 @@ import { IdentityKitContext } from "./context"
 import { IdentityKitModal } from "./modal"
 import { IdentityKitTheme } from "./constants"
 import {
-  IdentityKitAuthKindType,
+  IdentityKitAuthType,
   IdentityKitAccountsSignerClientOptions,
-  IdentityKitAuthKind,
   IdentityKitDelegationSignerClientOptions,
   IdentityKitSignerAgentOptions,
 } from "../../lib"
 import { useCreateIdentityKit, useLogoutOnIdle, useSigner, useTheme } from "./hooks"
 
 interface IdentityKitProviderProps<
-  T extends IdentityKitAuthKindType = typeof IdentityKitAuthKind.DELEGATION,
+  T extends IdentityKitAuthType = typeof IdentityKitAuthType.DELEGATION,
 > extends PropsWithChildren {
-  authKind?: T
+  authType?: T
   signers: SignerConfig[]
   featuredSigner?: SignerConfig
   theme?: IdentityKitTheme
-  signerClientOptions?: T extends typeof IdentityKitAuthKind.DELEGATION
+  signerClientOptions?: T extends typeof IdentityKitAuthType.DELEGATION
     ? Omit<IdentityKitDelegationSignerClientOptions, "signer">
     : Omit<IdentityKitAccountsSignerClientOptions, "signer">
   signerAgentOptions?: {
@@ -30,12 +29,12 @@ interface IdentityKitProviderProps<
 
 globalThis.global = globalThis
 
-export const IdentityKitProvider = <T extends IdentityKitAuthKindType>({
+export const IdentityKitProvider = <T extends IdentityKitAuthType>({
   children,
   signers,
   signerClientOptions,
   signerAgentOptions,
-  authKind,
+  authType,
   featuredSigner,
   ...props
 }: IdentityKitProviderProps<T>) => {
@@ -64,7 +63,7 @@ export const IdentityKitProvider = <T extends IdentityKitAuthKindType>({
       },
     },
     signerAgentOptions,
-    authKind,
+    authType,
   })
 
   const theme = useTheme(props.theme)

@@ -2,31 +2,25 @@ import { useState } from "react"
 import App from "./App.tsx"
 import { useTheme } from "next-themes"
 import { IdentityKitProvider, IdentityKitTheme } from "@nfid/identitykit/react"
-import {
-  IdentityKitAuthKind,
-  IdentityKitAuthKindType,
-  MockedSigner,
-  NFID,
-  SignerConfig,
-} from "@nfid/identitykit"
+import { IdentityKitAuthType, MockedSigner, NFIDW, SignerConfig } from "@nfid/identitykit"
 
 const mockedSignerProviderUrl = import.meta.env.VITE_MOCKED_SIGNER_PROVIDER_URL
 const nfidSignerProviderUrl = import.meta.env.VITE_MOCKED_NFID_SIGNER_PROVIDER_URL
 
 export function AppWrappedInIdentityKit() {
-  const [authKind, setAuthKind] = useState<IdentityKitAuthKindType>(IdentityKitAuthKind.DELEGATION)
+  const [authType, setAuthType] = useState<IdentityKitAuthType>(IdentityKitAuthType.DELEGATION)
   const { theme } = useTheme()
-  const nfid: SignerConfig = { ...NFID, providerUrl: nfidSignerProviderUrl }
+  const nfidw: SignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
   const mockedSigner: SignerConfig = { ...MockedSigner, providerUrl: mockedSignerProviderUrl }
 
   return (
     <IdentityKitProvider
-      signers={[nfid, mockedSigner]}
-      featuredSigner={nfid}
+      signers={[nfidw, mockedSigner]}
+      featuredSigner={nfidw}
       theme={theme as IdentityKitTheme}
-      authKind={authKind}
+      authType={authType}
     >
-      <App authKind={authKind} setAuthKind={setAuthKind} />
+      <App authType={authType} setAuthType={setAuthType} />
     </IdentityKitProvider>
   )
 }

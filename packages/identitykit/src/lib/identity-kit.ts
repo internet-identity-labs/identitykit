@@ -3,14 +3,14 @@ import { Principal } from "@dfinity/principal"
 import { SignerClient } from "./signer-client"
 import { SignerAgent, SignerAgentOptions } from "./signer-agent"
 
-export const IdentityKitAuthKind = {
+export const IdentityKitAuthType = {
   DELEGATION: "DELEGATION",
   ACCOUNTS: "ACCOUNTS",
 } as const
 
 type ObjectValuesType<T> = T[keyof T]
 
-export type IdentityKitAuthKindType = ObjectValuesType<typeof IdentityKitAuthKind>
+export type IdentityKitAuthType = ObjectValuesType<typeof IdentityKitAuthType>
 
 export class IdentityKit {
   public static signerAgent: SignerAgent

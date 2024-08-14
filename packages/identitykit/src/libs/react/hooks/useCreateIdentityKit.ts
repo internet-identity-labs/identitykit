@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState } from "react"
 import {
-  IdentityKitAuthKindType,
+  IdentityKitAuthType,
   IdentityKit,
   IdentityKitAccountsSignerClient,
   IdentityKitAccountsSignerClientOptions,
-  IdentityKitAuthKind,
   IdentityKitDelegationSignerClient,
   IdentityKitDelegationSignerClientOptions,
   IdentityKitSignerAgentOptions,
@@ -13,15 +12,15 @@ import { Signer } from "@slide-computer/signer"
 import { AccountsSignerClient, DelegationSignerClient } from "../../../lib/signer-client"
 
 export function useCreateIdentityKit<
-  T extends IdentityKitAuthKindType = typeof IdentityKitAuthKind.DELEGATION,
+  T extends IdentityKitAuthType = typeof IdentityKitAuthType.DELEGATION,
 >({
   selectedSigner,
   signerClientOptions = {},
-  authKind,
+  authType,
 }: {
   selectedSigner?: Signer
-  authKind?: T
-  signerClientOptions?: T extends typeof IdentityKitAuthKind.DELEGATION
+  authType?: T
+  signerClientOptions?: T extends typeof IdentityKitAuthType.DELEGATION
     ? Omit<IdentityKitDelegationSignerClientOptions, "signer">
     : Omit<IdentityKitAccountsSignerClientOptions, "signer">
   signerAgentOptions?: {
@@ -33,7 +32,7 @@ export function useCreateIdentityKit<
     DelegationSignerClient | AccountsSignerClient | undefined
   >()
   const signerClientClass =
-    !authKind || authKind === IdentityKitAuthKind.DELEGATION
+    !authType || authType === IdentityKitAuthType.DELEGATION
       ? IdentityKitDelegationSignerClient
       : IdentityKitAccountsSignerClient
 
