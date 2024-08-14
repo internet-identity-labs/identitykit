@@ -36,7 +36,7 @@ wallet configuration. Ensure that each field is correctly filled out:
   [ICRC standards](https://github.com/dfinity/wg-identity-authentication/tree/main).
 - transportType: The method your wallet uses to communicate with the client's dApp. If your wallet
   is an extension, use `TransportType.EXTENSION`. For web dApps, you can choose
-  `TransportType.POPUP`.
+  `TransportType.NEW_TAB`.
 - label: The display name of your wallet.
 - icon: A base64-encoded SVG image representing your wallet.
 
@@ -47,7 +47,7 @@ const YourWalletSigner: SignerConfig = {
   id: "YourWalletSignerIdentifier",
   description: "Your wallet description.",
   providerUrl: "https://your-wallet-rpc-url.com",
-  transportType: TransportType.POPUP,
+  transportType: TransportType.NEW_TAB,
   label: "Your Wallet Name",
   icon: "data:image/svg+xml;base64,PHN2ZyB3aWR0ac+Cg==",
 }

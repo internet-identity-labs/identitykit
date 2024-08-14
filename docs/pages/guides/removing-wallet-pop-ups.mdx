@@ -46,29 +46,9 @@ Read more about the
 [ICRC-28](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md)
 standard.
 
-### 3. ICRC-10 setup
+### 2. List your canisters as targets
 
-**SKIP THIS STEP for now**
-
-[ICRC-10](https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-10/ICRC-10.md) describes the standard
-method for simplifying the discovery of a canister's supported standards on the Internet Computer.
-
-List ICRC-28 and any other standards your canisters support for each of your canisters.
-
-#### Rust implementation
-
-```rust
-#[query]
-fn icrc10_supported_standards() -> Vec<Record> {
-  record { name = "ICRC-10"; url = "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-10/ICRC-10.md"; }
-  record { name = "ICRC-28"; url = "https://github.com/dfinity/ICRC/tree/main/ICRCs/ICRC-28/ICRC-28.md"; }
-  // list all other supported standards
-}
-```
-
-### 4. List your canisters as targets
-
-Import `IdentityKitAuthType`, add `authOption={IdentityKitAuthType.DELEGATION}`, and your list of
+Import `IdentityKitAuthType`, add `authType={IdentityKitAuthType.ACCOUNTS}`, and your list of
 `targets` to `IdentityKitProvider`.
 
 ```typescript
@@ -77,7 +57,7 @@ import { IdentityKitAuthType } from "@nfid/identitykit"
 const App = () => {
   return (
     <IdentityKitProvider
-      authOption={IdentityKitAuthType.DELEGATION}
+      authType={IdentityKitAuthType.DELEGATION}
       targets=["canisterID1", "canisterID2",...]
       {...etc}
     >
@@ -87,7 +67,7 @@ const App = () => {
 };
 ```
 
-### 5. Check Delegation
+### 3. Check Delegation `WIP`
 
 Users will choose whether to continue to your application with a delegation for their main wallet
 address or for a wallet address specific to your app's URL. You'll know which you've received:

@@ -92,15 +92,16 @@ might access your application from:
 `true`.
 
 ```typescript
+import { IdentityKitProvider } from "@nfid/identitykit/react"
+import { NFIDW } from "@nfid/identitykit"
+
 const App = () => {
   return (
     <IdentityKitProvider
-      authOption="account"
-      walletsList=["NFIDWallet", "Plug", "Oisy"]
-      modalMode="featured"
-      featuredWallet="NFIDWallet"
+      authType={IdentityKitAuthType.ACCOUNTS}
+      signers={[NFIDW]}
+      featuredSigner={NFIDW}
       theme={systemTheme()}
-      production="true"
     >
       {/* Your App */}
     </IdentityKitProvider>
@@ -115,15 +116,16 @@ Setting your `derivationOrigin` to the default canister deployment location
 you [change your frontend URL](./configuring-custom-domain).
 
 ```typescript
+import { IdentityKitProvider } from "@nfid/identitykit/react"
+import { NFIDW } from "@nfid/identitykit"
+
 const App = () => {
   return (
     <IdentityKitProvider
-      authOption="account"
-      walletsList=["NFIDWallet", "Plug", "Oisy"]
-      modalMode="featured"
-      featuredWallet="NFIDWallet"
+      authType={IdentityKitAuthType.ACCOUNTS}
+      signers={[NFIDW]}
+      featuredSigner={NFIDW}
       theme={systemTheme()}
-      production="true"
       derivationOrigin="https://your-canister-id.icp0.io"
     >
       {/* Your App */}

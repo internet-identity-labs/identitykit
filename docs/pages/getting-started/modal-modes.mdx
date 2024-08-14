@@ -18,9 +18,12 @@ By default, IdentityKit's `modalMode` is set to `featured` (and looks like this)
 ![NFID Featured Mode](../../../docs/public/img/featured-mode-light.png)
 
 ```typescript
+import { IdentityKitProvider } from "@nfid/identitykit/react"
+import { NFIDW } from "@nfid/identitykit"
+
 export const App = () => (
   <IdentityKitProvider
-    featuredWallet="NFIDW"
+    featuredSigner={[NFIDW]}
     {...etc}
   >
     {/* Your App */}
@@ -36,13 +39,13 @@ We also provide a compact mode, which looks like this:
 
 ![NFID Compact Mode](../../../docs/public/img/compact-mode-light.png)
 
-To set your modal size to `compact`, just add `modalMode="compact"` as a prop in your
-IdentityKitProvider:
+To set your modal size to `compact`, just leave featuredSigner empty. IdentityKitProvider:
 
 ```typescript
+import { IdentityKitProvider } from "@nfid/identitykit/react"
+
 export const App = () => (
   <IdentityKitProvider
-    modalMode="compact"
     {...etc}
   >
     {/* Your App */}
