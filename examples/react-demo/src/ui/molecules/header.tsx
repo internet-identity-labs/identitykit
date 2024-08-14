@@ -35,10 +35,17 @@ export const Header = ({
           alt="nfid"
         />
         <div className="flex items-center space-x-2 sm:space-x-4">
-          <p className="text-sm font-bold hidden sm:block">NFID IdentityKit Docs</p>
+          <a
+            target="_blank"
+            href="https://docs.identitykit.xyz/"
+            className="text-sm font-bold hidden sm:block"
+          >
+            NFID IdentityKit Docs
+          </a>
           <img
-            className="block sm:hidden"
+            className="block sm:hidden cursor-pointer"
             src={theme === "light" ? IconSvgDocsLight : IconSvgDocsDark}
+            onClick={() => window.open("https://docs.identitykit.xyz/", "_blank")}
             alt="docs"
           />
           {theme === "light" ? (
