@@ -83,14 +83,6 @@ export const Section: React.FC<ISection> = ({
 
     const requestObject = getRequestObject(requestValue)
 
-    if (
-      !["greet", "greet_no_consent", "transfer"].includes(requestObject.params?.method) &&
-      "icrc49_call_canister" === requestObject.method
-    ) {
-      setIsLoading(false)
-      return toast.error("Method is not supported")
-    }
-
     let res
 
     try {
