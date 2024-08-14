@@ -87,7 +87,7 @@ jobs:
           fi
 
       - name: 🤖 Build
-        run: npm run build-package @nfid/${{ github.event.inputs.package }}
+        run: npm run build-identitykit
 
       - name: 📦 Publish package on NPM
         if: ${{ github.event.inputs.registry == 'npm' }}
