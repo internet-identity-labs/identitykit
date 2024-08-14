@@ -6,6 +6,7 @@ import { IdentityKitAuthType, MockedSigner, NFIDW, SignerConfig } from "@nfid/id
 
 const mockedSignerProviderUrl = import.meta.env.VITE_MOCKED_SIGNER_PROVIDER_URL
 const nfidSignerProviderUrl = import.meta.env.VITE_MOCKED_NFID_SIGNER_PROVIDER_URL
+const targetCanister = import.meta.env.VITE_TARGET_CANISTER
 
 export function AppWrappedInIdentityKit() {
   const [authType, setAuthType] = useState<IdentityKitAuthType>(IdentityKitAuthType.DELEGATION)
@@ -19,6 +20,9 @@ export function AppWrappedInIdentityKit() {
       featuredSigner={nfidw}
       theme={theme as IdentityKitTheme}
       authType={authType}
+      signerClientOptions={{
+        targets: [targetCanister],
+      }}
     >
       <App authType={authType} setAuthType={setAuthType} />
     </IdentityKitProvider>
