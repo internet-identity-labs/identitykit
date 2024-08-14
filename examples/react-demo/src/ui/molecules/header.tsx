@@ -7,11 +7,7 @@ import {
   IconSvgDocsLight,
   IconSvgDocsDark,
 } from "../atoms/icons"
-import {
-  formatIcp,
-  IdentityKitConnectWallet,
-  IdentityKitConnectWalletButton,
-} from "@nfid/identitykit/react"
+import { formatIcp, ConnectWallet, ConnectWalletButton } from "@nfid/identitykit/react"
 import { toast } from "react-toastify"
 
 export const Header = ({
@@ -63,7 +59,7 @@ export const Header = ({
               onClick={() => setTheme("light")}
             />
           )}
-          <IdentityKitConnectWallet
+          <ConnectWallet
             triggerManualDisconnect={triggerManualWalletDisconnect}
             onConnectFailure={(e) => {
               toast.error(e.message)
@@ -72,10 +68,7 @@ export const Header = ({
             onDisconnect={onWalletDisconnect}
             buttonComponent={(props) => {
               return (
-                <IdentityKitConnectWalletButton
-                  {...props}
-                  className="min-w-[100px] sm:min-w-[140px]"
-                >
+                <ConnectWalletButton {...props} className="min-w-[100px] sm:min-w-[140px]">
                   {!props.connectedAccount ? (
                     <small className="flex">
                       Connect<span className="hidden md:block ms-2">wallet</span>
@@ -93,7 +86,7 @@ export const Header = ({
                       </div>
                     </>
                   )}
-                </IdentityKitConnectWalletButton>
+                </ConnectWalletButton>
               )
             }}
           />

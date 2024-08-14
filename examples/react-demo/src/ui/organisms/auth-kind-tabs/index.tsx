@@ -1,16 +1,16 @@
-import { IdentityKitAuthKind, IdentityKitAuthKindType } from "@nfid/identitykit"
+import { IdentityKitAuthType } from "@nfid/identitykit"
 import clsx from "clsx"
 import { ResponseSection } from "../../molecules/response-section"
 import { CodeSection } from "../../molecules/code-section"
 
-const getUsageExample = (authKind: IdentityKitAuthKindType) =>
+const getUsageExample = (authType: IdentityKitAuthType) =>
   `import { IdentityKitProvider, IdentityKitTheme, ConnectWalletButton } from "@nfid/identitykit/react"
-import { NFID, IdentityKitAuthKindType, IdentityKitAuthKind } from "@nfid/identitykit"
+import { NFIDW, IdentityKitAuthKindType, IdentityKitAuthKind } from "@nfid/identitykit"
 
 <IdentityKitProvider 
-  signers={[NFID]}
+  signers={[NFIDW]}
   theme={IdentityKitTheme.LIGHT} // LIGHT, DARK, SYSTEM (by default) 
-  authKind={IdentityKitAuthKind.${authKind}}
+  authKind={IdentityKitAuthKind.${authType}}
 >
   <ConnectWalletButton />
 </IdentityKitProvider>`
@@ -21,19 +21,19 @@ export function AuthKindTabs({
   accountsResponseJson = "{}",
   delegationResponseJson = "{}",
 }: {
-  value: IdentityKitAuthKindType
-  onChange: (kind: IdentityKitAuthKindType) => void
+  value: IdentityKitAuthType
+  onChange: (type: IdentityKitAuthType) => void
   accountsResponseJson?: string
   delegationResponseJson?: string
 }) {
-  const isAccounts = value === IdentityKitAuthKind.ACCOUNTS
+  const isAccounts = value === IdentityKitAuthType.ACCOUNTS
   return (
     <>
       <div className="font-semibold text-black dark:text-white border-b-2 border-grey-500 dark:border-zinc-700 w-auto mb-1">
         <ul className="flex flex-wrap">
           <li
             onClick={() => {
-              if (!isAccounts) onChange(IdentityKitAuthKind.ACCOUNTS)
+              if (!isAccounts) onChange(IdentityKitAuthType.ACCOUNTS)
             }}
             className={clsx(
               "w-1/2 sm:w-[150px] cursor-pointer border-b-2 -mb-[2px]",
@@ -46,7 +46,7 @@ export function AuthKindTabs({
           </li>
           <li
             onClick={() => {
-              if (isAccounts) onChange(IdentityKitAuthKind.DELEGATION)
+              if (isAccounts) onChange(IdentityKitAuthType.DELEGATION)
             }}
             className={clsx(
               "w-1/2 sm:w-[150px] cursor-pointer border-b-2 -mb-[2px]",
@@ -68,7 +68,7 @@ export function AuthKindTabs({
               other activity.
             </small>
             <ResponseSection value={accountsResponseJson} />
-            <CodeSection className="mt-3" value={getUsageExample(IdentityKitAuthKind.ACCOUNTS)} />
+            <CodeSection className="mt-3" value={getUsageExample(IdentityKitAuthType.ACCOUNTS)} />
           </>
         ) : (
           <>
@@ -77,7 +77,7 @@ export function AuthKindTabs({
               user's behalf, resulting in the removal of wallet approval prompts.
             </small>
             <ResponseSection value={delegationResponseJson} />
-            <CodeSection className="mt-3" value={getUsageExample(IdentityKitAuthKind.DELEGATION)} />
+            <CodeSection className="mt-3" value={getUsageExample(IdentityKitAuthType.DELEGATION)} />
           </>
         )}
       </div>
