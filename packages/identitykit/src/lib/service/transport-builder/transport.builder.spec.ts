@@ -4,8 +4,7 @@ import { getPopupTransportBuilder } from "./new-tab-transport.builder"
 import { getExtensionTransportBuilder } from "./extension-transport.builder"
 import { TransportBuilder, TransportBuilderRequest } from "./transport.builder"
 
-jest.mock("./popup-transport.builder")
-jest.mock("./iframe-transport.builder")
+jest.mock("./new-tab-transport.builder")
 jest.mock("./extension-transport.builder")
 
 describe("TransportBuilder", () => {
