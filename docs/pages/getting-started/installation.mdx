@@ -33,28 +33,27 @@ import { IdentityKitProvider } from "@nfid/identitykit/react"
 
 ### Wrap provider
 
-Wrap your application with `IdentityKitProvider`. IdentityKit is in development mode by default,
-which exposes the development wallet as the only selectable wallet until production mode is set.
+Wrap your application with `IdentityKitProvider`.
 
-```typescript
+```jsx
 const App = () => {
   return (
     <IdentityKitProvider>
-      {/* Your App */}
+      <YourApp />
     </IdentityKitProvider>
-  );
-};
+  )
+}
 ```
 
 ### Add the connect button
 
-Then, in your app, import and render the `ConnectButton` component.
+Then, in your app, import and render the `ConnectWallet` component.
 
 ```typescript
-import { ConnectWalletButton } from "@nfid/identitykit/react"
+import { ConnectWallet } from "@nfid/identitykit/react"
 
 export const YourApp = () => {
-  return <ConnectWalletButton />;
+  return <ConnectWallet />;
 };
 ```
 

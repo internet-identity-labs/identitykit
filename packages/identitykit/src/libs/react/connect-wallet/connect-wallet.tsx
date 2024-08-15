@@ -1,23 +1,28 @@
-import { useContext, useEffect, useState, ComponentType, useCallback } from "react"
+import { useContext, useEffect, useState, ComponentType, useCallback, ReactNode } from "react"
 import { IdentityKitContext } from "../context"
-import { Button, ButtonProps } from "./button"
-import { Dropdown, DropdownProps } from "./dropdown"
+import { ConnectButton, ConnectButtonProps } from "./connect-button"
+import { ConnectedButton, ConnectedButtonProps } from "./connected-button"
+import { DropdownMenu, DropdownMenuProps } from "./dropdown"
 import { IdentityKit } from "../../../lib/identity-kit"
 import { Principal } from "@dfinity/principal"
+import { MenuButton, MenuButtonProps } from "@headlessui/react"
+import { MenuAddressItem, MenuItems, MenuLogoutItem } from "./dropdown/menu"
 
 export function ConnectWallet({
   onConnectFailure,
   onConnectSuccess,
   onDisconnect,
-  buttonComponent,
-  dropdownComponent,
+  connectButtonComponent,
+  connectedButtonComponent,
+  dropdownMenuComponent,
   triggerManualDisconnect,
 }: {
   onConnectFailure?: (e: Error) => unknown
   onConnectSuccess?: (signerResponse: object) => unknown
   onDisconnect?: () => unknown
-  buttonComponent?: ComponentType<ButtonProps>
-  dropdownComponent?: ComponentType<DropdownProps>
+  connectButtonComponent?: ComponentType<ConnectButtonProps>
+  connectedButtonComponent?: ComponentType<ConnectedButtonProps>
+  dropdownMenuComponent?: ComponentType<DropdownMenuProps>
   triggerManualDisconnect?: boolean
 }) {
   const {
@@ -25,7 +30,7 @@ export function ConnectWallet({
     savedSigner,
     toggleModal,
     selectSigner,
-    signerAgentOptions,
+    agentOptions,
     signerClient,
     setSignerClient,
     shouldLogoutByIdle,
@@ -40,7 +45,7 @@ export function ConnectWallet({
         .login()
         .then((res) => {
           IdentityKit.setSignerAgent({
-            ...signerAgentOptions,
+            ...agentOptions,
             signer: selectedSigner,
             account: Principal.from(res.connectedAccount),
           })
@@ -56,7 +61,7 @@ export function ConnectWallet({
   useEffect(() => {
     if (!selectedSigner && savedSigner && signerClient?.connectedUser?.owner) {
       IdentityKit.setSignerAgent({
-        ...signerAgentOptions,
+        ...agentOptions,
         signer: savedSigner,
         account: Principal.fromText(signerClient?.connectedUser?.owner),
       })
@@ -83,12 +88,13 @@ export function ConnectWallet({
     if (triggerManualDisconnect || shouldLogoutByIdle) disconnect()
   }, [triggerManualDisconnect, shouldLogoutByIdle])
 
-  const ButtonComponent = buttonComponent ?? Button
-  const DropdownComponent = dropdownComponent ?? Dropdown
+  const ConnectButtonComponent = connectButtonComponent ?? ConnectButton
+  const ConnectedButtonComponent = connectedButtonComponent ?? ConnectedButton
+  const DropdownMenuComponent = dropdownMenuComponent ?? DropdownMenu
 
   if (!connectedAccount)
     return (
-      <ButtonComponent
+      <ConnectButtonComponent
         onClick={() => {
           toggleModal()
         }}
@@ -96,11 +102,25 @@ export function ConnectWallet({
     )
 
   return (
-    <DropdownComponent
-      buttonComponent={ButtonComponent}
-      connectedAccount={connectedAccount}
-      icpBalance={icpBalance}
-      onDisconnect={disconnect}
-    />
+    <>
+      <DropdownMenuComponent>
+        <MenuButton
+          as={({ className, children, ...props }: MenuButtonProps) => (
+            <ConnectedButtonComponent
+              connectedAccount={connectedAccount}
+              icpBalance={icpBalance}
+              className={className as string}
+              {...props}
+            >
+              {children as ReactNode}
+            </ConnectedButtonComponent>
+          )}
+        />
+        <MenuItems>
+          <MenuAddressItem value={connectedAccount} />
+          <MenuLogoutItem onClick={disconnect} />
+        </MenuItems>
+      </DropdownMenuComponent>
+    </>
   )
 }

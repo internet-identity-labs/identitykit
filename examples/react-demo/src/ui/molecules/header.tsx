@@ -7,7 +7,12 @@ import {
   IconSvgDocsLight,
   IconSvgDocsDark,
 } from "../atoms/icons"
-import { formatIcp, ConnectWallet, ConnectWalletButton } from "@nfid/identitykit/react"
+import {
+  formatIcp,
+  ConnectWallet,
+  ConnectWalletButton,
+  ConnectedWalletButton,
+} from "@nfid/identitykit/react"
 import { toast } from "react-toastify"
 
 export const Header = ({
@@ -66,27 +71,28 @@ export const Header = ({
             }}
             onConnectSuccess={onConnectWalletSuccess}
             onDisconnect={onWalletDisconnect}
-            buttonComponent={(props) => {
+            connectButtonComponent={(props) => {
               return (
                 <ConnectWalletButton {...props} className="min-w-[100px] sm:min-w-[140px]">
-                  {!props.connectedAccount ? (
-                    <small className="flex">
-                      Connect<span className="hidden md:block ms-2">wallet</span>
-                    </small>
-                  ) : (
-                    <>
-                      <small className="mr-2 hidden md:block">
-                        {props.connectedAccount.substring(0, 5)}...
-                        {props.connectedAccount.substring(props.connectedAccount.length - 5)}
-                      </small>
-                      <div className="bg-white px-[5px] rounded-md">
-                        <small className="text-black font-normal text-xs">
-                          {props.icpBalance !== undefined && `${formatIcp(props.icpBalance)} ICP`}
-                        </small>
-                      </div>
-                    </>
-                  )}
+                  <small className="flex">
+                    Connect<span className="hidden md:block ms-2">wallet</span>
+                  </small>
                 </ConnectWalletButton>
+              )
+            }}
+            connectedButtonComponent={(props) => {
+              return (
+                <ConnectedWalletButton {...props} className="min-w-[100px] sm:min-w-[140px]">
+                  <small className="mr-2 hidden md:block">
+                    {props.connectedAccount.substring(0, 5)}...
+                    {props.connectedAccount.substring(props.connectedAccount.length - 5)}
+                  </small>
+                  <div className="bg-white px-[5px] rounded-md">
+                    <small className="text-black font-normal text-xs">
+                      {props.icpBalance !== undefined && `${formatIcp(props.icpBalance)} ICP`}
+                    </small>
+                  </div>
+                </ConnectedWalletButton>
               )
             }}
           />

@@ -5,17 +5,17 @@ import { CodeSection } from "../../molecules/code-section"
 
 const getUsageExample = (authType: IdentityKitAuthType) =>
   `import { IdentityKitProvider, IdentityKitTheme, ConnectWalletButton } from "@nfid/identitykit/react"
-import { NFIDW, IdentityKitAuthKindType, IdentityKitAuthKind } from "@nfid/identitykit"
+import { NFIDW, IdentityKitAuthType } from "@nfid/identitykit"
 
 <IdentityKitProvider 
   signers={[NFIDW]}
   theme={IdentityKitTheme.LIGHT} // LIGHT, DARK, SYSTEM (by default)
-  authType={IdentityKitAuthKind.${authType}} // DELEGATION, ACCOUNTS (by default)
+  authType={IdentityKitAuthType.${authType}} // DELEGATION, ACCOUNTS (by default)
 >
   <ConnectWalletButton />
 </IdentityKitProvider>`
 
-export function AuthKindTabs({
+export function AuthTypeTabs({
   value,
   onChange,
   accountsResponseJson = "{}",

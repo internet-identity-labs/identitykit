@@ -2,20 +2,20 @@ import clsx from "clsx"
 import { MouseEventHandler, PropsWithChildren } from "react"
 import { formatIcp } from "../utils"
 
-export type ButtonProps = PropsWithChildren<{
+export type ConnectedButtonProps = PropsWithChildren<{
   onClick?: MouseEventHandler<HTMLButtonElement>
-  connectedAccount?: string
+  connectedAccount: string
   icpBalance?: number
   className?: string
 }>
 
-export function Button({
+export function ConnectedButton({
   onClick,
   connectedAccount,
   icpBalance,
   className,
   children,
-}: ButtonProps) {
+}: ConnectedButtonProps) {
   return (
     <button
       id={"connect"}
@@ -23,9 +23,7 @@ export function Button({
       onClick={onClick}
       className={clsx(
         "border-transparent",
-        connectedAccount
-          ? "bg-gray-200 text-black hover:bg-gray-100 active:bg-gray-300 active:border-gray-200"
-          : "bg-primary text-white hover:bg-teal-600 active:bg-teal-700 active:border-primary",
+        "bg-gray-200 text-black hover:bg-gray-100 active:bg-gray-300 active:border-gray-200",
         "hover:shadow-md",
         "font-bold px-[10px] min-w-[140px] h-[40px] flex items-center justify-center",
         "px-[15px] rounded-xl border",
@@ -34,8 +32,6 @@ export function Button({
     >
       {children ? (
         children
-      ) : !connectedAccount ? (
-        <small>Connect wallet</small>
       ) : (
         <>
           <small className="mr-2">
