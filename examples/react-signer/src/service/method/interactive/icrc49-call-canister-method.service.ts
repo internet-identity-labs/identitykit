@@ -50,7 +50,7 @@ class Icrc49CallCanisterMethodService extends InteractiveMethodService {
     )
     const delegation = DelegationIdentity.fromDelegation(sessionKey, chain)
 
-    const agent: Agent = new HttpAgent({
+    const agent: Agent = HttpAgent.createSync({
       host: IC_HOSTNAME,
       identity: delegation as unknown as Identity,
     })
