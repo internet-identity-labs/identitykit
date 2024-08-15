@@ -5,12 +5,6 @@ authors:
   - name: "Dan Ostrovsky"
 ---
 
-# THIS PAGE IS A WIP
-
-![Static Badge](https://img.shields.io/badge/status-wip-red)
-
----
-
 # Using and customizing themes
 
 You can pick from a few pre-defined themes to match your branding.
@@ -21,19 +15,15 @@ There are 3 built-in theme functions:
 - `DARK`
 - `LIGHT`
 
-A theme function returns a theme object. You can pass the object to the `IdentityKitProvider`'s
-`theme` prop.
+You can pass one of the `IdentityKitTheme` values to the `IdentityKitProvider`'s `theme` prop.
 
-```typescript
+```jsx
 import { IdentityKitProvider } from "@nfid/identitykit/react"
 import { IdentityKitTheme } from "@nfid/identitykit/react"
 
 export const App = () => (
-  <IdentityKitProvider
-    theme={IdentityKitTheme.DARK}
-    {...etc}
-  >
+  <IdentityKitProvider theme={IdentityKitTheme.DARK} {...etc}>
     {/* Your App */}
   </IdentityKitProvider>
-);
+)
 ```

@@ -50,7 +50,7 @@ export const Section: React.FC<ISection> = ({
   const [responseValue, setResponseValue] = useState("{}")
   const [icrc49ActorResponse, setIcrc49ActorResponse] = useState<string | undefined>(undefined)
 
-  const { selectedSigner, savedSigner, signerClient, signerAgent } = useIdentityKit()
+  const { selectedSigner, savedSigner, signerClient, agent } = useIdentityKit()
 
   useEffect(() => {
     if (signerClient?.connectedUser?.owner) {
@@ -86,7 +86,7 @@ export const Section: React.FC<ISection> = ({
         setIcrc49ActorResponse(undefined)
         const { canisterId } = requestObject.params
         const actor = Actor.createActor(canistersIDLs[canisterId], {
-          agent: signerAgent,
+          agent,
           canisterId,
         })
 

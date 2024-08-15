@@ -13,17 +13,9 @@ Account.
 If the user connected with a Relying Party Delegation, your application can already call the ledger
 on the user's behalf.
 
-```
-// signerAgent will know which is the currently connected wallet
-const { signerAgent } = useIdentityKit()
-
-// the connected wallet's principal
-const connectedPrincipal = SOME_PRINCIPAL
-
-// create an agent for the currently connected wallet
-const agent = new signerAgent({
-  getPrincipal: () => Principal.fromText(connectedPrincipal),
-})
+```typescript
+// agent will know which is the currently connected wallet
+const { agent } = useIdentityKit()
 
 // you'll need to import the idlFactory for ICP (or any other ledger canister)
 // and specify which canister you're calling, in this case the ICP ledger.

@@ -25,7 +25,7 @@ const defaultState: IdentityKitProvider = {
     throw new Error("signer is not available on this url")
   },
   theme: IdentityKitTheme.SYSTEM,
-  signerAgentOptions: {} as {
+  agentOptions: {} as {
     signer?: IdentityKitSignerAgentOptions["signer"]
     agent?: IdentityKitSignerAgentOptions["agent"]
   },
@@ -41,7 +41,7 @@ export function useIdentityKit(): {
   savedSigner?: Signer
   selectSigner: (signerId?: string | undefined) => void | SignerConfig
   signerClient?: DelegationSignerClient | AccountsSignerClient
-  signerAgent: IdentityKitSignerAgent
+  agent: IdentityKitSignerAgent
 } {
   const { selectedSigner, selectSigner, signerClient, savedSigner } = useContext(IdentityKitContext)
 
@@ -50,6 +50,6 @@ export function useIdentityKit(): {
     savedSigner,
     selectSigner,
     signerClient,
-    signerAgent: IdentityKit.signerAgent,
+    agent: IdentityKit.signerAgent,
   }
 }

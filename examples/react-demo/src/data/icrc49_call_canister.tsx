@@ -84,9 +84,9 @@ const transferArgs = {
 const response = await actor.${basicRequest.params.method}(transferArgs)`
     }
 
-    return `const { signerAgent } = useIdentityKit()
+    return `const { agent } = useIdentityKit()
 const actor = Actor.createActor(idlFactory, {
-  agent: signerAgent,
+  agent,
   canisterId: "${basicRequest.params.canisterId}",
 })
 const response = await actor.${basicRequest.params.method}("me")`

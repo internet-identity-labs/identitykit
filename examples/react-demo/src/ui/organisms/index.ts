@@ -1,1 +1,1 @@
-export * from "./auth-kind-tabs"
+export * from "./auth-type-tabs"

@@ -23,7 +23,7 @@ export function useCreateIdentityKit<
   signerClientOptions?: T extends typeof IdentityKitAuthType.DELEGATION
     ? Omit<IdentityKitDelegationSignerClientOptions, "signer">
     : Omit<IdentityKitAccountsSignerClientOptions, "signer">
-  signerAgentOptions?: {
+  agentOptions?: {
     signer?: IdentityKitSignerAgentOptions["signer"]
     agent?: IdentityKitSignerAgentOptions["agent"]
   }

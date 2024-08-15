@@ -8,6 +8,7 @@ import {
   IdentityKitAccountsSignerClientOptions,
   IdentityKitDelegationSignerClientOptions,
   IdentityKitSignerAgentOptions,
+  NFIDW,
 } from "../../lib"
 import { useCreateIdentityKit, useLogoutOnIdle, useSigner, useTheme } from "./hooks"
 
@@ -15,13 +16,13 @@ interface IdentityKitProviderProps<
   T extends IdentityKitAuthType = typeof IdentityKitAuthType.DELEGATION,
 > extends PropsWithChildren {
   authType?: T
-  signers: SignerConfig[]
-  featuredSigner?: SignerConfig
+  signers?: SignerConfig[]
+  featuredSigner?: SignerConfig | false
   theme?: IdentityKitTheme
   signerClientOptions?: T extends typeof IdentityKitAuthType.DELEGATION
     ? Omit<IdentityKitDelegationSignerClientOptions, "signer">
     : Omit<IdentityKitAccountsSignerClientOptions, "signer">
-  signerAgentOptions?: {
+  agentOptions?: {
     signer?: IdentityKitSignerAgentOptions["signer"]
     agent?: IdentityKitSignerAgentOptions["agent"]
   }
@@ -31,9 +32,8 @@ globalThis.global = globalThis
 
 export const IdentityKitProvider = <T extends IdentityKitAuthType>({
   children,
-  signers,
   signerClientOptions,
-  signerAgentOptions,
+  agentOptions,
   authType,
   featuredSigner,
   ...props
@@ -42,6 +42,8 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
   const toggleModal = useCallback(() => {
     setIsModalOpen((prev) => !prev)
   }, [])
+
+  const signers = !props.signers || !props.signers.length ? [NFIDW] : props.signers
 
   const { selectSigner, selectedSigner, savedSigner, selectCustomSigner } = useSigner({
     signers,
@@ -62,7 +64,7 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
         },
       },
     },
-    signerAgentOptions,
+    agentOptions,
     authType,
   })
 
@@ -79,8 +81,8 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
         selectSigner,
         selectCustomSigner,
         theme,
-        featuredSigner,
-        signerAgentOptions: signerAgentOptions,
+        featuredSigner: featuredSigner === false ? undefined : (featuredSigner ?? signers[0]),
+        agentOptions,
         signerClient,
         setSignerClient,
         shouldLogoutByIdle,

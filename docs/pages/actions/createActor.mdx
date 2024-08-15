@@ -22,10 +22,10 @@ import { idlFactory } from "/path/to/did.js"
 import { useIdentityKit } from "@nfid/identitykit"
 import { idlFactory } from '/path/to/did.js';
 
-const { signerAgent } = useIdentityKit()
+const { agent } = useIdentityKit()
 
 const actor = await Actor.createActor(idlFactory, {
-  signerAgent,
+  agent,
   CANISTER_ID_TO_CALL
 })
 

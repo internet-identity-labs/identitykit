@@ -1,0 +1,43 @@
+---
+title: "Featured Signer"
+date: "2024-06-03"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+By default, IdentityKit's `featuredSigner` is set to `NFIDW` in case `signers` prop includes `NFIDW`
+or was not provided (and looks like this):
+
+![NFID Featured Signer](../../../docs/public/img/featured-mode-light.png)
+
+```jsx
+import { IdentityKitProvider } from "@nfid/identitykit/react"
+import { NFIDW } from "@nfid/identitykit"
+
+export const App = () => (
+  <IdentityKitProvider featuredSigner={[NFIDW]} {...etc}>
+    {/* Your App */}
+  </IdentityKitProvider>
+)
+```
+
+Available options for `featuredSigner`:
+
+- `NFIDW`
+- `false{:jsx}`
+
+Modal can also be used without `featuredSigner`, and will look like this:
+
+![NFID No featured signer](../../../docs/public/img/compact-mode-light.png)
+
+To disable `featuredSigner`, just set `featuredSigner={false}{:jsx}`. IdentityKitProvider:
+
+```jsx
+import { IdentityKitProvider } from "@nfid/identitykit/react"
+
+export const App = () => (
+  <IdentityKitProvider featuredSigner={false} {...etc}>
+    {/* Your App */}
+  </IdentityKitProvider>
+)
+```

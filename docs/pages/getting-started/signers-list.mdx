@@ -21,18 +21,16 @@ standards:
 - Oisy Wallet (signerName: OISY) `WIP`
 - Internet Identity (signerName: II) `WIP`
 
-To reorder your wallets list, just add `signers=[signers]` as a prop in your IdentityKitProvider:
+To reorder your wallets list, just add `signers={[your_signers]}{:jsx}` as a prop in your
+IdentityKitProvider:
 
-```typescript
+```jsx
 import { IdentityKitProvider } from "@nfid/identitykit/react"
 import { NFIDW } from "@nfid/identitykit"
 
 export const App = () => (
-  <IdentityKitProvider
-    signers={[NFIDW]}
-    {...etc}
-  >
-    {/* Your App */}
+  <IdentityKitProvider signers={[NFIDW]} {...etc}>
+    <YourApp />
   </IdentityKitProvider>
-);
+)
 ```

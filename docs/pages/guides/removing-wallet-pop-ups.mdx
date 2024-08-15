@@ -90,7 +90,7 @@ if IdentityKit.connectedWallet.isDelegation {
     // But every transaction to a non-target-canister WILL
 
     // Create your own agent when making calls to your own canisters
-    // Use the signerAgent from useIdentityKit hook when making calls to other canisters
+    // Use the agent from useIdentityKit hook when making calls to other canisters
 
   } else {
     // This is a Relying Party Delegation for the user's URL-specific wallet address
@@ -102,7 +102,7 @@ if IdentityKit.connectedWallet.isDelegation {
 } else {
   // Every transaction WILL result in a wallet approval pop-up
 
-  // Use the signerAgent from useIdentityKit hook when making calls to any canister
+  // Use the agent from useIdentityKit hook when making calls to any canister
 }
 
 ```

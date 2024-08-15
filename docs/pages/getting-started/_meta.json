@@ -1,7 +1,7 @@
 {
   "installation": "Installation",
-  "connect-button": "ConnectButton",
-  "modal-modes": "Modal Modes",
-  "theming": "Theming",
-  "signers-list": "Signers List"
+  "connect-wallet": "ConnectWallet",
+  "signers-list": "Signers List",
+  "featured-signer": "Featured Signer",
+  "theming": "Theming"
 }

@@ -14,7 +14,7 @@ export interface IdentityKitProvider {
   selectSigner: (signerId?: string) => SignerConfig | void
   selectCustomSigner: (url: string) => void
   theme: IdentityKitTheme
-  signerAgentOptions?: {
+  agentOptions?: {
     signer?: IdentityKitSignerAgentOptions["signer"]
     agent?: IdentityKitSignerAgentOptions["agent"]
   }

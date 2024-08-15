@@ -4,7 +4,7 @@ import { Section } from "./ui/organisms/section"
 import { ToastContainer } from "react-toastify"
 import { IdentityKitAuthType } from "@nfid/identitykit"
 import { useState } from "react"
-import { AuthKindTabs } from "./ui/organisms"
+import { AuthTypeTabs } from "./ui/organisms"
 
 function App({
   authType,
@@ -14,7 +14,7 @@ function App({
   setAuthType: (k: IdentityKitAuthType) => void
 }) {
   const [connectWalletSignerResponse, setConnectWalletSignerResponse] = useState("{}")
-  const [authKindSwitched, setAuthKindSwitched] = useState(false)
+  const [authTypeSwitched, setAuthTypeSwitched] = useState(false)
   const [shouldDisconnectWallet, setShouldDisconnectWallet] = useState(false)
 
   return (
@@ -33,20 +33,20 @@ function App({
       <h5 className="font-semibold mb-4 mt-6 sm:mt-12">
         1. Choose which authentication method your users will connect with
       </h5>
-      <AuthKindTabs
+      <AuthTypeTabs
         value={authType}
-        onChange={(kind) => {
-          setAuthType(kind)
-          setAuthKindSwitched(!authKindSwitched)
+        onChange={(type) => {
+          setAuthType(type)
+          setAuthTypeSwitched(!authTypeSwitched)
           setShouldDisconnectWallet(true)
         }}
         accountsResponseJson={
-          authType === IdentityKitAuthType.ACCOUNTS && authKindSwitched
+          authType === IdentityKitAuthType.ACCOUNTS && authTypeSwitched
             ? connectWalletSignerResponse
             : undefined
         }
         delegationResponseJson={
-          authType === IdentityKitAuthType.DELEGATION && !authKindSwitched
+          authType === IdentityKitAuthType.DELEGATION && !authTypeSwitched
             ? connectWalletSignerResponse
             : undefined
         }

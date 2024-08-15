@@ -86,37 +86,14 @@ might access your application from:
 
 ## IdentityKitProvider steps
 
-### 1. Add `production` prop
-
-[Make production ICP wallets available](/miscellaneous/local-development) by setting `production` to
-`true`.
-
-```typescript
-import { IdentityKitProvider } from "@nfid/identitykit/react"
-import { NFIDW } from "@nfid/identitykit"
-
-const App = () => {
-  return (
-    <IdentityKitProvider
-      authType={IdentityKitAuthType.ACCOUNTS}
-      signers={[NFIDW]}
-      featuredSigner={NFIDW}
-      theme={systemTheme()}
-    >
-      {/* Your App */}
-    </IdentityKitProvider>
-  );
-};
-```
-
-### 2. Add `derivationOrigin` prop
+### 1. Add `derivationOrigin` prop
 
 Setting your `derivationOrigin` to the default canister deployment location
 (https://your-canister-id.icp0.io) will ensure your users authenticate against that origin even if
 you [change your frontend URL](./configuring-custom-domain).
 
-```typescript
-import { IdentityKitProvider } from "@nfid/identitykit/react"
+```jsx
+import { IdentityKitProvider, IdentityKitTheme } from "@nfid/identitykit/react"
 import { NFIDW } from "@nfid/identitykit"
 
 const App = () => {
@@ -125,16 +102,16 @@ const App = () => {
       authType={IdentityKitAuthType.ACCOUNTS}
       signers={[NFIDW]}
       featuredSigner={NFIDW}
-      theme={systemTheme()}
+      theme={IdentityKitTheme.LIGHT}
       derivationOrigin="https://your-canister-id.icp0.io"
     >
       {/* Your App */}
     </IdentityKitProvider>
-  );
-};
+  )
+}
 ```
 
-### 3. Deploy to production
+### 2. Deploy to production
 
 You're now ready to deploy!
 
