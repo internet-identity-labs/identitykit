@@ -57,20 +57,22 @@ standard.
 
 ### 2. List your canisters as targets
 
-Import `IdentityKitAuthType`, add `authType={IdentityKitAuthType.ACCOUNTS}`, and your list of
+Import `IdentityKitAuthType`, add `authType={IdentityKitAuthType.DELEGATION}`, and your list of
 `targets` to `IdentityKitProvider`.
 
-```typescript
+```jsx
 import { IdentityKitAuthType } from "@nfid/identitykit"
 
 const App = () => {
   return (
     <IdentityKitProvider
       authType={IdentityKitAuthType.DELEGATION}
-      targets=["canisterID1", "canisterID2",...]
+      signerClientOptions={{
+        targets=["canisterID1", "canisterID2",...]
+      }}
       {...etc}
     >
-      {/* Your App */}
+      <YourApp />
     </IdentityKitProvider>
   );
 };

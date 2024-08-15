@@ -12,7 +12,7 @@ import { Signer } from "@slide-computer/signer"
 import { AccountsSignerClient, DelegationSignerClient } from "../../../lib/signer-client"
 
 export function useCreateIdentityKit<
-  T extends IdentityKitAuthType = typeof IdentityKitAuthType.DELEGATION,
+  T extends IdentityKitAuthType = typeof IdentityKitAuthType.ACCOUNTS,
 >({
   selectedSigner,
   signerClientOptions = {},

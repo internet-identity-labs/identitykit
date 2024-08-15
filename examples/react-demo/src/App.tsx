@@ -41,12 +41,12 @@ function App({
           setShouldDisconnectWallet(true)
         }}
         accountsResponseJson={
-          authType === IdentityKitAuthType.ACCOUNTS && authTypeSwitched
+          authType === IdentityKitAuthType.ACCOUNTS && !authTypeSwitched
             ? connectWalletSignerResponse
             : undefined
         }
         delegationResponseJson={
-          authType === IdentityKitAuthType.DELEGATION && !authTypeSwitched
+          authType === IdentityKitAuthType.DELEGATION && authTypeSwitched
             ? connectWalletSignerResponse
             : undefined
         }

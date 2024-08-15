@@ -13,7 +13,7 @@ import {
 import { useCreateIdentityKit, useLogoutOnIdle, useSigner, useTheme } from "./hooks"
 
 interface IdentityKitProviderProps<
-  T extends IdentityKitAuthType = typeof IdentityKitAuthType.DELEGATION,
+  T extends IdentityKitAuthType = typeof IdentityKitAuthType.ACCOUNTS,
 > extends PropsWithChildren {
   authType?: T
   signers?: SignerConfig[]
