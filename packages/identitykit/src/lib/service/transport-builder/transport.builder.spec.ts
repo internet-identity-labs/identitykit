@@ -19,7 +19,7 @@ describe("TransportBuilder", () => {
     jest.clearAllMocks()
   })
 
-  it("should build a POPUP transport", () => {
+  it("should build a NEW_TAB transport", () => {
     const request: TransportBuilderRequest = {
       transportType: TransportType.NEW_TAB,
       url: "https://example.com",

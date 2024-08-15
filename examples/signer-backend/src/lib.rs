@@ -1,7 +1,7 @@
 use crate::types::{
     Icrc21ConsentInfo, Icrc21ConsentMessage, Icrc21ConsentMessageMetadata,
     Icrc21ConsentMessageRequest, Icrc21DeviceSpec, Icrc21Error, Icrc21ErrorInfo,
-    Icrc21LineDisplayPage, Icrc21SupportedStandard,
+    Icrc21LineDisplayPage, Icrc21SupportedStandard, Icrc28TrustedOriginsResponse
 };
 use ic_cdk::{query, update};
 use itertools::Itertools;
@@ -11,8 +11,8 @@ use Icrc21Error::UnsupportedCanisterCall;
 mod types;
 
 #[update]
-fn get_trusted_origins() -> Vec<String> {
-    return vec![
+fn icrc28_trusted_origins() -> Icrc28TrustedOriginsResponse {
+    let trusted_origins = vec![
         String::from("https://standards.identitykit.xyz"),
         String::from("https://dev.standards.identitykit.xyz"),
         String::from("https://demo.identitykit.xyz"),
@@ -22,6 +22,8 @@ fn get_trusted_origins() -> Vec<String> {
         String::from("https://nfid.one"),
         String::from("https://dev.nfid.one"),
     ];
+
+    return Icrc28TrustedOriginsResponse { trusted_origins }
 }
 
 #[query]

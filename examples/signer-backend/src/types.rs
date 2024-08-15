@@ -66,3 +66,8 @@ pub struct Icrc21SupportedStandard {
     pub url: String,
     pub name: String,
 }
+
+#[derive(Clone, Debug, CandidType, Deserialize)]
+pub struct Icrc28TrustedOriginsResponse {
+    pub trusted_origins: Vec<String>
+}

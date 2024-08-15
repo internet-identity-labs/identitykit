@@ -24,9 +24,16 @@ have one item for every domain that should have authority to call your canisters
 connected wallets without prompting them with transaction approval messages.
 
 ```rust
+use candid::{self, CandidType, Deserialize};
+
+#[derive(Clone, Debug, CandidType, Deserialize)]
+pub struct Icrc28TrustedOriginsResponse {
+    pub trusted_origins: Vec<String>
+}
+
 #[update]
-fn icrc28_trusted_origins() -> Vec<String> {
-    return vec![
+fn icrc28_trusted_origins() -> Icrc28TrustedOriginsResponse {
+    let trusted_origins = vec![
         String::from("https://your-canister-id.icp0.io"),
         String::from("https://your-canister-id.raw.icp0.io"),
         String::from("https://your-canister-id.ic0.app"),
@@ -36,6 +43,8 @@ fn icrc28_trusted_origins() -> Vec<String> {
         String::from("https://yourcustomdomain.com"),
         String::from("https://yourothercustomdomain.com")
     ];
+
+    return Icrc28TrustedOriginsResponse { trusted_origins }
 }
 ```
 

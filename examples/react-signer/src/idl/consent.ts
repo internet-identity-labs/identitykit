@@ -44,8 +44,10 @@ export type icrc21_error =
 export interface icrc21_error_info {
   description: string
 }
+export interface icrc28_trusted_origins_response {
+  trusted_origins: Array<string>
+}
 export interface _SERVICE {
-  get_trusted_origins: ActorMethod<[], Array<string>>
   greet: ActorMethod<[string], string>
   greet_no_consent: ActorMethod<[string], string>
   icrc10_supported_standards: ActorMethod<[], Array<{ url: string; name: string }>>
@@ -53,6 +55,7 @@ export interface _SERVICE {
     [icrc21_consent_message_request],
     icrc21_consent_message_response
   >
+  icrc28_trusted_origins: ActorMethod<[], icrc28_trusted_origins_response>
 }
 export declare const idlFactory: IDL.InterfaceFactory
 export declare const init: (args: { IDL: typeof IDL }) => IDL.Type[]
