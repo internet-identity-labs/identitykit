@@ -17,13 +17,16 @@ By default, IdentityKit's `signers` is set to the order in which wallets adopted
 standards:
 
 - NFID Wallet (signerName: NFIDW)
-- Plug Wallet (signerName: PLUG)
-- Oisy Wallet (signerName: OISY)
-- Internet Identity (signerName: II)
+- Plug Wallet (signerName: PLUG) `WIP`
+- Oisy Wallet (signerName: OISY) `WIP`
+- Internet Identity (signerName: II) `WIP`
 
 To reorder your wallets list, just add `signers=[signers]` as a prop in your IdentityKitProvider:
 
 ```typescript
+import { IdentityKitProvider } from "@nfid/identitykit/react"
+import { NFIDW } from "@nfid/identitykit"
+
 export const App = () => (
   <IdentityKitProvider
     signers={[NFIDW]}

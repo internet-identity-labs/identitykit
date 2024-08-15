@@ -1,12 +1,10 @@
 import { Transport } from "@slide-computer/signer"
 import { TransportType } from "../../types"
-import { getPopupTransportBuilder } from "./popup-transport.builder"
-import { getIframeTransportBuilder } from "./iframe-transport.builder"
+import { getPopupTransportBuilder } from "./new-tab-transport.builder"
 import { getExtensionTransportBuilder } from "./extension-transport.builder"
 import { TransportBuilder, TransportBuilderRequest } from "./transport.builder"
 
-jest.mock("./popup-transport.builder")
-jest.mock("./iframe-transport.builder")
+jest.mock("./new-tab-transport.builder")
 jest.mock("./extension-transport.builder")
 
 describe("TransportBuilder", () => {
@@ -14,7 +12,6 @@ describe("TransportBuilder", () => {
 
   beforeEach(() => {
     ;(getPopupTransportBuilder as jest.Mock).mockReturnValue(mockTransport)
-    ;(getIframeTransportBuilder as jest.Mock).mockReturnValue(mockTransport)
     ;(getExtensionTransportBuilder as jest.Mock).mockReturnValue(mockTransport)
   })
 
@@ -24,25 +21,13 @@ describe("TransportBuilder", () => {
 
   it("should build a POPUP transport", () => {
     const request: TransportBuilderRequest = {
-      transportType: TransportType.POPUP,
+      transportType: TransportType.NEW_TAB,
       url: "https://example.com",
     }
 
     const result = TransportBuilder.build(request)
 
     expect(getPopupTransportBuilder).toHaveBeenCalledWith(request)
-    expect(result).toBe(mockTransport)
-  })
-
-  it("should build an IFRAME transport", () => {
-    const request: TransportBuilderRequest = {
-      transportType: TransportType.IFRAME,
-      url: "https://example.com",
-    }
-
-    const result = TransportBuilder.build(request)
-
-    expect(getIframeTransportBuilder).toHaveBeenCalledWith(request)
     expect(result).toBe(mockTransport)
   })
 

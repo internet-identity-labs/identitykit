@@ -8,7 +8,6 @@ export type SignerConfig = {
 }
 
 export enum TransportType {
-  POPUP,
-  IFRAME,
+  NEW_TAB,
   EXTENSION,
 }

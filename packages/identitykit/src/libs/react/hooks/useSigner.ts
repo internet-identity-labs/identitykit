@@ -44,7 +44,7 @@ export function useSigner({
 
   const selectCustomSigner = useCallback((url: string) => {
     const transport = TransportBuilder.build({
-      transportType: TransportType.POPUP,
+      transportType: TransportType.NEW_TAB,
       url,
     })
 

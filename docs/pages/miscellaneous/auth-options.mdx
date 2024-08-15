@@ -58,12 +58,12 @@ Consider requesting a user's account when building dApps that:
 
 ### Usage
 
-Add the `authOption="account"` prop.
+Add the `authType={IdentityKitAuthType.ACCOUNTS}` prop.
 
 ```typescript
 const App = () => {
   return (
-    <IdentityKitProvider authOption="account" {...etc}>
+    <IdentityKitProvider authType={IdentityKitAuthType.ACCOUNTS} {...etc}>
       {/* Your App */}
     </IdentityKitProvider>
   );
@@ -86,13 +86,14 @@ Consider requesting a user's Account Delegation when building dApps that:
 
 ### Usage
 
-Add the `authOption="delegation"` prop and populate the `targets=""` prop with a list of canister
-IDs and follow the guide to [remove wallet approval pop-ups](/guides/removing-wallet-pop-ups).
+Add the `authType={IdentityKitAuthType.DELEGATION}` prop and populate the `targets=""` prop with a
+list of canister IDs and follow the guide to
+[remove wallet approval pop-ups](/guides/removing-wallet-pop-ups).
 
 ```typescript
 const App = () => {
   return (
-    <IdentityKitProvider authOption="delegation" targets="" {...etc}>
+    <IdentityKitProvider authType={IdentityKitAuthType.DELEGATION} targets="" {...etc}>
       {/* Your App */}
     </IdentityKitProvider>
   );
@@ -112,12 +113,12 @@ Consider requesting a user's relying party delegation when building dApps that:
 
 ### Usage
 
-Add the `authOption="delegation"` prop.
+Add the `authType={IdentityKitAuthType.DELEGATION}` prop.
 
 ```typescript
 const App = () => {
   return (
-    <IdentityKitProvider authOption="delegation" {...etc}>
+    <IdentityKitProvider authType={IdentityKitAuthType.DELEGATION} {...etc}>
       {/* Your App */}
     </IdentityKitProvider>
   );

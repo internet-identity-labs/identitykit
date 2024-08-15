@@ -9,8 +9,8 @@ import { NFIDW, IdentityKitAuthKindType, IdentityKitAuthKind } from "@nfid/ident
 
 <IdentityKitProvider 
   signers={[NFIDW]}
-  theme={IdentityKitTheme.LIGHT} // LIGHT, DARK, SYSTEM (by default) 
-  authKind={IdentityKitAuthKind.${authType}}
+  theme={IdentityKitTheme.LIGHT} // LIGHT, DARK, SYSTEM (by default)
+  authType={IdentityKitAuthKind.${authType}} // DELEGATION, ACCOUNTS (by default)
 >
   <ConnectWalletButton />
 </IdentityKitProvider>`

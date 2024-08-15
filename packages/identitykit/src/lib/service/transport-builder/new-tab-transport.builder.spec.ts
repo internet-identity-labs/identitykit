@@ -1,7 +1,7 @@
 import { TransportBuilderRequest } from "./transport.builder"
 import { PostMessageTransport } from "@slide-computer/signer-web"
 import { openPopup } from "../../../libs/react/utils"
-import { getPopupTransportBuilder } from "./popup-transport.builder"
+import { getPopupTransportBuilder } from "./new-tab-transport.builder"
 import { TransportType } from "../../types"
 
 jest.mock("@slide-computer/signer-web", () => ({
@@ -16,7 +16,7 @@ describe("getPopupTransportBuilder", () => {
   const mockUrl = "http://example.com"
 
   const request: TransportBuilderRequest = {
-    transportType: TransportType.POPUP,
+    transportType: TransportType.NEW_TAB,
     url: mockUrl,
   }
 
