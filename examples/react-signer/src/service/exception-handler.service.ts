@@ -8,7 +8,7 @@ class ExceptionHandlerService {
     console.error("ExceptionHandlerService", error)
 
     if (error instanceof NotSupportedError) {
-      this.postErrorMessage(message, 2000, "Not supported")
+      this.postErrorMessage(message, 2000, "Not supported", error.message)
     }
 
     if (error instanceof GenericError) {
