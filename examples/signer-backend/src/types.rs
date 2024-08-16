@@ -69,5 +69,7 @@ pub struct Icrc21SupportedStandard {
 
 #[derive(Clone, Debug, CandidType, Deserialize)]
 pub struct Icrc28TrustedOriginsResponse {
-    pub trusted_origins: Vec<String>
+    pub trusted_origins: Vec<String>,
+    pub certificate: Vec<u8>,
+    pub witness: Vec<u8>,
 }

@@ -1,18 +1,22 @@
-use crate::types::{
-    Icrc21ConsentInfo, Icrc21ConsentMessage, Icrc21ConsentMessageMetadata,
-    Icrc21ConsentMessageRequest, Icrc21DeviceSpec, Icrc21Error, Icrc21ErrorInfo,
-    Icrc21LineDisplayPage, Icrc21SupportedStandard, Icrc28TrustedOriginsResponse
-};
-use ic_cdk::{query, update};
+use ic_cdk::{init, print, query, update};
 use itertools::Itertools;
+
 use Icrc21DeviceSpec::GenericDisplay;
 use Icrc21Error::UnsupportedCanisterCall;
 
-mod types;
+use crate::cert_trusted::{get_trusted_origins_cert, update_trusted_origins};
+use crate::types::{
+    Icrc21ConsentInfo, Icrc21ConsentMessage, Icrc21ConsentMessageMetadata,
+    Icrc21ConsentMessageRequest, Icrc21DeviceSpec, Icrc21Error, Icrc21ErrorInfo,
+    Icrc21LineDisplayPage, Icrc21SupportedStandard, Icrc28TrustedOriginsResponse,
+};
 
-#[update]
-fn icrc28_trusted_origins() -> Icrc28TrustedOriginsResponse {
-    let trusted_origins = vec![
+mod types;
+mod cert_trusted;
+
+#[init]
+fn init() {
+    update_trusted_origins(vec![
         String::from("https://standards.identitykit.xyz"),
         String::from("https://dev.standards.identitykit.xyz"),
         String::from("https://demo.identitykit.xyz"),
@@ -21,9 +25,26 @@ fn icrc28_trusted_origins() -> Icrc28TrustedOriginsResponse {
         String::from("http://localhost:3002"),
         String::from("https://nfid.one"),
         String::from("https://dev.nfid.one"),
-    ];
+    ]);
+    print("ICRC-28 Trusted Origins initialized");
+}
 
-    return Icrc28TrustedOriginsResponse { trusted_origins }
+
+#[query]
+fn icrc28_trusted_origins() -> Icrc28TrustedOriginsResponse {
+    let certified_response = get_trusted_origins_cert();
+
+    return Icrc28TrustedOriginsResponse {
+        trusted_origins: certified_response.response,
+        certificate: certified_response.certificate,
+        witness: certified_response.witness,
+    };
+}
+
+
+#[query]
+fn aaa() -> String {
+    "aaa".to_string()
 }
 
 #[query]
