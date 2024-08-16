@@ -5,8 +5,8 @@ import { idbRepository } from "./storage.service"
 const key = "auth"
 
 export enum PermissionMethod {
-  ICRC34_DELEGATION = "icrc34_delegation",
   ICRC27_ACCOUNTS = "icrc27_accounts",
+  ICRC34_DELEGATION = "icrc34_delegation",
   ICRC49_CALL_CANISTER = "icrc49_call_canister",
 }
 
