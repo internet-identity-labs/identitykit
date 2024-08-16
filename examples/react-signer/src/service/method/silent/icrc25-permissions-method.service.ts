@@ -1,4 +1,4 @@
-import { RPCMessage, RPCSuccessResponse, ScopeResponse } from "../../../type"
+import { RPCMessage, RPCSuccessResponse } from "../../../type"
 import { SilentMethodService } from "./silent-method.service"
 import { authService } from "../../auth.service"
 
@@ -9,8 +9,8 @@ class Icrc25PermissionsMethodService extends SilentMethodService {
 
   public async sendResponse(message: MessageEvent<RPCMessage>): Promise<void> {
     const permissions = await authService.getPermissions()
-    const scopes: ScopeResponse[] = permissions.map((x) => {
-      return { scope: { method: x }, state: "granted" }
+    const scopes = Object.entries(permissions).map(([key, value]) => {
+      return { scope: { method: key }, state: value }
     })
 
     const response: RPCSuccessResponse = {

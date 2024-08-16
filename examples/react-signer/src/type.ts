@@ -30,10 +30,10 @@ export interface ScopeRequest {
 }
 
 export interface Icrc25DtoResponse {
-  scopes: ScopeResponse[]
+  scopes: Scope[]
 }
 
-export interface ScopeResponse {
+export interface Scope {
   scope: {
     method: string
   }

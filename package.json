@@ -14,6 +14,7 @@
     "dev": "turbo dev",
     "lint:check": "turbo lint:check",
     "format:check": "prettier --check '**/*.{ts,tsx,md,mdx,css}'",
+    "format:write": "prettier --check '**/*.{ts,tsx,md,mdx,css}' --write",
     "test": "turbo test --force",
     "test:e2e": "turbo test:e2e --force",
     "test:e2e:ui:dapp": "cd ./examples/react-dapp && npm run test:e2e:dev",
