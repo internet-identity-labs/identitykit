@@ -2,23 +2,18 @@ use std::cell::RefCell;
 
 use candid::CandidType;
 use ic_cdk::api::set_certified_data;
-use serde::Serialize;
 use ic_certified_map::{AsHashTree, RbTree};
+use serde::Serialize;
 
+use crate::types::Icrc28TrustedOriginsResponse;
 
 thread_local! {
     static ORIGIN_STORAGE_CERTIFIED: RefCell<Vec<String>> = RefCell::new(Default::default());
     static TREE: RefCell<RbTree<String, Vec<u8>>> = RefCell::new(RbTree::new());
 }
 
-#[derive(CandidType)]
-pub struct CertifiedResponse {
-    pub response: Vec<String>,
-    pub certificate: Vec<u8>,
-    pub witness: Vec<u8>,
-}
 
-pub fn get_trusted_origins_cert() -> CertifiedResponse {
+pub fn get_trusted_origins_cert() -> Icrc28TrustedOriginsResponse {
     let witness = match get_count_witness("origins".to_string()) {
         Ok(tree) => tree,
         Err(_) => {
@@ -31,8 +26,8 @@ pub fn get_trusted_origins_cert() -> CertifiedResponse {
 
     let certificate = ic_cdk::api::data_certificate().expect("No data certificate available");
 
-    CertifiedResponse {
-        response: origins,
+    Icrc28TrustedOriginsResponse {
+        trusted_origins: origins,
         certificate,
         witness,
     }

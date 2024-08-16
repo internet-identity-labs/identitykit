@@ -161,7 +161,6 @@ service : {
     icrc10_supported_standards : () -> (vec record { name : text; url : text }) query;
 
     icrc28_trusted_origins : () -> (icrc28_trusted_origins_response) query;
-    aaa : () -> (text) query;
     greet_no_consent : (text) -> (text) query;
     greet : (text) -> (text) query;
 }

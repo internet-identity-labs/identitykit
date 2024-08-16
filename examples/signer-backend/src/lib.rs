@@ -32,20 +32,9 @@ fn init() {
 
 #[query]
 fn icrc28_trusted_origins() -> Icrc28TrustedOriginsResponse {
-    let certified_response = get_trusted_origins_cert();
-
-    return Icrc28TrustedOriginsResponse {
-        trusted_origins: certified_response.response,
-        certificate: certified_response.certificate,
-        witness: certified_response.witness,
-    };
+    get_trusted_origins_cert()
 }
 
-
-#[query]
-fn aaa() -> String {
-    "aaa".to_string()
-}
 
 #[query]
 fn greet_no_consent(name: String) -> String {
@@ -98,9 +87,9 @@ fn icrc21_canister_call_consent_message(
 
     match consent_msg_request.user_preferences.device_spec {
         Some(Icrc21DeviceSpec::LineDisplay {
-            characters_per_line,
-            lines_per_page,
-        }) => Ok(Icrc21ConsentInfo {
+                 characters_per_line,
+                 lines_per_page,
+             }) => Ok(Icrc21ConsentInfo {
             metadata,
             consent_message: Icrc21ConsentMessage::LineDisplayMessage {
                 pages: consent_msg_text_pages(
