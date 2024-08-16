@@ -45,6 +45,8 @@ export const idlFactory = ({ IDL }: any) => {
     Err: icrc21_error,
   })
   const icrc28_trusted_origins_response = IDL.Record({
+    certificate: IDL.Vec(IDL.Nat8),
+    witness: IDL.Vec(IDL.Nat8),
     trusted_origins: IDL.Vec(IDL.Text),
   })
   return IDL.Service({
@@ -60,7 +62,7 @@ export const idlFactory = ({ IDL }: any) => {
       [icrc21_consent_message_response],
       []
     ),
-    icrc28_trusted_origins: IDL.Func([], [icrc28_trusted_origins_response], []),
+    icrc28_trusted_origins: IDL.Func([], [icrc28_trusted_origins_response], ["query"]),
   })
 }
 export const init = ({}) => {

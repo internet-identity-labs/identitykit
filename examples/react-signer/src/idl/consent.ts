@@ -45,6 +45,8 @@ export interface icrc21_error_info {
   description: string
 }
 export interface icrc28_trusted_origins_response {
+  certificate: Uint8Array | number[]
+  witness: Uint8Array | number[]
   trusted_origins: Array<string>
 }
 export interface _SERVICE {
