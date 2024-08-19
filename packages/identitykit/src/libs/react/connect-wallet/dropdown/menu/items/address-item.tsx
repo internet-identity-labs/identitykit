@@ -21,13 +21,15 @@ export function AddressItem({
         onCopiedTimeout={() => setConnectedAddressCopied(false)}
         component={({ onClick }: { onClick: () => unknown }) => (
           <ItemInner onClick={onClick}>
-            <small className="font-semibold text-black dark:text-white">Wallet address</small>
-            <div className="flex">
-              <small className="font-semibold">{`${value.substring(0, VISIBLE_ADDRESS_CHARS_NUMBER)}...${value.substring(value.length - VISIBLE_ADDRESS_CHARS_NUMBER)}`}</small>
+            <small className="ik-font-semibold ik-text-black dark:ik-text-white">
+              Wallet address
+            </small>
+            <div className="ik-flex">
+              <small className="ik-font-semibold">{`${value.substring(0, VISIBLE_ADDRESS_CHARS_NUMBER)}...${value.substring(value.length - VISIBLE_ADDRESS_CHARS_NUMBER)}`}</small>
               {connectedAddressCopied ? (
-                <CopiedIcon className="ml-2" />
+                <CopiedIcon className="ik-ml-2" />
               ) : (
-                <CopyIcon className="ml-2" />
+                <CopyIcon className="ik-ml-2" />
               )}
             </div>
           </ItemInner>

@@ -9,7 +9,7 @@ export function Menu({ className, children, ...props }: MenuProps) {
   return (
     <HeadlessMenu
       as="div"
-      className={clsx("relative inline-block text-left", className)}
+      className={clsx("ik-relative ik-inline-block ik-text-left", className)}
       {...props}
     >
       {children}

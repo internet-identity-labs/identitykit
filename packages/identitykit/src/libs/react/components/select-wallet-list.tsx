@@ -20,32 +20,32 @@ export const SelectWalletList = ({
 }: SelectWalletListProps) => {
   return (
     <div>
-      <div className="flex flex-col gap-2.5 relative overflow-auto max-h-[420px]">
+      <div className="ik-flex ik-flex-col ik-gap-2.5 ik-relative ik-overflow-auto ik-max-h-[420px]">
         {signers.map((signer) => (
           <div
             className={clsx(
-              "shadow-[0px_2px_10px_rgba(0,0,0,0.03)] rounded-[13px]",
+              "ik-shadow-[0px_2px_10px_rgba(0,0,0,0.03)] ik-rounded-[13px]",
               featuredSigner?.id === signer.id
-                ? "gradient-border"
-                : "border border-black/5 dark:border-white/5"
+                ? "ik-gradient-border"
+                : "ik-border ik-border-black/5 dark:ik-border-white/5"
             )}
           >
             <div
               id={`signer_${signer.id}`}
               key={`signer_${signer.id}`}
               className={clsx(
-                "bg-white dark:bg-zinc-800 rounded-[12px] cursor-pointer",
-                "hover:bg-gray-50 dark:hover:bg-signerDarkHoverBg",
-                "flex items-center space-x-3 w-full p-5",
-                signer?.description?.length && "!items-start"
+                "ik-bg-white dark:ik-bg-zinc-800 ik-rounded-[12px] ik-cursor-pointer",
+                "hover:ik-bg-gray-50 dark:hover:ik-bg-signerDarkHoverBg",
+                "ik-flex ik-items-center ik-space-x-3 ik-w-full ik-p-5",
+                signer?.description?.length && "!ik-items-start"
               )}
               onClick={() => onSelectSigner(signer.id)}
             >
-              <img src={signer.icon} alt={signer.label} className="w-8 h-8" />
+              <img src={signer.icon} alt={signer.label} className="ik-w-8 ik-h-8" />
 
-              <div className="text-black dark:text-white">
-                <p className="text-sm font-bold leading-[25px]">{signer.label}</p>
-                <p className="text-xs text-gray-400 dark:text-zinc-400 leading-[20px]">
+              <div className="ik-text-black dark:ik-text-white">
+                <p className="ik-text-sm ik-font-bold ik-leading-[25px]">{signer.label}</p>
+                <p className="ik-text-xs ik-text-gray-400 dark:ik-text-zinc-400 ik-leading-[20px]">
                   {signer.description}
                 </p>
               </div>
@@ -54,7 +54,7 @@ export const SelectWalletList = ({
         ))}
       </div>
       {!isViewAll ? (
-        <Button className="mt-2.5" block type="secondary" onClick={onViewAll}>
+        <Button className="ik-mt-2.5" block type="secondary" onClick={onViewAll}>
           View all
         </Button>
       ) : (

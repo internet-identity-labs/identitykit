@@ -12,12 +12,12 @@ export function Items({
     <MenuItems
       transition
       className={clsx(
-        "absolute right-0 z-10 mt-2 min-w-[320px] origin-top-right rounded-3xl bg-white dark:bg-zinc-900 shadow-lg transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in p-2.5",
+        "ik-absolute ik-right-0 ik-z-10 ik-mt-2 ik-min-w-[320px] ik-origin-top-right ik-rounded-3xl ik-bg-white dark:ik-bg-zinc-900 ik-shadow-lg ik-transition focus:ik-outline-none data-[closed]:ik-scale-95 data-[closed]:ik-transform data-[closed]:ik-opacity-0 data-[enter]:ik-duration-100 data-[leave]:ik-duration-75 data-[enter]:ik-ease-out data-[leave]:ik-ease-in ik-p-2.5",
         className
       )}
       {...props}
     >
-      <div className={clsx("py-1", innerClassName)}>{menuItems}</div>
+      <div className={clsx("ik-py-1", innerClassName)}>{menuItems}</div>
     </MenuItems>
   )
 }

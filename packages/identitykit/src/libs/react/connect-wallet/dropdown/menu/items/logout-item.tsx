@@ -6,7 +6,7 @@ export function LogoutItem({ onClick, ...props }: { onClick?: () => unknown } & 
   return (
     <Item {...props}>
       <ItemInner onClick={onClick}>
-        <small className="font-semibold text-black dark:text-white">Disconnect</small>
+        <small className="ik-font-semibold ik-text-black dark:ik-text-white">Disconnect</small>
         <LogoutIcon />
       </ItemInner>
     </Item>

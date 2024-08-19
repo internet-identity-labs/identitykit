@@ -7,19 +7,19 @@ const configExtension = {
   colors: {
     primary: "#146F68",
     dark: "#141518",
-    zinc: colors.zinc,
+    zinc: colors.zinc
   },
   fontFamily: {
     ...defaultTheme.fontFamily,
     sans: ["Inter", ...defaultTheme.fontFamily.sans],
     mono: ["IBM Plex Mono", ...defaultTheme.fontFamily.mono],
-  },
+  }
 }
 
 /** @type {import('tailwindcss').Config} */
 export default {
   theme: {
-    extend: merge(configExtension, identityKitConfig.theme.extend ?? {}),
+    extend: configExtension,
   },
   darkMode: ["selector", "[data-identity-kit-theme*='dark']"],
   content: [
@@ -27,7 +27,7 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
     // TODO: check that this is only required for development
     // The package exports the compiled style sheet
-    "../../packages/identitykit/src/libs/**/*.{js,ts,jsx,tsx}",
+    // "../../packages/identitykit/src/libs/**/*.{js,ts,jsx,tsx}",
   ],
   plugins: [],
 }

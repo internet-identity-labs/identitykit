@@ -1,6 +1,7 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
 import { ThemeProvider } from "next-themes"
+import "@nfid/identitykit/react/styles.css"
 import "./index.css"
 import { AppWrappedInIdentityKit } from "./AppWrappedInIdentityKit.tsx"
 
