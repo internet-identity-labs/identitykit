@@ -28,12 +28,10 @@ fn init() {
     ]);
 }
 
-
 #[query]
 fn icrc28_trusted_origins() -> Icrc28TrustedOriginsResponse {
     get_trusted_origins_cert()
 }
-
 
 #[query]
 fn greet_no_consent(name: String) -> String {

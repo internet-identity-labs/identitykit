@@ -12,7 +12,6 @@ thread_local! {
     static TREE: RefCell<RbTree<String, Vec<u8>>> = RefCell::new(RbTree::new());
 }
 
-
 pub fn get_trusted_origins_cert() -> Icrc28TrustedOriginsResponse {
     let witness = match get_count_witness("origins".to_string()) {
         Ok(tree) => tree,
@@ -40,7 +39,6 @@ pub fn update_trusted_origins(a: Vec<String>) -> Vec<String> {
         storage.borrow().clone()
     })
 }
-
 
 fn get_count_witness(key: String) -> anyhow::Result<Vec<u8>> {
     TREE.with(|tree| {
