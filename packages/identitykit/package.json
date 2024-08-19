@@ -1,6 +1,6 @@
 {
   "name": "@nfid/identitykit",
-  "version": "0.0.0-alpha.2",
+  "version": "0.0.0-alpha.3",
   "license": "MIT",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -75,7 +75,6 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jest-transform-stub": "^2.0.0",
-    "ts-jest": "^29.2.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rollup": "^4.20.0",
@@ -84,7 +83,8 @@
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-typescript2": "^0.36.0",
     "size-limit": "^11.1.4",
-    "storybook": "^8.1.5"
+    "storybook": "^8.1.5",
+    "ts-jest": "^29.2.4"
   },
   "peerDependencies": {
     "react": ">=17.0.2",
