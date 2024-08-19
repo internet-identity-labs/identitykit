@@ -5,7 +5,7 @@ export function ItemInner({ className, children, ...props }: React.HTMLProps<HTM
   return (
     <div
       className={clsx(
-        "flex justify-between w-full p-2.5 text-black dark:text-white cursor-pointer",
+        "ik-flex ik-justify-between ik-w-full ik-p-2.5 ik-text-black dark:ik-text-white ik-cursor-pointer",
         className
       )}
       {...props}

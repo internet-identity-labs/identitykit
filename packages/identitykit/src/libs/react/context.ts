@@ -1,14 +1,10 @@
 import { createContext, useContext } from "react"
 import { IdentityKitProvider } from "./types"
 import { Signer } from "@slide-computer/signer"
-import {
-  IdentityKit,
-  IdentityKitSignerAgent,
-  IdentityKitSignerAgentOptions,
-  SignerConfig,
-} from "../../lib"
+import { IdentityKit, IdentityKitSignerAgent, IdentityKitSignerAgentOptions } from "../../lib"
 import { IdentityKitTheme } from "./constants"
 import { AccountsSignerClient, DelegationSignerClient } from "../../lib/signer-client"
+import { SignerConfig } from "../../lib/types"
 
 const defaultState: IdentityKitProvider = {
   signers: [],

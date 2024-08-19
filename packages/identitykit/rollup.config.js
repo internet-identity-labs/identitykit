@@ -7,6 +7,7 @@ import svgr from "@svgr/rollup"
 import { getComponentsFolders } from "./scripts/buildUtils.js"
 import generatePackageJson from "rollup-plugin-generate-package-json"
 import tailwindcss from "tailwindcss"
+import dts from "rollup-plugin-dts"
 
 const packageJson = require("./package.json")
 const tailwindConfig = require("./tailwind.config.js")
@@ -22,72 +23,93 @@ const commonPlugins = [
   typescript({
     tsconfig: "./tsconfig.json",
     useTsconfigDeclarationDir: true,
-  }),
-  postcss({
-    extensions: [".css"],
-    extract: true,
-    modules: true,
-    config: {
-      path: "./postcss.config.js",
-    },
-    plugins: [tailwindcss(tailwindConfig)],
+    include: ["src/**/*", "types/*.d.ts"],
+    exclude: ["**/*.spec.tsx", "./*.ts"],
+    verbosity: 2
   }),
   svgr(),
 ]
 
-const SUBPACKAGES = "src/libs"
+const SUBPACKAGES = "libs"
 
 // Returns rollup configuration for a given component
 function component(commonPlugins, folder) {
-  return {
-    input: `${SUBPACKAGES}/${folder}/index.ts`,
-    output: [
-      {
-        file: `dist/${folder}/index.esm.js`,
-        exports: "named",
-        format: "esm",
-        banner: `'use client';`,
-      },
-      {
-        file: `dist/${folder}/index.cjs.js`,
-        exports: "named",
-        format: "cjs",
-        banner: `'use client';`,
-      },
-    ],
-    plugins: [
-      ...commonPlugins,
-      generatePackageJson({
-        baseContents: {
-          name: `${packageJson.name}/${folder}`,
-          private: true,
-          main: "./index.cjs.js",
-          module: "./index.esm.js",
-          types: "./index.d.ts",
-          style: "./index.cjs.css",
-          exports: {
-            "./styles.css": {
-              import: "./index.cjs.css",
-              require: "./index.cjs.css",
-              default: "./index.cjs.css",
-            },
-          },
-          peerDependencies: packageJson.peerDependencies,
+  return [
+    {
+      input: `src/${SUBPACKAGES}/${folder}/index.ts`,
+      output: [
+        {
+          file: `dist/${SUBPACKAGES}/${folder}/index.esm.js`,
+          exports: "named",
+          format: "esm",
+          banner: `'use client';`,
         },
-        outputFolder: `dist/${folder}/`,
-      }),
-    ],
-    // Don't bundle node_modules and ../utils
-    //
-    // We should also exclude relative imports of other components, but a trivial exclude of /\.\./ does not work
-    // It may require changes to the way the components are exported
-    external: [/node_modules/, /\.\.\/utils/],
-  }
+        {
+          file: `dist/${SUBPACKAGES}/${folder}/index.cjs.js`,
+          exports: "named",
+          format: "cjs",
+          banner: `'use client';`,
+        },
+      ],
+      plugins: [
+        ...commonPlugins,
+        generatePackageJson({
+          baseContents: {
+            name: `${packageJson.name}/${folder}`,
+            private: true,
+            main: "./index.cjs.js",
+            module: "./index.esm.js",
+            types: "./index.d.ts",
+            style: "./index.cjs.css",
+            exports: {
+              "./styles.css": {
+                import: "./index.css",
+                require: "./index.css",
+                default: "./index.css",
+              },
+            },
+            peerDependencies: packageJson.peerDependencies,
+          },
+          outputFolder: `dist/${SUBPACKAGES}/${folder}/`,
+        }),
+      ],
+      // Don't bundle node_modules and ../utils
+      //
+      // We should also exclude relative imports of other components, but a trivial exclude of /\.\./ does not work
+      // It may require changes to the way the components are exported
+      external: [/node_modules/],
+    },
+    {
+      input: `src/${SUBPACKAGES}/${folder}/index.ts`,
+      output: [{ file: `dist/${SUBPACKAGES}/${folder}/index.d.ts`, format: "esm" }],
+      plugins: [dts.default()],
+      external: [/\.css$/],
+    },
+    {
+      input: `src/${SUBPACKAGES}/${folder}/styles.css`,
+      output: [{ file: `dist/${SUBPACKAGES}/${folder}/index.css`, format: "es" }],
+      plugins: [
+        postcss({
+          extensions: [".css"],
+          extract: true,
+          modules: false,
+          config: {
+            path: "./postcss.config.js",
+          },
+          plugins: [tailwindcss(tailwindConfig)],
+          minimize: true,
+        }),
+      ],
+    },
+  ]
 }
 
 export default [
-  // Build all components in ./src/*
-  ...getComponentsFolders(`./${SUBPACKAGES}`).map((folder) => component(commonPlugins, folder)),
+  // Build all components in ./src/libs
+  ...[].concat.apply(
+    [],
+    getComponentsFolders(`./src/${SUBPACKAGES}`).map((folder) => component(commonPlugins, folder))
+  ),
 
   // Build the main file that includes all components and utils
   {
@@ -104,9 +126,15 @@ export default [
         exports: "named",
         format: "cjs",
         banner: `'use client';`,
-      },
+      }
     ],
     plugins: commonPlugins,
     external: [/node_modules/],
   },
+  {
+    input: `src/index.ts`,
+    output: [{ file: `dist/index.d.ts`, format: "esm" }],
+    plugins: [dts.default()],
+    external: [/\.css$/],
+  }
 ]

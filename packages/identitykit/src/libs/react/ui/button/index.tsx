@@ -32,36 +32,38 @@ export const Button: React.FC<ButtonProps> = ({
       id={id}
       disabled={disabled}
       className={clsx(
-        "transition duration-75",
-        "text-center text-sm first-letter:capitalize hover:no-underline",
-        "font-bold",
-        "rounded-md outline-none p-[15px] leading-4",
-        "cursor-pointer disabled:cursor-not-allowed",
+        "ik-transition ik-duration-75",
+        "ik-text-center ik-text-sm first-letter:ik-capitalize hover:ik-no-underline",
+        "ik-font-bold",
+        "ik-rounded-md ik-outline-none ik-p-[15px] ik-leading-4",
+        "ik-cursor-pointer disabled:ik-cursor-not-allowed",
         isPrimary &&
           clsx(
-            "text-white bg-[#146F68] border-transparent",
-            "hover:shadow-md hover:shadow-[#0D9488]/40 hover:bg-[#00A899]",
-            "active:border-teal-700 active:bg-teal-700",
-            "focus:ring-0 focus:ring-offset-0 focus:ring-transparent",
-            "disabled:shadow-none disabled:bg-gray-300 disabled:border-gray-300",
-            "dark:disabled:bg-zinc-700 dark:disabled:border-zinc-700"
+            "ik-text-white ik-bg-[#146F68] ik-border-transparent",
+            "hover:ik-shadow-md hover:ik-shadow-[#0D9488]/40 hover:ik-bg-[#00A899]",
+            "active:ik-border-teal-700 active:ik-bg-teal-700",
+            "focus:ik-ring-0 focus:ik-ring-offset-0 focus:rik-ing-transparent",
+            "disabled:ik-shadow-none disabled:ik-bg-gray-300 disabled:ik-border-gray-300",
+            "dark:disabled:ik-bg-zinc-700 dark:disabled:ik-border-zinc-700"
           ),
         isSecondary &&
           clsx(
-            "text-[#146F68] dark:text-teal-500 border-transparent",
-            "hover:bg-gray-100 dark:hover:bg-zinc-800",
-            "active:bg-gray-200 dark:active:bg-zinc-900",
-            "disabled:text-gray-400",
-            "dark:disabled:text-zinc-600"
+            "ik-text-[#146F68] dark:ik-text-teal-500 ik-border-transparent",
+            "hover:ik-bg-gray-100 dark:hover:ik-bg-zinc-800",
+            "active:ik-bg-gray-200 dark:active:ik-bg-zinc-900",
+            "disabled:ik-text-gray-400",
+            "dark:disabled:ik-text-zinc-600"
           ),
-        block && clsx("w-full block"),
+        block && clsx("ik-w-full ik-block"),
         className
       )}
       {...buttonProps}
     >
-      <div className="flex items-center justify-center space-x-2">
-        {icon ? <div className="flex items-center justify-center w-6 h-6">{icon}</div> : null}
-        {children ? <div className="text-center">{children}</div> : null}
+      <div className="ik-flex ik-items-center ik-justify-center ik-space-x-2">
+        {icon ? (
+          <div className="ik-flex ik-items-center ik-justify-center ik-w-6 ik-h-6">{icon}</div>
+        ) : null}
+        {children ? <div className="ik-text-center">{children}</div> : null}
       </div>
     </Component>
   )

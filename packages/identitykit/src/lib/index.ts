@@ -6,7 +6,10 @@ export {
 } from "./signer-client"
 export * from "./identity-kit"
 
-export { type SignerConfig } from "./types"
+export {
+  type SignerConfig as IdentityKitSignerConfig,
+  TransportType as IdentityKitTransportType,
+} from "./types"
 export {
   type SignerClientOptions as IdentityKitSignerClientOptions,
   type DelegationSignerClientOptions as IdentityKitDelegationSignerClientOptions,

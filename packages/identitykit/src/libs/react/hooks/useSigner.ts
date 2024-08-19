@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { Signer } from "@slide-computer/signer"
-import { SignerConfig } from "../../../lib"
 import { TransportBuilder } from "../../../lib/service"
-import { TransportType } from "../../../lib/types"
+import { TransportType, SignerConfig } from "../../../lib/types"
 
 export function useSigner({
   signers,
