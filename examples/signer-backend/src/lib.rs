@@ -26,7 +26,6 @@ fn init() {
         String::from("https://nfid.one"),
         String::from("https://dev.nfid.one"),
     ]);
-    print("ICRC-28 Trusted Origins initialized");
 }
 
 
