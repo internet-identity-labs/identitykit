@@ -54,8 +54,10 @@
     }
   ],
   "dependencies": {
+    "@dfinity/ledger-icp": "^2.4.0",
     "@headlessui/react": "2.1.2",
     "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-tooltip": "^1.1.2",
     "@slide-computer/signer": "^2.6.2",
     "@slide-computer/signer-agent": "^2.6.2",
     "@slide-computer/signer-storage": "^2.6.2",
