@@ -1,0 +1,41 @@
+---
+title: "Validation of Permission Methods"
+date: "2024-08-16"
+authors:
+  - name: "Dmytro Sheremet"
+---
+
+# Validation of Permission Methods
+
+Each wallet is designed to support a set of standards, with each standard specifying a list of
+methods. It is crucial that the wallet only grants permission to methods explicitly expected by the
+signer, as failing to do so may lead to potential security vulnerabilities in the future.
+Maintaining a list of expected permission methods and raising an error when an unapproved method is
+encountered is highly recommended.
+
+The
+[Mocked Signer](https://github.com/internet-identity-labs/identitykit/blob/main/examples/react-signer/src/service/auth.service.ts#L84)
+can be used as an example of a validation implementation:
+
+```typescript
+export enum PermissionMethod {
+  ICRC27_ACCOUNTS = "icrc27_accounts",
+  ICRC34_DELEGATION = "icrc34_delegation",
+  ICRC49_CALL_CANISTER = "icrc49_call_canister",
+}
+
+function getPermissionMethod(methodName: string): PermissionMethod {
+  const method = PermissionMethod[methodName.toUpperCase() as keyof typeof PermissionMethod]
+
+  if (!method) {
+    throw new NotSupportedError(`The method name ${methodName} is not supported`)
+  }
+
+  return method
+}
+```
+
+---
+
+By adhering to these recommendations, permission method validation can be successfully implemented
+using IdentityKit.
