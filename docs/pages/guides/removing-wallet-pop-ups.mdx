@@ -28,23 +28,17 @@ use candid::{self, CandidType, Deserialize};
 
 #[derive(Clone, Debug, CandidType, Deserialize)]
 pub struct Icrc28TrustedOriginsResponse {
-    pub trusted_origins: Vec<String>
+    pub trusted_origins: Vec<String>,
+    pub certificate: Vec<u8>,
+    pub witness: Vec<u8>,
 }
 
-#[update]
+#[query]
 fn icrc28_trusted_origins() -> Icrc28TrustedOriginsResponse {
-    let trusted_origins = vec![
-        String::from("https://your-canister-id.icp0.io"),
-        String::from("https://your-canister-id.raw.icp0.io"),
-        String::from("https://your-canister-id.ic0.app"),
-        String::from("https://your-canister-id.raw.ic0.app"),
-        String::from("https://your-canister-id.icp0.icp-api.io"),
-        String::from("https://your-canister-id.icp-api.io"),
-        String::from("https://yourcustomdomain.com"),
-        String::from("https://yourothercustomdomain.com")
-    ];
-
-    return Icrc28TrustedOriginsResponse { trusted_origins }
+    //you can find an example implementation in the signer-backend package src/cert_trusted.rs
+    //certificate query documentation:
+    //https://internetcomputer.org/docs/current/developer-docs/smart-contracts/call/overview#certified-queries
+    get_trusted_origins_cert()
 }
 ```
 
