@@ -11,13 +11,13 @@ describe("ItemInner Component", () => {
     const { container } = render(<ItemInner>Test</ItemInner>)
     const divElement = container.firstChild as HTMLDivElement
     expect(divElement).toHaveClass(
-      "flex",
-      "justify-between",
-      "w-full",
-      "p-2.5",
-      "text-black",
-      "dark:text-white",
-      "cursor-pointer"
+      "ik-flex",
+      "ik-justify-between",
+      "ik-w-full",
+      "ik-p-2.5",
+      "ik-text-black",
+      "dark:ik-text-white",
+      "ik-cursor-pointer"
     )
   })
 

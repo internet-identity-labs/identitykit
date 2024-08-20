@@ -5,7 +5,6 @@ import clsx from "clsx"
 import { IdentityKitContext } from "./context"
 import { ModalHeader } from "./components/modal-header"
 import { SelectWalletList } from "./components/select-wallet-list"
-import "./modal.css"
 import useClickOutside from "./hooks/use-click-outside"
 
 export const IdentityKitModal = () => {
@@ -42,28 +41,28 @@ export const IdentityKitModal = () => {
         <Dialog.Portal>
           <div
             className={clsx(
-              isModalOpen ? "block" : "hidden",
-              "bg-black bg-opacity-25 backdrop-blur-[2px]",
-              "fixed inset-0 z-[1009]"
+              isModalOpen ? "ik-block" : "ik-hidden",
+              "ik-bg-black ik-bg-opacity-25 ik-backdrop-blur-[2px]",
+              "ik-fixed ik-inset-0 ik-z-[1009]"
             )}
           />
           <Dialog.Content
             ref={ref}
-            id="identity-kit-modal"
+            id="ik-identity-kit-modal"
             data-identity-kit-theme={theme}
             aria-describedby={undefined}
             className={clsx(
-              "flex-col fixed p-0 focus:outline-none z-[1010]",
-              "shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px]",
-              "top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[490px] translate-x-[-50%] translate-y-[-50%]",
-              isModalOpen ? "flex" : "hidden"
+              "ik-flex-col ik-fixed ik-p-0 focus:ik-outline-none ik-z-[1010]",
+              "ik-shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px]",
+              "ik-top-[50%] ik-left-[50%] ik-max-h-[85vh] ik-w-[90vw] ik-max-w-[490px] ik-translate-x-[-50%] ik-translate-y-[-50%]",
+              isModalOpen ? "ik-flex" : "ik-hidden"
             )}
           >
             <div
               className={clsx(
-                "flex flex-col rounded-xl h-full",
-                "bg-[#FAFAFA] dark:bg-black",
-                "p-[20px] gap-[10px]"
+                "ik-flex ik-flex-col ik-rounded-xl ik-h-full",
+                "ik-bg-[#FAFAFA] dark:ik-bg-black",
+                "ik-p-[20px] ik-gap-[10px]"
               )}
             >
               <ModalHeader onBack={() => setIsViewAll(false)} isViewAll={isViewAll} />

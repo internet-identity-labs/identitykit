@@ -1,8 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
 
-input:focus-visible {
-  outline: none;
-  border: 1px solid #9ca3af;
-}
+@import "tailwindcss/components";
+
+@import "tailwindcss/utilities";

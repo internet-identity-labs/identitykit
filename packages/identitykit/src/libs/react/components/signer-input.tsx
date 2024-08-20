@@ -26,10 +26,12 @@ export const SignerInput = () => {
 
   return (
     <div>
-      <div className="text-black dark:text-white font-bold my-[20px]">CustomConnect</div>
-      <div className="flex items-center gap-[12px] relative">
+      <div className="ik-text-black dark:ik-text-white ik-font-bold ik-my-[20px]">
+        CustomConnect
+      </div>
+      <div className="ik-flex ik-items-center ik-gap-[12px] ik-relative">
         <input
-          className="rounded-xl border border-gray-400 px-[10px] h-[48px] flex-1 flex-shrink text-sm text-gray-400 focus:border-gray-400 dark:text-white"
+          className="ik-rounded-xl ik-border ik-border-gray-400 ik-px-[10px] ik-h-[48px] ik-flex-1 ik-flex-shrink ik-text-sm ik-text-gray-400 focus:ik-border-gray-400 dark:ik-text-white [&:has(:focus-visible)]:ik-outline-none"
           placeholder="https://wallet.url"
           type="text"
           {...register("url", {
@@ -40,13 +42,15 @@ export const SignerInput = () => {
         />
         <Button
           disabled={Boolean(errors.url) || !customSignerUrl}
-          className="w-[110px]"
+          className="ik-w-[110px]"
           onClick={submitHandler}
         >
           Connect
         </Button>
         {errors.url && (
-          <p className="absolute text-xs text-red-500 top-[100%]">{errors.url.message}</p>
+          <p className="ik-absolute ik-text-xs ik-text-red-500 ik-top-[100%]">
+            {errors.url.message}
+          </p>
         )}
       </div>
     </div>

@@ -15,14 +15,14 @@ export const Tooltip: React.FC<TooltipProps> = ({ tip, children, className, ...c
         <RadixTooltip.Content
           sideOffset={5}
           className={clsx(
-            "text-white text-sm font-light bg-black py-2 px-6 rounded",
+            "ik-text-white ik-text-sm ik-font-light ik-bg-black ik-py-2 ik-px-6 ik-rounded",
             className,
-            ["left", "right"].includes(contentProps.side || "top") ? "my-2" : "mx-2"
+            ["left", "right"].includes(contentProps.side || "top") ? "ik-my-2" : "ik-mx-2"
           )}
           {...contentProps}
         >
           {tip}
-          <RadixTooltip.Arrow className="fill-current text-black" />
+          <RadixTooltip.Arrow className="ik-fill-current ik-text-black" />
         </RadixTooltip.Content>
       </RadixTooltip.Portal>
     </RadixTooltip.Root>
