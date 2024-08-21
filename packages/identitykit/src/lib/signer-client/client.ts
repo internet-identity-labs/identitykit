@@ -1,8 +1,7 @@
 import { type SignIdentity } from "@dfinity/agent"
 import { PartialIdentity } from "@dfinity/identity"
 import type { Signer } from "@slide-computer/signer"
-import { type SignerStorage } from "@slide-computer/signer-storage"
-import { SubAccount } from "@dfinity/ledger-icp"
+import { IdbStorage, type SignerStorage } from "@slide-computer/signer-storage"
 import { IdleManager, type IdleManagerOptions } from "./idle-manager"
 
 export const STORAGE_KEY = "client"
@@ -33,7 +32,7 @@ export interface SignerClientOptions {
    * Optional, used to generate random bytes
    * @default uses browser/node Crypto by default
    */
-  crypto?: Pick<Crypto, "getRandomValues">
+  crypto?: Pick<Crypto, "getRandomValues" | "randomUUID">
   /**
    * Optional storage with get, set, and remove. Uses {@link IdbStorage} by default
    */
@@ -43,20 +42,20 @@ export interface SignerClientOptions {
    * @default after 30 minutes, invalidates the identity
    */
   idleOptions?: IdleOptions
+  derivationOrigin?: string
 }
 
 export abstract class SignerClient {
-  protected idleManager: IdleManager | undefined = undefined
-  public connectedUser: { owner: string; subAccount?: SubAccount } | undefined = undefined
+  protected idleManager: IdleManager | undefined
+  protected storage: SignerStorage = new IdbStorage()
+  public connectedUser: { owner: string; subAccount?: ArrayBuffer } | undefined
 
-  constructor(
-    protected options: SignerClientOptions,
-    protected storage: SignerStorage
-  ) {
+  constructor(protected options: SignerClientOptions) {
     if (!options?.idleOptions?.disableIdle) {
       this.idleManager = IdleManager.create(options.idleOptions)
       this.registerDefaultIdleCallback()
     }
+    if (options.storage) this.storage = options.storage
   }
 
   protected registerDefaultIdleCallback() {
@@ -74,10 +73,74 @@ export abstract class SignerClient {
     }
   }
 
-  abstract logout(options?: { returnTo?: string }): Promise<void>
+  public logout(options?: { returnTo?: string }): void {
+    this.setConnectedUserToStorage(undefined)
+    this.idleManager?.exit()
+    this.idleManager = undefined
+    if (options?.returnTo) {
+      try {
+        window.history.pushState({}, "", options.returnTo)
+      } catch (e) {
+        window.location.href = options.returnTo
+      }
+    }
+  }
 
-  protected async setConnectedUser(owner: string, subAccount?: SubAccount): Promise<void> {
-    await this.storage.set(STORAGE_CONNECTED_OWNER_KEY, owner)
-    this.connectedUser = { owner, subAccount }
+  protected async setConnectedUser(
+    user:
+      | {
+          owner: string
+          subAccount?: ArrayBuffer
+        }
+      | undefined
+  ): Promise<void> {
+    this.connectedUser = user
+  }
+
+  protected async setConnectedUserToStorage(
+    user:
+      | {
+          owner: string
+          subAccount?: ArrayBuffer
+        }
+      | undefined
+  ): Promise<void> {
+    if (!user) {
+      await this.storage.remove(STORAGE_CONNECTED_OWNER_KEY)
+      await this.storage.remove(STORAGE_CONNECTED_SUBACCOUNT_KEY)
+      this.setConnectedUser(undefined)
+      return
+    }
+    await this.storage.set(STORAGE_CONNECTED_OWNER_KEY, user.owner)
+    if (user.subAccount)
+      await this.storage.set(
+        STORAGE_CONNECTED_SUBACCOUNT_KEY,
+        new TextDecoder().decode(user.subAccount)
+      )
+    this.setConnectedUser({
+      owner: user.owner,
+      subAccount: user.subAccount,
+    })
+  }
+
+  protected async getConnectedUserFromStorage(): Promise<
+    | {
+        owner: string
+        subAccount?: ArrayBuffer
+      }
+    | undefined
+  > {
+    const owner = await this.storage.get(STORAGE_CONNECTED_OWNER_KEY)
+    if (!owner) return
+    const subAccount = await this.storage.get(STORAGE_CONNECTED_SUBACCOUNT_KEY)
+
+    return {
+      owner: owner.toString(),
+      subAccount: subAccount ? new TextEncoder().encode(subAccount.toString()) : undefined,
+    }
+  }
+
+  protected get crypto(): Pick<Crypto, "getRandomValues" | "randomUUID"> {
+    return this.options.crypto ?? globalThis.crypto
   }
 }
