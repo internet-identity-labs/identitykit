@@ -82,7 +82,15 @@ export function ConnectWallet({
     setSignerClient(undefined)
     selectSigner(undefined)
     onDisconnect?.()
-  }, [signerClient, setSignerClient, IdentityKit.signerClient, selectSigner, onDisconnect])
+    setIcpBalance(undefined)
+  }, [
+    signerClient,
+    setSignerClient,
+    IdentityKit.signerClient,
+    selectSigner,
+    onDisconnect,
+    setIcpBalance,
+  ])
 
   useEffect(() => {
     if (triggerManualDisconnect || shouldLogoutByIdle) disconnect()

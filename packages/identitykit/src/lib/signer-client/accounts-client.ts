@@ -1,29 +1,16 @@
-import {
-  IdbStorage,
-  SignerStorage,
-  removeDelegationChain,
-  removeIdentity,
-} from "@slide-computer/signer-storage"
-import { SubAccount } from "@dfinity/ledger-icp"
 import { IdleManager } from "./idle-manager"
 import { Principal } from "@dfinity/principal"
-import {
-  STORAGE_CONNECTED_OWNER_KEY,
-  STORAGE_KEY,
-  SignerClient,
-  SignerClientOptions,
-} from "./client"
+import { SignerClient, SignerClientOptions } from "./client"
+import { AccountsRequest, AccountsResponse, fromBase64 } from "@slide-computer/signer"
 
 export interface AccountsSignerClientOptions extends SignerClientOptions {}
 
 export class AccountsSignerClient extends SignerClient {
-  constructor(options: AccountsSignerClientOptions, storage: SignerStorage) {
-    super(options, storage)
-  }
-
-  public static async create(options: AccountsSignerClientOptions): Promise<SignerClient> {
-    const storage = options.storage ?? new IdbStorage()
-    return new AccountsSignerClient(options, storage)
+  public static async create(options: AccountsSignerClientOptions): Promise<AccountsSignerClient> {
+    const signerClient = new AccountsSignerClient(options)
+    const storageConnectedUser = await signerClient.getConnectedUserFromStorage()
+    await signerClient.setConnectedUser(storageConnectedUser)
+    return signerClient
   }
 
   public async login(): Promise<{
@@ -33,6 +20,7 @@ export class AccountsSignerClient extends SignerClient {
     }[]
     connectedAccount: string
   }> {
+    // check permission for icrc27_accounts
     const permissions = await this.options.signer.permissions()
     const permission = permissions.find((x) => "icrc27_accounts" === x.scope.method)
 
@@ -43,7 +31,23 @@ export class AccountsSignerClient extends SignerClient {
         },
       ])
     }
-    const accounts = await this.options.signer.accounts()
+
+    // get and transform accounts from signer
+    const accounts = (
+      await this.options.signer.sendRequest<AccountsRequest, AccountsResponse>({
+        method: "icrc27_accounts",
+        id: this.crypto.randomUUID(),
+        jsonrpc: "2.0",
+        params: this.options.derivationOrigin
+          ? {
+              derivationOrigin: this.options.derivationOrigin,
+            }
+          : undefined,
+      })
+    ).accounts.map(({ owner, subaccount }) => ({
+      owner: Principal.fromText(owner),
+      subaccount: subaccount === undefined ? undefined : fromBase64(subaccount),
+    }))
     const account = accounts[0]
 
     if (!account.subaccount) {
@@ -51,20 +55,17 @@ export class AccountsSignerClient extends SignerClient {
         this.idleManager = IdleManager.create(this.options.idleOptions)
         this.registerDefaultIdleCallback()
       }
-      await this.setConnectedUser(account.owner.toString())
+      await this.setConnectedUserToStorage({ owner: account.owner.toString() })
       return {
         signerResponse: accounts,
         connectedAccount: account.owner.toString(),
       }
     }
 
-    const subAccount = SubAccount.fromBytes(new Uint8Array(account.subaccount))
-
-    if (typeof subAccount === typeof Error) {
-      throw subAccount
-    }
-
-    await this.setConnectedUser(account.owner.toString(), subAccount as SubAccount)
+    await this.setConnectedUserToStorage({
+      owner: account.owner.toString(),
+      subAccount: account.subaccount,
+    })
 
     if (!this.options?.idleOptions?.disableIdle && !this.idleManager) {
       this.idleManager = IdleManager.create(this.options.idleOptions)
@@ -73,22 +74,6 @@ export class AccountsSignerClient extends SignerClient {
     return {
       signerResponse: accounts,
       connectedAccount: account.owner.toString(),
-    }
-  }
-
-  public async logout(options: { returnTo?: string } = {}): Promise<void> {
-    await removeIdentity(STORAGE_KEY, this.storage)
-    await removeDelegationChain(STORAGE_KEY, this.storage)
-    await this.storage.remove(STORAGE_CONNECTED_OWNER_KEY)
-    this.idleManager?.exit()
-    this.idleManager = undefined
-    this.connectedUser = undefined
-    if (options.returnTo) {
-      try {
-        window.history.pushState({}, "", options.returnTo)
-      } catch (e) {
-        window.location.href = options.returnTo
-      }
     }
   }
 }
