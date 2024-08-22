@@ -10,7 +10,8 @@ import {
 } from "@nfid/identitykit"
 
 const mockedSignerProviderUrl = import.meta.env.VITE_MOCKED_SIGNER_PROVIDER_URL
-const nfidSignerProviderUrl = import.meta.env.VITE_MOCKED_NFID_SIGNER_PROVIDER_URL
+// const nfidSignerProviderUrl = import.meta.env.VITE_MOCKED_NFID_SIGNER_PROVIDER_URL
+const nfidSignerProviderUrl = "http://localhost:9090/rpc"
 const targetCanister = import.meta.env.VITE_TARGET_CANISTER
 
 export function AppWrappedInIdentityKit() {

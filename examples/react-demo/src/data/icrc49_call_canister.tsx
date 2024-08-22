@@ -31,6 +31,16 @@ export const ledgerRequest = {
   },
 }
 
+export const icrc2approve = {
+  method: "icrc49_call_canister",
+  params: {
+    canisterId: "etik7-oiaaa-aaaar-qagia-cai",
+    sender: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+    method: "icrc2_approve",
+    arg: "RElETAZufW17bgFueGwCs7DawwNorYbKgwUCbAjG/LYCALqJ5cIEAqLelOsGAoLz85EMA9ijjKgNfZGcnL8NAN6n99oNA8uW3LQOBAEFAAAAAICAgMnVm5n4jJ4EAAABHfiYTFV8824++qVOIjiov3Bgl0gU0RPMROITTCMCAA==",
+  },
+}
+
 export const icrc49CallCanisterSection: ISection = {
   id: "icrc49_call_canister",
   title: "4.a icrc49_call_canister",
@@ -53,6 +63,10 @@ export const icrc49CallCanisterSection: ISection = {
     {
       title: "Ledger transfer",
       value: JSON.stringify(ledgerRequest, null, 2),
+    },
+    {
+      title: "ICRC2 approve",
+      value: JSON.stringify(icrc2approve, null, 2),
     },
   ],
   getCodeSnippet: function (requestJSON: string): string {
@@ -82,6 +96,39 @@ const transferArgs = {
   amount: { e8s: BigInt(1000) },
 }
 const response = await actor.${basicRequest.params.method}(transferArgs)`
+    }
+
+    if (basicRequest?.params?.method === "icrc2_approve") {
+      return `const { IdentityKitAgent } = useIdentityKit()
+
+const agent = new IdentityKitAgent({
+  getPrincipal: () => Principal.fromText("${basicRequest.params.sender}"),
+})
+
+const actor = Actor.createActor(idlFactory, {
+  agent,
+  canisterId: "${basicRequest.params.canisterId}",
+})
+  
+const acc = {
+  owner: Principal.fromText(
+    "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe"
+  ),
+  subaccount: [],
+}
+
+const icrc2_approve_args = {
+  from_subaccount: [],
+  spender: myAcc,
+  fee: [],
+  memo: [],
+  amount: BigInt(5000 * 10 ** 18),
+  created_at_time: [],
+  expected_allowance: [],
+  expires_at: [],
+}
+
+const response = await actor.${basicRequest.params.method}(icrc2_approve_args)`
     }
 
     return `const { agent } = useIdentityKit()

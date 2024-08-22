@@ -13,6 +13,7 @@ import { DropdownSelect } from "../molecules/dropdown-select"
 import "react-toastify/dist/ReactToastify.css"
 import { idlFactory as demoIDL } from "../../idl/service_idl"
 import { idlFactory as ledgerIDL } from "../../idl/ledger"
+import { idlFactory as pepeIDL } from "../../idl/token-pepe-ledger"
 import { AccountIdentifier } from "@dfinity/ledger-icp"
 import { fromHexString } from "ictool"
 import { Principal } from "@dfinity/principal"
@@ -36,6 +37,7 @@ export interface ISection {
 const canistersIDLs: { [key: string]: any } = {
   "ryjl3-tyaaa-aaaaa-aaaba-cai": ledgerIDL,
   "do25a-dyaaa-aaaak-qifua-cai": demoIDL,
+  "etik7-oiaaa-aaaar-qagia-cai": pepeIDL,
 }
 
 export const Section: React.FC<ISection> = ({
@@ -106,7 +108,29 @@ export const Section: React.FC<ISection> = ({
             created_at_time: [],
             amount: { e8s: BigInt(1000) },
           }
+
           setIcrc49ActorResponse((await actor[requestObject.params.method](transferArgs)) as string)
+        } else if (requestObject.params?.method === "icrc2_approve") {
+          const myAcc = {
+            owner: Principal.fromText(
+              "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe" // mocked signer main account
+            ),
+            subaccount: [],
+          }
+
+          const icrc2_approve_args = {
+            from_subaccount: [],
+            spender: myAcc,
+            fee: [],
+            memo: [],
+            amount: BigInt(5000 * 10 ** 18),
+            created_at_time: [],
+            expected_allowance: [],
+            expires_at: [],
+          }
+          setIcrc49ActorResponse(
+            (await actor[requestObject.params.method](icrc2_approve_args)) as string
+          )
         } else {
           setIcrc49ActorResponse((await actor[requestObject.params.method]("me")) as string)
         }
