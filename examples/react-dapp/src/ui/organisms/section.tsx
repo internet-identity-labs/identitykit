@@ -16,13 +16,13 @@ import { DropdownSelect } from "../molecules/dropdown-select"
 import { Buffer } from "buffer"
 
 import "react-toastify/dist/ReactToastify.css"
-import { IdentityKitSignerAgent } from "@nfid/identitykit"
 import { toBase64 } from "@slide-computer/signer"
 import { idlFactory as demoIDL } from "../../idl/service_idl"
 import { idlFactory as ledgerIDL } from "../../idl/ledger"
 import { idlFactory as pepeIDL } from "../../idl/token-pepe-ledger"
 import { AccountIdentifier } from "@dfinity/ledger-icp"
 import { fromHexString } from "ictool"
+import { SignerAgent } from "@slide-computer/signer-agent"
 
 export interface IRequestExample {
   title: string
@@ -93,7 +93,7 @@ export const Section: React.FC<ISection> = ({
         setIcrc49ActorResponse(null)
         const { sender, canisterId } = requestObject.params
 
-        const agent = new IdentityKitSignerAgent({
+        const agent = new SignerAgent({
           signer: new Proxy(selectedSigner, {
             get(target, prop) {
               return async (params: any) => {
@@ -248,6 +248,14 @@ export const Section: React.FC<ISection> = ({
     } catch (e) {
       if (e instanceof Error) {
         console.error(e)
+
+        if (e.message === "Not supported") {
+          toast.error(
+            `The connected signer does not support one of the methods for which permission was requested`
+          )
+          return
+        }
+
         toast.error(e.message)
       }
     } finally {
