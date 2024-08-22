@@ -26,16 +26,22 @@ const icrc49data = [icrc49CallCanisterSection]
 
 const mockedSignerProviderUrl = import.meta.env.VITE_MOCKED_SIGNER_PROVIDER_URL
 const nfidSignerProviderUrl = import.meta.env.VITE_MOCKED_NFID_SIGNER_PROVIDER_URL
+const environment = import.meta.env.VITE_ENVIRONMENT
 
 function App() {
   const { theme } = useTheme()
   const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
-  const mockedSigner: IdentityKitSignerConfig = {
-    ...MockedSigner,
-    providerUrl: mockedSignerProviderUrl,
+  const signers = [nfidw]
+
+  if (environment === "dev") {
+    signers.push({
+      ...MockedSigner,
+      providerUrl: mockedSignerProviderUrl,
+    })
   }
+
   return (
-    <IdentityKitProvider signers={[nfidw, mockedSigner]} theme={theme as IdentityKitTheme}>
+    <IdentityKitProvider signers={signers} theme={theme as IdentityKitTheme}>
       <div className="h-full min-h-screen bg-white dark:bg-dark px-[30px] pb-20">
         <ToastContainer />
         <Header />
