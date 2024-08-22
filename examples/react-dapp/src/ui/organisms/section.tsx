@@ -20,6 +20,7 @@ import { IdentityKitSignerAgent } from "@nfid/identitykit"
 import { toBase64 } from "@slide-computer/signer"
 import { idlFactory as demoIDL } from "../../idl/service_idl"
 import { idlFactory as ledgerIDL } from "../../idl/ledger"
+import { idlFactory as pepeIDL } from "../../idl/token-pepe-ledger"
 import { AccountIdentifier } from "@dfinity/ledger-icp"
 import { fromHexString } from "ictool"
 
@@ -39,6 +40,7 @@ export interface ISection {
 const canistersIDLs: { [key: string]: any } = {
   "ryjl3-tyaaa-aaaaa-aaaba-cai": ledgerIDL,
   "do25a-dyaaa-aaaak-qifua-cai": demoIDL,
+  "etik7-oiaaa-aaaar-qagia-cai": pepeIDL,
 }
 
 const SignerMethod: any = {
@@ -116,7 +118,9 @@ export const Section: React.FC<ISection> = ({
           requestObject.params?.method === "transfer"
         ) {
           const address = AccountIdentifier.fromPrincipal({
-            principal: Principal.fromText("do25a-dyaaa-aaaak-qifua-cai"),
+            principal: Principal.fromText(
+              "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe"
+            ),
           }).toHex()
 
           const transferArgs = {
@@ -127,7 +131,56 @@ export const Section: React.FC<ISection> = ({
             created_at_time: [],
             amount: { e8s: BigInt(1000) },
           }
+
           setIcrc49ActorResponse((await actor[requestObject.params.method](transferArgs)) as string)
+        } else if (requestObject.params?.method === "icrc2_approve") {
+          const myAcc = {
+            owner: Principal.fromText(
+              "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe" // mocked signer main account
+            ),
+            subaccount: [],
+          }
+
+          const icrc2_approve_args = {
+            from_subaccount: [],
+            spender: myAcc,
+            fee: [],
+            memo: [],
+            amount: BigInt(5000 * 10 ** 18),
+            created_at_time: [],
+            expected_allowance: [],
+            expires_at: [],
+          }
+          setIcrc49ActorResponse(
+            (await actor[requestObject.params.method](icrc2_approve_args)) as string
+          )
+        } else if (requestObject.params?.method === "icrc2_transfer_from") {
+          const myAcc = {
+            owner: Principal.fromText(
+              "otmgz-w3jqd-eutql-bdgwo-3dvfp-q5l2p-ruzio-nc3dr-2vgbi-c5eiz-tqe"
+            ),
+            subaccount: [],
+          }
+
+          const toAcc = {
+            owner: Principal.fromText(
+              "6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae" // mocked signer second account
+            ),
+            subaccount: [],
+          }
+
+          const icrc2_transfer_from_args = {
+            spender_subaccount: [],
+            from: myAcc,
+            to: toAcc,
+            amount: BigInt(1000 * 10 ** 18), // 1000 PEPE tokens
+            fee: [],
+            memo: [],
+            created_at_time: [],
+          }
+          setIcrc49ActorResponse(
+            (await actor[requestObject.params.method](icrc2_transfer_from_args)) as string
+          )
         } else {
           setIcrc49ActorResponse((await actor[requestObject.params.method]("me")) as string)
         }
