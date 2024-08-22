@@ -57,8 +57,8 @@ standard.
 
 ### 2. List your canisters as targets
 
-Import `IdentityKitAuthType`, add `authType={IdentityKitAuthType.DELEGATION}`, and your list of
-`targets` to `IdentityKitProvider`.
+Import `IdentityKitAuthType`, add `authType={IdentityKitAuthType.DELEGATION}` and
+`signerClientOptions={{targets: []}}` props, and pass your list of `targets`.
 
 ```jsx
 import { IdentityKitAuthType } from "@nfid/identitykit"
