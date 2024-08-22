@@ -1,4 +1,5 @@
 class LocalStorageWithTTL {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setItem(key: string, value: any, ttl: number): void {
     const now = new Date().getTime()
 
@@ -10,6 +11,7 @@ class LocalStorageWithTTL {
     localStorage.setItem(key, JSON.stringify(item))
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getItem(key: string): any | null {
     const itemStr = localStorage.getItem(key)
 
