@@ -41,6 +41,16 @@ export const icrc2approve = {
   },
 }
 
+export const icrc2transfer = {
+  method: "icrc49_call_canister",
+  params: {
+    canisterId: "etik7-oiaaa-aaaar-qagia-cai",
+    sender: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+    method: "icrc2_transfer_from",
+    arg: "RElETAZufW17bgFueGwCs7DawwNorYbKgwUCbAjG/LYCALqJ5cIEAqLelOsGAoLz85EMA9ijjKgNfZGcnL8NAN6n99oNA8uW3LQOBAEFAAAAAICAgMnVm5n4jJ4EAAABHfiYTFV8824++qVOIjiov3Bgl0gU0RPMROITTCMCAA==",
+  },
+}
+
 export const icrc49CallCanisterSection: ISection = {
   id: "icrc49_call_canister",
   title: "4.a icrc49_call_canister",
@@ -61,12 +71,16 @@ export const icrc49CallCanisterSection: ISection = {
       value: JSON.stringify(withConsentMessage, null, 2),
     },
     {
-      title: "Ledger transfer",
+      title: "ICP transfer",
       value: JSON.stringify(ledgerRequest, null, 2),
     },
     {
-      title: "ICRC2 approve",
+      title: "ICRC-2 approve",
       value: JSON.stringify(icrc2approve, null, 2),
+    },
+    {
+      title: "ICRC-2 transfer",
+      value: JSON.stringify(icrc2transfer, null, 2),
     },
   ],
   getCodeSnippet: function (requestJSON: string): string {

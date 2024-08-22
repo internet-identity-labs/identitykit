@@ -125,11 +125,38 @@ export const Section: React.FC<ISection> = ({
             memo: [],
             amount: BigInt(5000 * 10 ** 18),
             created_at_time: [],
-            expected_allowance: [],
+            expected_allowance: [BigInt(5000 * 10 ** 18)],
             expires_at: [],
           }
           setIcrc49ActorResponse(
             (await actor[requestObject.params.method](icrc2_approve_args)) as string
+          )
+        } else if (requestObject.params?.method === "icrc2_transfer_from") {
+          const myAcc = {
+            owner: Principal.fromText(
+              "otmgz-w3jqd-eutql-bdgwo-3dvfp-q5l2p-ruzio-nc3dr-2vgbi-c5eiz-tqe"
+            ),
+            subaccount: [],
+          }
+
+          const toAcc = {
+            owner: Principal.fromText(
+              "6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae" // mocked signer second account
+            ),
+            subaccount: [],
+          }
+
+          const icrc2_transfer_from_args = {
+            spender_subaccount: [],
+            from: myAcc,
+            to: toAcc,
+            amount: BigInt(1000 * 10 ** 18), // 1000 PEPE tokens
+            fee: [],
+            memo: [],
+            created_at_time: [],
+          }
+          setIcrc49ActorResponse(
+            (await actor[requestObject.params.method](icrc2_transfer_from_args)) as string
           )
         } else {
           setIcrc49ActorResponse((await actor[requestObject.params.method]("me")) as string)
