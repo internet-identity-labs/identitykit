@@ -139,9 +139,7 @@ type icrc21_consent_message_response = variant {
 };
 
 type icrc28_trusted_origins_response = record {
-    trusted_origins: vec text;
-    certificate: vec nat8;
-    witness: vec nat8;
+    trusted_origins: vec text
 };
 
 service : {
@@ -160,7 +158,7 @@ service : {
     // See ICRC-10 for more information: https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-10/ICRC-10.md
     icrc10_supported_standards : () -> (vec record { name : text; url : text }) query;
 
-    icrc28_trusted_origins : () -> (icrc28_trusted_origins_response) query;
+    icrc28_trusted_origins : () -> (icrc28_trusted_origins_response);
     greet_no_consent : (text) -> (text) query;
     greet : (text) -> (text) query;
 }
