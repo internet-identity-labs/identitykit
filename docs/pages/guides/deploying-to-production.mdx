@@ -86,7 +86,7 @@ might access your application from:
 
 ## IdentityKitProvider steps
 
-### 1. Add `derivationOrigin` prop
+### 1. Add `derivationOrigin` to `signerClientOptions` prop
 
 Setting your `derivationOrigin` to the default canister deployment location
 (https://your-canister-id.icp0.io) will ensure your users authenticate against that origin even if
@@ -103,7 +103,9 @@ const App = () => {
       signers={[NFIDW]}
       featuredSigner={NFIDW}
       theme={IdentityKitTheme.LIGHT}
-      derivationOrigin="https://your-canister-id.icp0.io"
+      signerClientOptions={{
+        derivationOrigin: "https://your-canister-id.icp0.io",
+      }}
     >
       <YourApp />
     </IdentityKitProvider>
