@@ -1,22 +1,18 @@
-use ic_cdk::{init, print, query, update};
-use itertools::Itertools;
-
-use Icrc21DeviceSpec::GenericDisplay;
-use Icrc21Error::UnsupportedCanisterCall;
-
-use crate::cert_trusted::{get_trusted_origins_cert, update_trusted_origins};
 use crate::types::{
     Icrc21ConsentInfo, Icrc21ConsentMessage, Icrc21ConsentMessageMetadata,
     Icrc21ConsentMessageRequest, Icrc21DeviceSpec, Icrc21Error, Icrc21ErrorInfo,
-    Icrc21LineDisplayPage, Icrc21SupportedStandard, Icrc28TrustedOriginsResponse,
+    Icrc21LineDisplayPage, Icrc21SupportedStandard, Icrc28TrustedOriginsResponse
 };
+use ic_cdk::{query, update};
+use itertools::Itertools;
+use Icrc21DeviceSpec::GenericDisplay;
+use Icrc21Error::UnsupportedCanisterCall;
 
 mod types;
-mod cert_trusted;
 
-#[init]
-fn init() {
-    update_trusted_origins(vec![
+#[update]
+fn icrc28_trusted_origins() -> Icrc28TrustedOriginsResponse {
+    let trusted_origins = vec![
         String::from("https://standards.identitykit.xyz"),
         String::from("https://dev.standards.identitykit.xyz"),
         String::from("https://demo.identitykit.xyz"),
@@ -25,12 +21,9 @@ fn init() {
         String::from("http://localhost:3002"),
         String::from("https://nfid.one"),
         String::from("https://dev.nfid.one"),
-    ]);
-}
+    ];
 
-#[query]
-fn icrc28_trusted_origins() -> Icrc28TrustedOriginsResponse {
-    get_trusted_origins_cert()
+    return Icrc28TrustedOriginsResponse { trusted_origins }
 }
 
 #[query]
@@ -84,9 +77,9 @@ fn icrc21_canister_call_consent_message(
 
     match consent_msg_request.user_preferences.device_spec {
         Some(Icrc21DeviceSpec::LineDisplay {
-                 characters_per_line,
-                 lines_per_page,
-             }) => Ok(Icrc21ConsentInfo {
+            characters_per_line,
+            lines_per_page,
+        }) => Ok(Icrc21ConsentInfo {
             metadata,
             consent_message: Icrc21ConsentMessage::LineDisplayMessage {
                 pages: consent_msg_text_pages(
