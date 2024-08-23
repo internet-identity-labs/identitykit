@@ -89,6 +89,15 @@ export const Section: React.FC<ISection> = ({
 
     try {
       if (requestObject.method === "icrc49_call_canister") {
+        if (
+          !requestsExamples.find(
+            (r) => requestObject.params?.method === JSON.parse(r.value).params.method
+          )
+        ) {
+          setIsLoading(false)
+          return toast.error("Method is not supported")
+        }
+
         setIcrc49SignerResponse(null)
         setIcrc49ActorResponse(null)
         const { sender, canisterId } = requestObject.params
