@@ -1,8 +1,8 @@
 import { RPCMessage, RPCErrorResponse } from "../../../type"
 import { authService } from "../../auth.service"
 import {
-  GenericError,
   NotSupportedError,
+  PermissionNotGranted,
   exceptionHandlerService,
 } from "../../exception-handler.service"
 import { MethodService } from "../method.servcie"
@@ -21,7 +21,9 @@ export abstract class InteractiveMethodService implements MethodService {
     const authorized = await this.isAuthorized()
 
     if (!authorized) {
-      throw new GenericError("Permission not granted")
+      throw new PermissionNotGranted(
+        "The signer has rejected the request due to insufficient permissions."
+      )
     }
 
     const componentData = this.getСomponentData(message)

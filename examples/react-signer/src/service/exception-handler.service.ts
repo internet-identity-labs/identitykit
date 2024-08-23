@@ -2,6 +2,7 @@ import { RPCMessage } from "../type"
 
 export class NotSupportedError extends Error {}
 export class GenericError extends Error {}
+export class PermissionNotGranted extends Error {}
 
 class ExceptionHandlerService {
   public handle(error: unknown, message: MessageEvent<RPCMessage>) {
@@ -13,6 +14,10 @@ class ExceptionHandlerService {
 
     if (error instanceof GenericError) {
       this.postErrorMessage(message, 1000, "Generic error", error.message)
+    }
+
+    if (error instanceof PermissionNotGranted) {
+      this.postErrorMessage(message, 3000, "Permission not granted", error.message)
     }
   }
 
