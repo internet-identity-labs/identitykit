@@ -51,12 +51,12 @@ function App({
             : undefined
         }
       />
-      <h5 className="text-xl mt-[30px] mb-[25px]">
+      <h3 className="text-xl mt-[30px] mb-[25px]">
         Step 2. Click Connect Wallet button (or disconnect and reconnect)
-      </h5>
-      <h5 className="text-xl mb-[25px]">
+      </h3>
+      <h3 className="text-xl mb-[25px]">
         Step 3. Interact with other smart contract canisters on behalf of your connected user
-      </h5>
+      </h3>
       <Section {...icrc49CallCanisterSection} />
     </div>
   )
