@@ -85,6 +85,15 @@ export const Section: React.FC<ISection> = ({
 
     try {
       if (requestObject.method === "icrc49_call_canister") {
+        if (
+          !requestsExamples.find(
+            (r) => requestObject.params?.method === JSON.parse(r.value).params.method
+          )
+        ) {
+          setIsLoading(false)
+          return toast.error("Method is not supported")
+        }
+
         setIcrc49ActorResponse(undefined)
         const { canisterId } = requestObject.params
         const actor = Actor.createActor(canistersIDLs[canisterId], {
