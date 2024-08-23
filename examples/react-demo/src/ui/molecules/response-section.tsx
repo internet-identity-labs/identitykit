@@ -3,16 +3,20 @@ import { langs } from "@uiw/codemirror-extensions-langs"
 import { Copy } from "../atoms/copy"
 import { E2ELogger } from "../atoms/e2e"
 import { useTheme } from "next-themes"
+import clsx from "clsx"
 
 export interface ResponseSectionProps {
   value: string
+  className?: string
 }
 
-export const ResponseSection: React.FC<ResponseSectionProps> = ({ value }) => {
+export const ResponseSection: React.FC<ResponseSectionProps> = ({ value, className }) => {
   const { resolvedTheme } = useTheme()
   return (
     <div>
-      <p className="mb-1 text-slate-500 dark:text-zinc-700">Response</p>
+      <p className={clsx("text-slate-500 dark:text-zinc-500 font-semibold mb-1", className)}>
+        Response
+      </p>
       <div className="relative w-full overflow-hidden !font-mono rounded-xl">
         <div className="absolute z-40 scale-125 w-[24px] right-3 top-3">
           <Copy value={value} />

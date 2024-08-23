@@ -18,7 +18,7 @@ function App({
   const [shouldDisconnectWallet, setShouldDisconnectWallet] = useState(false)
 
   return (
-    <div className="h-full min-h-screen bg-white dark:bg-dark px-[30px] pb-20">
+    <div className="h-full min-h-screen bg-white dark:bg-dark px-[30px] pb-[25px]">
       <ToastContainer />
       <Header
         onConnectWalletSuccess={(response) =>
@@ -30,9 +30,9 @@ function App({
         }}
         triggerManualWalletDisconnect={shouldDisconnectWallet}
       />
-      <h5 className="font-semibold mb-4 mt-6 sm:mt-12">
-        1. Choose which authentication method your users will connect with
-      </h5>
+      <h3 className="text-xl mt-[25px] mb-[20px]">
+        Step 1. Choose which authentication method your users will connect with
+      </h3>
       <AuthTypeTabs
         value={authType}
         onChange={(type) => {
@@ -51,11 +51,11 @@ function App({
             : undefined
         }
       />
-      <h5 className="font-semibold mt-8">
-        2. Click Connect Wallet button (or disconnect and reconnect)
+      <h5 className="text-xl mt-[30px] mb-[25px]">
+        Step 2. Click Connect Wallet button (or disconnect and reconnect)
       </h5>
-      <h5 className="font-semibold mb-8">
-        3. Interact with other smart contract canisters on behalf of your connected user
+      <h5 className="text-xl mb-[25px]">
+        Step 3. Interact with other smart contract canisters on behalf of your connected user
       </h5>
       <Section {...icrc49CallCanisterSection} />
     </div>

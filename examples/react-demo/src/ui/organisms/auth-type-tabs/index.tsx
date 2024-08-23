@@ -38,8 +38,8 @@ export function AuthTypeTabs({
             className={clsx(
               "w-1/2 sm:w-[150px] cursor-pointer border-b-2 -mb-[2px]",
               isAccounts
-                ? "text-primary border-primary"
-                : "border-transparent hover:text-primary hover:border-primary"
+                ? "border-primary"
+                : "border-transparent text-zinc-500 hover:text-dark dark:hover:text-white hover:border-primary"
             )}
           >
             <div className="inline-block py-2 rounded-t-lg">Account</div>
@@ -49,10 +49,10 @@ export function AuthTypeTabs({
               if (isAccounts) onChange(IdentityKitAuthType.DELEGATION)
             }}
             className={clsx(
-              "w-1/2 sm:w-[150px] cursor-pointer border-b-2 -mb-[2px]",
+              "w-1/2 sm:w-[150px] cursor-pointer border-b-2 -mb-[2px] outline outline-2 outline-white dark:outline-dark",
               !isAccounts
-                ? "text-primary border-primary"
-                : "border-transparent hover:text-primary hover:border-primary"
+                ? "border-primary"
+                : "border-transparent text-zinc-500 hover:text-dark dark:hover:text-white hover:border-primary"
             )}
           >
             <div className="inline-block py-2 rounded-t-lg">Delegation</div>
@@ -62,22 +62,28 @@ export function AuthTypeTabs({
       <div>
         {isAccounts ? (
           <>
-            <small className="mb-5 mt-2 block">
+            <p className="text-sm my-[20px] block">
               Accounts are standard wallet address strings users may have used across the ICP
               ecosystem, for example to store assets, participate in defi, or engage in a variety of
               other activity.
-            </small>
+            </p>
             <ResponseSection value={accountsResponseJson} />
-            <CodeSection className="mt-3" value={getUsageExample(IdentityKitAuthType.ACCOUNTS)} />
+            <CodeSection
+              className="mt-[25px]"
+              value={getUsageExample(IdentityKitAuthType.ACCOUNTS)}
+            />
           </>
         ) : (
           <>
-            <small className="mb-5 mt-2 block">
+            <small className="text-sm my-[20px] block">
               Delegations are accounts that have been pre-approved to execute transactions on the
               user's behalf, resulting in the removal of wallet approval prompts.
             </small>
             <ResponseSection value={delegationResponseJson} />
-            <CodeSection className="mt-3" value={getUsageExample(IdentityKitAuthType.DELEGATION)} />
+            <CodeSection
+              className="mt-[25px]"
+              value={getUsageExample(IdentityKitAuthType.DELEGATION)}
+            />
           </>
         )}
       </div>

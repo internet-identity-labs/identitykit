@@ -2,10 +2,25 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap");
+
+* {
+  font-family: "Inter";
+}
+
+.cm-line span {
+  font-family: "Inconsolata";
+}
+
 .cm-editor {
   padding: 15px;
 }
 
 .ͼ15 {
   background-color: #f9f9f9;
+}
+
+body {
+  font-weight: 300;
 }

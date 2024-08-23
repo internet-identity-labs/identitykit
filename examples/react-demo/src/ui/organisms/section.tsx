@@ -197,7 +197,7 @@ export const Section: React.FC<ISection> = ({
   return (
     <Blur radius={!signerClient?.connectedUser ? "5px" : "0"} transition="400ms">
       <div id={id}>
-        <small className="block mb-5">{description}</small>
+        <p className="block text-sm my-[25px]">{description}</p>
         {requestsOptions.length > 1 ? (
           <DropdownSelect
             id="select-request"
@@ -210,7 +210,7 @@ export const Section: React.FC<ISection> = ({
             }}
           />
         ) : null}
-        <div className="grid grid-cols-2 gap-[30px] my-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-[25px] my-[25px]">
           <RequestSection value={requestValue} setValue={setRequestValue} />
           <ResponseSection value={responseValue} />
         </div>

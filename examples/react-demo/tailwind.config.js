@@ -12,6 +12,11 @@ const configExtension = {
     sans: ["Inter", ...defaultTheme.fontFamily.sans],
     mono: ["IBM Plex Mono", ...defaultTheme.fontFamily.mono],
   },
+  fontWeight: {
+    normal: '300',
+    semibold: '500',
+    bold: '600'
+  }
 }
 
 /** @type {import('tailwindcss').Config} */

@@ -41,7 +41,7 @@ export const Header = ({
             href="https://docs.identitykit.xyz/"
             className="text-sm font-bold hidden sm:block"
           >
-            NFID IdentityKit Docs
+            Dev Docs
           </a>
           <img
             className="block sm:hidden cursor-pointer"
@@ -75,7 +75,7 @@ export const Header = ({
               return (
                 <ConnectWalletButton {...props} className="min-w-[100px] sm:min-w-[140px]">
                   <small className="flex">
-                    Connect<span className="hidden md:block ms-2">wallet</span>
+                    Connect<span className="hidden md:block">&nbsp;wallet</span>
                   </small>
                 </ConnectWalletButton>
               )
