@@ -13,7 +13,7 @@ export const RequestSection: React.FC<RequestSectionProps> = ({ value, setValue 
   const { resolvedTheme } = useTheme()
   return (
     <div>
-      <p className="text-slate-500 dark:text-zinc-700">
+      <p className="text-slate-500 dark:text-zinc-500 font-semibold mb-1">
         Request <span className="text-sm opacity-50">(editable)</span>
       </p>
       <div className="relative w-full overflow-hidden !font-mono rounded-xl">
