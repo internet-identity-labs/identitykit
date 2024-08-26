@@ -11,9 +11,8 @@ import { Section } from "./ui/organisms/section"
 import { ToastContainer } from "react-toastify"
 import { SectionContainer } from "./ui/organisms/section-container"
 import { IdentityKitProvider, IdentityKitTheme } from "@nfid/identitykit/react"
-import { MockedSigner, NFIDW } from "@nfid/identitykit"
+import { MockedSigner, NFIDW, Plug, IdentityKitSignerConfig } from "@nfid/identitykit"
 import { useTheme } from "next-themes"
-import { IdentityKitSignerConfig } from "@nfid/identitykit"
 
 const icrc25data = [
   icrc25RequestPermissionsSection,
@@ -31,7 +30,7 @@ const environment = import.meta.env.VITE_ENVIRONMENT
 function App() {
   const { theme } = useTheme()
   const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
-  const signers = [nfidw]
+  const signers = [nfidw, Plug]
 
   if (environment === "dev") {
     signers.push({

@@ -4,9 +4,10 @@ import { useTheme } from "next-themes"
 import { IdentityKitProvider, IdentityKitTheme } from "@nfid/identitykit/react"
 import {
   IdentityKitAuthType,
+  IdentityKitSignerConfig,
   MockedSigner,
   NFIDW,
-  IdentityKitSignerConfig,
+  Plug,
 } from "@nfid/identitykit"
 
 const mockedSignerProviderUrl = import.meta.env.VITE_MOCKED_SIGNER_PROVIDER_URL
@@ -19,7 +20,7 @@ export function AppWrappedInIdentityKit() {
   const [authType, setAuthType] = useState<IdentityKitAuthType>(IdentityKitAuthType.ACCOUNTS)
   const { theme } = useTheme()
   const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
-  const signers = [nfidw]
+  const signers = [nfidw, Plug]
 
   if (environment === "dev") {
     signers.push({

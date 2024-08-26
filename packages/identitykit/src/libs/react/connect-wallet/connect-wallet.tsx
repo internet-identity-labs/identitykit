@@ -43,8 +43,8 @@ export function ConnectWallet({
     if (selectedSigner && signerClient && !connectedAccount) {
       signerClient
         .login()
-        .then((res) => {
-          IdentityKit.setSignerAgent({
+        .then(async (res) => {
+          await IdentityKit.setSignerAgent({
             ...agentOptions,
             signer: selectedSigner,
             account: Principal.from(res.connectedAccount),

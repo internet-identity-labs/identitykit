@@ -20,8 +20,8 @@ export class IdentityKit {
     IdentityKit.signerClient = signerClient
   }
 
-  static setSignerAgent(options: SignerAgentOptions) {
-    IdentityKit.signerAgent = new SignerAgent(options)
+  static async setSignerAgent(options: SignerAgentOptions) {
+    IdentityKit.signerAgent = await SignerAgent.create(options)
   }
 
   static async getIcpBalance(): Promise<number> {

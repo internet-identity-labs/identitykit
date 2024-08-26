@@ -1,4 +1,5 @@
 export { SignerAgent as IdentityKitSignerAgent } from "./signer-agent"
+export { SignerAgent as IdentityKitSignerRawAgent } from "@slide-computer/signer-agent"
 export {
   SignerClient as IdentityKitSignerClient,
   DelegationSignerClient as IdentityKitDelegationSignerClient,
@@ -16,4 +17,5 @@ export {
   type AccountsSignerClientOptions as IdentityKitAccountsSignerClientOptions,
 } from "./signer-client"
 export { type SignerAgentOptions as IdentityKitSignerAgentOptions } from "./signer-agent"
-export { NFIDW, MockedSigner } from "./signers"
+export { NFIDW, Plug, MockedSigner } from "./signers"
+export { toBase64, fromBase64 } from "@slide-computer/signer"
