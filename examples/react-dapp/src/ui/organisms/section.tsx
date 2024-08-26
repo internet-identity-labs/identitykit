@@ -16,13 +16,12 @@ import { DropdownSelect } from "../molecules/dropdown-select"
 import { Buffer } from "buffer"
 
 import "react-toastify/dist/ReactToastify.css"
-import { toBase64 } from "@slide-computer/signer"
 import { idlFactory as demoIDL } from "../../idl/service_idl"
 import { idlFactory as ledgerIDL } from "../../idl/ledger"
 import { idlFactory as pepeIDL } from "../../idl/token-pepe-ledger"
 import { AccountIdentifier } from "@dfinity/ledger-icp"
 import { fromHexString } from "ictool"
-import { SignerAgent } from "@slide-computer/signer-agent"
+import { IdentityKitSignerRawAgent, toBase64 } from "@nfid/identitykit"
 
 export interface IRequestExample {
   title: string
@@ -102,7 +101,7 @@ export const Section: React.FC<ISection> = ({
         setIcrc49ActorResponse(null)
         const { sender, canisterId } = requestObject.params
 
-        const agent = new SignerAgent({
+        const agent = await IdentityKitSignerRawAgent.create({
           signer: new Proxy(selectedSigner, {
             get(target, prop) {
               return async (params: any) => {
@@ -115,10 +114,10 @@ export const Section: React.FC<ISection> = ({
               }
             },
           }),
-          account: Principal.fromText(sender),
+          account: Principal.fromText(sender) as any,
         })
         const actor = Actor.createActor(canistersIDLs[canisterId], {
-          agent,
+          agent: agent as any,
           canisterId,
         })
 
@@ -129,7 +128,7 @@ export const Section: React.FC<ISection> = ({
           const address = AccountIdentifier.fromPrincipal({
             principal: Principal.fromText(
               "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe"
-            ),
+            ) as any,
           }).toHex()
 
           const transferArgs = {
