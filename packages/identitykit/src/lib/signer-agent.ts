@@ -39,24 +39,29 @@ export class SignerAgent implements Agent {
 
   static async create(options: SignerAgentOptions) {
     SignerAgent.#isInternalConstructing = true
-    var agent = await SlideComputerSignerAgent.create(options)
+    const agent = await SlideComputerSignerAgent.create(options)
     return new SignerAgent(options, agent)
   }
 
   getPrincipal(): Promise<Principal> {
     return this.agent.getPrincipal()
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   createReadStateRequest?(_options: ReadStateOptions): Promise<any> {
     return this.agent.createReadStateRequest(_options)
   }
+
   readState(
     effectiveCanisterId: Principal | string,
     options: ReadStateOptions,
     identity?: Identity,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     request?: any
   ): Promise<ReadStateResponse> {
     return this.agent.readState(effectiveCanisterId, options, identity, request)
   }
+
   status(): Promise<JsonObject> {
     return this.agent.status()
   }
