@@ -4,3 +4,5 @@ export { icrc25SupportedStandardsSection } from "./icrc25_supported_standards"
 export { icrc27AccountsSection } from "./icrc27_accounts"
 export { icrc34DelegationSection } from "./icrc34_delegation"
 export { icrc49CallCanisterSection } from "./icrc49_call_canister"
+
+export { type Request as CallCanisterRequest } from "./icrc49_call_canister"

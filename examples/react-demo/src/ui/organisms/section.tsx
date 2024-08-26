@@ -9,28 +9,20 @@ import { useIdentityKit } from "@nfid/identitykit/react"
 import { Actor } from "@dfinity/agent"
 import { getRequestObject } from "../../utils/requests"
 import { DropdownSelect } from "../molecules/dropdown-select"
-
+import Blur from "react-css-blur"
 import "react-toastify/dist/ReactToastify.css"
+
 import { idlFactory as demoIDL } from "../../idl/service_idl"
 import { idlFactory as ledgerIDL } from "../../idl/ledger"
 import { idlFactory as pepeIDL } from "../../idl/token-pepe-ledger"
-import { AccountIdentifier } from "@dfinity/ledger-icp"
-import { fromHexString } from "ictool"
-import { Principal } from "@dfinity/principal"
 
-import Blur from "react-css-blur"
-
-export interface IRequestExample {
-  title: string
-  value: string
-}
+import { RequestExample } from "../../data/icrc49_call_canister"
 
 export interface ISection {
   id: string
-  title: string
   description: JSX.Element
-  requestsExamples: IRequestExample[]
-  getCodeSnippet: (requestJSON: string) => string
+  requestsExamples: Array<{ config: RequestExample; value: string }>
+  getCodeSnippet: (requestJson: string) => string
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,7 +42,7 @@ export const Section: React.FC<ISection> = ({
   const [selectedRequestIndex, setSelectedRequestIndex] = useState(0)
   const [requestValue, setRequestValue] = useState(requestsExamples[selectedRequestIndex].value)
   const [responseValue, setResponseValue] = useState("{}")
-  const [icrc49ActorResponse, setIcrc49ActorResponse] = useState<string | undefined>(undefined)
+  const [actorResponse, setActorResponse] = useState<string | undefined>(undefined)
 
   const { selectedSigner, savedSigner, signerClient, agent } = useIdentityKit()
 
@@ -59,13 +51,7 @@ export const Section: React.FC<ISection> = ({
       if (isValidJSON(requestValue)) {
         const rVal = JSON.parse(requestValue)
         if (rVal.params.sender) rVal.params.sender = signerClient?.connectedUser?.owner
-        setRequestValue(
-          JSON.stringify(
-            rVal,
-            (_, value) => (typeof value === "bigint" ? value.toString() : value),
-            2
-          )
-        )
+        setRequestValue(JSON.stringify(rVal, null, 2))
       }
     }
   }, [signerClient?.connectedUser?.owner, requestValue])
@@ -74,103 +60,22 @@ export const Section: React.FC<ISection> = ({
 
   const handleSubmit = async () => {
     if (!signer) return
-    setIsLoading(true)
 
-    if (!isValidJSON(requestValue)) {
-      setIsLoading(false)
-      return toast.error("Invalid JSON")
-    }
+    setIsLoading(true)
 
     const requestObject = getRequestObject(requestValue)
 
     try {
-      if (requestObject.method === "icrc49_call_canister") {
-        if (
-          !requestsExamples.find(
-            (r) => requestObject.params?.method === JSON.parse(r.value).params.method
-          )
-        ) {
-          setIsLoading(false)
-          return toast.error("Method is not supported")
-        }
+      const args =
+        requestsExamples[selectedRequestIndex].config.getActorArgs?.(requestObject) ?? requestObject
 
-        setIcrc49ActorResponse(undefined)
-        const { canisterId } = requestObject.params
-        const actor = Actor.createActor(canistersIDLs[canisterId], {
-          agent,
-          canisterId,
-        })
-
-        if (
-          requestObject.params?.canisterId === "ryjl3-tyaaa-aaaaa-aaaba-cai" &&
-          requestObject.params?.method === "transfer"
-        ) {
-          const address = AccountIdentifier.fromPrincipal({
-            principal: Principal.fromText("do25a-dyaaa-aaaak-qifua-cai"),
-          }).toHex()
-
-          const transferArgs = {
-            to: fromHexString(address),
-            fee: { e8s: BigInt(10000) },
-            memo: BigInt(0),
-            from_subaccount: [],
-            created_at_time: [],
-            amount: { e8s: BigInt(1000) },
-          }
-
-          setIcrc49ActorResponse((await actor[requestObject.params.method](transferArgs)) as string)
-        } else if (requestObject.params?.method === "icrc2_approve") {
-          const myAcc = {
-            owner: Principal.fromText(
-              "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe" // mocked signer main account
-            ),
-            subaccount: [],
-          }
-
-          const icrc2_approve_args = {
-            from_subaccount: [],
-            spender: myAcc,
-            fee: [],
-            memo: [],
-            amount: BigInt(5000 * 10 ** 18),
-            created_at_time: [],
-            expected_allowance: [BigInt(5000 * 10 ** 18)],
-            expires_at: [],
-          }
-          setIcrc49ActorResponse(
-            (await actor[requestObject.params.method](icrc2_approve_args)) as string
-          )
-        } else if (requestObject.params?.method === "icrc2_transfer_from") {
-          const myAcc = {
-            owner: Principal.fromText(
-              "otmgz-w3jqd-eutql-bdgwo-3dvfp-q5l2p-ruzio-nc3dr-2vgbi-c5eiz-tqe"
-            ),
-            subaccount: [],
-          }
-
-          const toAcc = {
-            owner: Principal.fromText(
-              "6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae" // mocked signer second account
-            ),
-            subaccount: [],
-          }
-
-          const icrc2_transfer_from_args = {
-            spender_subaccount: [],
-            from: myAcc,
-            to: toAcc,
-            amount: BigInt(1000 * 10 ** 18), // 1000 PEPE tokens
-            fee: [],
-            memo: [],
-            created_at_time: [],
-          }
-          setIcrc49ActorResponse(
-            (await actor[requestObject.params.method](icrc2_transfer_from_args)) as string
-          )
-        } else {
-          setIcrc49ActorResponse((await actor[requestObject.params.method]("me")) as string)
-        }
-      }
+      setActorResponse(undefined)
+      const { canisterId } = requestObject.params
+      const actor = Actor.createActor(canistersIDLs[canisterId], {
+        agent,
+        canisterId,
+      })
+      setActorResponse((await actor[requestObject.params.method](args)) as string)
     } catch (e) {
       if (e instanceof Error) {
         console.error(e)
@@ -184,21 +89,29 @@ export const Section: React.FC<ISection> = ({
   useEffect(() => {
     setResponseValue(
       JSON.stringify(
-        icrc49ActorResponse,
+        actorResponse,
         (_, value) => (typeof value === "bigint" ? value.toString() : value),
         2
       )
     )
-  }, [icrc49ActorResponse])
+  }, [actorResponse])
 
   const codeSection = useMemo(() => {
-    if (!isValidJSON(requestValue)) return "Invalid JSON"
-    return getCodeSnippet(requestValue)
+    if (!isValidJSON(requestValue)) return { error: "Invalid JSON" }
+    try {
+      return {
+        value: getCodeSnippet(requestValue),
+      }
+    } catch (e) {
+      return {
+        error: (e as Error).message,
+      }
+    }
   }, [getCodeSnippet, requestValue])
 
   const requestsOptions = useMemo(() => {
     return requestsExamples.map((r) => ({
-      label: r.title,
+      label: r.config.title,
       value: r.value,
     }))
   }, [requestsExamples])
@@ -223,14 +136,14 @@ export const Section: React.FC<ISection> = ({
           <RequestSection value={requestValue} setValue={setRequestValue} />
           <ResponseSection value={responseValue} />
         </div>
-        <CodeSection value={codeSection} />
+        <CodeSection value={codeSection.error ?? codeSection.value} />
         <div className="flex gap-5">
           <Button
             id="submit"
             loading={isLoading}
             className="w-[160px] mt-5"
             onClick={handleSubmit}
-            disabled={!signerClient?.connectedUser}
+            disabled={!signerClient?.connectedUser || !!codeSection.error}
             isSmall
           >
             Submit
