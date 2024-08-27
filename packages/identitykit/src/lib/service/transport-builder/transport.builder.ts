@@ -4,6 +4,7 @@ import { TransportType } from "../../types"
 import { getExtensionTransportBuilder } from "./extension-transport.builder"
 
 export interface TransportBuilderRequest {
+  id?: string
   transportType: TransportType
   url: string
 }
