@@ -1,6 +1,12 @@
 import { Transport } from "@slide-computer/signer"
 import { PlugTransport } from "@slide-computer/signer-transport-plug"
+import { TransportBuilderRequest } from "./transport.builder"
 
-export function getExtensionTransportBuilder(): Transport {
-  return new PlugTransport()
+export function getExtensionTransportBuilder({ id }: TransportBuilderRequest): Transport {
+  switch (id) {
+    case "Plug":
+      return new PlugTransport()
+    default:
+      throw Error("The extension wallet is not supported.")
+  }
 }

@@ -26,6 +26,7 @@ export function useSigner({
       const { transportType, providerUrl } = signer
 
       const transport = TransportBuilder.build({
+        id: signer.id,
         transportType,
         url: providerUrl,
       })
