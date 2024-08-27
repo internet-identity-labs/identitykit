@@ -69,9 +69,8 @@ test.describe("ICRC27 accounts", () => {
     await demoPage.login(account)
     await requestPermissionSection.approvePermissions(account)
 
-    account.type === AccountType.MockedSigner
-      ? await section.selectAccountsMocked()
-      : await section.selectAccountsNFID(demoPage.page, context)
+    if (account.type === AccountType.MockedSigner) await section.selectAccountsMocked()
+    else await section.selectAccountsNFID(demoPage.page, context)
 
     await section.waitForResponse()
     const actualResponse = await section.getResponseJson()

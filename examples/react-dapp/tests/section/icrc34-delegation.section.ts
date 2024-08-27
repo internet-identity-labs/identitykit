@@ -27,7 +27,7 @@ export class Icrc34DelegationSection extends Section {
     checkMethod(isDisabledGlobalAccount)
     const isDisabledSessionAccount = await this.isDisabledSessionAccount(popup)
     expect(isDisabledSessionAccount).toBeFalsy()
-    account == ProfileType.Global ? await popup.click("#acc_1") : await popup.click("#acc_2")
+    await popup.click(account == ProfileType.Global ? "#acc_1" : "#acc_2")
     await popup.click("#approve")
     await popup.close()
   }
