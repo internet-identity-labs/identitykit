@@ -53,7 +53,6 @@ const _openDbStore = async (dbName = DB_NAME, storeName = OBJECT_STORE_NAME, ver
   console.debug("_openDbStore", { dbName, storeName, version })
   return await openDB(dbName, version, {
     upgrade: (database) => {
-      database.objectStoreNames
       if (database.objectStoreNames.contains(storeName)) {
         database.clear(storeName)
       }

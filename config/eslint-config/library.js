@@ -12,12 +12,19 @@ module.exports = {
   ],
   plugins: ["only-warn", "eslint-plugin-unused-imports"],
   rules: {
-    "no-unused-vars": "off",
+    "@typescript-eslint/no-empty-object-type": "off",
     "unused-imports/no-unused-imports": "error",
-    "unused-imports/no-unused-vars": [
-        "warn",
-        { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
-    ]
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        vars: "all",
+        varsIgnorePattern: "^_",
+        args: "after-used",
+        argsIgnorePattern: "^_",
+        caughtErrorsIgnorePattern: "^",
+      },
+    ],
   },
   globals: {
     React: true,
@@ -38,7 +45,7 @@ module.exports = {
     ".*.js",
     "node_modules/",
     "dist/",
-    "**/idl/*.ts"
+    "**/idl/*.ts",
   ],
   overrides: [
     {
