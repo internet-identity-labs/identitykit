@@ -24,7 +24,7 @@ export const Header = ({
   onWalletDisconnect?: () => unknown
   triggerManualWalletDisconnect?: boolean
 }) => {
-  const { theme, setTheme } = useTheme()
+  const { resolvedTheme, setTheme } = useTheme()
 
   return (
     <div className="mb-3">
@@ -41,15 +41,15 @@ export const Header = ({
             href="https://docs.identitykit.xyz/"
             className="text-sm font-bold hidden sm:block"
           >
-            Dev Docs
+            Dev docs
           </a>
           <img
             className="block sm:hidden cursor-pointer"
-            src={theme === "light" ? IconSvgDocsLight : IconSvgDocsDark}
+            src={resolvedTheme === "light" ? IconSvgDocsLight : IconSvgDocsDark}
             onClick={() => window.open("https://docs.identitykit.xyz/", "_blank")}
             alt="docs"
           />
-          {theme === "light" ? (
+          {resolvedTheme === "light" ? (
             <img
               className="w-5 transition-opacity cursor-pointer hover:opacity-50"
               src={IconSvgSun}

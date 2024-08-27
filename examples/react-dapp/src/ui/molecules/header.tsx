@@ -3,7 +3,7 @@ import { IconSvgMoon, IconSvgNFID, IconSvgNFIDWhite, IconSvgSun } from "../atoms
 import { ConnectWalletButton } from "./connect-wallet-button"
 
 export const Header = () => {
-  const { theme, setTheme } = useTheme()
+  const { resolvedTheme, setTheme } = useTheme()
 
   return (
     <div className="flex items-center justify-between h-[68px] mb-3">
@@ -13,7 +13,7 @@ export const Header = () => {
         <a target="_blank" href="https://docs.identitykit.xyz/" className="text-sm font-bold">
           NFID IdentityKit Docs
         </a>
-        {theme === "light" ? (
+        {resolvedTheme === "light" ? (
           <img
             className="w-5 transition-opacity cursor-pointer hover:opacity-50"
             src={IconSvgSun}

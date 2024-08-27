@@ -29,14 +29,14 @@ export function AuthTypeTabs({
   const isAccounts = value === IdentityKitAuthType.ACCOUNTS
   return (
     <>
-      <div className="font-semibold text-black dark:text-white border-b-2 border-grey-500 dark:border-zinc-700 w-auto mb-1">
+      <div className="font-semibold text-black dark:text-white border-b border-grey-500 dark:border-zinc-700 w-auto mb-1">
         <ul className="flex flex-wrap">
           <li
             onClick={() => {
               if (!isAccounts) onChange(IdentityKitAuthType.ACCOUNTS)
             }}
             className={clsx(
-              "w-1/2 sm:w-[150px] cursor-pointer border-b-2 -mb-[2px]",
+              "w-1/2 sm:w-auto cursor-pointer border-b-2 -mb-[1px] sm:mr-[25px]",
               isAccounts
                 ? "border-primary"
                 : "border-transparent text-zinc-500 hover:text-dark dark:hover:text-white hover:border-primary"
@@ -49,7 +49,7 @@ export function AuthTypeTabs({
               if (isAccounts) onChange(IdentityKitAuthType.DELEGATION)
             }}
             className={clsx(
-              "w-1/2 sm:w-[150px] cursor-pointer border-b-2 -mb-[2px] outline outline-2 outline-white dark:outline-dark",
+              "w-1/2 sm:w-auto cursor-pointer border-b-2 -mb-[1px]",
               !isAccounts
                 ? "border-primary"
                 : "border-transparent text-zinc-500 hover:text-dark dark:hover:text-white hover:border-primary"

@@ -40,7 +40,7 @@ export const DropdownSelect = ({
   isBig,
 }: IDropdownSelect) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const { theme } = useTheme()
+  const { resolvedTheme } = useTheme()
 
   const ref = useClickOutside(() => setIsDropdownOpen(false))
 
@@ -127,7 +127,7 @@ export const DropdownSelect = ({
             ) : null}
           </div>
         </div>
-        {theme === "light" ? (
+        {resolvedTheme === "light" ? (
           <img
             src={IconSvgChevronLight}
             className={clsx(

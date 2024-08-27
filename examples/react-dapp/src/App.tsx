@@ -28,7 +28,7 @@ const nfidSignerProviderUrl = import.meta.env.VITE_MOCKED_NFID_SIGNER_PROVIDER_U
 const environment = import.meta.env.VITE_ENVIRONMENT
 
 function App() {
-  const { theme } = useTheme()
+  const { resolvedTheme } = useTheme()
   const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
   const signers = [nfidw, Plug]
 
@@ -40,7 +40,7 @@ function App() {
   }
 
   return (
-    <IdentityKitProvider signers={signers} theme={theme as IdentityKitTheme}>
+    <IdentityKitProvider signers={signers} theme={resolvedTheme as IdentityKitTheme}>
       <div className="h-full min-h-screen bg-white dark:bg-dark px-[30px] pb-20">
         <ToastContainer />
         <Header />

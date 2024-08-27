@@ -18,7 +18,7 @@ const environment = import.meta.env.VITE_ENVIRONMENT
 
 export function AppWrappedInIdentityKit() {
   const [authType, setAuthType] = useState<IdentityKitAuthType>(IdentityKitAuthType.ACCOUNTS)
-  const { theme } = useTheme()
+  const { resolvedTheme } = useTheme()
   const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
   const signers = [nfidw, Plug]
 
@@ -33,7 +33,7 @@ export function AppWrappedInIdentityKit() {
     <IdentityKitProvider
       signers={signers}
       featuredSigner={nfidw}
-      theme={theme as IdentityKitTheme}
+      theme={resolvedTheme as IdentityKitTheme}
       authType={authType}
       signerClientOptions={{
         targets: [targetCanister],
