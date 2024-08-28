@@ -9,6 +9,7 @@ import {
   IdentityKitDelegationSignerClientOptions,
   IdentityKitSignerAgentOptions,
   NFIDW,
+  Plug,
 } from "../../lib"
 import { useCreateIdentityKit, useLogoutOnIdle, useSigner, useTheme } from "./hooks"
 
@@ -43,7 +44,7 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
     setIsModalOpen((prev) => !prev)
   }, [])
 
-  const signers = !props.signers || !props.signers.length ? [NFIDW] : props.signers
+  const signers = !props.signers || !props.signers.length ? [NFIDW, Plug] : props.signers
 
   const { selectSigner, selectedSigner, savedSigner, selectCustomSigner } = useSigner({
     signers,
