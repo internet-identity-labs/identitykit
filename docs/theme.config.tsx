@@ -39,8 +39,14 @@ const theme = {
     toggleButton: true,
     defaultMenuCollapseLevel: 1,
   },
-  primaryHue: 175,
-  primarySaturation: 69,
+  primaryHue: {
+    dark: 175,
+    light: 173,
+  },
+  primarySaturation: {
+    dark: 69,
+    light: 38,
+  },
   head: () => {
     const { frontMatter } = useConfig()
 
