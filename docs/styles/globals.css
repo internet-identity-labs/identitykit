@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
 
 body {
@@ -13,7 +12,3 @@ body {
 .dark body {
   background: #141518;
 }
-/* 
-.dark body a:hover, .dark body button:hover{
-  color: #0D9488!important;
-} */
