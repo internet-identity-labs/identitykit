@@ -1,6 +1,6 @@
 {
   "name": "@nfid/identitykit",
-  "version": "0.0.0-alpha.5",
+  "version": "0.0.0-alpha.6",
   "license": "MIT",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -89,9 +89,9 @@
     "ts-jest": "^29.2.5"
   },
   "peerDependencies": {
+    "@dfinity/ledger-icp": ">=2.4.0",
     "react": ">=18.3.1",
-    "react-dom": ">=18.3.1",
-    "@dfinity/ledger-icp": ">=2.4.0"
+    "react-dom": ">=18.3.1"
   },
   "lint-staged": {
     "src/*.{js,jsx,ts,tsx}": [
