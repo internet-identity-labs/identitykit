@@ -13,7 +13,7 @@ authors:
 
 ### Install
 
-Install IdentityKit and its peer dependencies:
+Install IdentityKit:
 
 - `@nfid/identitykit` - A library to integrate compatible ICP wallets into your application.
 - `@nfid/identitykit/react` - A library containing react specific components for integrating
@@ -21,6 +21,13 @@ Install IdentityKit and its peer dependencies:
 
 ```sh npm2yarn
 npm i @nfid/identitykit @nfid/identitykit/react
+```
+
+The bundle needs peer dependencies, be sure that following resources are available in your project
+as well:
+
+```sh npm2yarn
+npm i @dfinity/ledger-icp @dfinity/identity @dfinity/agent @dfinity/candid @dfinity/identity @dfinity/principal @dfinity/utils
 ```
 
 > Note: IdentityKit is a React library and exports styles, that you need to import in your project.
