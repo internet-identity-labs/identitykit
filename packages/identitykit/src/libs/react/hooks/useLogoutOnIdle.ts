@@ -6,7 +6,7 @@ export function useLogoutOnIdle() {
   return {
     logoutByIdle: () => {
       setIdle(true)
-      setTimeout(() => setIdle(true), 2000)
+      setTimeout(() => setIdle(false), 2000)
     },
     shouldLogoutByIdle: idle,
   }

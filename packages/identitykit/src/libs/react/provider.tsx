@@ -55,14 +55,14 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
   const { signerClient, setSignerClient } = useCreateIdentityKit({
     selectedSigner: selectedSigner ?? savedSigner,
     signerClientOptions: {
-      ...signerClientOptions,
       idleOptions: {
-        ...signerClientOptions?.idleOptions,
+        disableIdle: false,
+        idleTimeout: 14_400_000,
         onIdle: () => {
-          signerClientOptions?.idleOptions?.onIdle?.()
           logoutByIdle()
         },
       },
+      ...signerClientOptions,
     },
     agentOptions,
     authType,
