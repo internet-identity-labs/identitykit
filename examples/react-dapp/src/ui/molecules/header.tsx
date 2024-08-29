@@ -1,9 +1,18 @@
 import { useTheme } from "next-themes"
 import { IconSvgMoon, IconSvgNFID, IconSvgNFIDWhite, IconSvgSun } from "../atoms/icons"
 import { ConnectWalletButton } from "./connect-wallet-button"
+import { useEffect } from "react"
+import { useIdentityKit } from "@nfid/identitykit/react"
 
 export const Header = () => {
   const { resolvedTheme, setTheme } = useTheme()
+  const { selectSigner } = useIdentityKit()
+
+  useEffect(() => {
+    localStorage.clear()
+    selectSigner(undefined)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className="flex items-center justify-between h-[68px] mb-3">

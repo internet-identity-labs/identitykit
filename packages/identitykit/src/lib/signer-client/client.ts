@@ -63,18 +63,15 @@ export abstract class SignerClient {
      * Default behavior is to clear stored identity and reload the page.
      * By either setting the disableDefaultIdleCallback flag or passing in a custom idle callback, we will ignore this config
      */
-    if (
-      !this.options?.idleOptions?.onIdle &&
-      !this.options?.idleOptions?.disableDefaultIdleCallback
-    ) {
+    if (!this.options?.idleOptions?.disableDefaultIdleCallback) {
       this.idleManager?.registerCallback(async () => {
         await this.logout()
       })
     }
   }
 
-  public logout(options?: { returnTo?: string }): void {
-    this.setConnectedUserToStorage(undefined)
+  public async logout(options?: { returnTo?: string }): Promise<void> {
+    await this.setConnectedUserToStorage(undefined)
     this.idleManager?.exit()
     this.idleManager = undefined
     if (options?.returnTo) {

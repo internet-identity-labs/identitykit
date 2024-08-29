@@ -2,60 +2,124 @@ import { useCallback, useEffect, useState } from "react"
 import {
   IdentityKitAuthType,
   IdentityKit,
-  IdentityKitAccountsSignerClient,
   IdentityKitAccountsSignerClientOptions,
-  IdentityKitDelegationSignerClient,
   IdentityKitDelegationSignerClientOptions,
   IdentityKitSignerAgentOptions,
 } from "../../../lib"
 import { Signer } from "@slide-computer/signer"
-import { AccountsSignerClient, DelegationSignerClient } from "../../../lib/signer-client"
+import { Principal } from "@dfinity/principal"
+import { SignerAgent } from "@slide-computer/signer-agent"
+
+const DEFAULT_IDLE_TIMEOUT = 14_400_000
 
 export function useCreateIdentityKit<
   T extends IdentityKitAuthType = typeof IdentityKitAuthType.ACCOUNTS,
 >({
   selectedSigner,
+  clearSigner,
   signerClientOptions = {},
   authType,
+  agentOptions,
+  onConnectFailure,
+  onConnectSuccess,
+  onDisconnect,
+  realConnectDisabled,
 }: {
   selectedSigner?: Signer
+  clearSigner: () => unknown
   authType?: T
   signerClientOptions?: T extends typeof IdentityKitAuthType.DELEGATION
     ? Omit<IdentityKitDelegationSignerClientOptions, "signer">
     : Omit<IdentityKitAccountsSignerClientOptions, "signer">
   agentOptions?: {
-    signer?: IdentityKitSignerAgentOptions["signer"]
     agent?: IdentityKitSignerAgentOptions["agent"]
   }
+  onConnectFailure?: (e: Error) => unknown
+  onConnectSuccess?: (signerResponse: object) => unknown
+  onDisconnect?: () => unknown
+  realConnectDisabled?: boolean
 }) {
-  const [signerClient, setSignerClient] = useState<
-    DelegationSignerClient | AccountsSignerClient | undefined
-  >()
-  const signerClientClass =
-    !authType || authType === IdentityKitAuthType.DELEGATION
-      ? IdentityKitDelegationSignerClient
-      : IdentityKitAccountsSignerClient
+  const [ik, setIk] = useState<null | IdentityKit>(null)
+  const [connectedAccount, setConnectedAccount] = useState<string | undefined>()
+  const [icpBalance, setIcpBalance] = useState<undefined | number>()
+  const [agent, setAgent] = useState<SignerAgent | null>(null)
 
-  const createIdentityKitSignerClient = useCallback(async () => {
-    if (selectedSigner) {
-      return await signerClientClass.create({
-        signer: selectedSigner,
-        keyType: "Ed25519",
-        ...signerClientOptions,
-      })
+  // create logout func
+  const logout = useCallback(() => {
+    const onLogout = () => {
+      clearSigner()
+      setConnectedAccount(undefined)
+      setIcpBalance(undefined)
+      setAgent(null)
+      onDisconnect?.()
     }
-    return null
-  }, [selectedSigner])
+    if (ik?.signerClient) {
+      ik?.signerClient?.logout().then(onLogout)
+    } else {
+      onLogout()
+    }
+  }, [ik?.signerClient, clearSigner, setConnectedAccount, setIcpBalance, onDisconnect, setAgent])
 
   useEffect(() => {
-    if (selectedSigner)
-      createIdentityKitSignerClient().then((signerClient) => {
-        if (signerClient) {
-          IdentityKit.create(signerClient)
-          setSignerClient(signerClient as DelegationSignerClient | AccountsSignerClient)
+    setIk(null)
+    // when signer is selected, but user is not connected, create indetity kit and trigger login
+    if (selectedSigner && !ik?.signerClient) {
+      IdentityKit.create<T>({
+        authType: authType || (IdentityKitAuthType.ACCOUNTS as T),
+        signerClientOptions: {
+          ...signerClientOptions,
+          signer: selectedSigner,
+          idleOptions: {
+            idleTimeout: DEFAULT_IDLE_TIMEOUT,
+            ...signerClientOptions.idleOptions,
+            onIdle: () => {
+              signerClientOptions.idleOptions?.onIdle?.()
+              logout()
+            },
+          },
+        },
+      }).then(async (instance) => {
+        if (!realConnectDisabled) {
+          if (!instance.signerClient.connectedUser) {
+            try {
+              const response = await instance.signerClient.login()
+              setConnectedAccount(response.connectedAccount)
+              onConnectSuccess?.(response.signerResponse)
+            } catch (e) {
+              clearSigner()
+              onConnectFailure?.(e as Error)
+            }
+          } else {
+            setConnectedAccount(instance.signerClient.connectedUser.owner)
+          }
         }
+        setIk(instance as IdentityKit)
       })
-  }, [createIdentityKitSignerClient, selectedSigner])
+    }
+  }, [selectedSigner, realConnectDisabled])
 
-  return { signerClient, setSignerClient }
+  // fetch balance when user connected
+  useEffect(() => {
+    if (connectedAccount && !icpBalance) {
+      ik?.getIcpBalance().then((b) => {
+        setIcpBalance(b)
+      })
+    }
+  }, [setIcpBalance, icpBalance, connectedAccount, ik])
+
+  // create signer agent and save to state
+  useEffect(() => {
+    if (ik && connectedAccount) {
+      ik.createSignerAgent({
+        ...agentOptions,
+        signer: selectedSigner!,
+        account: Principal.fromText(connectedAccount),
+      }).then((agent) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setAgent(agent as any)
+      })
+    }
+  }, [ik, connectedAccount])
+
+  return { agent, connectedAccount, logout, icpBalance }
 }

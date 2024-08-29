@@ -40,7 +40,11 @@ function App() {
   }
 
   return (
-    <IdentityKitProvider signers={signers} theme={resolvedTheme as IdentityKitTheme}>
+    <IdentityKitProvider
+      signers={signers}
+      theme={resolvedTheme as IdentityKitTheme}
+      realConnectDisabled
+    >
       <div className="h-full min-h-screen bg-white dark:bg-dark px-[30px] pb-20">
         <ToastContainer />
         <Header />
