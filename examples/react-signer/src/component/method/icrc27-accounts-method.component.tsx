@@ -4,6 +4,7 @@ import { GetAccounts } from "../get-accounts.component"
 import { MethodComponent } from "./method.component"
 import { Dispatch, SetStateAction } from "react"
 import { State } from "../../hook/use-signer"
+import { PermissionCheck } from "../permission-check.component"
 
 export const icrc27AccountsMethodComponent: MethodComponent = {
   getMethod(): string {
@@ -16,14 +17,20 @@ export const icrc27AccountsMethodComponent: MethodComponent = {
   ) {
     const { origin, accounts, onApprove, onReject } = componentData as AccountsComponentData
     return (
-      <GetAccounts
-        accounts={accounts}
-        origin={origin}
-        onApprove={onApprove}
-        onReject={onReject}
-        setState={setState}
+      <PermissionCheck
+        methodName={this.getMethod()}
+        componentData={componentData}
         timeout={timeout}
-      />
+      >
+        <GetAccounts
+          accounts={accounts}
+          origin={origin}
+          onApprove={onApprove}
+          onReject={onReject}
+          setState={setState}
+          timeout={timeout}
+        />
+      </PermissionCheck>
     )
   },
 }

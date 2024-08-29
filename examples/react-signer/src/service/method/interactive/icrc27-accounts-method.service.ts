@@ -34,13 +34,16 @@ class Icrc27AccountsMethodService extends InteractiveMethodService {
     window.opener.postMessage(response, message.origin)
   }
 
-  public async getСomponentData(message: MessageEvent<RPCMessage>): Promise<AccountsComponentData> {
+  public async getСomponentData(
+    message: MessageEvent<RPCMessage>,
+    isAskOnUse: boolean
+  ): Promise<AccountsComponentData> {
     const accounts = await accountService.getAccounts()
     if (!accounts) {
       throw new GenericError("User data has not been found")
     }
 
-    const baseData = await super.getСomponentData(message)
+    const baseData = await super.getСomponentData(message, isAskOnUse)
     return {
       ...baseData,
       accounts,

@@ -46,7 +46,8 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
   }
 
   public async getСomponentData(
-    message: MessageEvent<RPCMessage>
+    message: MessageEvent<RPCMessage>,
+    isAskOnUse: boolean
   ): Promise<DelegationComponentData> {
     const icrc34Dto = message.data.params as unknown as Icrc34Dto
 
@@ -67,7 +68,7 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
       throw new GenericError("User data has not been found")
     }
 
-    const baseData = await super.getСomponentData(message)
+    const baseData = await super.getСomponentData(message, isAskOnUse)
     return {
       ...baseData,
       accounts,
