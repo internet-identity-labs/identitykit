@@ -12,6 +12,7 @@ export interface ComponentData {
   origin: string
   isAskOnUse: boolean
   onApprovePermission: () => Promise<void>
+  onRejectPermission: () => Promise<void>
   onApprove: (data?: unknown) => Promise<void>
   onReject: () => Promise<void>
 }
@@ -45,6 +46,20 @@ export abstract class InteractiveMethodService implements MethodService {
       isAskOnUse,
       onApprovePermission: async () => {
         await authService.savePermissions([this.getMethod()], PermissionState.GRANTED)
+      },
+      onRejectPermission: async () => {
+        await authService.savePermissions([this.getMethod()], PermissionState.DENIED)
+        const response: RPCErrorResponse = {
+          origin: message.origin,
+          jsonrpc: message.data.jsonrpc,
+          id: message.data.id,
+          error: {
+            code: 3000,
+            message: "Permission not granted",
+          },
+        }
+
+        window.opener.postMessage(response, message.origin)
       },
       onApprove: async (data?: unknown) => {
         try {

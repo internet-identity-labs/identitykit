@@ -15,7 +15,8 @@ export const PermissionCheck: React.FC<PermissionCheckRequest> = ({
   timeout,
   children,
 }: PermissionCheckRequest) => {
-  const { origin, isAskOnUse, onApprovePermission, onReject } = componentData as ComponentData
+  const { origin, isAskOnUse, onApprovePermission, onRejectPermission } =
+    componentData as ComponentData
   const [isAllowed, setAllowed] = useState(!isAskOnUse)
 
   const onApprove = useCallback(async () => {
@@ -32,7 +33,7 @@ export const PermissionCheck: React.FC<PermissionCheckRequest> = ({
           origin={origin}
           permissions={[methodName]}
           onApprove={onApprove}
-          onReject={onReject}
+          onReject={onRejectPermission}
           setState={() => {}}
           timeout={timeout}
         />

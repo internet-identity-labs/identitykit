@@ -12,11 +12,11 @@ class Icrc25RequestPermissionsMethodService extends InteractiveMethodService {
   }
 
   public async onApprove(message: MessageEvent<RPCMessage>): Promise<void> {
-    return await this.persistPermissions(message, PermissionState.GRANTED)
+    return await this.savePermissionsAndRespondBack(message, PermissionState.GRANTED)
   }
 
   public async onReject(message: MessageEvent<RPCMessage>): Promise<void> {
-    return await this.persistPermissions(message, PermissionState.DENIED)
+    return await this.savePermissionsAndRespondBack(message, PermissionState.DENIED)
   }
 
   public async getСomponentData(
@@ -24,7 +24,7 @@ class Icrc25RequestPermissionsMethodService extends InteractiveMethodService {
     isAskOnUse: boolean
   ): Promise<PermissionsComponentData> {
     const icrc25Message = message.data.params as unknown as Icrc25DtoRequest
-    const permissionsRequest = icrc25Message.scopes.map((el) => el.method)
+    const permissionsRequest = icrc25Message.scopes.map((x) => x.method)
     const permissions = authService.filterPermissionMethodNames(permissionsRequest)
 
     const baseData = await super.getСomponentData(message, isAskOnUse)
@@ -39,7 +39,7 @@ class Icrc25RequestPermissionsMethodService extends InteractiveMethodService {
     return PermissionState.GRANTED
   }
 
-  private async persistPermissions(
+  private async savePermissionsAndRespondBack(
     message: MessageEvent<RPCMessage>,
     state: PermissionState
   ): Promise<void> {
