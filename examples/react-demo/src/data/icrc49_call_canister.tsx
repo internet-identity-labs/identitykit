@@ -269,7 +269,8 @@ export const icrc49CallCanisterSection = {
       (r) => request.params?.method === r.config.request.params.method
     )
 
-    if (!requestExample) throw new Error("Method not supported")
+    if (!requestExample || request.method !== "icrc49_call_canister")
+      throw new Error("Method not supported")
 
     requestExample.config.validateRequest?.(request)
 
