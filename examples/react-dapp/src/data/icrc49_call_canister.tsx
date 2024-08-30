@@ -272,7 +272,8 @@ export const icrc49CallCanisterSection: ISection = {
     const request = JSON.parse(requestJson)
     const requestExample = icrc49.find((r) => request.params?.method === r.request.params.method)
 
-    if (!requestExample) throw new Error("Method not supported")
+    if (!requestExample || request.method !== "icrc49_call_canister")
+      throw new Error("Method not supported")
 
     requestExample.validateRequest?.(request)
 
