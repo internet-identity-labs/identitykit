@@ -1,5 +1,6 @@
 import { RPCMessage, RPCSuccessResponse, Icrc25DtoRequest } from "../../../type"
 import { authService, PermissionState } from "../../auth.service"
+import { permissionsService } from "../../permission.service"
 import { ComponentData, InteractiveMethodService } from "./interactive-method.service"
 
 export interface PermissionsComponentData extends ComponentData {
@@ -19,20 +20,21 @@ class Icrc25RequestPermissionsMethodService extends InteractiveMethodService {
     return await this.savePermissionsAndRespondBack(message, PermissionState.DENIED)
   }
 
-  public async getСomponentData(
-    message: MessageEvent<RPCMessage>,
-    isAskOnUse: boolean
-  ): Promise<PermissionsComponentData> {
+  public async invokeAndGetComponentData(
+    message: MessageEvent<RPCMessage>
+  ): Promise<ComponentData | undefined> {
     const icrc25Message = message.data.params as unknown as Icrc25DtoRequest
     const permissionsRequest = icrc25Message.scopes.map((x) => x.method)
     const permissions = authService.filterPermissionMethodNames(permissionsRequest)
 
-    const baseData = await super.getСomponentData(message, isAskOnUse)
-
-    return {
-      ...baseData,
-      permissions,
+    if (permissions.length === 0) {
+      await permissionsService.sendActualPermissions(message)
+      return undefined
     }
+
+    const baseData = await super.getСomponentData(message, false)
+    const componentData = { ...baseData, permissions } as ComponentData
+    return componentData
   }
 
   protected async getPermission(): Promise<PermissionState> {
