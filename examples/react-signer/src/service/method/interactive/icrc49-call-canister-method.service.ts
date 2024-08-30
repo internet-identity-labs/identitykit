@@ -76,7 +76,8 @@ class Icrc49CallCanisterMethodService extends InteractiveMethodService {
   }
 
   public async getСomponentData(
-    message: MessageEvent<RPCMessage>
+    message: MessageEvent<RPCMessage>,
+    isAskOnUse: boolean
   ): Promise<CallCanisterComponentData> {
     const icrc49Dto = message.data.params as unknown as Icrc49Dto
 
@@ -100,7 +101,7 @@ class Icrc49CallCanisterMethodService extends InteractiveMethodService {
       identity: delegation as unknown as Identity,
     })
 
-    const baseData = await super.getСomponentData(message)
+    const baseData = await super.getСomponentData(message, isAskOnUse)
     const consentMessage = await consentMessageService.getConsentMessage(
       icrc49Dto.canisterId,
       icrc49Dto.method,

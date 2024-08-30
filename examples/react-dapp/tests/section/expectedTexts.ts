@@ -28,10 +28,6 @@ export class ExpectedTexts {
         url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-27/ICRC-27.md",
       },
       {
-        name: "ICRC-28",
-        url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-28/ICRC-28.md",
-      },
-      {
         name: "ICRC-29",
         url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-29/ICRC-29.md",
       },

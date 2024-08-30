@@ -42,9 +42,7 @@ export const authService = {
     permissionMethods: string[],
     permissionState: PermissionState
   ): Promise<Record<PermissionMethod, PermissionState>> {
-    const methods: PermissionMethod[] = permissionMethods.map((methodName) =>
-      getPermissionMethod(methodName)
-    )
+    const methods: PermissionMethod[] = authService.filterPermissionMethodNames(permissionMethods)
     const authState = await getAuthState()
 
     const permissionsNew: Record<PermissionMethod, PermissionState> = methods.reduce(
@@ -70,24 +68,26 @@ export const authService = {
     return authState.permissions
   },
 
-  async hasPermission(methodName: string): Promise<boolean> {
+  async getPermission(methodName: string): Promise<PermissionState> {
     const method = getPermissionMethod(methodName)
+
+    if (!method) {
+      throw new NotSupportedError(`The method name ${methodName} is not supported`)
+    }
+
     const authState = await getAuthState()
-    return authState.permissions[method] === PermissionState.GRANTED
+    return authState.permissions[method]
   },
 
-  validatePermissionMethodNames(methodNames: string[]): void {
-    methodNames.map((methodName) => getPermissionMethod(methodName))
+  filterPermissionMethodNames(methodNames: string[]): PermissionMethod[] {
+    return methodNames
+      .map((methodName) => getPermissionMethod(methodName))
+      .filter((x) => x !== undefined)
   },
 }
 
-function getPermissionMethod(methodName: string): PermissionMethod {
+function getPermissionMethod(methodName: string): PermissionMethod | undefined {
   const method = PermissionMethod[methodName.toUpperCase() as keyof typeof PermissionMethod]
-
-  if (!method) {
-    throw new NotSupportedError(`The method name ${methodName} is not supported`)
-  }
-
   return method
 }
 

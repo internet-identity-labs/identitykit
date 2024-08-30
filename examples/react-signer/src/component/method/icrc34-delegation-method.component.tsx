@@ -4,6 +4,7 @@ import { MethodComponent } from "./method.component"
 import { Dispatch, SetStateAction } from "react"
 import { State } from "../../hook/use-signer"
 import { DelegationComponentData } from "../../service/method/interactive/icrc34-delegation-method.service"
+import { PermissionCheck } from "../permission-check.component"
 
 export const icrc34DelegationMethodComponent: MethodComponent = {
   getMethod(): string {
@@ -17,15 +18,21 @@ export const icrc34DelegationMethodComponent: MethodComponent = {
     const { origin, accounts, isPublicAccountsAllowed, onApprove, onReject } =
       componentData as DelegationComponentData
     return (
-      <GetDelegation
-        accounts={accounts}
-        origin={origin}
-        onApprove={onApprove}
-        onReject={onReject}
-        setState={setState}
-        isPublicAccountsAllowed={isPublicAccountsAllowed}
+      <PermissionCheck
+        methodName={this.getMethod()}
+        componentData={componentData}
         timeout={timeout}
-      />
+      >
+        <GetDelegation
+          accounts={accounts}
+          origin={origin}
+          onApprove={onApprove}
+          onReject={onReject}
+          setState={setState}
+          isPublicAccountsAllowed={isPublicAccountsAllowed}
+          timeout={timeout}
+        />
+      </PermissionCheck>
     )
   },
 }
