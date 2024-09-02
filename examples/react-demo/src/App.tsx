@@ -3,33 +3,29 @@ import { icrc49CallCanisterSection } from "./data"
 import { Section } from "./ui/organisms/section"
 import { ToastContainer } from "react-toastify"
 import { IdentityKitAuthType } from "@nfid/identitykit"
-import { useState } from "react"
 import { AuthTypeTabs } from "./ui/organisms"
 
 function App({
   authType,
   setAuthType,
+  setShouldDisconnectWallet,
+  setAuthTypeSwitched,
+  shouldDisconnectWallet,
+  authTypeSwitched,
+  connectWalletSignerResponse,
 }: {
   authType: IdentityKitAuthType
   setAuthType: (k: IdentityKitAuthType) => void
+  setShouldDisconnectWallet: (param: boolean) => unknown
+  shouldDisconnectWallet?: boolean
+  setAuthTypeSwitched: (switched: boolean) => unknown
+  authTypeSwitched?: boolean
+  connectWalletSignerResponse: string
 }) {
-  const [connectWalletSignerResponse, setConnectWalletSignerResponse] = useState("{}")
-  const [authTypeSwitched, setAuthTypeSwitched] = useState(false)
-  const [shouldDisconnectWallet, setShouldDisconnectWallet] = useState(false)
-
   return (
     <div className="h-full min-h-screen bg-white dark:bg-dark px-[30px] pb-[25px]">
       <ToastContainer />
-      <Header
-        onConnectWalletSuccess={(response) =>
-          setConnectWalletSignerResponse(JSON.stringify(response, null, 2))
-        }
-        onWalletDisconnect={() => {
-          setConnectWalletSignerResponse("{}")
-          setShouldDisconnectWallet(false)
-        }}
-        triggerManualWalletDisconnect={shouldDisconnectWallet}
-      />
+      <Header triggerManualWalletDisconnect={shouldDisconnectWallet} />
       <h3 className="text-xl mt-[25px] mb-[20px]">
         Step 1. Choose which authentication method your users will connect with
       </h3>

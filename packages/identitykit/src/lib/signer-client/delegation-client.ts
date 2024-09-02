@@ -53,7 +53,9 @@ export class DelegationSignerClient extends SignerClient {
     super(options)
   }
 
-  public static async create(options: DelegationSignerClientOptions): Promise<SignerClient> {
+  public static async create(
+    options: DelegationSignerClientOptions
+  ): Promise<DelegationSignerClient> {
     const storage = options.storage ?? new IdbStorage()
     const baseIdentity = options.identity ?? (await getIdentity(STORAGE_KEY, storage))
     const delegationChain = await getDelegationChain(STORAGE_KEY, storage)

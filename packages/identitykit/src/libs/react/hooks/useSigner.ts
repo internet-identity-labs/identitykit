@@ -62,8 +62,13 @@ export function useSigner({
 
   return {
     selectSigner: (signerId?: string) => selectSigner(setSelectedSigner, signerId),
+    // clear both signer and local storage signer
+    clearSigner: () => {
+      selectSigner(setSelectedSigner, undefined)
+      selectSigner(setPrevSigner, undefined)
+    },
     selectCustomSigner,
-    selectedSigner,
-    savedSigner: prevSigner,
+    // selected signer is local storage signer by default (in case authenticated user)
+    selectedSigner: selectedSigner ?? prevSigner,
   }
 }

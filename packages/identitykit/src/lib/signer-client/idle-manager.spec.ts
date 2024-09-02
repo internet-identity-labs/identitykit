@@ -62,18 +62,14 @@ describe("IdleManager", () => {
     expect(mockCallback).toHaveBeenCalled()
   })
 
-  it("should clean up listeners and execute registered callbacks on exit", () => {
-    const mockCallback = jest.fn()
+  it("should clean up listeners on exit", () => {
     const clearTimeoutMock = jest.fn()
     global.clearTimeout = clearTimeoutMock
 
-    const idleManager = IdleManager.create({
-      onIdle: mockCallback,
-    })
+    const idleManager = IdleManager.create()
 
     idleManager.exit()
 
-    expect(mockCallback).toHaveBeenCalled()
     expect(clearTimeoutMock).toHaveBeenCalledWith(idleManager.timeoutID)
   })
 })

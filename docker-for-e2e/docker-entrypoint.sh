@@ -28,10 +28,6 @@ ci_echo_info "Installing packages ..." >&2
 ci_echo_debug "npm install --frozen-lockfile" >&2
 npm install --frozen-lockfile
 
-ci_echo_info "Building @nfid/identitykit package" >&2
-ci_echo_debug "npm run build-identitykit" >&2
-npm run build-identitykit
-
 ci_echo_info "Running the playground ..." >&2
 popd > /dev/null
 ci_echo_debug "npm run playground" >&2

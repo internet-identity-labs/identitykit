@@ -13,15 +13,10 @@ import {
   ConnectWalletButton,
   ConnectedWalletButton,
 } from "@nfid/identitykit/react"
-import { toast } from "react-toastify"
 
 export const Header = ({
-  onConnectWalletSuccess,
-  onWalletDisconnect,
   triggerManualWalletDisconnect,
 }: {
-  onConnectWalletSuccess?: (response: object) => unknown
-  onWalletDisconnect?: () => unknown
   triggerManualWalletDisconnect?: boolean
 }) => {
   const { resolvedTheme, setTheme } = useTheme()
@@ -66,11 +61,6 @@ export const Header = ({
           )}
           <ConnectWallet
             triggerManualDisconnect={triggerManualWalletDisconnect}
-            onConnectFailure={(e) => {
-              toast.error(e.message)
-            }}
-            onConnectSuccess={onConnectWalletSuccess}
-            onDisconnect={onWalletDisconnect}
             connectButtonComponent={(props) => {
               return (
                 <ConnectWalletButton {...props} className="min-w-[100px] sm:min-w-[140px]">

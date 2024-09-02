@@ -9,6 +9,7 @@ import {
   NFIDW,
   Plug,
 } from "@nfid/identitykit"
+import { toast } from "react-toastify"
 
 const mockedSignerProviderUrl = import.meta.env.VITE_MOCKED_SIGNER_PROVIDER_URL
 const nfidSignerProviderUrl = import.meta.env.VITE_MOCKED_NFID_SIGNER_PROVIDER_URL
@@ -18,6 +19,9 @@ const environment = import.meta.env.VITE_ENVIRONMENT
 
 export function AppWrappedInIdentityKit() {
   const [authType, setAuthType] = useState<IdentityKitAuthType>(IdentityKitAuthType.ACCOUNTS)
+  const [connectWalletSignerResponse, setConnectWalletSignerResponse] = useState("{}")
+  const [authTypeSwitched, setAuthTypeSwitched] = useState(false)
+  const [shouldDisconnectWallet, setShouldDisconnectWallet] = useState(false)
   const { resolvedTheme } = useTheme()
   const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
   const signers = [nfidw, Plug]
@@ -38,8 +42,26 @@ export function AppWrappedInIdentityKit() {
       signerClientOptions={{
         targets: [targetCanister],
       }}
+      onConnectSuccess={(response) =>
+        setConnectWalletSignerResponse(JSON.stringify(response, null, 2))
+      }
+      onDisconnect={() => {
+        setConnectWalletSignerResponse("{}")
+        setShouldDisconnectWallet(false)
+      }}
+      onConnectFailure={(e) => {
+        toast.error(e.message)
+      }}
     >
-      <App authType={authType} setAuthType={setAuthType} />
+      <App
+        authType={authType}
+        setAuthType={setAuthType}
+        connectWalletSignerResponse={connectWalletSignerResponse}
+        authTypeSwitched={authTypeSwitched}
+        setAuthTypeSwitched={setAuthTypeSwitched}
+        shouldDisconnectWallet={shouldDisconnectWallet}
+        setShouldDisconnectWallet={setShouldDisconnectWallet}
+      />
     </IdentityKitProvider>
   )
 }

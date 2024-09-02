@@ -1,15 +1,13 @@
 import { createContext, useContext } from "react"
 import { IdentityKitProvider } from "./types"
 import { Signer } from "@slide-computer/signer"
-import { IdentityKit, IdentityKitSignerAgent, IdentityKitSignerAgentOptions } from "../../lib"
 import { IdentityKitTheme } from "./constants"
-import { AccountsSignerClient, DelegationSignerClient } from "../../lib/signer-client"
 import { SignerConfig } from "../../lib/types"
+import { SignerAgent } from "@slide-computer/signer-agent"
 
 const defaultState: IdentityKitProvider = {
   signers: [],
   selectedSigner: undefined,
-  savedSigner: undefined,
   isModalOpen: false,
   toggleModal: () => {
     throw new Error("toggleModal not implemented")
@@ -21,31 +19,26 @@ const defaultState: IdentityKitProvider = {
     throw new Error("signer is not available on this url")
   },
   theme: IdentityKitTheme.SYSTEM,
-  agentOptions: {} as {
-    signer?: IdentityKitSignerAgentOptions["signer"]
-    agent?: IdentityKitSignerAgentOptions["agent"]
+  logout: () => {
+    throw new Error("logout not implemented")
   },
-  setSignerClient: () => {
-    throw new Error("setSignerClient not implemented")
-  },
+  agent: null,
 }
 
 export const IdentityKitContext = createContext<IdentityKitProvider>(defaultState)
 
 export function useIdentityKit(): {
   selectedSigner?: Signer
-  savedSigner?: Signer
   selectSigner: (signerId?: string | undefined) => void | SignerConfig
-  signerClient?: DelegationSignerClient | AccountsSignerClient
-  agent: IdentityKitSignerAgent
+  agent: SignerAgent | null
+  connectedAccount?: string
 } {
-  const { selectedSigner, selectSigner, signerClient, savedSigner } = useContext(IdentityKitContext)
+  const { selectedSigner, selectSigner, agent, connectedAccount } = useContext(IdentityKitContext)
 
   return {
     selectedSigner,
-    savedSigner,
     selectSigner,
-    signerClient,
-    agent: IdentityKit.signerAgent,
+    agent,
+    connectedAccount,
   }
 }

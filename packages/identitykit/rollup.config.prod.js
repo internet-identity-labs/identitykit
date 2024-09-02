@@ -25,7 +25,7 @@ const commonPlugins = [
     useTsconfigDeclarationDir: true,
     include: ["src/**/*", "types/*.d.ts"],
     exclude: ["**/*.spec.tsx", "./*.ts"],
-    verbosity: 2
+    verbosity: 2,
   }),
   svgr(),
 ]
@@ -126,9 +126,19 @@ export default [
         exports: "named",
         format: "cjs",
         banner: `'use client';`,
-      }
+      },
     ],
-    plugins: commonPlugins,
+    plugins: [
+      ...commonPlugins,
+      generatePackageJson({
+        baseContents: {
+          ...packageJson,
+          exports: packageJson.exportsProd,
+          exportsProd: undefined
+        },
+        outputFolder: `dist/`,
+      }),
+    ],
     external: [/node_modules/],
   },
   {
@@ -136,5 +146,5 @@ export default [
     output: [{ file: `dist/index.d.ts`, format: "esm" }],
     plugins: [dts.default()],
     external: [/\.css$/],
-  }
+  },
 ]

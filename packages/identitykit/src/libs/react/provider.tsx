@@ -10,7 +10,7 @@ import {
   IdentityKitSignerAgentOptions,
   NFIDW,
 } from "../../lib"
-import { useCreateIdentityKit, useLogoutOnIdle, useSigner, useTheme } from "./hooks"
+import { useCreateIdentityKit, useSigner, useTheme } from "./hooks"
 
 interface IdentityKitProviderProps<
   T extends IdentityKitAuthType = typeof IdentityKitAuthType.ACCOUNTS,
@@ -22,10 +22,11 @@ interface IdentityKitProviderProps<
   signerClientOptions?: T extends typeof IdentityKitAuthType.DELEGATION
     ? Omit<IdentityKitDelegationSignerClientOptions, "signer">
     : Omit<IdentityKitAccountsSignerClientOptions, "signer">
-  agentOptions?: {
-    signer?: IdentityKitSignerAgentOptions["signer"]
-    agent?: IdentityKitSignerAgentOptions["agent"]
-  }
+  agent?: IdentityKitSignerAgentOptions["agent"]
+  onConnectFailure?: (e: Error) => unknown
+  onConnectSuccess?: (signerResponse: object) => unknown
+  onDisconnect?: () => unknown
+  realConnectDisabled?: boolean
 }
 
 globalThis.global = globalThis
@@ -33,9 +34,10 @@ globalThis.global = globalThis
 export const IdentityKitProvider = <T extends IdentityKitAuthType>({
   children,
   signerClientOptions,
-  agentOptions,
+  agent,
   authType,
   featuredSigner,
+  realConnectDisabled,
   ...props
 }: IdentityKitProviderProps<T>) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -45,28 +47,23 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
 
   const signers = !props.signers || !props.signers.length ? [NFIDW] : props.signers
 
-  const { selectSigner, selectedSigner, savedSigner, selectCustomSigner } = useSigner({
+  const { selectSigner, clearSigner, selectedSigner, selectCustomSigner } = useSigner({
     signers,
     closeModal: () => setIsModalOpen(false),
   })
 
-  const { shouldLogoutByIdle, logoutByIdle } = useLogoutOnIdle()
-
-  const { signerClient, setSignerClient } = useCreateIdentityKit({
-    selectedSigner: selectedSigner ?? savedSigner,
-    signerClientOptions: {
-      ...signerClientOptions,
-      idleOptions: {
-        onIdle: () => {
-          logoutByIdle()
-          signerClientOptions?.idleOptions?.onIdle?.()
-        },
-        idleTimeout: 14_400_000,
-        ...signerClientOptions?.idleOptions,
-      },
+  const identityKit = useCreateIdentityKit({
+    selectedSigner,
+    clearSigner,
+    signerClientOptions,
+    agentOptions: {
+      agent,
     },
-    agentOptions,
     authType,
+    onConnectSuccess: props.onConnectSuccess,
+    onConnectFailure: props.onConnectFailure,
+    onDisconnect: props.onDisconnect,
+    realConnectDisabled,
   })
 
   const theme = useTheme(props.theme)
@@ -76,17 +73,16 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
       value={{
         signers,
         selectedSigner,
-        savedSigner,
         isModalOpen,
         toggleModal,
         selectSigner,
         selectCustomSigner,
         theme,
         featuredSigner: featuredSigner === false ? undefined : (featuredSigner ?? signers[0]),
-        agentOptions,
-        signerClient,
-        setSignerClient,
-        shouldLogoutByIdle,
+        agent: identityKit.agent,
+        connectedAccount: identityKit.connectedAccount,
+        logout: identityKit.logout,
+        icpBalance: identityKit.icpBalance,
       }}
     >
       <IdentityKitModal />

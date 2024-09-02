@@ -4,13 +4,15 @@ import { MouseEventHandler, PropsWithChildren } from "react"
 export type ConnectButtonProps = PropsWithChildren<{
   onClick?: MouseEventHandler<HTMLButtonElement>
   className?: string
+  disabled?: boolean
 }>
 
-export function ConnectButton({ onClick, className, children }: ConnectButtonProps) {
+export function ConnectButton({ onClick, className, disabled, children }: ConnectButtonProps) {
   return (
     <button
       id={"connect"}
       type="button"
+      disabled={disabled}
       onClick={onClick}
       className={clsx(
         "ik-border-transparent",

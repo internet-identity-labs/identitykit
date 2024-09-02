@@ -26,7 +26,7 @@
   "files": [
     "dist"
   ],
-  "exports": {
+  "exportsProd": {
     ".": {
       "main": "./dist/index.cjs.js",
       "module": "./dist/index.esm.js",
@@ -43,14 +43,24 @@
       "default": "./dist/libs/react/index.css"
     }
   },
+  "exports": {
+    ".": "./src/index.ts",
+    "./react": "./src/libs/react/index.ts",
+    "./react/styles.css": {
+      "import": "./dist/libs/react/index.css",
+      "require": "./dist/libs/react/index.css",
+      "default": "./dist/libs/react/index.css"
+    }
+  },
   "engines": {
     "node": ">=10"
   },
   "scripts": {
-    "dev": "rollup -c --bundleConfigAsCjs --watch",
-    "build": "rm -rf ./dist && npm run rollup",
+    "dev": "npm run build-dev --watch",
+    "build": "npm run build-prod && npm run build-dev",
+    "build-prod": "rm -rf ./dist && rollup -c rollup.config.prod.js --bundleConfigAsCjs",
+    "build-dev": "rm -rf ./dist && rollup -c rollup.config.dev.js --bundleConfigAsCjs",
     "post:build": "node ./scripts/frankBuild.js",
-    "rollup": "rollup -c --bundleConfigAsCjs",
     "test": "jest --passWithNoTests",
     "lint:check": "eslint . --ext ts,tsx --max-warnings 0",
     "lint:fix": "eslint . --fix --ext ts,tsx --max-warnings 0",

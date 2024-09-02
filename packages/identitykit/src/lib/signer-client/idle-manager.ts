@@ -130,7 +130,6 @@ export class IdleManager {
     events.forEach(function (name) {
       document.removeEventListener(name, _resetTimer, true)
     })
-    this.callbacks.forEach((cb) => cb())
   }
 
   /**
@@ -139,6 +138,9 @@ export class IdleManager {
   _resetTimer(): void {
     const exit = this.exit.bind(this)
     window.clearTimeout(this.timeoutID)
-    this.timeoutID = window.setTimeout(exit, this.idleTimeout)
+    this.timeoutID = window.setTimeout(() => {
+      exit()
+      this.callbacks.forEach((cb) => cb())
+    }, this.idleTimeout)
   }
 }
