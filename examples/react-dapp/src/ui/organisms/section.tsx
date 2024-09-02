@@ -20,7 +20,7 @@ import "react-toastify/dist/ReactToastify.css"
 import { idlFactory as demoIDL } from "../../idl/service_idl"
 import { idlFactory as ledgerIDL } from "../../idl/ledger"
 import { idlFactory as pepeIDL } from "../../idl/token-pepe-ledger"
-import { IdentityKitSignerRawAgent, toBase64 } from "@nfid/identitykit"
+import { IdentityKitSignerAgent, toBase64 } from "@nfid/identitykit"
 
 export type IRequestExample = {
   title: string
@@ -101,7 +101,7 @@ export const Section: React.FC<ISection> = ({
         setIcrc49ActorResponse(null)
         const { sender, canisterId } = requestObject.params
 
-        const agent = await IdentityKitSignerRawAgent.create({
+        const agent = await IdentityKitSignerAgent.create({
           signer: new Proxy(selectedSigner, {
             get(target, prop) {
               return async (params: any) => {
