@@ -91,17 +91,6 @@ export class DelegationSignerClient extends SignerClient {
     maxTimeToLive?: bigint
   }): Promise<{ signerResponse: DelegationChain; connectedAccount: string }> {
     const baseIdentity = await this.getBaseIdentity()
-    const permissions = await this.options.signer.permissions()
-    const permission = permissions.find((x) => "icrc34_delegation" === x.scope.method)
-
-    if (!permission || permission.state === "ask_on_use" || permission.state === "denied") {
-      await this.options.signer.requestPermissions([
-        {
-          method: "icrc34_delegation",
-        },
-      ])
-    }
-
     const delegationChainResponse = await this.options.signer.sendRequest<
       DelegationRequest,
       DelegationResponse
