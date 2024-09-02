@@ -1,7 +1,7 @@
 import { AccountIdentifier, LedgerCanister, SubAccount } from "@dfinity/ledger-icp"
 import { Principal } from "@dfinity/principal"
 import { SignerClient } from "./signer-client"
-import { SignerAgent, SignerAgentOptions } from "./signer-agent"
+import { SignerAgent, type SignerAgentOptions } from "@slide-computer/signer-agent"
 
 export const IdentityKitAuthType = {
   DELEGATION: "DELEGATION",

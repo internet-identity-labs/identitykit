@@ -20,18 +20,6 @@ export class AccountsSignerClient extends SignerClient {
     }[]
     connectedAccount: string
   }> {
-    // check permission for icrc27_accounts
-    const permissions = await this.options.signer.permissions()
-    const permission = permissions.find((x) => "icrc27_accounts" === x.scope.method)
-
-    if (!permission || permission.state === "ask_on_use" || permission.state === "denied") {
-      await this.options.signer.requestPermissions([
-        {
-          method: "icrc27_accounts",
-        },
-      ])
-    }
-
     // get and transform accounts from signer
     const accounts = (
       await this.options.signer.sendRequest<AccountsRequest, AccountsResponse>({
