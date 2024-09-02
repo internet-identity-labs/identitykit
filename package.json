@@ -9,7 +9,7 @@
     "build-identitykit:dev": "cd ./packages/identitykit && npm run build-dev",
     "build-docs": "turbo build --force --filter='@nfid/docs'",
     "build-playground:dev": "npm run build-identitykit:dev && dotenv -e .env.dev -- turbo run build --force --filter='@nfid/react-demo' --filter='@nfid/react-dapp' --filter='@nfid/react-signer'",
-    "build-playground:ic": "build-identitykit:dev && dotenv -e .env.ic -- turbo run build --force --filter='@nfid/react-demo' --filter='@nfid/react-dapp' --filter='@nfid/react-signer'",
+    "build-playground:ic": "npm run build-identitykit:dev && dotenv -e .env.ic -- turbo run build --force --filter='@nfid/react-demo' --filter='@nfid/react-dapp' --filter='@nfid/react-signer'",
     "playground:docs": "turbo run dev --force --filter='@nfid/docs'",
     "playground": "turbo dev --force --filter='@nfid/identitykit' && dotenv -- turbo run dev --force --filter=\"@nfid/react-demo\" --filter=\"@nfid/react-dapp\" --filter=\"@nfid/react-signer\"",
     "dev": "turbo dev",
