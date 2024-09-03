@@ -21,18 +21,25 @@ export class AccountsSignerClient extends SignerClient {
     connectedAccount: string
   }> {
     // get and transform accounts from signer
-    const accounts = (
-      await this.options.signer.sendRequest<AccountsRequest, AccountsResponse>({
-        method: "icrc27_accounts",
-        id: this.crypto.randomUUID(),
-        jsonrpc: "2.0",
-        params: this.options.derivationOrigin
-          ? {
-              derivationOrigin: this.options.derivationOrigin,
-            }
-          : undefined,
-      })
-    ).accounts.map(({ owner, subaccount }) => ({
+    const accountsResponse = await this.options.signer.sendRequest<
+      AccountsRequest,
+      AccountsResponse
+    >({
+      method: "icrc27_accounts",
+      id: this.crypto.randomUUID(),
+      jsonrpc: "2.0",
+      params: this.options.derivationOrigin
+        ? {
+            derivationOrigin: this.options.derivationOrigin,
+          }
+        : undefined,
+    })
+
+    if ("error" in accountsResponse) {
+      throw Error(accountsResponse.error.message)
+    }
+
+    const accounts = accountsResponse.result.accounts.map(({ owner, subaccount }) => ({
       owner: Principal.fromText(owner),
       subaccount: subaccount === undefined ? undefined : fromBase64(subaccount),
     }))
