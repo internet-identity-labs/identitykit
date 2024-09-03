@@ -14,10 +14,10 @@ export function useSigner({
   const [prevSigner, setPrevSigner] = useState<Signer | undefined>(undefined)
 
   const selectSigner = useCallback(
-    (cb: (signer: Signer) => unknown, signerId?: string) => {
+    (cb: (signer?: Signer) => unknown, signerId?: string) => {
       if (!signerId) {
         localStorage.removeItem("signerId")
-        return setSelectedSigner(undefined)
+        return cb(undefined)
       }
 
       const signer = signers.find((s) => s.id === signerId)
@@ -61,11 +61,13 @@ export function useSigner({
   }, [selectedSigner, selectSigner, setPrevSigner, prevSigner])
 
   return {
-    selectSigner: (signerId?: string) => selectSigner(setSelectedSigner, signerId),
+    selectSigner: (signerId?: string) => {
+      selectSigner(setSelectedSigner, signerId)
+    },
     // clear both signer and local storage signer
     clearSigner: () => {
-      selectSigner(setSelectedSigner, undefined)
-      selectSigner(setPrevSigner, undefined)
+      selectSigner(setSelectedSigner)
+      selectSigner(setPrevSigner)
     },
     selectCustomSigner,
     // selected signer is local storage signer by default (in case authenticated user)
