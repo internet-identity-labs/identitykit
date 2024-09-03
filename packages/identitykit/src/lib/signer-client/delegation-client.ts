@@ -107,8 +107,13 @@ export class DelegationSignerClient extends SignerClient {
           options?.maxTimeToLive === undefined ? undefined : String(options.maxTimeToLive),
       },
     })
+
+    if ("error" in delegationChainResponse) {
+      throw Error(delegationChainResponse.error.message)
+    }
+
     const delegationChain = DelegationChain.fromDelegations(
-      delegationChainResponse.signerDelegation.map((delegation) => ({
+      delegationChainResponse.result.signerDelegation.map((delegation) => ({
         delegation: new Delegation(
           fromBase64(delegation.delegation.pubkey),
           BigInt(delegation.delegation.expiration),
@@ -116,7 +121,7 @@ export class DelegationSignerClient extends SignerClient {
         ),
         signature: fromBase64(delegation.signature) as Signature,
       })),
-      fromBase64(delegationChainResponse.publicKey)
+      fromBase64(delegationChainResponse.result.publicKey)
     )
 
     await setDelegationChain(STORAGE_KEY, delegationChain, this.storage)

@@ -110,41 +110,56 @@ export class ExpectedTexts {
       },
     ],
     ListOfAccountsResponse: {
-      accounts: [
-        {
-          owner: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
-          subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
-        },
-        {
-          owner: "6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae",
-          subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=",
-        },
-      ],
+      id: "8c417beb-e7b1-4925-94b3-c737697e51bf",
+      jsonrpc: "2.0",
+      origin: "http://localhost:3001",
+      result: {
+        accounts: [
+          {
+            owner: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+            subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          },
+          {
+            owner: "6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae",
+            subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=",
+          },
+        ],
+      },
     },
     DelegationWithTargetsResponse: {
-      signerDelegation: [
-        {
-          delegation: {
-            expiration: expect.anything(),
-            pubkey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
-            targets: ["do25a-dyaaa-aaaak-qifua-cai"],
+      id: "8932ce44-a693-4d1a-a087-8468aafe536e",
+      jsonrpc: "2.0",
+      origin: "http://localhost:3001",
+      result: {
+        signerDelegation: [
+          {
+            delegation: {
+              expiration: expect.anything(),
+              pubkey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
+              targets: ["do25a-dyaaa-aaaak-qifua-cai"],
+            },
+            signature: expect.anything(),
           },
-          signature: expect.anything(),
-        },
-      ],
-      publicKey: "MCowBQYDK2VwAyEAO2onvM62pC1io6jQKm8Nc2UyFXcd4kOmOsBIoYtZ2ik=",
+        ],
+        publicKey: "MCowBQYDK2VwAyEAO2onvM62pC1io6jQKm8Nc2UyFXcd4kOmOsBIoYtZ2ik=",
+      },
     },
     NoTargetsDelegationResponse: {
-      signerDelegation: [
-        {
-          delegation: {
-            expiration: expect.anything(),
-            pubkey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
+      id: "8932ce44-a693-4d1a-a087-8468aafe536e",
+      jsonrpc: "2.0",
+      origin: "http://localhost:3001",
+      result: {
+        signerDelegation: [
+          {
+            delegation: {
+              expiration: expect.anything(),
+              pubkey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
+            },
+            signature: expect.anything(),
           },
-          signature: expect.anything(),
-        },
-      ],
-      publicKey: "MCowBQYDK2VwAyEAMAityFffzQR3p6qgGmV8ppI852wHZFcEsehy3rElO6o=",
+        ],
+        publicKey: "MCowBQYDK2VwAyEAMAityFffzQR3p6qgGmV8ppI852wHZFcEsehy3rElO6o=",
+      },
     },
     ConsentCaseCanisterCallRequest: [
       "Request from http://localhost:3001",
@@ -158,7 +173,7 @@ export class ExpectedTexts {
     ConsentCaseCanisterCallResponse: {
       origin: "http://localhost:3001",
       jsonrpc: "2.0",
-      id: "7812362e-29b8-4099-824c-067e8a50f6f3",
+      id: "8932ce44-a693-4d1a-a087-8468aafe536e",
       result: {
         contentMap: expect.anything(),
         certificate: expect.anything(),
@@ -176,7 +191,7 @@ export class ExpectedTexts {
     NoConsentCaseCanisterCallResponse: {
       origin: "http://localhost:3001",
       jsonrpc: "2.0",
-      id: "7812362e-29b8-4099-824c-067e8a50f6f3",
+      id: "8932ce44-a693-4d1a-a087-8468aafe536e",
       result: {
         contentMap: expect.anything(),
         certificate: expect.anything(),
@@ -226,24 +241,34 @@ export class ExpectedTexts {
       },
     ],
     ListOfAccountsResponse: {
-      accounts: [
-        {
-          owner: "7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae",
-          subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
-        },
-      ],
+      id: "8c417beb-e7b1-4925-94b3-c737697e51bf",
+      jsonrpc: "2.0",
+      origin: "http://localhost:3001",
+      result: {
+        accounts: [
+          {
+            owner: "7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae",
+            subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          },
+        ],
+      },
     },
     NoTargetsDelegationResponse: {
-      signerDelegation: [
-        {
-          delegation: {
-            expiration: expect.anything(),
-            pubkey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
+      id: "8932ce44-a693-4d1a-a087-8468aafe536e",
+      jsonrpc: "2.0",
+      origin: "http://localhost:3001",
+      result: {
+        signerDelegation: [
+          {
+            delegation: {
+              expiration: expect.anything(),
+              pubkey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
+            },
+            signature: expect.anything(),
           },
-          signature: expect.anything(),
-        },
-      ],
-      publicKey: "MCowBQYDK2VwAyEALHdjGe0ciJb8Kmq4Xsc2/hn760QS+QgdJh7LUPc/wn0=",
+        ],
+        publicKey: "MCowBQYDK2VwAyEALHdjGe0ciJb8Kmq4Xsc2/hn760QS+QgdJh7LUPc/wn0=",
+      },
     },
     ConsentCaseCanisterCall: [
       "Request from localhost:3001",

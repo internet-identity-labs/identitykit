@@ -3,24 +3,18 @@ import { Title } from "../atoms/title"
 import { RequestSection } from "../molecules/request-section"
 import { ResponseSection } from "../molecules/response-section"
 import { Text } from "../atoms/text"
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { toast } from "react-toastify"
 import { isValidJSON } from "../../utils/json"
 import { Button } from "../atoms/button"
 import { CodeSection } from "../molecules/code-section"
 import { useIdentityKit } from "@nfid/identitykit/react"
-import { Actor } from "@dfinity/agent"
-import { Principal } from "@dfinity/principal"
 import { getRequestObject } from "../../utils/requests"
 import { DropdownSelect } from "../molecules/dropdown-select"
 import { Buffer } from "buffer"
 import { CallCanisterRequest } from "../../data"
 
 import "react-toastify/dist/ReactToastify.css"
-import { idlFactory as demoIDL } from "../../idl/service_idl"
-import { idlFactory as ledgerIDL } from "../../idl/ledger"
-import { idlFactory as pepeIDL } from "../../idl/token-pepe-ledger"
-import { IdentityKitSignerAgent, toBase64 } from "@nfid/identitykit"
 
 export type IRequestExample = {
   title: string
@@ -34,12 +28,6 @@ export interface ISection {
   description: JSX.Element
   requestsExamples: Array<IRequestExample>
   getCodeSnippet: (requestJSON: string) => string
-}
-
-const canistersIDLs: { [key: string]: any } = {
-  "ryjl3-tyaaa-aaaaa-aaaba-cai": ledgerIDL,
-  "do25a-dyaaa-aaaak-qifua-cai": demoIDL,
-  "etik7-oiaaa-aaaar-qagia-cai": pepeIDL,
 }
 
 const SignerMethod: any = {
@@ -65,12 +53,6 @@ export const Section: React.FC<ISection> = ({
   const [selectedRequestIndex, setSelectedRequestIndex] = useState(0)
   const [requestValue, setRequestValue] = useState(requestsExamples[selectedRequestIndex].value)
   const [responseValue, setResponseValue] = useState("{}")
-  const [icrc49SignerResponse, setIcrc49SignerResponse] = useState<{
-    certificate: string
-    contentMap: string
-  } | null>(null)
-  const [icrc49ActorResponse, setIcrc49ActorResponse] = useState<string | null>(null)
-
   const { selectedSigner } = useIdentityKit()
 
   const handleSubmit = async () => {
@@ -96,35 +78,19 @@ export const Section: React.FC<ISection> = ({
           setIsLoading(false)
           return toast.error("Method is not supported")
         }
+        const req = {
+          id: "8932ce44-a693-4d1a-a087-8468aafe536e",
+          jsonrpc: "2.0",
+          ...requestObject,
+        }
 
-        setIcrc49SignerResponse(null)
-        setIcrc49ActorResponse(null)
-        const { sender, canisterId } = requestObject.params
-
-        const agent = await IdentityKitSignerAgent.create({
-          signer: new Proxy(selectedSigner, {
-            get(target, prop) {
-              return async (params: any) => {
-                const response = await (target as any)[prop](params)
-                setIcrc49SignerResponse({
-                  certificate: toBase64(response.certificate),
-                  contentMap: toBase64(response.contentMap),
-                })
-                return response
-              }
-            },
-          }),
-          account: Principal.fromText(sender) as any,
-        })
-        const actor = Actor.createActor(canistersIDLs[canisterId], {
-          agent: agent as any,
-          canisterId,
-        })
-
-        const args =
-          requestsExamples[selectedRequestIndex].getActorArgs?.(requestObject) ?? requestObject
-
-        setIcrc49ActorResponse((await actor[requestObject.params.method](args)) as string)
+        res = await (selectedSigner as any)?.["sendRequest"](req)
+        const json = JSON.stringify(
+          res,
+          (_, value) => (typeof value === "bigint" ? value.toString() : value),
+          2
+        )
+        setResponseValue(json)
       } else if (requestObject.method === "icrc34_delegation") {
         const req = {
           id: "8932ce44-a693-4d1a-a087-8468aafe536e",
@@ -203,25 +169,6 @@ export const Section: React.FC<ISection> = ({
       setIsLoading(false)
     }
   }
-
-  // when certificates, contentMap and content returned from actor are in local state we can group them in one response
-  useEffect(() => {
-    if (icrc49SignerResponse !== null && icrc49ActorResponse !== null) {
-      const { contentMap, certificate } = icrc49SignerResponse
-      setResponseValue(
-        JSON.stringify(
-          {
-            origin: "http://localhost:3001",
-            jsonrpc: "2.0",
-            id: "7812362e-29b8-4099-824c-067e8a50f6f3",
-            result: { contentMap, certificate },
-          },
-          (_, value) => (typeof value === "bigint" ? value.toString() : value),
-          2
-        )
-      )
-    }
-  }, [icrc49SignerResponse, icrc49ActorResponse])
 
   const codeSection = useMemo(() => {
     if (!isValidJSON(requestValue)) return { error: "Invalid JSON" }
