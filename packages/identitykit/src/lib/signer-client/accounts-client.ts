@@ -8,8 +8,10 @@ export interface AccountsSignerClientOptions extends SignerClientOptions {}
 export class AccountsSignerClient extends SignerClient {
   public static async create(options: AccountsSignerClientOptions): Promise<AccountsSignerClient> {
     const signerClient = new AccountsSignerClient(options)
-    const storageConnectedUser = await signerClient.getConnectedUserFromStorage()
-    await signerClient.setConnectedUser(storageConnectedUser)
+    if (SignerClient.shouldCheckIsUserConnected()) {
+      const storageConnectedUser = await signerClient.getConnectedUserFromStorage()
+      await signerClient.setConnectedUser(storageConnectedUser)
+    }
     return signerClient
   }
 

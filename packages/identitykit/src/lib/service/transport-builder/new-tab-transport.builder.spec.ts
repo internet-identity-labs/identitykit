@@ -34,6 +34,7 @@ describe("getPopupTransportBuilder", () => {
     getPopupTransportBuilder(request)
     expect(PostMessageTransport).toHaveBeenCalledWith({
       openWindow: expect.any(Function),
+      crypto: globalThis.crypto,
     })
 
     const openWindowFn = (PostMessageTransport as jest.Mock).mock.calls[0][0].openWindow

@@ -68,6 +68,7 @@ export function useCreateIdentityKit<
         authType: authType || (IdentityKitAuthType.ACCOUNTS as T),
         signerClientOptions: {
           ...signerClientOptions,
+          crypto,
           signer: selectedSigner,
           idleOptions: {
             idleTimeout: DEFAULT_IDLE_TIMEOUT,
