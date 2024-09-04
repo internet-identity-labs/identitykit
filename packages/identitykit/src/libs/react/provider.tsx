@@ -11,6 +11,7 @@ import {
   NFIDW,
 } from "../../lib"
 import { useCreateIdentityKit, useSigner, useTheme } from "./hooks"
+import { SignerOptions } from "@slide-computer/signer"
 
 interface IdentityKitProviderProps<
   T extends IdentityKitAuthType = typeof IdentityKitAuthType.ACCOUNTS,
@@ -20,20 +21,24 @@ interface IdentityKitProviderProps<
   featuredSigner?: SignerConfig | false
   theme?: IdentityKitTheme
   signerClientOptions?: T extends typeof IdentityKitAuthType.DELEGATION
-    ? Omit<IdentityKitDelegationSignerClientOptions, "signer">
-    : Omit<IdentityKitAccountsSignerClientOptions, "signer">
+    ? Omit<IdentityKitDelegationSignerClientOptions, "signer" | "crypto">
+    : Omit<IdentityKitAccountsSignerClientOptions, "signer" | "crypto">
+  signerOptions?: Pick<SignerOptions, "autoCloseTransportChannel" | "closeTransportChannelAfter">
   agent?: IdentityKitSignerAgentOptions["agent"]
   onConnectFailure?: (e: Error) => unknown
   onConnectSuccess?: (signerResponse: object) => unknown
   onDisconnect?: () => unknown
   realConnectDisabled?: boolean
+  crypto?: Pick<Crypto, "getRandomValues" | "randomUUID">
 }
 
 globalThis.global = globalThis
 
 export const IdentityKitProvider = <T extends IdentityKitAuthType>({
   children,
-  signerClientOptions,
+  signerClientOptions = {},
+  signerOptions = {},
+  crypto = globalThis.crypto,
   agent,
   authType,
   featuredSigner,
@@ -50,12 +55,14 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
   const { selectSigner, clearSigner, selectedSigner, selectCustomSigner } = useSigner({
     signers,
     closeModal: () => setIsModalOpen(false),
+    crypto,
+    options: signerOptions,
   })
 
   const identityKit = useCreateIdentityKit({
     selectedSigner,
     clearSigner,
-    signerClientOptions,
+    signerClientOptions: { ...signerClientOptions, crypto },
     agentOptions: {
       agent,
     },

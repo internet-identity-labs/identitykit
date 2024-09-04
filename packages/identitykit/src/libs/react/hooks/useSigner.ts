@@ -1,17 +1,23 @@
 import { useCallback, useEffect, useState } from "react"
-import { Signer } from "@slide-computer/signer"
+import { Signer, SignerOptions } from "@slide-computer/signer"
 import { TransportBuilder } from "../../../lib/service"
 import { TransportType, SignerConfig } from "../../../lib/types"
 
 export function useSigner({
   signers,
   closeModal,
+  crypto,
+  ...props
 }: {
   signers: SignerConfig[]
   closeModal: () => unknown
+  options: Pick<SignerOptions, "autoCloseTransportChannel" | "closeTransportChannelAfter">
+  crypto?: Pick<Crypto, "getRandomValues" | "randomUUID">
 }) {
   const [selectedSigner, setSelectedSigner] = useState<Signer | undefined>(undefined)
   const [prevSigner, setPrevSigner] = useState<Signer | undefined>(undefined)
+
+  const options = { ...(props.options ?? {}), crypto }
 
   const selectSigner = useCallback(
     (cb: (signer?: Signer) => unknown, signerId?: string) => {
@@ -29,9 +35,13 @@ export function useSigner({
         id: signer.id,
         transportType,
         url: providerUrl,
+        crypto,
       })
 
-      const createdSigner = new Signer({ transport })
+      const createdSigner = new Signer({
+        ...options,
+        transport,
+      })
       cb(createdSigner)
 
       localStorage.setItem("signerId", signerId)
@@ -46,9 +56,10 @@ export function useSigner({
     const transport = TransportBuilder.build({
       transportType: TransportType.NEW_TAB,
       url,
+      crypto,
     })
 
-    const createdSigner = new Signer({ transport })
+    const createdSigner = new Signer({ ...options, transport })
 
     setSelectedSigner(createdSigner)
     closeModal()

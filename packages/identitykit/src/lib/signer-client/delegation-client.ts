@@ -57,22 +57,36 @@ export class DelegationSignerClient extends SignerClient {
     options: DelegationSignerClientOptions
   ): Promise<DelegationSignerClient> {
     const storage = options.storage ?? new IdbStorage()
-    const baseIdentity = options.identity ?? (await getIdentity(STORAGE_KEY, storage))
-    const delegationChain = await getDelegationChain(STORAGE_KEY, storage)
-    const identity =
-      baseIdentity && delegationChain && isDelegationValid(delegationChain)
-        ? DelegationSignerClient.createIdentity(baseIdentity, delegationChain)
-        : new AnonymousIdentity()
+    if (SignerClient.shouldCheckIsUserConnected()) {
+      const baseIdentity = options.identity ?? (await getIdentity(STORAGE_KEY, storage))
+      const delegationChain = await getDelegationChain(STORAGE_KEY, storage)
+      const identity =
+        baseIdentity && delegationChain && isDelegationValid(delegationChain)
+          ? DelegationSignerClient.createIdentity(baseIdentity, delegationChain)
+          : new AnonymousIdentity()
 
-    const signerClient = new DelegationSignerClient(
-      options,
-      identity,
-      options.keyType ?? "Ed25519",
-      options.targets
-    )
-    const storageConnectedUser = await signerClient.getConnectedUserFromStorage()
-    await signerClient.setConnectedUser(storageConnectedUser)
-    return signerClient
+      const signerClient = new DelegationSignerClient(
+        options,
+        identity,
+        options.keyType ?? ED25519_KEY_LABEL,
+        options.targets
+      )
+
+      const storageConnectedUser = await signerClient.getConnectedUserFromStorage()
+      await signerClient.setConnectedUser(storageConnectedUser)
+
+      return signerClient
+    } else {
+      const identity = new AnonymousIdentity()
+      const signerClient = new DelegationSignerClient(
+        options,
+        identity,
+        options.keyType ?? ED25519_KEY_LABEL,
+        options.targets
+      )
+
+      return signerClient
+    }
   }
 
   private static createIdentity(
@@ -124,6 +138,9 @@ export class DelegationSignerClient extends SignerClient {
       fromBase64(delegationChainResponse.result.publicKey)
     )
 
+    if (baseIdentity instanceof Ed25519KeyIdentity || baseIdentity instanceof ECDSAKeyIdentity) {
+      await setIdentity(STORAGE_KEY, baseIdentity, this.storage)
+    }
     await setDelegationChain(STORAGE_KEY, delegationChain, this.storage)
     this.identity = DelegationSignerClient.createIdentity(baseIdentity, delegationChain)
 
@@ -151,18 +168,20 @@ export class DelegationSignerClient extends SignerClient {
     if (this.options.identity) {
       return this.options.identity
     }
-    const baseIdentity = await getIdentity(STORAGE_KEY, this.storage)
-    if (baseIdentity) {
-      return baseIdentity
+    // TODO could be better, need to get rid of all async calls between login and signer select
+    if (SignerClient.shouldCheckIsUserConnected()) {
+      const baseIdentity = await getIdentity(STORAGE_KEY, this.storage)
+      if (baseIdentity) {
+        return baseIdentity
+      }
     }
     return this.createBaseIdentity()
   }
 
   private async createBaseIdentity() {
-    const baseIdentity = await (this.keyType === "Ed25519"
+    const baseIdentity = await (this.keyType === ED25519_KEY_LABEL
       ? Ed25519KeyIdentity.generate(this.crypto.getRandomValues(new Uint8Array(32)))
       : ECDSAKeyIdentity.generate())
-    await setIdentity(STORAGE_KEY, baseIdentity, this.storage)
     return baseIdentity
   }
 }

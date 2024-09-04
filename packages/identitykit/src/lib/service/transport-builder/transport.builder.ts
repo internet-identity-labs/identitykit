@@ -7,6 +7,7 @@ export interface TransportBuilderRequest {
   id?: string
   transportType: TransportType
   url: string
+  crypto?: Pick<Crypto, "getRandomValues" | "randomUUID">
 }
 
 export class TransportBuilder {

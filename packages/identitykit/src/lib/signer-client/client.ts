@@ -105,10 +105,12 @@ export abstract class SignerClient {
     if (!user) {
       await this.storage.remove(STORAGE_CONNECTED_OWNER_KEY)
       await this.storage.remove(STORAGE_CONNECTED_SUBACCOUNT_KEY)
+      localStorage.removeItem("connected")
       this.setConnectedUser(undefined)
       return
     }
     await this.storage.set(STORAGE_CONNECTED_OWNER_KEY, user.owner)
+    localStorage.setItem("connected", "1")
     if (user.subAccount)
       await this.storage.set(
         STORAGE_CONNECTED_SUBACCOUNT_KEY,
@@ -118,6 +120,11 @@ export abstract class SignerClient {
       owner: user.owner,
       subAccount: user.subAccount,
     })
+  }
+
+  // sync method to check if it's needed to check authorization reading from async storage
+  static shouldCheckIsUserConnected() {
+    return !!localStorage.getItem("connected")
   }
 
   protected async getConnectedUserFromStorage(): Promise<
