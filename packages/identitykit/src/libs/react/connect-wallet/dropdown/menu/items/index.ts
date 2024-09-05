@@ -1,5 +1,5 @@
 export * from "./item"
-export * from "./item-inner"
+export * from "./item-text"
 export * from "./items"
 export * from "./address-item"
-export * from "./logout-item"
+export * from "./disconnect-item"

@@ -32,13 +32,18 @@ export function useIdentityKit(): {
   selectSigner: (signerId?: string | undefined) => void | SignerConfig
   agent: SignerAgent | null
   connectedAccount?: string
+  logout: () => unknown
+  icpBalance?: number
 } {
-  const { selectedSigner, selectSigner, agent, connectedAccount } = useContext(IdentityKitContext)
+  const { selectedSigner, selectSigner, agent, connectedAccount, logout, icpBalance } =
+    useContext(IdentityKitContext)
 
   return {
     selectedSigner,
     selectSigner,
     agent,
     connectedAccount,
+    logout,
+    icpBalance,
   }
 }
