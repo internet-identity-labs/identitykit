@@ -1,10 +1,9 @@
-import { useContext, useEffect, ComponentType, ReactNode } from "react"
+import { useContext, useEffect, ComponentType } from "react"
 import { IdentityKitContext } from "../context"
 import { ConnectButton, ConnectButtonProps } from "./connect-button"
 import { ConnectedButton, ConnectedButtonProps } from "./connected-button"
 import { DropdownMenu, DropdownMenuProps } from "./dropdown"
-import { MenuButton, MenuButtonProps } from "@headlessui/react"
-import { MenuAddressItem, MenuItems, MenuDisconnectItem } from "./dropdown/menu"
+import { MenuAddressItem, MenuItems, MenuDisconnectItem, MenuButton } from "./dropdown/menu"
 
 export function ConnectWallet({
   connectButtonComponent,
@@ -53,18 +52,9 @@ export function ConnectWallet({
         icpBalance={icpBalance}
         connectedAccount={connectedAccount}
       >
-        <MenuButton
-          as={({ className, children, ...props }: MenuButtonProps) => (
-            <ConnectedButtonComponent
-              connectedAccount={connectedAccount}
-              icpBalance={icpBalance}
-              className={className as string}
-              {...props}
-            >
-              {children as ReactNode}
-            </ConnectedButtonComponent>
-          )}
-        />
+        <MenuButton>
+          <ConnectedButtonComponent connectedAccount={connectedAccount} icpBalance={icpBalance} />
+        </MenuButton>
         <MenuItems>
           <MenuAddressItem value={connectedAccount} />
           <MenuDisconnectItem onClick={logout} />

@@ -1,26 +1,24 @@
 import clsx from "clsx"
-import { MouseEventHandler, PropsWithChildren } from "react"
+import { HTMLAttributes } from "react"
 import { formatIcp } from "../utils"
 
-export type ConnectedButtonProps = PropsWithChildren<{
-  onClick?: MouseEventHandler<HTMLButtonElement>
+export type ConnectedButtonProps = HTMLAttributes<HTMLButtonElement> & {
   connectedAccount: string
   icpBalance?: number
-  className?: string
-}>
+}
 
 export function ConnectedButton({
-  onClick,
   connectedAccount,
   icpBalance,
   className,
   children,
+  ...props
 }: ConnectedButtonProps) {
   return (
     <button
       id={"connect"}
       type="button"
-      onClick={onClick}
+      {...props}
       className={clsx(
         "ik-border-transparent",
         "ik-bg-gray-200 ik-text-black hover:ik-bg-gray-100 active:ik-bg-gray-300 active:ik-border-gray-200",
