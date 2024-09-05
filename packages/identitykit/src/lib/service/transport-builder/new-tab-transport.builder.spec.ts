@@ -1,6 +1,5 @@
 import { TransportBuilderRequest } from "./transport.builder"
 import { PostMessageTransport } from "@slide-computer/signer-web"
-import { openPopup } from "../../../libs/react/utils"
 import { getPopupTransportBuilder } from "./new-tab-transport.builder"
 import { TransportType } from "../../types"
 
@@ -9,7 +8,7 @@ jest.mock("@slide-computer/signer-web", () => ({
 }))
 
 jest.mock("../../../libs/react/utils", () => ({
-  openPopup: jest.fn(),
+  url: "http://example.com",
 }))
 
 describe("getPopupTransportBuilder", () => {
@@ -20,25 +19,16 @@ describe("getPopupTransportBuilder", () => {
     url: mockUrl,
   }
 
-  it("should return an instance of PostMessageTransport", () => {
-    const transport = getPopupTransportBuilder(request)
+  it("should return an instance of PostMessageTransport", async () => {
+    const transport = await getPopupTransportBuilder(request)
     expect(transport).toBeInstanceOf(PostMessageTransport)
   })
 
-  it("should not call openPopup with the correct parameters", () => {
-    getPopupTransportBuilder(request)
-    expect(openPopup).not.toHaveBeenCalledWith(mockUrl)
-  })
-
-  it("should pass openWindow function to PostMessageTransport", () => {
-    getPopupTransportBuilder(request)
+  it("should pass url to PostMessageTransport", async () => {
+    await getPopupTransportBuilder(request)
     expect(PostMessageTransport).toHaveBeenCalledWith({
-      openWindow: expect.any(Function),
+      url: "http://example.com",
       crypto: globalThis.crypto,
     })
-
-    const openWindowFn = (PostMessageTransport as jest.Mock).mock.calls[0][0].openWindow
-    openWindowFn()
-    expect(openPopup).toHaveBeenCalledWith(mockUrl)
   })
 })

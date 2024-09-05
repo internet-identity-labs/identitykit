@@ -60,24 +60,41 @@ test.describe("ICRC25 Permissions", () => {
     }
   })
 
-  test("should retrieve full list of permissions", async ({
+  test("should retrieve full list of permissions on Mocked Wallet", async ({
     section,
     requestPermissionSection,
     demoPage,
   }) => {
-    for (const account of accounts) {
-      await demoPage.login(account)
-      await requestPermissionSection.approvePermissions(account)
-      await section.clickSubmitButton()
-      await section.waitForResponse()
+    const account = accounts[0]
+    await testGetPermissions(demoPage, section, requestPermissionSection, account)
+  })
 
-      const actualResponse = await section.getResponseJson()
-      expect(actualResponse).toStrictEqual(
-        account.type === AccountType.MockedSigner
-          ? ExpectedTexts.Mocked.GetCurrentPermissionsResponse
-          : ExpectedTexts.NFID.GetCurrentPermissionsResponse
-      )
-      await demoPage.logout()
-    }
+  test("should retrieve full list of permissions on NFID Wallet", async ({
+    section,
+    requestPermissionSection,
+    demoPage,
+  }) => {
+    const account = accounts[0]
+    await testGetPermissions(demoPage, section, requestPermissionSection, account)
   })
 })
+
+async function testGetPermissions(
+  demoPage: DemoPage,
+  section: Icrc25PermissionsSection,
+  requestPermissionSection: Icrc25RequestPermissionsSection,
+  account: Account
+) {
+  await demoPage.login(account)
+  await requestPermissionSection.approvePermissions(account)
+  await section.clickSubmitButton()
+  await section.waitForResponse()
+
+  const actualResponse = await section.getResponseJson()
+  expect(actualResponse).toStrictEqual(
+    account.type === AccountType.MockedSigner
+      ? ExpectedTexts.Mocked.GetCurrentPermissionsResponse
+      : ExpectedTexts.NFID.GetCurrentPermissionsResponse
+  )
+  await demoPage.logout()
+}

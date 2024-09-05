@@ -8,6 +8,7 @@ import {
   MockedSigner,
   NFIDW,
   Plug,
+  InternetIdentity,
 } from "@nfid/identitykit"
 import { toast } from "react-toastify"
 
@@ -24,7 +25,7 @@ export function AppWrappedInIdentityKit() {
   const [shouldDisconnectWallet, setShouldDisconnectWallet] = useState(false)
   const { resolvedTheme } = useTheme()
   const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
-  const signers = [nfidw, Plug]
+  const signers = [nfidw, Plug, InternetIdentity]
 
   if (environment === "dev") {
     signers.push({

@@ -2,7 +2,9 @@ import { Transport } from "@slide-computer/signer"
 import { PlugTransport } from "@slide-computer/signer-transport-plug"
 import { TransportBuilderRequest } from "./transport.builder"
 
-export function getExtensionTransportBuilder({ id }: TransportBuilderRequest): Transport {
+export async function getExtensionTransportBuilder({
+  id,
+}: TransportBuilderRequest): Promise<Transport> {
   switch (id) {
     case "Plug":
       return new PlugTransport()

@@ -11,7 +11,8 @@ import {
   NFIDW,
 } from "../../lib"
 import { useCreateIdentityKit, useSigner, useTheme } from "./hooks"
-import { SignerOptions } from "@slide-computer/signer"
+import { SignerOptions, Transport } from "@slide-computer/signer"
+import { Signer } from "@slide-computer/signer"
 
 interface IdentityKitProviderProps<
   T extends IdentityKitAuthType = typeof IdentityKitAuthType.ACCOUNTS,
@@ -23,8 +24,11 @@ interface IdentityKitProviderProps<
   signerClientOptions?: T extends typeof IdentityKitAuthType.DELEGATION
     ? Omit<IdentityKitDelegationSignerClientOptions, "signer" | "crypto">
     : Omit<IdentityKitAccountsSignerClientOptions, "signer" | "crypto">
-  signerOptions?: Pick<SignerOptions, "autoCloseTransportChannel" | "closeTransportChannelAfter">
-  agent?: IdentityKitSignerAgentOptions["agent"]
+  signerOptions?: Pick<
+    SignerOptions<Transport>,
+    "autoCloseTransportChannel" | "closeTransportChannelAfter"
+  >
+  agent?: IdentityKitSignerAgentOptions<Signer>["agent"]
   onConnectFailure?: (e: Error) => unknown
   onConnectSuccess?: (signerResponse: object) => unknown
   onDisconnect?: () => unknown
