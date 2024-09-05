@@ -5,9 +5,9 @@ export {
   DropdownMenu as ConnectWalletDropdownMenu,
   DropdownMenuItems as ConnectWalletDropdownMenuItems,
   DropdownMenuItem as ConnectWalletDropdownMenuItem,
-  DropdownMenuItemInner as ConnectWalletDropdownMenuItemInner,
+  DropdownMenuItemText as ConnectWalletDropdownMenuItemText,
   DropdownMenuAddressItem as ConnectWalletDropdownMenuAddressItem,
-  DropdownMenuLogoutItem as ConnectWalletDropdownMenuLogoutItem,
+  DropdownMenuDisconnectItem as ConnectWalletDropdownMenuDisconnectItem,
   DropdownMenuButton as ConnectWalletDropdownMenuButton,
 } from "./dropdown"
 

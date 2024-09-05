@@ -106,9 +106,9 @@ function ConnectedWalletButton({ onClick, connectedAccount, icpBalance }: Button
 
 - ConnectWalletDropdownMenuItems
 - ConnectWalletDropdownMenuItem
-- ConnectWalletDropdownMenuItemInner
+- ConnectWalletDropdownMenuItemText
 - ConnectWalletDropdownMenuAddressItem
-- ConnectWalletDropdownMenuLogoutItem
+- ConnectWalletDropdownMenuDisconnectItem
 
 It's possible to create your own `DropdownComponent` using these components, reorder menu items,
 change them or add new
@@ -118,7 +118,11 @@ function DropdownMenu({ connectedAccount, icpBalance, disconnect }: ConnectWalle
   return (
     <ConnectWalletDropdownMenu>
       <ConnectWalletDropdownMenuButton
-        as={({ className, children, ...props }: ConnectWalletDropdownMenuButtonProps) => (
+        as={({
+          className,
+          children,
+          ...props
+        }: ConnectWalletDropdownMenuButtonProps) => (
           <ConnectedWalletButton
             connectedAccount={connectedAccount}
             icpBalance={icpBalance}
@@ -130,15 +134,15 @@ function DropdownMenu({ connectedAccount, icpBalance, disconnect }: ConnectWalle
         )}
       />
       <ConnectWalletDropdownMenuItems>
-        <ConnectWalletDropdownMenuLogoutItem onClick={disconnect} />
-          <ConnectWalletDropdownMenuItem>
-            <ConnectWalletDropdownMenuItemInner>
-              Your custom menu item
-            </ConnectWalletDropdownMenuItemInner>
-          </ConnectWalletDropdownMenuItem>
+        <ConnectWalletDropdownMenuDisconnectItem onClick={disconnect} />
+        <ConnectWalletDropdownMenuItem>
+          <ConnectWalletDropdownMenuItemText>
+            Your custom menu item
+          </ConnectWalletDropdownMenuItemText>
+        </ConnectWalletDropdownMenuItem>
         <ConnectWalletDropdownMenuAddressItem value={connectedAccount} />
-      </MenuItems>
-    </ConnectWalletDropdownMenuItems>
+      </ConnectWalletDropdownMenuItems>
+    </ConnectWalletDropdownMenu>
   )
 }
 ```

@@ -1,9 +1,9 @@
 export {
   Item as MenuItem,
-  ItemInner as MenuItemInner,
+  ItemText as MenuItemText,
   Items as MenuItems,
   AddressItem as MenuAddressItem,
-  LogoutItem as MenuLogoutItem,
+  DisconnectItem as MenuDisconnectItem,
 } from "./items"
 export * from "./menu"
 export { Button as MenuButton } from "./button"

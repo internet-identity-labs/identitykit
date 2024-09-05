@@ -2,9 +2,9 @@ export {
   Menu as DropdownMenu,
   MenuItems as DropdownMenuItems,
   MenuItem as DropdownMenuItem,
-  MenuItemInner as DropdownMenuItemInner,
+  MenuItemText as DropdownMenuItemText,
   MenuAddressItem as DropdownMenuAddressItem,
-  MenuLogoutItem as DropdownMenuLogoutItem,
+  MenuDisconnectItem as DropdownMenuDisconnectItem,
   MenuButton as DropdownMenuButton,
 } from "./menu"
 

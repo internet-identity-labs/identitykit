@@ -4,7 +4,7 @@ import { ConnectButton, ConnectButtonProps } from "./connect-button"
 import { ConnectedButton, ConnectedButtonProps } from "./connected-button"
 import { DropdownMenu, DropdownMenuProps } from "./dropdown"
 import { MenuButton, MenuButtonProps } from "@headlessui/react"
-import { MenuAddressItem, MenuItems, MenuLogoutItem } from "./dropdown/menu"
+import { MenuAddressItem, MenuItems, MenuDisconnectItem } from "./dropdown/menu"
 
 export function ConnectWallet({
   connectButtonComponent,
@@ -14,7 +14,13 @@ export function ConnectWallet({
 }: {
   connectButtonComponent?: ComponentType<ConnectButtonProps>
   connectedButtonComponent?: ComponentType<ConnectedButtonProps>
-  dropdownMenuComponent?: ComponentType<DropdownMenuProps>
+  dropdownMenuComponent?: ComponentType<
+    DropdownMenuProps & {
+      disconnect: () => unknown
+      icpBalance?: number
+      connectedAccount: string
+    }
+  >
   triggerManualDisconnect?: boolean
 }) {
   const { toggleModal, connectedAccount, icpBalance, logout, selectedSigner } =
@@ -42,7 +48,11 @@ export function ConnectWallet({
 
   return (
     <>
-      <DropdownMenuComponent>
+      <DropdownMenuComponent
+        disconnect={logout}
+        icpBalance={icpBalance}
+        connectedAccount={connectedAccount}
+      >
         <MenuButton
           as={({ className, children, ...props }: MenuButtonProps) => (
             <ConnectedButtonComponent
@@ -57,7 +67,7 @@ export function ConnectWallet({
         />
         <MenuItems>
           <MenuAddressItem value={connectedAccount} />
-          <MenuLogoutItem onClick={logout} />
+          <MenuDisconnectItem onClick={logout} />
         </MenuItems>
       </DropdownMenuComponent>
     </>
