@@ -7,11 +7,7 @@ export type MenuProps = HeadlessMenuProps & {
 
 export function Menu({ className, children, ...props }: MenuProps) {
   return (
-    <HeadlessMenu
-      as="div"
-      className={clsx("ik-relative ik-inline-block ik-text-left", className)}
-      {...props}
-    >
+    <HeadlessMenu as="div" className={clsx("ik-inline-block ik-text-left", className)} {...props}>
       {children}
     </HeadlessMenu>
   )
