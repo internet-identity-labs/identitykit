@@ -89,6 +89,7 @@ possible to create your own custom button, which will receive next props:
 - `connectedAccount` string containing address of connected account
 - `icpBalance` string containing connected account balance or `undefined{:jsx}` if balance is
   fetching
+- `onClick` callback, which opens dropdown menu
 
 ```jsx
 function ConnectedWalletButton({ onClick, connectedAccount, icpBalance }: ButtonProps) {
