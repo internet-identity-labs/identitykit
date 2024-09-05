@@ -26,13 +26,13 @@ export function useCreateIdentityKit<
   realConnectDisabled,
 }: {
   selectedSigner?: Signer
-  clearSigner: () => unknown
+  clearSigner: () => Promise<unknown>
   authType?: T
   signerClientOptions?: T extends typeof IdentityKitAuthType.DELEGATION
     ? Omit<IdentityKitDelegationSignerClientOptions, "signer">
     : Omit<IdentityKitAccountsSignerClientOptions, "signer">
   agentOptions?: {
-    agent?: IdentityKitSignerAgentOptions["agent"]
+    agent?: IdentityKitSignerAgentOptions<Signer>["agent"]
   }
   onConnectFailure?: (e: Error) => unknown
   onConnectSuccess?: (signerResponse: object) => unknown
@@ -42,12 +42,13 @@ export function useCreateIdentityKit<
   const [ik, setIk] = useState<null | IdentityKit>(null)
   const [connectedAccount, setConnectedAccount] = useState<string | undefined>()
   const [icpBalance, setIcpBalance] = useState<undefined | number>()
-  const [agent, setAgent] = useState<SignerAgent | null>(null)
+  const [agent, setAgent] = useState<SignerAgent<Signer> | null>(null)
 
   // create logout func
-  const logout = useCallback(() => {
-    const onLogout = () => {
-      clearSigner()
+  const logout = useCallback(async () => {
+    const onLogout = async () => {
+      await selectedSigner?.transport.connection?.disconnect()
+      await clearSigner()
       setConnectedAccount(undefined)
       setIcpBalance(undefined)
       setAgent(null)
@@ -56,7 +57,7 @@ export function useCreateIdentityKit<
     if (ik?.signerClient) {
       ik?.signerClient?.logout().then(onLogout)
     } else {
-      onLogout()
+      await onLogout()
     }
   }, [ik?.signerClient, clearSigner, setConnectedAccount, setIcpBalance, onDisconnect, setAgent])
 
@@ -73,9 +74,9 @@ export function useCreateIdentityKit<
           idleOptions: {
             idleTimeout: DEFAULT_IDLE_TIMEOUT,
             ...signerClientOptions.idleOptions,
-            onIdle: () => {
+            onIdle: async () => {
               signerClientOptions.idleOptions?.onIdle?.()
-              logout()
+              await logout()
             },
           },
         },
@@ -87,7 +88,7 @@ export function useCreateIdentityKit<
               setConnectedAccount(response.connectedAccount)
               onConnectSuccess?.(response.signerResponse)
             } catch (e) {
-              clearSigner()
+              await clearSigner()
               onConnectFailure?.(e as Error)
             }
           } else {

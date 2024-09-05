@@ -19,25 +19,25 @@ describe("TransportBuilder", () => {
     jest.clearAllMocks()
   })
 
-  it("should build a NEW_TAB transport", () => {
+  it("should build a NEW_TAB transport", async () => {
     const request: TransportBuilderRequest = {
       transportType: TransportType.NEW_TAB,
       url: "https://example.com",
     }
 
-    const result = TransportBuilder.build(request)
+    const result = await TransportBuilder.build(request)
 
     expect(getPopupTransportBuilder).toHaveBeenCalledWith(request)
     expect(result).toBe(mockTransport)
   })
 
-  it("should build an EXTENSION transport", () => {
+  it("should build an EXTENSION transport", async () => {
     const request: TransportBuilderRequest = {
       transportType: TransportType.EXTENSION,
       url: "https://example.com",
     }
 
-    const result = TransportBuilder.build(request)
+    const result = await TransportBuilder.build(request)
 
     expect(getExtensionTransportBuilder).toHaveBeenCalledWith(request)
     expect(result).toBe(mockTransport)

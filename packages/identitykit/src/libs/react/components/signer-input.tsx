@@ -19,9 +19,9 @@ export const SignerInput = () => {
 
   const customSignerUrl = watch("url")
 
-  const submitHandler = () => {
+  const submitHandler = async () => {
     if (!customSignerUrl) return
-    selectCustomSigner(customSignerUrl)
+    await selectCustomSigner(customSignerUrl)
   }
 
   return (

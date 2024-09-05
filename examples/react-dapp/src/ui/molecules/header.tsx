@@ -10,7 +10,13 @@ export const Header = () => {
 
   useEffect(() => {
     localStorage.clear()
-    selectSigner(undefined)
+
+    async function select() {
+      await selectSigner(undefined)
+    }
+
+    select()
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

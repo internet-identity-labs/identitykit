@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import { Signer, SignerOptions } from "@slide-computer/signer"
+import { Signer, SignerOptions, Transport } from "@slide-computer/signer"
 import { TransportBuilder } from "../../../lib/service"
 import { TransportType, SignerConfig } from "../../../lib/types"
 
@@ -11,7 +11,10 @@ export function useSigner({
 }: {
   signers: SignerConfig[]
   closeModal: () => unknown
-  options: Pick<SignerOptions, "autoCloseTransportChannel" | "closeTransportChannelAfter">
+  options: Pick<
+    SignerOptions<Transport>,
+    "autoCloseTransportChannel" | "closeTransportChannelAfter"
+  >
   crypto?: Pick<Crypto, "getRandomValues" | "randomUUID">
 }) {
   const [selectedSigner, setSelectedSigner] = useState<Signer | undefined>(undefined)
@@ -20,7 +23,7 @@ export function useSigner({
   const options = { ...(props.options ?? {}), crypto }
 
   const selectSigner = useCallback(
-    (cb: (signer?: Signer) => unknown, signerId?: string) => {
+    async (cb: (signer?: Signer) => unknown, signerId?: string) => {
       if (!signerId) {
         localStorage.removeItem("signerId")
         return cb(undefined)
@@ -31,12 +34,16 @@ export function useSigner({
 
       const { transportType, providerUrl } = signer
 
-      const transport = TransportBuilder.build({
+      const transport = await TransportBuilder.build({
         id: signer.id,
         transportType,
         url: providerUrl,
         crypto,
       })
+
+      if (!transport.connection?.connected) {
+        await transport.connection?.connect()
+      }
 
       const createdSigner = new Signer({
         ...options,
@@ -52,8 +59,8 @@ export function useSigner({
     [signers, selectedSigner, closeModal]
   )
 
-  const selectCustomSigner = useCallback((url: string) => {
-    const transport = TransportBuilder.build({
+  const selectCustomSigner = useCallback(async (url: string) => {
+    const transport = await TransportBuilder.build({
       transportType: TransportType.NEW_TAB,
       url,
       crypto,
@@ -67,18 +74,22 @@ export function useSigner({
 
   // default selected signer from local storage
   useEffect(() => {
-    if (!selectedSigner && localStorage.getItem("signerId") && !prevSigner)
-      selectSigner(setPrevSigner, localStorage.getItem("signerId")!)
+    async function select() {
+      if (!selectedSigner && localStorage.getItem("signerId") && !prevSigner)
+        await selectSigner(setPrevSigner, localStorage.getItem("signerId")!)
+    }
+
+    select()
   }, [selectedSigner, selectSigner, setPrevSigner, prevSigner])
 
   return {
-    selectSigner: (signerId?: string) => {
-      selectSigner(setSelectedSigner, signerId)
+    selectSigner: async (signerId?: string) => {
+      await selectSigner(setSelectedSigner, signerId)
     },
     // clear both signer and local storage signer
-    clearSigner: () => {
-      selectSigner(setSelectedSigner)
-      selectSigner(setPrevSigner)
+    clearSigner: async () => {
+      await selectSigner(setSelectedSigner)
+      await selectSigner(setPrevSigner)
     },
     selectCustomSigner,
     // selected signer is local storage signer by default (in case authenticated user)

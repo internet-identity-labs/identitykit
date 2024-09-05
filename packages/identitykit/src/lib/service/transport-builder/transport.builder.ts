@@ -2,6 +2,7 @@ import { Transport } from "@slide-computer/signer"
 import { getPopupTransportBuilder } from "./new-tab-transport.builder"
 import { TransportType } from "../../types"
 import { getExtensionTransportBuilder } from "./extension-transport.builder"
+import { getAuthClientTransportBuilder } from "./auth-client-transport.builder"
 
 export interface TransportBuilderRequest {
   id?: string
@@ -11,13 +12,16 @@ export interface TransportBuilderRequest {
 }
 
 export class TransportBuilder {
-  private static builders: Record<TransportType, (request: TransportBuilderRequest) => Transport> =
-    {
-      [TransportType.NEW_TAB]: getPopupTransportBuilder,
-      [TransportType.EXTENSION]: getExtensionTransportBuilder,
-    }
+  private static builders: Record<
+    TransportType,
+    (request: TransportBuilderRequest) => Promise<Transport>
+  > = {
+    [TransportType.NEW_TAB]: getPopupTransportBuilder,
+    [TransportType.EXTENSION]: getExtensionTransportBuilder,
+    [TransportType.INTERNET_IDENTITY]: getAuthClientTransportBuilder,
+  }
 
-  public static build(request: TransportBuilderRequest): Transport {
-    return TransportBuilder.builders[request.transportType](request)
+  public static async build(request: TransportBuilderRequest): Promise<Transport> {
+    return await TransportBuilder.builders[request.transportType](request)
   }
 }

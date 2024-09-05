@@ -9,10 +9,10 @@ export interface IdentityKitProvider {
   selectedSigner?: Signer
   isModalOpen: boolean
   toggleModal: () => void
-  selectSigner: (signerId?: string) => SignerConfig | void
-  selectCustomSigner: (url: string) => void
+  selectSigner: (signerId?: string) => Promise<SignerConfig | void>
+  selectCustomSigner: (url: string) => Promise<void>
   theme: IdentityKitTheme
-  agent: IdentityKitSignerAgent | null
+  agent: IdentityKitSignerAgent<Signer> | null
   connectedAccount?: string
   logout: () => unknown
   icpBalance?: number

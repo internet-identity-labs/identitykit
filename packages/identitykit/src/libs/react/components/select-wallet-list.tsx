@@ -5,7 +5,7 @@ import { SignerInput } from "./signer-input"
 
 export interface SelectWalletListProps {
   signers: SignerConfig[]
-  onSelectSigner: (id: string) => void
+  onSelectSigner: (id: string) => Promise<void | SignerConfig>
   isViewAll: boolean
   onViewAll: () => void
   featuredSigner?: SignerConfig
@@ -39,7 +39,7 @@ export const SelectWalletList = ({
                 "ik-flex ik-items-center ik-space-x-3 ik-w-full ik-p-5",
                 signer?.description?.length && "!ik-items-start"
               )}
-              onClick={() => onSelectSigner(signer.id)}
+              onClick={async () => await onSelectSigner(signer.id)}
             >
               <img src={signer.icon} alt={signer.label} className="ik-w-8 ik-h-8" />
 

@@ -29,8 +29,8 @@ export const IdentityKitContext = createContext<IdentityKitProvider>(defaultStat
 
 export function useIdentityKit(): {
   selectedSigner?: Signer
-  selectSigner: (signerId?: string | undefined) => void | SignerConfig
-  agent: SignerAgent | null
+  selectSigner: (signerId?: string | undefined) => Promise<void | SignerConfig>
+  agent: SignerAgent<Signer> | null
   connectedAccount?: string
   logout: () => unknown
   icpBalance?: number

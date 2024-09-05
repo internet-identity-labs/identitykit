@@ -8,6 +8,7 @@ import {
   SignerClient,
 } from "./signer-client"
 import { SignerAgent, SignerAgentOptions } from "@slide-computer/signer-agent"
+import { Signer } from "@slide-computer/signer"
 
 export const IdentityKitAuthType = {
   DELEGATION: "DELEGATION",
@@ -24,7 +25,7 @@ export class IdentityKit<
     ? DelegationSignerClient
     : AccountsSignerClient,
 > {
-  public signerAgent?: SignerAgent
+  public signerAgent?: SignerAgent<Signer>
   public signerClient: TSignerClient
 
   constructor(signerClient: TSignerClient) {
@@ -35,7 +36,7 @@ export class IdentityKit<
     return Object.assign(Object.create(Object.getPrototypeOf(this)), this)
   }
 
-  async createSignerAgent(options: SignerAgentOptions): Promise<SignerAgent> {
+  async createSignerAgent(options: SignerAgentOptions<Signer>): Promise<SignerAgent<Signer>> {
     const signerAgent = await SignerAgent.create(options)
     this.signerAgent = signerAgent
     return signerAgent

@@ -11,7 +11,13 @@ import { Section } from "./ui/organisms/section"
 import { ToastContainer } from "react-toastify"
 import { SectionContainer } from "./ui/organisms/section-container"
 import { IdentityKitProvider, IdentityKitTheme } from "@nfid/identitykit/react"
-import { MockedSigner, NFIDW, Plug, IdentityKitSignerConfig } from "@nfid/identitykit"
+import {
+  MockedSigner,
+  NFIDW,
+  Plug,
+  InternetIdentity,
+  IdentityKitSignerConfig,
+} from "@nfid/identitykit"
 import { useTheme } from "next-themes"
 
 const icrc25data = [
@@ -30,7 +36,7 @@ const environment = import.meta.env.VITE_ENVIRONMENT
 function App() {
   const { resolvedTheme } = useTheme()
   const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
-  const signers = [nfidw, Plug]
+  const signers = [nfidw, Plug, InternetIdentity]
 
   if (environment === "dev") {
     signers.push({
