@@ -40,18 +40,30 @@ test.describe("ICRC25 Request Permissions", () => {
     }
   })
 
-  test("should request full list of permissions", async ({ section, demoPage }) => {
-    for (const account of accounts) {
-      await demoPage.login(account)
-      await section.approvePermissions(account)
-      await section.clickSubmitButton()
-      const actualResponse = await section.getResponseJson()
-      expect(actualResponse).toStrictEqual(
-        account.type === AccountType.MockedSigner
-          ? ExpectedTexts.Mocked.GrantedPermissions
-          : ExpectedTexts.NFID.GrantedPermissions
-      )
-      await demoPage.logout()
-    }
+  test("should request full list of permissions on Demo app", async ({ section, demoPage }) => {
+    const account = accounts[0]
+    await testFullPermissions(demoPage, section, account)
+  })
+
+  test("should request full list of permissions on NFID wallet", async ({ section, demoPage }) => {
+    const account = accounts[1]
+    await testFullPermissions(demoPage, section, account)
   })
 })
+
+async function testFullPermissions(
+  demoPage: DemoPage,
+  section: Icrc25RequestPermissionsSection,
+  account: Account
+) {
+  await demoPage.login(account)
+  await section.approvePermissions(account)
+  await section.clickSubmitButton()
+  const actualResponse = await section.getResponseJson()
+  expect(actualResponse).toStrictEqual(
+    account.type === AccountType.MockedSigner
+      ? ExpectedTexts.Mocked.GrantedPermissions
+      : ExpectedTexts.NFID.GrantedPermissions
+  )
+  await demoPage.logout()
+}
