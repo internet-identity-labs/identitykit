@@ -40,7 +40,10 @@ test.describe("ICRC25 Request Permissions", () => {
     }
   })
 
-  test("should request full list of permissions on Demo app", async ({ section, demoPage }) => {
+  test("should request full list of permissions on Mocked Wallet", async ({
+    section,
+    demoPage,
+  }) => {
     const account = accounts[0]
     await testFullPermissions(demoPage, section, account)
   })
