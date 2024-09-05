@@ -37,7 +37,7 @@ export const SelectWalletList = ({
                 "ik-bg-white dark:ik-bg-zinc-800 ik-rounded-[12px] ik-cursor-pointer",
                 "hover:ik-bg-gray-50 dark:hover:ik-bg-signerDarkHoverBg",
                 "ik-flex ik-items-center ik-space-x-3 ik-w-full ik-p-5",
-                signer?.description?.length && "!ik-items-start"
+                featuredSigner?.id === signer.id && signer?.description?.length && "!ik-items-start"
               )}
               onClick={async () => await onSelectSigner(signer.id)}
             >
@@ -45,9 +45,11 @@ export const SelectWalletList = ({
 
               <div className="ik-text-black dark:ik-text-white">
                 <p className="ik-text-sm ik-font-bold ik-leading-[25px]">{signer.label}</p>
-                <p className="ik-text-xs ik-text-gray-400 dark:ik-text-zinc-400 ik-leading-[20px]">
-                  {signer.description}
-                </p>
+                {featuredSigner?.id === signer.id && signer.description && (
+                  <p className="ik-text-xs ik-text-gray-400 dark:ik-text-zinc-400 ik-leading-[20px]">
+                    {signer.description}
+                  </p>
+                )}
               </div>
             </div>
           </div>
