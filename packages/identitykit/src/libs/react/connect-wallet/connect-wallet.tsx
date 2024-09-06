@@ -1,4 +1,4 @@
-import { useContext, useEffect, ComponentType } from "react"
+import { useContext, ComponentType } from "react"
 import { IdentityKitContext } from "../context"
 import { ConnectButton, ConnectButtonProps } from "./connect-button"
 import { ConnectedButton, ConnectedButtonProps } from "./connected-button"
@@ -9,7 +9,6 @@ export function ConnectWallet({
   connectButtonComponent,
   connectedButtonComponent,
   dropdownMenuComponent,
-  triggerManualDisconnect,
 }: {
   connectButtonComponent?: ComponentType<ConnectButtonProps>
   connectedButtonComponent?: ComponentType<ConnectedButtonProps>
@@ -20,16 +19,9 @@ export function ConnectWallet({
       connectedAccount: string
     }
   >
-  triggerManualDisconnect?: boolean
 }) {
-  const { toggleModal, connectedAccount, icpBalance, logout, selectedSigner } =
+  const { toggleModal, connectedAccount, icpBalance, disconnect, selectedSigner } =
     useContext(IdentityKitContext)
-
-  useEffect(() => {
-    if (triggerManualDisconnect) {
-      logout()
-    }
-  }, [triggerManualDisconnect])
 
   const ConnectButtonComponent = connectButtonComponent ?? ConnectButton
   const ConnectedButtonComponent = connectedButtonComponent ?? ConnectedButton
@@ -48,7 +40,7 @@ export function ConnectWallet({
   return (
     <>
       <DropdownMenuComponent
-        disconnect={logout}
+        disconnect={disconnect}
         icpBalance={icpBalance}
         connectedAccount={connectedAccount}
       >
@@ -57,7 +49,7 @@ export function ConnectWallet({
         </MenuButton>
         <MenuItems>
           <MenuAddressItem value={connectedAccount} />
-          <MenuDisconnectItem onClick={logout} />
+          <MenuDisconnectItem onClick={disconnect} />
         </MenuItems>
       </DropdownMenuComponent>
     </>

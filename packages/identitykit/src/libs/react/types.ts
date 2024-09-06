@@ -14,6 +14,6 @@ export interface IdentityKitProvider {
   theme: IdentityKitTheme
   agent: IdentityKitSignerAgent<Signer> | null
   connectedAccount?: string
-  logout: () => unknown
+  disconnect: () => unknown
   icpBalance?: number
 }
