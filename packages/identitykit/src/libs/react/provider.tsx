@@ -9,6 +9,9 @@ import {
   IdentityKitDelegationSignerClientOptions,
   IdentityKitSignerAgentOptions,
   NFIDW,
+  Plug,
+  InternetIdentity,
+  Stoic,
 } from "../../lib"
 import { useCreateIdentityKit, useSigner, useTheme } from "./hooks"
 import { SignerOptions, Transport } from "@slide-computer/signer"
@@ -54,7 +57,8 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
     setIsModalOpen((prev) => !prev)
   }, [])
 
-  const signers = !props.signers || !props.signers.length ? [NFIDW] : props.signers
+  const signers =
+    !props.signers || !props.signers.length ? [NFIDW, Plug, InternetIdentity, Stoic] : props.signers
 
   const { selectSigner, clearSigner, selectedSigner, selectCustomSigner } = useSigner({
     signers,
