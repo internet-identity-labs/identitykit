@@ -1,6 +1,6 @@
 {
   "name": "@nfid/identitykit",
-  "version": "0.0.0-alpha.6",
+  "version": "0.0.0-alpha.7",
   "description": "A React library for adding wallet connections to dApps.",
   "keywords": [
     "ICP",
@@ -82,9 +82,9 @@
     }
   ],
   "dependencies": {
-    "@headlessui/react": "2.1.3",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.2",
+    "@headlessui/react": "2.1.4",
     "@slide-computer/signer": "^3.6.1",
     "@slide-computer/signer-agent": "^3.6.1",
     "@slide-computer/signer-storage": "^3.6.1",

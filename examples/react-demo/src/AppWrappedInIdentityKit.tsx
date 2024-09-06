@@ -23,7 +23,6 @@ export function AppWrappedInIdentityKit() {
   const [authType, setAuthType] = useState<IdentityKitAuthType>(IdentityKitAuthType.ACCOUNTS)
   const [connectWalletSignerResponse, setConnectWalletSignerResponse] = useState("{}")
   const [authTypeSwitched, setAuthTypeSwitched] = useState(false)
-  const [shouldDisconnectWallet, setShouldDisconnectWallet] = useState(false)
   const { resolvedTheme } = useTheme()
   const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
   const signers = [nfidw, Plug, InternetIdentity, Stoic]
@@ -49,7 +48,6 @@ export function AppWrappedInIdentityKit() {
       }
       onDisconnect={() => {
         setConnectWalletSignerResponse("{}")
-        setShouldDisconnectWallet(false)
       }}
       onConnectFailure={(e) => {
         toast.error(e.message)
@@ -61,8 +59,6 @@ export function AppWrappedInIdentityKit() {
         connectWalletSignerResponse={connectWalletSignerResponse}
         authTypeSwitched={authTypeSwitched}
         setAuthTypeSwitched={setAuthTypeSwitched}
-        shouldDisconnectWallet={shouldDisconnectWallet}
-        setShouldDisconnectWallet={setShouldDisconnectWallet}
       />
     </IdentityKitProvider>
   )

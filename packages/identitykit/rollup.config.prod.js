@@ -131,11 +131,11 @@ export default [
     plugins: [
       ...commonPlugins,
       generatePackageJson({
-        baseContents: {
-          ...packageJson,
-          exports: packageJson.exportsProd,
-          exportsProd: undefined
-        },
+        baseContents: (bC) => ({
+          ...bC,
+          exports: bC.exportsProd,
+          exportsProd: undefined,
+        }),
         outputFolder: `dist/`,
       }),
     ],

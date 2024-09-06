@@ -19,8 +19,8 @@ const defaultState: IdentityKitProvider = {
     throw new Error("signer is not available on this url")
   },
   theme: IdentityKitTheme.SYSTEM,
-  logout: () => {
-    throw new Error("logout not implemented")
+  disconnect: () => {
+    throw new Error("disconnect not implemented")
   },
   agent: null,
 }
@@ -32,10 +32,10 @@ export function useIdentityKit(): {
   selectSigner: (signerId?: string | undefined) => Promise<void | SignerConfig>
   agent: SignerAgent<Signer> | null
   connectedAccount?: string
-  logout: () => unknown
+  disconnect: () => unknown
   icpBalance?: number
 } {
-  const { selectedSigner, selectSigner, agent, connectedAccount, logout, icpBalance } =
+  const { selectedSigner, selectSigner, agent, connectedAccount, disconnect, icpBalance } =
     useContext(IdentityKitContext)
 
   return {
@@ -43,7 +43,7 @@ export function useIdentityKit(): {
     selectSigner,
     agent,
     connectedAccount,
-    logout,
+    disconnect,
     icpBalance,
   }
 }

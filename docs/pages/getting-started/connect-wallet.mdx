@@ -7,18 +7,21 @@ authors:
 
 # Using and customizing the ConnectWallet
 
-This is the main component. It is responsible for rendering the connect/disconnect button. And it's
-also possible to attach callbacks to react to successfull and failed connect or disconnect.
+This is the main component. It is responsible for rendering the connect/disconnect button.
+onConnectFailure, onConnectSuccess, and onDisconnect callbacks can be passed to
+`IdentityKitProvider`
 
 ```typescript
-import { ConnectWallet } from "@nfid/identitykit/react"
+import { IdentityKitProvider, ConnectWallet } from "@nfid/identitykit/react"
 
 export const YourApp = () => {
-  return <ConnectWallet
+  return <IdentityKitProvider
     onConnectFailure={(e: Error) => {}}
     onConnectSuccess={(signerResponse: object) => {}}
     onDisconnect={() => {}}
-  />;
+  >
+    <ConnectWallet />
+  </IdentityKitProvider>;
 };
 ```
 

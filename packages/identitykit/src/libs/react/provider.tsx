@@ -96,7 +96,7 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
         featuredSigner: featuredSigner === false ? undefined : (featuredSigner ?? signers[0]),
         agent: identityKit.agent,
         connectedAccount: identityKit.connectedAccount,
-        logout: identityKit.logout,
+        disconnect: identityKit.disconnect,
         icpBalance: identityKit.icpBalance,
       }}
     >
