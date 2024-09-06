@@ -136,7 +136,7 @@ export default [
           exports: packageJson.exportsProd,
           exportsProd: undefined
         },
-        outputFolder: `dist/`,
+        outputFolder: `.`,
       }),
     ],
     external: [/node_modules/],
