@@ -90,6 +90,7 @@
     "@slide-computer/signer-storage": "^3.6.1",
     "@slide-computer/signer-transport-auth-client": "^3.6.1",
     "@slide-computer/signer-transport-plug": "^3.6.1",
+    "@slide-computer/signer-transport-stoic": "^3.6.1",
     "@slide-computer/signer-web": "^3.6.1",
     "clsx": "^2.1.1",
     "react-hook-form": "^7.53.0",

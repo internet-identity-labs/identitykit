@@ -18,5 +18,5 @@ export {
   type DelegationSignerClientOptions as IdentityKitDelegationSignerClientOptions,
   type AccountsSignerClientOptions as IdentityKitAccountsSignerClientOptions,
 } from "./signer-client"
-export { NFIDW, Plug, MockedSigner, InternetIdentity } from "./signers"
+export { NFIDW, Plug, MockedSigner, InternetIdentity, Stoic } from "./signers"
 export { toBase64, fromBase64 } from "@slide-computer/signer"
