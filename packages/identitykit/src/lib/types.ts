@@ -11,4 +11,5 @@ export enum TransportType {
   NEW_TAB,
   EXTENSION,
   INTERNET_IDENTITY,
+  STOIC,
 }

@@ -3,6 +3,7 @@ import { getPopupTransportBuilder } from "./new-tab-transport.builder"
 import { TransportType } from "../../types"
 import { getExtensionTransportBuilder } from "./extension-transport.builder"
 import { getAuthClientTransportBuilder } from "./auth-client-transport.builder"
+import { getStoicTransportBuilder } from "./stoic-transport.builder"
 
 export interface TransportBuilderRequest {
   id?: string
@@ -19,6 +20,7 @@ export class TransportBuilder {
     [TransportType.NEW_TAB]: getPopupTransportBuilder,
     [TransportType.EXTENSION]: getExtensionTransportBuilder,
     [TransportType.INTERNET_IDENTITY]: getAuthClientTransportBuilder,
+    [TransportType.STOIC]: getStoicTransportBuilder,
   }
 
   public static async build(request: TransportBuilderRequest): Promise<Transport> {

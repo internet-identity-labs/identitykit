@@ -17,6 +17,7 @@ import {
   Plug,
   InternetIdentity,
   IdentityKitSignerConfig,
+  Stoic,
 } from "@nfid/identitykit"
 import { useTheme } from "next-themes"
 
@@ -36,7 +37,7 @@ const environment = import.meta.env.VITE_ENVIRONMENT
 function App() {
   const { resolvedTheme } = useTheme()
   const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
-  const signers = [nfidw, Plug, InternetIdentity]
+  const signers = [nfidw, Plug, InternetIdentity, Stoic]
 
   if (environment === "dev") {
     signers.push({
