@@ -4,28 +4,26 @@ import { Section } from "./ui/organisms/section"
 import { ToastContainer } from "react-toastify"
 import { IdentityKitAuthType } from "@nfid/identitykit"
 import { AuthTypeTabs } from "./ui/organisms"
+import { useIdentityKit } from "@nfid/identitykit/react"
 
 function App({
   authType,
   setAuthType,
-  setShouldDisconnectWallet,
   setAuthTypeSwitched,
-  shouldDisconnectWallet,
   authTypeSwitched,
   connectWalletSignerResponse,
 }: {
   authType: IdentityKitAuthType
   setAuthType: (k: IdentityKitAuthType) => void
-  setShouldDisconnectWallet: (param: boolean) => unknown
-  shouldDisconnectWallet?: boolean
   setAuthTypeSwitched: (switched: boolean) => unknown
   authTypeSwitched?: boolean
   connectWalletSignerResponse: string
 }) {
+  const { disconnect } = useIdentityKit()
   return (
     <div className="h-full min-h-screen bg-white dark:bg-dark px-[30px] pb-[25px]">
       <ToastContainer />
-      <Header triggerManualWalletDisconnect={shouldDisconnectWallet} />
+      <Header />
       <h3 className="text-xl mt-[25px] mb-[20px]">
         Step 1. Choose which authentication method your users will connect with
       </h3>
@@ -34,7 +32,7 @@ function App({
         onChange={(type) => {
           setAuthType(type)
           setAuthTypeSwitched(!authTypeSwitched)
-          setShouldDisconnectWallet(true)
+          disconnect()
         }}
         accountsResponseJson={
           authType === IdentityKitAuthType.ACCOUNTS && !authTypeSwitched

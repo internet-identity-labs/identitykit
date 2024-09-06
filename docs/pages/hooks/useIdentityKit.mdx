@@ -7,7 +7,13 @@ authors:
 
 # useIdentityKit
 
-Hook for getting the agent for the currently connected signer.
+Hook for getting currently connected user, agent, his ICP balance and disconnect:
+
+- `connectedAccount` - `undefined{:js}` for disconnected user or `string{:js}` principal of
+  connnected user
+- `agent` - `undefined{:js}` for not connected user or Http agent for connected user
+- `icpBalance` - `undefined{:js}` while ICP balance not fetched or `number{:js}` when fetched
+- `disconnect` - function to disconnect user manually
 
 ## Import
 
@@ -18,5 +24,5 @@ import { useIdentityKit } from "@nfid/identitykit"
 ## Usage
 
 ```typescript
-const { agent } = useIdentityKit()
+const { agent, connectedAccount, icpBalance, disconnect } = useIdentityKit()
 ```
