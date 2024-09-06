@@ -44,9 +44,9 @@ export function useCreateIdentityKit<
   const [icpBalance, setIcpBalance] = useState<undefined | number>()
   const [agent, setAgent] = useState<SignerAgent<Signer> | null>(null)
 
-  // create logout func
-  const logout = useCallback(async () => {
-    const onLogout = async () => {
+  // create disconnect func
+  const disconnect = useCallback(async () => {
+    const finalFunc = async () => {
       await selectedSigner?.transport.connection?.disconnect()
       await clearSigner()
       setConnectedAccount(undefined)
@@ -55,9 +55,9 @@ export function useCreateIdentityKit<
       onDisconnect?.()
     }
     if (ik?.signerClient) {
-      ik?.signerClient?.logout().then(onLogout)
+      ik?.signerClient?.logout().then(finalFunc)
     } else {
-      await onLogout()
+      await finalFunc()
     }
   }, [ik?.signerClient, clearSigner, setConnectedAccount, setIcpBalance, onDisconnect, setAgent])
 
@@ -76,7 +76,7 @@ export function useCreateIdentityKit<
             ...signerClientOptions.idleOptions,
             onIdle: async () => {
               signerClientOptions.idleOptions?.onIdle?.()
-              await logout()
+              await disconnect()
             },
           },
         },
@@ -123,5 +123,5 @@ export function useCreateIdentityKit<
     }
   }, [ik, connectedAccount])
 
-  return { agent, connectedAccount, logout, icpBalance }
+  return { agent, connectedAccount, disconnect, icpBalance }
 }

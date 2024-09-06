@@ -14,11 +14,7 @@ import {
   ConnectedWalletButton,
 } from "@nfid/identitykit/react"
 
-export const Header = ({
-  triggerManualWalletDisconnect,
-}: {
-  triggerManualWalletDisconnect?: boolean
-}) => {
+export const Header = () => {
   const { resolvedTheme, setTheme } = useTheme()
 
   return (
@@ -60,7 +56,6 @@ export const Header = ({
             />
           )}
           <ConnectWallet
-            triggerManualDisconnect={triggerManualWalletDisconnect}
             connectButtonComponent={(props) => {
               return (
                 <ConnectWalletButton {...props} className="min-w-[100px] sm:min-w-[140px]">
