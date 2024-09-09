@@ -184,4 +184,8 @@ export class DelegationSignerClient extends SignerClient {
       : ECDSAKeyIdentity.generate())
     return baseIdentity
   }
+
+  public getDelegationChain(): Promise<DelegationChain | undefined> {
+    return getDelegationChain(STORAGE_KEY, this.storage)
+  }
 }

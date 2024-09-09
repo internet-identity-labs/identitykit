@@ -1,6 +1,6 @@
 import { IdleManager } from "./idle-manager"
 import { Principal } from "@dfinity/principal"
-import { SignerClient, SignerClientOptions } from "./client"
+import { SignerClient, SignerClientOptions, STORAGE_KEY } from "./client"
 import { AccountsRequest, AccountsResponse, fromBase64 } from "@slide-computer/signer"
 
 export interface AccountsSignerClientOptions extends SignerClientOptions {}
@@ -45,6 +45,7 @@ export class AccountsSignerClient extends SignerClient {
       owner: Principal.fromText(owner),
       subaccount: subaccount === undefined ? undefined : fromBase64(subaccount),
     }))
+    await this.storage.set(`accounts-${STORAGE_KEY}`, JSON.stringify(accounts))
     const account = accounts[0]
 
     if (!account.subaccount) {
@@ -72,5 +73,22 @@ export class AccountsSignerClient extends SignerClient {
       signerResponse: accounts,
       connectedAccount: account.owner.toString(),
     }
+  }
+
+  public async logout(options?: { returnTo?: string }): Promise<void> {
+    await this.storage.remove(`accounts-${STORAGE_KEY}`)
+    super.logout(options)
+  }
+
+  async getAccounts(): Promise<
+    | {
+        owner: Principal
+        subaccount: ArrayBuffer | undefined
+      }[]
+    | undefined
+  > {
+    const storageData = await this.storage.get(`accounts-${STORAGE_KEY}`)
+    if (!storageData || typeof storageData !== "string") return
+    return JSON.parse(storageData)
   }
 }
