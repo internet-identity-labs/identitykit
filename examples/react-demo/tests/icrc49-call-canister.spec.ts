@@ -39,7 +39,7 @@ test.skip("should check request and response has correct initial state", async (
     method: "icrc49_call_canister",
     params: {
       canisterId: "do25a-dyaaa-aaaak-qifua-cai",
-      sender: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+      sender: "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
       method: "greet_no_consent",
       arg: "RElETAABcQJtZQ==",
     },
@@ -59,7 +59,7 @@ test.skip("should check request and response has correct state for consent case"
     method: "icrc49_call_canister",
     params: {
       canisterId: "do25a-dyaaa-aaaak-qifua-cai",
-      sender: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+      sender: "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
       method: "greet",
       arg: "RElETAABcQJtZQ==",
     },
@@ -82,7 +82,7 @@ test.skip("should make canister call with no consent", async ({ section }) => {
     "Canister ID",
     "do25a-dyaaa-aaaak-qifua-cai",
     "Sender",
-    "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+    "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
     "Arguments",
     '["me"]',
   ]
@@ -117,7 +117,7 @@ test.skip("should make canister call with consent", async ({ section }) => {
     "Canister ID",
     "do25a-dyaaa-aaaak-qifua-cai",
     "Sender",
-    "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+    "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
     "Arguments",
     '["me"]',
     "Produce the following greeting text: > Hello, me!",

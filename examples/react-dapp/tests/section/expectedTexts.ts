@@ -52,7 +52,7 @@ export class ExpectedTexts {
       method: "icrc49_call_canister",
       params: {
         canisterId: "do25a-dyaaa-aaaak-qifua-cai",
-        sender: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+        sender: "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
         method: "greet_no_consent",
         arg: "RElETAABcQJtZQ==",
       },
@@ -61,7 +61,7 @@ export class ExpectedTexts {
       method: "icrc49_call_canister",
       params: {
         canisterId: "do25a-dyaaa-aaaak-qifua-cai",
-        sender: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+        sender: "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
         method: "greet",
         arg: "RElETAABcQJtZQ==",
       },
@@ -116,7 +116,7 @@ export class ExpectedTexts {
       result: {
         accounts: [
           {
-            owner: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+            owner: "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
             subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
           },
           {
@@ -141,7 +141,7 @@ export class ExpectedTexts {
             signature: expect.anything(),
           },
         ],
-        publicKey: "MCowBQYDK2VwAyEAO2onvM62pC1io6jQKm8Nc2UyFXcd4kOmOsBIoYtZ2ik=",
+        publicKey: "MCowBQYDK2VwAyEAq24mMq2DrldUMLxC8PFielFi+DphaUGDLrMYeUGHoOc=",
       },
     },
     NoTargetsDelegationResponse: {
@@ -166,7 +166,7 @@ export class ExpectedTexts {
       "Canister ID",
       "do25a-dyaaa-aaaak-qifua-cai",
       "Sender",
-      "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+      "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
       "Arguments",
       '["me"]',
     ],
@@ -184,7 +184,7 @@ export class ExpectedTexts {
       "Canister ID",
       "do25a-dyaaa-aaaak-qifua-cai",
       "Sender",
-      "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+      "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
       "Arguments",
       '["me"]',
     ],

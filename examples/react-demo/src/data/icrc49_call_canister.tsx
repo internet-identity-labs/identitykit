@@ -26,7 +26,7 @@ export const basic: RequestExample = {
     method: "icrc49_call_canister",
     params: {
       canisterId: "do25a-dyaaa-aaaak-qifua-cai",
-      sender: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+      sender: "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
       method: "greet_no_consent",
       arg: "RElETAABcQJtZQ==",
     },
@@ -50,7 +50,7 @@ export const withConsentMessage: RequestExample = {
     method: "icrc49_call_canister",
     params: {
       canisterId: "do25a-dyaaa-aaaak-qifua-cai",
-      sender: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+      sender: "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
       method: "greet",
       arg: "RElETAABcQJtZQ==",
     },
@@ -74,7 +74,7 @@ export const ledger: RequestExample = {
     method: "icrc49_call_canister",
     params: {
       canisterId: "ryjl3-tyaaa-aaaaa-aaaba-cai",
-      sender: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+      sender: "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
       method: "transfer",
       arg: "RElETAZte2wB4KmzAnhuAGwB1vaOgAF4bgNsBvvKAQDG/LYCAbqJ5cIEeKLelOsGAoLz85EMBNijjKgNAQEFIOryWM4M9NaQ7WNXeb3wjbfURB8JbLIb5aI3/N+SxHRgECcAAAAAAAAAAAAAAAAAAAAAAOH1BQAAAAA=",
     },
@@ -128,7 +128,7 @@ export const icrc2approve: RequestExample = {
     method: "icrc49_call_canister",
     params: {
       canisterId: "etik7-oiaaa-aaaar-qagia-cai",
-      sender: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+      sender: "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
       method: "icrc2_approve",
       arg: "RElETAZufW17bgFueGwCs7DawwNorYbKgwUCbAjG/LYCALqJ5cIEAqLelOsGAoLz85EMA9ijjKgNfZGcnL8NAN6n99oNA8uW3LQOBAEFAAAAAICAgMnVm5n4jJ4EAAABHfiYTFV8824++qVOIjiov3Bgl0gU0RPMROITTCMCAA==",
     },
@@ -188,7 +188,7 @@ export const icrc2transfer: RequestExample = {
     method: "icrc49_call_canister",
     params: {
       canisterId: "etik7-oiaaa-aaaar-qagia-cai",
-      sender: "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe",
+      sender: "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
       method: "icrc2_transfer_from",
       arg: "RElETAZufW17bgFueGwCs7DawwNorYbKgwUCbAjG/LYCALqJ5cIEAqLelOsGAoLz85EMA9ijjKgNfZGcnL8NAN6n99oNA8uW3LQOBAEFAAAAAICAgMnVm5n4jJ4EAAABHfiYTFV8824++qVOIjiov3Bgl0gU0RPMROITTCMCAA==",
     },
