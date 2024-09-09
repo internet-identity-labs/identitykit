@@ -77,7 +77,7 @@ test.skip("should request global delegation with targets", async ({ section }) =
         signature: expect.anything(),
       },
     ],
-    publicKey: "MCowBQYDK2VwAyEAO2onvM62pC1io6jQKm8Nc2UyFXcd4kOmOsBIoYtZ2ik=",
+    publicKey: "MCowBQYDK2VwAyEAq24mMq2DrldUMLxC8PFielFi+DphaUGDLrMYeUGHoOc=",
   })
 })
 

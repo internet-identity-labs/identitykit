@@ -40,7 +40,13 @@ class CallCanisterService {
         contentMap,
       }
     } catch (error) {
-      throw new GenericError("The call cannot be executed")
+      console.error("The canister call cannot be executed:", error)
+
+      if (error instanceof Error) {
+        throw new GenericError(`The canister call cannot be executed: ${error.message}`)
+      }
+
+      throw new GenericError("The canister call cannot be executed")
     }
   }
 
