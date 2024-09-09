@@ -1,7 +1,7 @@
 import { SignerConfig } from "../../lib/types"
 import { Signer } from "@slide-computer/signer"
 import { IdentityKitTheme } from "./constants"
-import { IdentityKitSignerAgent } from "../../lib"
+import { IdentityKitAuthType, IdentityKitSignerAgent, IdentityKitSignerClient } from "../../lib"
 
 export interface IdentityKitProvider {
   signers: SignerConfig[]
@@ -16,4 +16,6 @@ export interface IdentityKitProvider {
   connectedAccount?: string
   disconnect: () => unknown
   icpBalance?: number
+  authType: IdentityKitAuthType
+  signerClient?: IdentityKitSignerClient
 }

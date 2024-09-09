@@ -27,7 +27,7 @@ export function useCreateIdentityKit<
 }: {
   selectedSigner?: Signer
   clearSigner: () => Promise<unknown>
-  authType?: T
+  authType: T
   signerClientOptions?: T extends typeof IdentityKitAuthType.DELEGATION
     ? Omit<IdentityKitDelegationSignerClientOptions, "signer">
     : Omit<IdentityKitAccountsSignerClientOptions, "signer">
@@ -66,7 +66,7 @@ export function useCreateIdentityKit<
     // when signer is selected, but user is not connected, create indetity kit and trigger login
     if (selectedSigner && !ik?.signerClient) {
       IdentityKit.create<T>({
-        authType: authType || (IdentityKitAuthType.ACCOUNTS as T),
+        authType,
         signerClientOptions: {
           ...signerClientOptions,
           crypto,
@@ -123,5 +123,5 @@ export function useCreateIdentityKit<
     }
   }, [ik, connectedAccount])
 
-  return { agent, connectedAccount, disconnect, icpBalance }
+  return { agent, connectedAccount, disconnect, icpBalance, signerClient: ik?.signerClient }
 }

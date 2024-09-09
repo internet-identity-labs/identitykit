@@ -21,8 +21,6 @@ const environment = import.meta.env.VITE_ENVIRONMENT
 
 export function AppWrappedInIdentityKit() {
   const [authType, setAuthType] = useState<IdentityKitAuthType>(IdentityKitAuthType.ACCOUNTS)
-  const [connectWalletSignerResponse, setConnectWalletSignerResponse] = useState("{}")
-  const [authTypeSwitched, setAuthTypeSwitched] = useState(false)
   const { resolvedTheme } = useTheme()
   const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
   const signers = [nfidw, Plug, InternetIdentity, Stoic]
@@ -43,23 +41,11 @@ export function AppWrappedInIdentityKit() {
       signerClientOptions={{
         targets: [targetCanister],
       }}
-      onConnectSuccess={(response) =>
-        setConnectWalletSignerResponse(JSON.stringify(response, null, 2))
-      }
-      onDisconnect={() => {
-        setConnectWalletSignerResponse("{}")
-      }}
       onConnectFailure={(e) => {
         toast.error(e.message)
       }}
     >
-      <App
-        authType={authType}
-        setAuthType={setAuthType}
-        connectWalletSignerResponse={connectWalletSignerResponse}
-        authTypeSwitched={authTypeSwitched}
-        setAuthTypeSwitched={setAuthTypeSwitched}
-      />
+      <App setAuthType={setAuthType} />
     </IdentityKitProvider>
   )
 }

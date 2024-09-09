@@ -47,7 +47,7 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
   signerOptions = {},
   crypto = globalThis.crypto,
   agent,
-  authType,
+  authType = IdentityKitAuthType.ACCOUNTS as T,
   featuredSigner,
   realConnectDisabled,
   ...props
@@ -98,6 +98,8 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
         connectedAccount: identityKit.connectedAccount,
         disconnect: identityKit.disconnect,
         icpBalance: identityKit.icpBalance,
+        authType,
+        signerClient: identityKit.signerClient,
       }}
     >
       <IdentityKitModal />

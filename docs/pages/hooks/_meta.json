@@ -1,3 +1,5 @@
 {
-  "useIdentityKit": "useIdentityKit"
+  "useIdentityKit": "useIdentityKit",
+  "useDelegationChain": "useDelegationChain",
+  "useAccounts": "useAccounts"
 }
