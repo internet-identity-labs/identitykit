@@ -15,6 +15,7 @@ Account), balance, and disconnect function:
 - `agent` - `undefined{:js}` for not connected user or Http agent for connected user
 - `icpBalance` - `undefined{:js}` while ICP balance not fetched or `number{:js}` when fetched
 - `disconnect` - function to disconnect user manually
+- `selectedSigner` - currently selected signer
 
 ## Import
 
@@ -25,5 +26,5 @@ import { useIdentityKit } from "@nfid/identitykit"
 ## Usage
 
 ```typescript
-const { agent, connectedAccount, icpBalance, disconnect } = useIdentityKit()
+const { agent, connectedAccount, icpBalance, disconnect, selectedSigner } = useIdentityKit()
 ```

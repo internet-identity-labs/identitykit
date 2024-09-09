@@ -4,6 +4,7 @@ import { Signer } from "@slide-computer/signer"
 import { IdentityKitTheme } from "./constants"
 import { SignerConfig } from "../../lib/types"
 import { SignerAgent } from "@slide-computer/signer-agent"
+import { IdentityKitAuthType } from "../../lib/identity-kit"
 
 const defaultState: IdentityKitProvider = {
   signers: [],
@@ -23,6 +24,7 @@ const defaultState: IdentityKitProvider = {
     throw new Error("disconnect not implemented")
   },
   agent: null,
+  authType: IdentityKitAuthType.ACCOUNTS,
 }
 
 export const IdentityKitContext = createContext<IdentityKitProvider>(defaultState)
@@ -34,9 +36,17 @@ export function useIdentityKit(): {
   connectedAccount?: string
   disconnect: () => unknown
   icpBalance?: number
+  authType: IdentityKitAuthType
 } {
-  const { selectedSigner, selectSigner, agent, connectedAccount, disconnect, icpBalance } =
-    useContext(IdentityKitContext)
+  const {
+    selectedSigner,
+    selectSigner,
+    agent,
+    connectedAccount,
+    disconnect,
+    icpBalance,
+    authType,
+  } = useContext(IdentityKitContext)
 
   return {
     selectedSigner,
@@ -45,5 +55,6 @@ export function useIdentityKit(): {
     connectedAccount,
     disconnect,
     icpBalance,
+    authType,
   }
 }
