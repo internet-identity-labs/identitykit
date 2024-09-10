@@ -43,7 +43,7 @@ export const consentMessageService = {
 
       return consentMessageResult.Ok.consent_message.GenericDisplayMessage
     } catch (error) {
-      console.error("consentMessageService getConsentMessage", error)
+      console.warn("consentMessageService getConsentMessage", error)
       return undefined
     }
   },

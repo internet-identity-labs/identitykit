@@ -39,8 +39,8 @@ wait_until_up "http://localhost:3002" 120 5 '200|301|302|400'
 wait_until_up "http://localhost:3003" 120 5 '200|301|302|400'
 
 ci_echo_info "Configuring playwright" >&2
-ci_echo_debug "npx playwright install" >&2
-npx playwright install
+ci_echo_debug "npx playwright install chromium" >&2
+npx playwright install chromium
 
 ci_echo_info "Running the tests..." >&2
 ci_echo_debug "npm run test:e2e" >&2
