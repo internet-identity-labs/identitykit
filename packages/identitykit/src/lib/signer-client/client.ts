@@ -3,6 +3,8 @@ import { PartialIdentity } from "@dfinity/identity"
 import type { Signer } from "@slide-computer/signer"
 import { IdbStorage, type SignerStorage } from "@slide-computer/signer-storage"
 import { IdleManager, type IdleManagerOptions } from "./idle-manager"
+import { SubAccount } from "@dfinity/ledger-icp"
+import { Principal } from "@dfinity/principal"
 
 export const STORAGE_KEY = "client"
 export const STORAGE_CONNECTED_OWNER_KEY = "connected-owner"
@@ -48,7 +50,7 @@ export interface SignerClientOptions {
 export abstract class SignerClient {
   protected idleManager: IdleManager | undefined
   protected storage: SignerStorage = new IdbStorage()
-  public connectedUser: { owner: string; subAccount?: ArrayBuffer } | undefined
+  public connectedUser: { principal: Principal; subAccount?: SubAccount } | undefined
 
   constructor(protected options: SignerClientOptions) {
     if (!options?.idleOptions?.disableIdle) {
@@ -91,7 +93,25 @@ export abstract class SignerClient {
         }
       | undefined
   ): Promise<void> {
-    this.connectedUser = user
+    if (!user) this.connectedUser = undefined
+    else {
+      let subAccount: SubAccount | undefined
+
+      if (user.subAccount) {
+        const subAccountOrError = SubAccount.fromBytes(new Uint8Array(user.subAccount))
+
+        if (typeof subAccountOrError === typeof Error) {
+          throw subAccount
+        }
+
+        subAccount = subAccountOrError as SubAccount
+      }
+
+      this.connectedUser = {
+        principal: Principal.from(user.owner),
+        subAccount,
+      }
+    }
   }
 
   protected async setConnectedUserToStorage(

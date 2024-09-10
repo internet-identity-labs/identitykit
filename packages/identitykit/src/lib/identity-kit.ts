@@ -1,5 +1,4 @@
-import { AccountIdentifier, LedgerCanister, SubAccount } from "@dfinity/ledger-icp"
-import { Principal } from "@dfinity/principal"
+import { AccountIdentifier, LedgerCanister } from "@dfinity/ledger-icp"
 import {
   AccountsSignerClient,
   AccountsSignerClientOptions,
@@ -46,23 +45,11 @@ export class IdentityKit<
     const connectedUser = await (this.signerClient as SignerClient).connectedUser
     if (!connectedUser) throw new Error("Not authenticated")
 
-    let subAccount: SubAccount | undefined
-
-    if (connectedUser.subAccount) {
-      const subAccountOrError = SubAccount.fromBytes(new Uint8Array(connectedUser.subAccount))
-
-      if (typeof subAccountOrError === typeof Error) {
-        throw subAccount
-      }
-
-      subAccount = subAccountOrError as SubAccount
-    }
-
     const balance = (
       await LedgerCanister.create().accountBalance({
         accountIdentifier: AccountIdentifier.fromPrincipal({
-          principal: Principal.from(connectedUser.owner),
-          subAccount,
+          principal: connectedUser.principal,
+          subAccount: connectedUser.subAccount,
         }),
         certified: false,
       })

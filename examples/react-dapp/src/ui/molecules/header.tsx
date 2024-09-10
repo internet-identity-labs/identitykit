@@ -2,22 +2,15 @@ import { useTheme } from "next-themes"
 import { IconSvgMoon, IconSvgNFID, IconSvgNFIDWhite, IconSvgSun } from "../atoms/icons"
 import { ConnectWalletButton } from "./connect-wallet-button"
 import { useEffect } from "react"
-import { useIdentityKit } from "@nfid/identitykit/react"
 
 export const Header = () => {
   const { resolvedTheme, setTheme } = useTheme()
-  const { selectSigner } = useIdentityKit()
 
   useEffect(() => {
-    localStorage.clear()
-
-    async function select() {
-      await selectSigner(undefined)
+    if (localStorage.getItem("signerId")) {
+      localStorage.clear()
+      window.location.reload()
     }
-
-    select()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

@@ -9,6 +9,7 @@ import {
 import { Signer } from "@slide-computer/signer"
 import { Principal } from "@dfinity/principal"
 import { SignerAgent } from "@slide-computer/signer-agent"
+import { SubAccount } from "@dfinity/ledger-icp"
 
 const DEFAULT_IDLE_TIMEOUT = 14_400_000
 
@@ -35,12 +36,18 @@ export function useCreateIdentityKit<
     agent?: IdentityKitSignerAgentOptions<Signer>["agent"]
   }
   onConnectFailure?: (e: Error) => unknown
-  onConnectSuccess?: (signerResponse: object) => unknown
+  onConnectSuccess?: () => unknown
   onDisconnect?: () => unknown
   realConnectDisabled?: boolean
 }) {
   const [ik, setIk] = useState<null | IdentityKit>(null)
-  const [connectedAccount, setConnectedAccount] = useState<string | undefined>()
+  const [user, setUser] = useState<
+    | {
+        principal: Principal
+        subaccount?: SubAccount
+      }
+    | undefined
+  >()
   const [icpBalance, setIcpBalance] = useState<undefined | number>()
   const [agent, setAgent] = useState<SignerAgent<Signer> | null>(null)
 
@@ -49,7 +56,7 @@ export function useCreateIdentityKit<
     const finalFunc = async () => {
       await selectedSigner?.transport.connection?.disconnect()
       await clearSigner()
-      setConnectedAccount(undefined)
+      setUser(undefined)
       setIcpBalance(undefined)
       setAgent(null)
       onDisconnect?.()
@@ -59,7 +66,7 @@ export function useCreateIdentityKit<
     } else {
       await finalFunc()
     }
-  }, [ik?.signerClient, clearSigner, setConnectedAccount, setIcpBalance, onDisconnect, setAgent])
+  }, [ik?.signerClient, clearSigner, setUser, setIcpBalance, onDisconnect, setAgent])
 
   useEffect(() => {
     setIk(null)
@@ -84,15 +91,15 @@ export function useCreateIdentityKit<
         if (!realConnectDisabled) {
           if (!instance.signerClient.connectedUser) {
             try {
-              const response = await instance.signerClient.login()
-              setConnectedAccount(response.connectedAccount)
-              onConnectSuccess?.(response.signerResponse)
+              await instance.signerClient.login()
+              setUser(instance.signerClient.connectedUser)
+              onConnectSuccess?.()
             } catch (e) {
               await clearSigner()
               onConnectFailure?.(e as Error)
             }
           } else {
-            setConnectedAccount(instance.signerClient.connectedUser.owner)
+            setUser(instance.signerClient.connectedUser)
           }
         }
         setIk(instance as IdentityKit)
@@ -102,26 +109,26 @@ export function useCreateIdentityKit<
 
   // fetch balance when user connected
   useEffect(() => {
-    if (connectedAccount && !icpBalance) {
+    if (user && !icpBalance) {
       ik?.getIcpBalance().then((b) => {
         setIcpBalance(b)
       })
     }
-  }, [setIcpBalance, icpBalance, connectedAccount, ik])
+  }, [setIcpBalance, icpBalance, user, ik])
 
   // create signer agent and save to state
   useEffect(() => {
-    if (ik && connectedAccount) {
+    if (ik && user) {
       ik.createSignerAgent({
         ...agentOptions,
         signer: selectedSigner!,
-        account: Principal.fromText(connectedAccount),
+        account: user.principal,
       }).then((agent) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         setAgent(agent as any)
       })
     }
-  }, [ik, connectedAccount])
+  }, [ik, user])
 
-  return { agent, connectedAccount, disconnect, icpBalance, signerClient: ik?.signerClient }
+  return { agent, user, disconnect, icpBalance, signerClient: ik?.signerClient }
 }

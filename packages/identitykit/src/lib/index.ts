@@ -6,6 +6,7 @@ export {
   SignerClient as IdentityKitSignerClient,
   DelegationSignerClient as IdentityKitDelegationSignerClient,
   AccountsSignerClient as IdentityKitAccountsSignerClient,
+  DelegationType as IdentityKitDelegationType,
 } from "./signer-client"
 export * from "./identity-kit"
 

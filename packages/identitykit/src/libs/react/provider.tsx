@@ -33,7 +33,7 @@ interface IdentityKitProviderProps<
   >
   agent?: IdentityKitSignerAgentOptions<Signer>["agent"]
   onConnectFailure?: (e: Error) => unknown
-  onConnectSuccess?: (signerResponse: object) => unknown
+  onConnectSuccess?: () => unknown
   onDisconnect?: () => unknown
   realConnectDisabled?: boolean
   crypto?: Pick<Crypto, "getRandomValues" | "randomUUID">
@@ -95,7 +95,7 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
         theme,
         featuredSigner: featuredSigner === false ? undefined : (featuredSigner ?? signers[0]),
         agent: identityKit.agent,
-        connectedAccount: identityKit.connectedAccount,
+        user: identityKit.user,
         disconnect: identityKit.disconnect,
         icpBalance: identityKit.icpBalance,
         authType,

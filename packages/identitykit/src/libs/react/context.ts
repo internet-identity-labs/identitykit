@@ -2,9 +2,14 @@ import { createContext, useContext } from "react"
 import { IdentityKitProvider } from "./types"
 import { Signer } from "@slide-computer/signer"
 import { IdentityKitTheme } from "./constants"
-import { SignerConfig } from "../../lib/types"
 import { SignerAgent } from "@slide-computer/signer-agent"
 import { IdentityKitAuthType } from "../../lib/identity-kit"
+import { SubAccount } from "@dfinity/ledger-icp"
+import { Principal } from "@dfinity/principal"
+import { useAccounts, useDelegationType, useIdentity } from "./hooks"
+import { IdentityKitDelegationType } from "../../lib"
+import { type Identity } from "@dfinity/agent"
+import { PartialIdentity } from "@dfinity/identity"
 
 const defaultState: IdentityKitProvider = {
   signers: [],
@@ -30,31 +35,38 @@ const defaultState: IdentityKitProvider = {
 export const IdentityKitContext = createContext<IdentityKitProvider>(defaultState)
 
 export function useIdentityKit(): {
-  selectedSigner?: Signer
-  selectSigner: (signerId?: string | undefined) => Promise<void | SignerConfig>
+  signer?: Signer
   agent: SignerAgent<Signer> | null
-  connectedAccount?: string
+  user?: {
+    principal: Principal
+    subaccount?: SubAccount
+  }
   disconnect: () => unknown
   icpBalance?: number
   authType: IdentityKitAuthType
+  delegationType?: IdentityKitDelegationType
+  accounts?: {
+    principal: Principal
+    subAccount?: SubAccount
+  }[]
+  identity?: Identity | PartialIdentity
 } {
-  const {
-    selectedSigner,
-    selectSigner,
-    agent,
-    connectedAccount,
-    disconnect,
-    icpBalance,
-    authType,
-  } = useContext(IdentityKitContext)
+  const { selectedSigner, agent, user, disconnect, icpBalance, authType } =
+    useContext(IdentityKitContext)
+
+  const { identity } = useIdentity()
+  const { delegationType } = useDelegationType()
+  const { accounts } = useAccounts()
 
   return {
-    selectedSigner,
-    selectSigner,
+    signer: selectedSigner,
     agent,
-    connectedAccount,
-    disconnect,
+    user,
     icpBalance,
     authType,
+    accounts,
+    delegationType,
+    identity,
+    disconnect,
   }
 }
