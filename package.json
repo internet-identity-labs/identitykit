@@ -11,7 +11,7 @@
     "build-playground:dev": "npm run build-identitykit:dev && dotenv -e .env.dev -- turbo run build --force --filter='@nfid/react-demo' --filter='@nfid/react-dapp' --filter='@nfid/react-signer'",
     "build-playground:ic": "npm run build-identitykit:dev && dotenv -e .env.ic -- turbo run build --force --filter='@nfid/react-demo' --filter='@nfid/react-dapp' --filter='@nfid/react-signer'",
     "playground:docs": "turbo run dev --force --filter='@nfid/docs'",
-    "playground": "turbo dev --force --filter='@nfid/identitykit' && dotenv -- turbo run dev --force --filter=\"@nfid/react-demo\" --filter=\"@nfid/react-dapp\" --filter=\"@nfid/react-signer\"",
+    "playground": "turbo dev --force --filter=\"@nfid/identitykit\" && dotenv -- turbo run dev --force --filter=\"@nfid/react-demo\" --filter=\"@nfid/react-dapp\" --filter=\"@nfid/react-signer\"",
     "dev": "turbo dev",
     "lint:check": "turbo lint:check",
     "format:check": "prettier --check '**/*.{ts,tsx,md,mdx,css}'",
