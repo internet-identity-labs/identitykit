@@ -19,25 +19,43 @@ import { idlFactory } from "/path/to/did.js"
 ## Usage
 
 ```typescript
+import { useEffect } from "react"
+import { HttpAgent, Actor } from "@dfinity/agent"
 import { useIdentityKit } from "@nfid/identitykit/react"
-import { idlFactory } from '/path/to/did.js';
+import { idlFactory } from '/path/to/did.js'
 
-const { agent } = useIdentityKit()
+const { delegationType, identity, agent } = useIdentityKit();
 
-const actor = await Actor.createActor(idlFactory, {
-  agent,
-  CANISTER_ID_TO_CALL
-})
+const [yourAgent, setYourAgent] = useState();
 
-const result = await actor.{yourmethod}
+useEffect(() => {
+  // create your own HttpAgent to not see approval pop-up
+  setYourAgent(
+    identity && delegationType === IdentityKitDelegationType.ANONYMOUS
+      ? HttpAgent.createSync({ identity })
+      : undefined
+  );
+}, [identity, delegationType]);
+
+// create actor with final agent
+const actor = Actor.createActor(
+  idlFactory,
+  {
+    agent: yourAgent || agent,
+    canisterId: CANISTER_ID_TO_CALL,
+  }
+);
+
+actor.["your_method"]()
 
 // Expected UX
 // 1. user is connected with an `account`
 // User sees wallet approval pop-up
-// 2. user is connected with an Account Delegation where `canisterId` IS listed as a `target`
-// User does not see wallet approval pop-up
-// 3. user is connected with an Account Delegation where `canisterId` IS NOT listed as a `target`
+// 2. user is connected with an Account Delegation (IdentityKitDelegationType.GLOBAL) where `canisterId` IS listed as a `target`
 // User sees wallet approval pop-up
-// 4. user is connected with a Relying Party Delegation that has unbounded targets (i.e. II or anonymous NFID Wallet account)
+// 3. user is connected with a Relying Party Delegation (IdentityKitDelegationType.ANONYMOUS) that has unbounded targets (i.e. II or anonymous NFID Wallet account)
 // User does not see wallet approval pop-up
 ```
+
+> Note: this example uses HttpAgent.createSync(), in case of async create you need to handle is
+> agent created or not

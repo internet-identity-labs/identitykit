@@ -2,8 +2,7 @@ import { IdentityKitAuthType } from "@nfid/identitykit"
 import clsx from "clsx"
 import { ResponseSection } from "../../molecules/response-section"
 import { CodeSection } from "../../molecules/code-section"
-import { useAccounts, useDelegationChain, useIdentityKit } from "@nfid/identitykit/react"
-import { useEffect } from "react"
+import { useIdentityKit } from "@nfid/identitykit/react"
 
 const getUsageExample = (authType: IdentityKitAuthType) =>
   `import { IdentityKitProvider, IdentityKitTheme, ConnectWalletButton } from "@nfid/identitykit/react"
@@ -18,19 +17,10 @@ import { NFIDW, IdentityKitAuthType } from "@nfid/identitykit"
 </IdentityKitProvider>`
 
 export function AuthTypeTabs({ onChange }: { onChange: (type: IdentityKitAuthType) => void }) {
-  const { authType, connectedAccount } = useIdentityKit()
-  const { delegationChain, getDelegationChain } = useDelegationChain()
-  const { accounts, getAccounts } = useAccounts()
-
-  useEffect(() => {
-    if (authType === IdentityKitAuthType.DELEGATION && connectedAccount) {
-      getDelegationChain()
-    } else {
-      getAccounts()
-    }
-  }, [getDelegationChain, getAccounts, authType, connectedAccount])
+  const { authType, accounts, identity } = useIdentityKit()
 
   const isAccounts = authType === IdentityKitAuthType.ACCOUNTS
+
   return (
     <>
       <div className="font-semibold text-black dark:text-white border-b border-grey-500 dark:border-zinc-700 w-auto mb-1">
@@ -83,7 +73,7 @@ export function AuthTypeTabs({ onChange }: { onChange: (type: IdentityKitAuthTyp
               Delegations are accounts that have been pre-approved to execute transactions on the
               user's behalf, resulting in the removal of wallet approval prompts.
             </small>
-            <ResponseSection value={JSON.stringify(delegationChain, null, 2)} />
+            <ResponseSection value={JSON.stringify(identity, null, 2)} />
             <CodeSection
               className="mt-[25px]"
               value={getUsageExample(IdentityKitAuthType.DELEGATION)}

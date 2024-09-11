@@ -2,6 +2,7 @@ import { IdleManager } from "./idle-manager"
 import { Principal } from "@dfinity/principal"
 import { SignerClient, SignerClientOptions, STORAGE_KEY } from "./client"
 import { AccountsRequest, AccountsResponse, fromBase64 } from "@slide-computer/signer"
+import { SubAccount } from "@dfinity/ledger-icp"
 
 export interface AccountsSignerClientOptions extends SignerClientOptions {}
 
@@ -15,13 +16,7 @@ export class AccountsSignerClient extends SignerClient {
     return signerClient
   }
 
-  public async login(): Promise<{
-    signerResponse: {
-      owner: Principal
-      subaccount?: ArrayBuffer
-    }[]
-    connectedAccount: string
-  }> {
+  public async login(): Promise<void> {
     // get and transform accounts from signer
     const accountsResponse = await this.options.signer.sendRequest<
       AccountsRequest,
@@ -41,11 +36,13 @@ export class AccountsSignerClient extends SignerClient {
       throw Error(accountsResponse.error.message)
     }
 
-    const accounts = accountsResponse.result.accounts.map(({ owner, subaccount }) => ({
-      owner: Principal.fromText(owner),
-      subaccount: subaccount === undefined ? undefined : fromBase64(subaccount),
-    }))
-    await this.storage.set(`accounts-${STORAGE_KEY}`, JSON.stringify(accounts))
+    const accounts = accountsResponse.result.accounts.map(({ owner, subaccount }) => {
+      return {
+        owner: Principal.fromText(owner),
+        subaccount: subaccount === undefined ? undefined : fromBase64(subaccount),
+      }
+    })
+    await this.setAccounts(accounts)
     const account = accounts[0]
 
     if (!account.subaccount) {
@@ -54,10 +51,7 @@ export class AccountsSignerClient extends SignerClient {
         this.registerDefaultIdleCallback()
       }
       await this.setConnectedUserToStorage({ owner: account.owner.toString() })
-      return {
-        signerResponse: accounts,
-        connectedAccount: account.owner.toString(),
-      }
+      return
     }
 
     await this.setConnectedUserToStorage({
@@ -69,10 +63,6 @@ export class AccountsSignerClient extends SignerClient {
       this.idleManager = IdleManager.create(this.options.idleOptions)
       this.registerDefaultIdleCallback()
     }
-    return {
-      signerResponse: accounts,
-      connectedAccount: account.owner.toString(),
-    }
   }
 
   public async logout(options?: { returnTo?: string }): Promise<void> {
@@ -80,15 +70,52 @@ export class AccountsSignerClient extends SignerClient {
     super.logout(options)
   }
 
+  private async setAccounts(
+    accounts: {
+      owner: Principal
+      subaccount: ArrayBuffer | undefined
+    }[]
+  ) {
+    return this.storage.set(
+      `accounts-${STORAGE_KEY}`,
+      JSON.stringify(
+        accounts.map((acc) => ({
+          owner: acc.owner.toString(),
+          subaccount: acc.subaccount && new TextDecoder().decode(acc.subaccount),
+        }))
+      )
+    )
+  }
+
   async getAccounts(): Promise<
     | {
-        owner: Principal
-        subaccount: ArrayBuffer | undefined
+        principal: Principal
+        subAccount?: SubAccount
       }[]
     | undefined
   > {
     const storageData = await this.storage.get(`accounts-${STORAGE_KEY}`)
     if (!storageData || typeof storageData !== "string") return
-    return JSON.parse(storageData)
+    return JSON.parse(storageData).map(
+      ({ owner, subaccount }: { owner: string; subaccount?: string }) => {
+        let subAccount: SubAccount | undefined
+
+        if (subaccount) {
+          const subAccountOrError = SubAccount.fromBytes(
+            new Uint8Array(new TextEncoder().encode(subaccount))
+          )
+
+          if (typeof subAccountOrError === typeof Error) {
+            throw subAccount
+          }
+
+          subAccount = subAccountOrError as SubAccount
+        }
+        return {
+          principal: Principal.from(owner),
+          subAccount,
+        }
+      }
+    )
   }
 }

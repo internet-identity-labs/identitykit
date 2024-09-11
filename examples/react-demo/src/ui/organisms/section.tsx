@@ -44,20 +44,20 @@ export const Section: React.FC<ISection> = ({
   const [responseValue, setResponseValue] = useState("{}")
   const [actorResponse, setActorResponse] = useState<string | undefined>(undefined)
 
-  const { selectedSigner, agent, connectedAccount } = useIdentityKit()
+  const { signer, agent, user } = useIdentityKit()
 
   useEffect(() => {
-    if (connectedAccount) {
+    if (user) {
       if (isValidJSON(requestValue)) {
         const rVal = JSON.parse(requestValue)
-        if (rVal.params.sender) rVal.params.sender = connectedAccount
+        if (rVal.params.sender) rVal.params.sender = user.principal.toString()
         setRequestValue(JSON.stringify(rVal, null, 2))
       }
     }
-  }, [connectedAccount, requestValue])
+  }, [user, requestValue])
 
   const handleSubmit = async () => {
-    if (!selectedSigner) return
+    if (!signer) return
 
     setIsLoading(true)
 
@@ -115,7 +115,7 @@ export const Section: React.FC<ISection> = ({
   }, [requestsExamples])
 
   return (
-    <Blur radius={!connectedAccount || !agent ? "5px" : "0"} transition="400ms">
+    <Blur radius={!user || !agent ? "5px" : "0"} transition="400ms">
       <div id={id}>
         <p className="block text-sm my-[25px]">{description}</p>
         {requestsOptions.length > 1 ? (
@@ -141,7 +141,7 @@ export const Section: React.FC<ISection> = ({
             loading={isLoading}
             className="w-[160px] mt-5"
             onClick={handleSubmit}
-            disabled={!!codeSection.error || !agent || !connectedAccount}
+            disabled={!!codeSection.error || !agent || !user}
             isSmall
           >
             Submit

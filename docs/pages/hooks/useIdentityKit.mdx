@@ -7,15 +7,9 @@ authors:
 
 # useIdentityKit
 
-Hook for getting the agent for the currently connected user, its wallet address (as a valid ICRC1
-Account), balance, and disconnect function:
-
-- `connectedAccount` - `undefined{:js}` for disconnected user or `string{:js}` principal of
-  connnected user
-- `agent` - `undefined{:js}` for not connected user or Http agent for connected user
-- `icpBalance` - `undefined{:js}` while ICP balance not fetched or `number{:js}` when fetched
-- `disconnect` - function to disconnect user manually
-- `selectedSigner` - currently selected signer
+`@nfid/identitykit` exports only one react hook, which is needed for getting the agent for the
+currently connected user, its wallet address (as a valid ICRC1 Account), balance, disconnect
+function and other:
 
 ## Import
 
@@ -26,5 +20,62 @@ import { useIdentityKit } from "@nfid/identitykit/react"
 ## Usage
 
 ```typescript
-const { agent, connectedAccount, icpBalance, disconnect, selectedSigner } = useIdentityKit()
+const { agent, user, icpBalance, signer, identity, delegationType, accounts, disconnect } =
+  useIdentityKit()
 ```
+
+## Return values
+
+### agent
+
+`SignerAgent<Signer<Transport>> | null{:typescript}`
+
+`@nfid/identitykit` agent which implements `@dfinity/agent` Agent, it comes with predefined user and
+should be used if canister call requires approve. Will be null until successfull connect.
+
+### user
+
+`{ principal: Principal, subaccount?: SubAccount} | undefined{:typescript}`
+
+Currently connected user principal and subaccount. Will be undefined until successfull connect.
+
+### icpBalance
+
+`number | undefined{:typescript}`
+
+Balance of connected user, will be undefined until successfull connect
+
+### signer
+
+`Signer<Transport> | undefined{:typescript}`
+
+Selected signer, undefined until selection
+
+### identity
+
+`Identity | PartialIdentity | undefined{:typescript}`
+
+If `IdentityKitProvider.authType` is set to `IdentityKitAuthType.DELEGATION` value will contain
+`@dfinity` identity after successfull connect, will be undefined if other authType is selected or
+user not connected
+
+### delegationType
+
+`IdentityKitDelegationType.GLOBAL | IdentityKitDelegationType.ANONYMOUS{:typescript}`
+
+Will contain type of delegation depending whether `IdentityKitProvider.targets` were provided or not
+in case `IdentityKitProvider.authType` is set to `IdentityKitAuthType.DELEGATION` and user is
+connected, otherwise will be undefined
+
+### accounts
+
+`{ principal: Principal, subaccount?: SubAccount}[] | undefined{:typescript}`
+
+Will contain connected accounts in case `IdentityKitProvider.authType` is set to
+`IdentityKitAuthType.ACCOUNTS` and user is connected, otherwise will be undefined
+
+### disconnect
+
+`function{:typescript}`
+
+Function to trigger manual disconnect

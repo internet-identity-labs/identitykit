@@ -81,11 +81,12 @@ const App = () => {
 ### 3. Check Delegation `WIP`
 
 Users will choose whether to continue to your application with a delegation for their main wallet
-address or for a wallet address specific to your app's URL. You'll know which you've received:
+address or for a wallet address specific to your app's URL. You'll know which you've received using
+`delegationType` from `useIdentityKit()`:
 
 ```typescript
-if IdentityKit.connectedWallet.isDelegation {
-  if IdentityKit.connectedWallet.delegation.hasTargets {
+if delegationType {
+  if delegationType === IdentityKitDelegationType.ANONYMOUS {
     // This is an Account Delegation for the user's main wallet address
 
     // Every transaction to a target canister WILL NOT result in a wallet approval pop-up

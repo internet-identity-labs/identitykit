@@ -11,13 +11,13 @@ This is the main component. It is responsible for rendering the connect/disconne
 onConnectFailure, onConnectSuccess, and onDisconnect callbacks can be passed to
 `IdentityKitProvider`
 
-```typescript
+```jsx
 import { IdentityKitProvider, ConnectWallet } from "@nfid/identitykit/react"
 
 export const YourApp = () => {
   return <IdentityKitProvider
     onConnectFailure={(e: Error) => {}}
-    onConnectSuccess={(signerResponse: object) => {}}
+    onConnectSuccess={() => {}}
     onDisconnect={() => {}}
   >
     <ConnectWallet />
@@ -28,20 +28,22 @@ export const YourApp = () => {
 But `@nfid/identitykit` also exports all components of which `ConnectWallet` is built to prodive as
 maximum customizations as possile.
 
-```typescript
+```jsx
 import {
   ConnectWalletButton,
   ConnectedWalletButton,
-  ConnectWalletDropdownMenu
+  ConnectWalletDropdownMenu,
 } from "@nfid/identitykit/react"
 
 export const YourApp = () => {
-  return <ConnectWallet
-    connectButtonComponent={ConnectWalletButton || YourCustomConnectButtonComponent}
-    connectedButtonComponent={ConnectedWalletButton || YourCustomConnectedButtonComponent}
-    dropdownMenuComponent={ConnectWalletDropdownMenu || YourCustomDropdownMenuComponent}
-  />;
-};
+  return (
+    <ConnectWallet
+      connectButtonComponent={ConnectWalletButton || YourCustomConnectButtonComponent}
+      connectedButtonComponent={ConnectedWalletButton || YourCustomConnectedButtonComponent}
+      dropdownMenuComponent={ConnectWalletDropdownMenu || YourCustomDropdownMenuComponent}
+    />
+  )
+}
 ```
 
 > Note: Make sure your app is wrapped in the necessary providers.

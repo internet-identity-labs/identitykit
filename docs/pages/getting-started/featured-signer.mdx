@@ -15,7 +15,7 @@ import { IdentityKitProvider } from "@nfid/identitykit/react"
 import { NFIDW } from "@nfid/identitykit"
 
 export const App = () => (
-  <IdentityKitProvider featuredSigner={[NFIDW]} {...etc}>
+  <IdentityKitProvider featuredSigner={NFIDW} {...etc}>
     {/* Your App */}
   </IdentityKitProvider>
 )
@@ -23,14 +23,13 @@ export const App = () => (
 
 Available options for `featuredSigner`:
 
-- `NFIDW`
-- `false{:jsx}`
+- `Signer{:typescript}` - one of the signers exported by `@nfid/identitykit`, default is first of
+  the signers list
+- `false{:jsx}` - to disable featured signer at all
 
-Modal can also be used without `featuredSigner`, and will look like this:
+With `false:{typescript}` value provided modal will look like this:
 
 ![NFID No featured signer](../../../docs/public/img/compact-mode.png)
-
-To disable `featuredSigner`, just set `featuredSigner={false}{:jsx}`. IdentityKitProvider:
 
 ```jsx
 import { IdentityKitProvider } from "@nfid/identitykit/react"

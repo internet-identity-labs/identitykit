@@ -20,22 +20,24 @@ export function ConnectWallet({
     }
   >
 }) {
-  const { toggleModal, connectedAccount, icpBalance, disconnect, selectedSigner } =
+  const { toggleModal, user, icpBalance, disconnect, selectedSigner } =
     useContext(IdentityKitContext)
 
   const ConnectButtonComponent = connectButtonComponent ?? ConnectButton
   const ConnectedButtonComponent = connectedButtonComponent ?? ConnectedButton
   const DropdownMenuComponent = dropdownMenuComponent ?? DropdownMenu
 
-  if (!connectedAccount)
+  if (!user)
     return (
       <ConnectButtonComponent
         onClick={() => {
           toggleModal()
         }}
-        disabled={selectedSigner && !connectedAccount}
+        disabled={selectedSigner && !user}
       />
     )
+
+  const connectedAccount = user.principal.toString()
 
   return (
     <>

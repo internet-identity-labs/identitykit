@@ -53,10 +53,10 @@ export const Section: React.FC<ISection> = ({
   const [selectedRequestIndex, setSelectedRequestIndex] = useState(0)
   const [requestValue, setRequestValue] = useState(requestsExamples[selectedRequestIndex].value)
   const [responseValue, setResponseValue] = useState("{}")
-  const { selectedSigner } = useIdentityKit()
+  const { signer } = useIdentityKit()
 
   const handleSubmit = async () => {
-    if (!selectedSigner) return
+    if (!signer) return
     setIsLoading(true)
 
     if (!isValidJSON(requestValue)) {
@@ -84,7 +84,7 @@ export const Section: React.FC<ISection> = ({
           ...requestObject,
         }
 
-        res = await (selectedSigner as any)?.["sendRequest"](req)
+        res = await (signer as any)?.["sendRequest"](req)
         const json = JSON.stringify(
           res,
           (_, value) => (typeof value === "bigint" ? value.toString() : value),
@@ -98,7 +98,7 @@ export const Section: React.FC<ISection> = ({
           ...requestObject,
         }
 
-        res = await (selectedSigner as any)?.["sendRequest"](req)
+        res = await (signer as any)?.["sendRequest"](req)
         const json = JSON.stringify(
           res,
           (_, value) => (typeof value === "bigint" ? value.toString() : value),
@@ -112,7 +112,7 @@ export const Section: React.FC<ISection> = ({
           jsonrpc: "2.0",
           ...requestObject,
         }
-        res = await (selectedSigner as any)?.["sendRequest"](req)
+        res = await (signer as any)?.["sendRequest"](req)
         const json = JSON.stringify(
           res,
           (_, value) => (typeof value === "bigint" ? value.toString() : value),
@@ -122,7 +122,7 @@ export const Section: React.FC<ISection> = ({
         return
       } else {
         // TODO for icrc25_request_permissions should pass params.scopes as arg and for icrc34_delegation change params to Principals
-        res = await (selectedSigner as any)?.[SignerMethod[requestObject.method]](
+        res = await (signer as any)?.[SignerMethod[requestObject.method]](
           SignerMethodParamsField[requestObject.method]
             ? requestObject.params[SignerMethodParamsField[requestObject.method]]
             : requestObject.params
@@ -218,7 +218,7 @@ export const Section: React.FC<ISection> = ({
           loading={isLoading}
           className="w-[160px] mt-5"
           onClick={handleSubmit}
-          disabled={!selectedSigner || !!codeSection.error}
+          disabled={!signer || !!codeSection.error}
           isSmall
         >
           Submit
