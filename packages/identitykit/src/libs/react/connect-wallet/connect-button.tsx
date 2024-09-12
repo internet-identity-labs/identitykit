@@ -15,7 +15,7 @@ export function ConnectButton({ onClick, className, disabled, children }: Connec
       disabled={disabled}
       onClick={onClick}
       className={clsx(
-        "ik-border-transparent",
+        "ik-component ik-border-transparent",
         "ik-bg-primary ik-text-white hover:ik-bg-teal-600 active:ik-bg-teal-700 active:ik-border-primary",
         "hover:ik-shadow-md",
         "ik-font-bold ik-px-[10px] ik-min-w-[140px] ik-h-[40px] ik-flex ik-items-center ik-justify-center",

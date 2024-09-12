@@ -82,9 +82,9 @@
     }
   ],
   "dependencies": {
+    "@headlessui/react": "2.1.4",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.2",
-    "@headlessui/react": "2.1.4",
     "@slide-computer/signer": "^3.6.2",
     "@slide-computer/signer-agent": "^3.6.2",
     "@slide-computer/signer-storage": "^3.6.2",
@@ -94,7 +94,8 @@
     "@slide-computer/signer-web": "^3.6.2",
     "clsx": "^2.1.1",
     "react-hook-form": "^7.53.0",
-    "tailwindcss": "^3.4.10"
+    "tailwindcss": "^3.4.10",
+    "tailwindcss-scoped-preflight": "^3.4.4"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^26.0.1",

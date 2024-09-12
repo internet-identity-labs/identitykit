@@ -7,7 +7,7 @@ export function Item({ className, children, ...props }: React.HTMLProps<HTMLDivE
   return (
     <div
       className={clsx(
-        "ik-flex ik-justify-between ik-w-full ik-p-2.5 ik-text-black dark:ik-text-white ik-cursor-pointer",
+        "ik-component ik-flex ik-justify-between ik-w-full ik-p-2.5 ik-text-black dark:ik-text-white ik-cursor-pointer",
         className
       )}
       {...props}
