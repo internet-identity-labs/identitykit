@@ -1,12 +1,12 @@
 import { expect, Page, test as base } from "@playwright/test"
-import { Account, AccountType, DemoPage } from "./page/demo.page.ts"
+import { Account, AccountType, StandardsPage } from "./page/standards.page.ts"
 import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
 import { Icrc49CallCanisterSection } from "./section/icrc49-call-canister.section.ts"
 import { ExpectedTexts } from "./section/expectedTexts.ts"
 
 type Fixtures = {
   section: Icrc49CallCanisterSection
-  demoPage: DemoPage
+  demoPage: StandardsPage
   requestPermissionSection: Icrc25RequestPermissionsSection
   nfidPage: Page
 }
@@ -17,7 +17,7 @@ const test = base.extend<Fixtures>({
     await use(section)
   },
   demoPage: async ({ page }, use) => {
-    const demoPage = new DemoPage(page)
+    const demoPage = new StandardsPage(page)
     await demoPage.goto()
     await use(demoPage)
   },
@@ -39,7 +39,7 @@ test.describe("ICRC25 call-canister", () => {
   let accounts: Account[] = []
 
   test.beforeEach(async ({ page }) => {
-    accounts = await DemoPage.getAccounts(page)
+    accounts = await StandardsPage.getAccounts(page)
   })
 
   test("should check request and response has correct initial state for no consent case", async ({

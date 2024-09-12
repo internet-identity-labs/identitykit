@@ -1,11 +1,11 @@
 import { expect, test as base } from "@playwright/test"
-import { Account, DemoPage } from "./page/demo.page.ts"
+import { Account, StandardsPage } from "./page/standards.page.ts"
 import { Icrc25SupportedStandardsSection } from "./section/icrc25-supported-standards.section.ts"
 import { ExpectedTexts } from "./section/expectedTexts.ts"
 
 type Fixtures = {
   section: Icrc25SupportedStandardsSection
-  demoPage: DemoPage
+  demoPage: StandardsPage
 }
 
 const test = base.extend<Fixtures>({
@@ -14,7 +14,7 @@ const test = base.extend<Fixtures>({
     await use(section)
   },
   demoPage: async ({ page }, use) => {
-    const demoPage = new DemoPage(page)
+    const demoPage = new StandardsPage(page)
     await demoPage.goto()
     await use(demoPage)
   },
@@ -24,7 +24,7 @@ test.describe("ICRC25 Supported standards", () => {
   let accounts: Account[] = []
 
   test.beforeEach(async ({ page }) => {
-    accounts = await DemoPage.getAccounts(page)
+    accounts = await StandardsPage.getAccounts(page)
   })
   test("should check request and response has correct initial state", async ({
     section,

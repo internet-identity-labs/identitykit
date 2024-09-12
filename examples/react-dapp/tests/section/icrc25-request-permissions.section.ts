@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test"
 import { Section } from "./section.ts"
-import { Account, AccountType } from "../page/demo.page.ts"
+import { Account, AccountType } from "../page/standards.page.ts"
 
 export class Icrc25RequestPermissionsSection extends Section {
   constructor(public readonly page: Page) {

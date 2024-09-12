@@ -1,14 +1,14 @@
 import { expect } from "@playwright/test"
-import { test as base } from "./hooks.js"
-import { Account, AccountType, DemoPage } from "./page/demo.page.ts"
+import { test as base } from "./helpers/hooks.js"
+import { Account, AccountType, StandardsPage } from "./page/standards.page.ts"
 import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
 import { Icrc25PermissionsSection } from "./section/icrc25-permissions.section.ts"
 import { ExpectedTexts } from "./section/expectedTexts.ts"
-import { withRetries } from "./utils.js"
+import { withRetries } from "./helpers/utils.js"
 
 type Fixtures = {
   section: Icrc25PermissionsSection
-  standardsPage: DemoPage
+  standardsPage: StandardsPage
   requestPermissionSection: Icrc25RequestPermissionsSection
 }
 
@@ -22,7 +22,7 @@ const test = base.extend<Fixtures>({
     await use(requestPermissionSection)
   },
   standardsPage: async ({ page }, use) => {
-    const standardsPage = new DemoPage(page)
+    const standardsPage = new StandardsPage(page)
     await standardsPage.goto()
     await use(standardsPage)
   },
@@ -32,7 +32,7 @@ test.describe("ICRC25 Permissions", () => {
   let accounts: Account[] = []
 
   test.beforeEach(async ({ page }) => {
-    accounts = await DemoPage.getAccounts(page)
+    accounts = await StandardsPage.getAccounts(page)
   })
 
   test("should check request and response has correct initial state for each user", async ({
@@ -60,10 +60,10 @@ test.describe("ICRC25 Permissions", () => {
 
   test("should retrieve empty permissions", async ({ section, standardsPage }) => {
     for (const account of accounts) {
-      await test.step(`Check retrieve full permissions for user: ${account.type}`, async () => {
+      await test.step(`User: ${account.type}`, async () => {
+        console.log(`Check retrieve full permissions for user: ${account.type}`)
         await withRetries(async () => {
-          const loginSuccess = await standardsPage.login(account)
-          if (!loginSuccess) throw new Error(`Login failed for user: ${account.type}`)
+          await standardsPage.login(account)
 
           await section.clickSubmitButton()
 
@@ -85,8 +85,7 @@ test.describe("ICRC25 Permissions", () => {
     for (const account of accounts) {
       await test.step(`Check retrieve full permissions for user: ${account.type}`, async () => {
         await withRetries(async () => {
-          const loginSuccess = await standardsPage.login(account)
-          if (!loginSuccess) throw new Error(`Login failed for user: ${account.type}`)
+          await standardsPage.login(account)
 
           await requestPermissionSection.approvePermissions(account)
           await section.clickSubmitButton()

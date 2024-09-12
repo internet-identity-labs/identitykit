@@ -11,7 +11,7 @@ export async function withRetries(
   while (attempt <= maxRetries) {
     attempt++
     if (attempt > 1) {
-      console.log(`Retry#${attempt - 1} | ${retryMessage}`)
+      console.log(`Retry#${attempt - 1} | ${retryMessage ?? ""}`)
     }
 
     try {
@@ -22,7 +22,6 @@ export async function withRetries(
 
       test.info().errors.push({
         message: error.message,
-        stack: error.stack,
       })
     }
   }

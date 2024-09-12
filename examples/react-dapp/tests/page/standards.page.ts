@@ -1,7 +1,7 @@
 import { Locator, Page } from "@playwright/test"
 import { UserService } from "../helpers/accounts-service.ts"
 
-export class DemoPage {
+export class StandardsPage {
   private readonly connectButton: Locator
   private readonly disconnectButton: Locator
 
@@ -61,4 +61,4 @@ export enum ProfileType {
   Session = "Session",
 }
 
-export default (page: Page) => new DemoPage(page)
+export default (page: Page) => new StandardsPage(page)
