@@ -20,7 +20,7 @@ export function ConnectedButton({
       type="button"
       {...props}
       className={clsx(
-        "ik-border-transparent",
+        "ik-component ik-border-transparent",
         "ik-bg-gray-200 ik-text-black hover:ik-bg-gray-100 active:ik-bg-gray-300 active:ik-border-gray-200",
         "hover:ik-shadow-md",
         "ik-font-bold ik-px-[10px] ik-min-w-[140px] ik-h-[40px] ik-flex ik-items-center ik-justify-center",
