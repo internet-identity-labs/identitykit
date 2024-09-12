@@ -1,9 +1,11 @@
+const { scopedPreflightStyles, isolateInsideOfContainer } = require("tailwindcss-scoped-preflight")
+
 const colors = require("tailwindcss/colors")
 const plugin = require("tailwindcss/plugin")
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  prefix: 'ik-',
+  prefix: "ik-",
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
@@ -39,6 +41,9 @@ module.exports = {
           "background-clip": "border-box",
         },
       })
+    }),
+    scopedPreflightStyles({
+      isolationStrategy: isolateInsideOfContainer(".ik-component"),
     }),
   ],
   darkMode: ["selector", "[data-identity-kit-theme*='dark']"],

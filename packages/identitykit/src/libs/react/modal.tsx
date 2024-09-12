@@ -42,7 +42,7 @@ export const IdentityKitModal = () => {
           <div
             className={clsx(
               isModalOpen ? "ik-block" : "ik-hidden",
-              "ik-bg-black ik-bg-opacity-25 ik-backdrop-blur-[2px]",
+              "ik-component ik-bg-black ik-bg-opacity-25 ik-backdrop-blur-[2px]",
               "ik-fixed ik-inset-0 ik-z-[1009]"
             )}
           />
@@ -52,7 +52,7 @@ export const IdentityKitModal = () => {
             data-identity-kit-theme={theme}
             aria-describedby={undefined}
             className={clsx(
-              "ik-flex-col ik-fixed ik-p-0 focus:ik-outline-none ik-z-[1010]",
+              "ik-component ik-flex-col ik-fixed ik-p-0 focus:ik-outline-none ik-z-[1010]",
               "ik-shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px]",
               "ik-top-[50%] ik-left-[50%] ik-max-h-[85vh] ik-w-[90vw] ik-max-w-[490px] ik-translate-x-[-50%] ik-translate-y-[-50%]",
               isModalOpen ? "ik-flex" : "ik-hidden"
