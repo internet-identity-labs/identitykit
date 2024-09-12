@@ -27,8 +27,13 @@ export class DemoPage {
   }
 
   async login(account: Account) {
-    await this.connectButton.click()
-    await account.locator.click()
+    try {
+      await this.connectButton.click({ timeout: 5000 })
+      await account.locator.click({ timeout: 5000 })
+    } catch (e) {
+      await this.logout()
+      throw new Error(`Login failed for user: ${account.type}`)
+    }
   }
 
   async setAccount(anchor: number, page: Page) {

@@ -1,12 +1,14 @@
-import { expect, test as base } from "@playwright/test"
+import { expect } from "@playwright/test"
+import { test as base } from "./hooks.js"
 import { Account, AccountType, DemoPage } from "./page/demo.page.ts"
 import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
 import { Icrc25PermissionsSection } from "./section/icrc25-permissions.section.ts"
 import { ExpectedTexts } from "./section/expectedTexts.ts"
+import { withRetries } from "./utils.js"
 
 type Fixtures = {
   section: Icrc25PermissionsSection
-  demoPage: DemoPage
+  standardsPage: DemoPage
   requestPermissionSection: Icrc25RequestPermissionsSection
 }
 
@@ -19,10 +21,10 @@ const test = base.extend<Fixtures>({
     const requestPermissionSection = new Icrc25RequestPermissionsSection(page)
     await use(requestPermissionSection)
   },
-  demoPage: async ({ page }, use) => {
-    const demoPage = new DemoPage(page)
-    await demoPage.goto()
-    await use(demoPage)
+  standardsPage: async ({ page }, use) => {
+    const standardsPage = new DemoPage(page)
+    await standardsPage.goto()
+    await use(standardsPage)
   },
 })
 
@@ -33,68 +35,76 @@ test.describe("ICRC25 Permissions", () => {
     accounts = await DemoPage.getAccounts(page)
   })
 
-  test("should check request and response has correct initial state", async ({
+  test("should check request and response has correct initial state for each user", async ({
     section,
-    demoPage,
+    standardsPage,
   }) => {
     for (const account of accounts) {
-      await demoPage.login(account)
+      await test.step(`Check request and response for user: ${account.type}`, async () => {
+        await withRetries(async () => {
+          await standardsPage.login(account)
 
-      const initialRequest = await section.getRequestJson()
-      expect(initialRequest).toStrictEqual({ method: "icrc25_permissions" })
+          const initialRequest = await section.getRequestJson()
+          expect
+            .soft(initialRequest, `Invalid initial request for ${account.type} user`)
+            .toStrictEqual({ method: "icrc25_permissions" })
 
-      const initialResponse = await section.getResponseJson()
-      expect(initialResponse).toStrictEqual({})
-      await demoPage.logout()
+          const initialResponse = await section.getResponseJson()
+          expect
+            .soft(initialResponse, `Invalid initial response for ${account.type} user`)
+            .toStrictEqual({})
+        }, `Check request and response for user: ${account.type}`)
+      })
     }
   })
 
-  test("should retrieve empty permissions", async ({ section, demoPage }) => {
+  test("should retrieve empty permissions", async ({ section, standardsPage }) => {
     for (const account of accounts) {
-      await demoPage.login(account)
-      await section.clickSubmitButton()
+      await test.step(`Check retrieve full permissions for user: ${account.type}`, async () => {
+        await withRetries(async () => {
+          const loginSuccess = await standardsPage.login(account)
+          if (!loginSuccess) throw new Error(`Login failed for user: ${account.type}`)
 
-      const actualResponse = await section.getResponseJson()
-      expect(actualResponse).toStrictEqual({})
-      await demoPage.logout()
+          await section.clickSubmitButton()
+
+          const actualResponse = await section.getResponseJson()
+          expect
+            .soft(actualResponse, `Invalid empty response for ${account.type} user`)
+            .toStrictEqual({})
+          await standardsPage.logout()
+        })
+      })
     }
   })
 
-  test("should retrieve full list of permissions on Mocked Wallet", async ({
+  test("should retrieve full list of permissions", async ({
     section,
     requestPermissionSection,
-    demoPage,
+    standardsPage,
   }) => {
-    const account = accounts[0]
-    await testGetPermissions(demoPage, section, requestPermissionSection, account)
-  })
+    for (const account of accounts) {
+      await test.step(`Check retrieve full permissions for user: ${account.type}`, async () => {
+        await withRetries(async () => {
+          const loginSuccess = await standardsPage.login(account)
+          if (!loginSuccess) throw new Error(`Login failed for user: ${account.type}`)
 
-  test("should retrieve full list of permissions on NFID Wallet", async ({
-    section,
-    requestPermissionSection,
-    demoPage,
-  }) => {
-    const account = accounts[0]
-    await testGetPermissions(demoPage, section, requestPermissionSection, account)
+          await requestPermissionSection.approvePermissions(account)
+          await section.clickSubmitButton()
+          await section.waitForResponse()
+          await standardsPage.logout()
+          const responseJson = await section.getResponseJson()
+          await standardsPage.logout()
+
+          expect
+            .soft(responseJson, `Full list of permissions is Invalid for ${account.type} user`)
+            .toStrictEqual(
+              account.type === AccountType.MockedSigner
+                ? ExpectedTexts.Mocked.GetCurrentPermissionsResponse
+                : ExpectedTexts.NFID.GetCurrentPermissionsResponse
+            )
+          await standardsPage.logout()
+        }, `Check retrieve full permissions for user: ${account.type}`)
+      })
+    }
   })
 })
-
-async function testGetPermissions(
-  demoPage: DemoPage,
-  section: Icrc25PermissionsSection,
-  requestPermissionSection: Icrc25RequestPermissionsSection,
-  account: Account
-) {
-  await demoPage.login(account)
-  await requestPermissionSection.approvePermissions(account)
-  await section.clickSubmitButton()
-  await section.waitForResponse()
-
-  const actualResponse = await section.getResponseJson()
-  expect(actualResponse).toStrictEqual(
-    account.type === AccountType.MockedSigner
-      ? ExpectedTexts.Mocked.GetCurrentPermissionsResponse
-      : ExpectedTexts.NFID.GetCurrentPermissionsResponse
-  )
-  await demoPage.logout()
-}

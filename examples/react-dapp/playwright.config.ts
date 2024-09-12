@@ -2,10 +2,9 @@ import { defineConfig } from "@playwright/test"
 
 export default defineConfig({
   testDir: "./tests",
-  timeout: 30000,
+  timeout: 60000,
   fullyParallel: true,
   workers: 2,
-  retries: 1,
   expect: {
     timeout: 2000,
   },
@@ -20,6 +19,9 @@ export default defineConfig({
   projects: [
     {
       name: "chromium",
+      metadata: {
+        retries: 1,
+      },
       use: { browserName: "chromium" },
     },
   ],

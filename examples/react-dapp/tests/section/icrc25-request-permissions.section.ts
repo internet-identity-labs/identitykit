@@ -8,19 +8,27 @@ export class Icrc25RequestPermissionsSection extends Section {
   }
 
   async approvePermissions(account: Account): Promise<void> {
-    const [popup] = await Promise.all([this.page.waitForEvent("popup"), this.submitButton.click()])
-    let isPopupClosed = false
-    if (account.type == AccountType.MockedSigner) {
-      while (!isPopupClosed) {
-        try {
-          await popup.waitForSelector("#approve", { state: "attached", timeout: 2000 })
+    const [popup] = await Promise.race([
+      this.page.waitForEvent("popup"),
+      this.submitButton.click(),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Popup did not open within timeout")), 10000)
+      ),
+    ])
+    if (account.type === AccountType.MockedSigner) {
+      await this.page.waitForFunction(
+        async () => {
+          const approveButton = await popup.waitForSelector("#approve", {
+            state: "attached",
+            timeout: 2000,
+          })
+          if (!approveButton) return false
           await popup.click("#approve")
           await popup.close()
-          isPopupClosed = true
-        } catch (e) {
-          /* empty */
-        }
-      }
+          return true
+        },
+        { timeout: 20000 }
+      )
     }
   }
 }

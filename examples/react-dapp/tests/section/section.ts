@@ -15,24 +15,24 @@ export abstract class Section {
   }
 
   async getRequestJson(): Promise<string> {
-    const json = (await this.requestSection.textContent()) ?? "{}"
+    const json = (await this.requestSection.textContent({ timeout: 10000 })) ?? "{}"
     return JSON.parse(json)
   }
 
   async getResponseJson(): Promise<string> {
-    await this.responseSection.waitFor({ state: "visible" })
+    await this.responseSection.waitFor({ state: "visible", timeout: 10000 })
     const json = (await this.responseSection.textContent()) ?? "{}"
     return JSON.parse(json)
   }
 
   async clickSubmitButton(): Promise<void> {
-    await this.submitButton.click()
+    await this.submitButton.click({ timeout: 10000 })
   }
 
   async waitForResponse(): Promise<void> {
     await this.page
       .locator(`#${this.section} #response-section div.cm-line > span:nth-child(2)`)
       .last()
-      .waitFor({ state: "visible" })
+      .waitFor({ state: "visible", timeout: 10000 })
   }
 }
