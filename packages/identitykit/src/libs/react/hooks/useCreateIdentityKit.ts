@@ -68,6 +68,11 @@ export function useCreateIdentityKit<
     }
   }, [ik?.signerClient, clearSigner, setUser, setIcpBalance, onDisconnect, setAgent])
 
+  // create fetchBalance func
+  const fetchIcpBalance = useCallback(() => {
+    return ik?.getIcpBalance().then(setIcpBalance)
+  }, [ik, setIcpBalance])
+
   useEffect(() => {
     setIk(null)
     // when signer is selected, but user is not connected, create indetity kit and trigger login
@@ -109,12 +114,10 @@ export function useCreateIdentityKit<
 
   // fetch balance when user connected
   useEffect(() => {
-    if (user && !icpBalance) {
-      ik?.getIcpBalance().then((b) => {
-        setIcpBalance(b)
-      })
+    if (icpBalance === undefined && user) {
+      fetchIcpBalance()
     }
-  }, [setIcpBalance, icpBalance, user, ik])
+  }, [icpBalance, user, fetchIcpBalance])
 
   // create signer agent and save to state
   useEffect(() => {
@@ -130,5 +133,12 @@ export function useCreateIdentityKit<
     }
   }, [ik, user])
 
-  return { agent, user, disconnect, icpBalance, signerClient: ik?.signerClient }
+  return {
+    agent,
+    user,
+    disconnect,
+    icpBalance,
+    signerClient: ik?.signerClient,
+    fetchIcpBalance: user ? (fetchIcpBalance as () => Promise<void>) : undefined,
+  }
 }

@@ -89,17 +89,18 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
         signers,
         selectedSigner,
         isModalOpen,
-        toggleModal,
-        selectSigner,
-        selectCustomSigner,
         theme,
         featuredSigner: featuredSigner === false ? undefined : (featuredSigner ?? signers[0]),
         agent: identityKit.agent,
         user: identityKit.user,
-        disconnect: identityKit.disconnect,
         icpBalance: identityKit.icpBalance,
         authType,
         signerClient: identityKit.signerClient,
+        toggleModal,
+        selectSigner,
+        selectCustomSigner,
+        disconnect: identityKit.disconnect,
+        fetchIcpBalance: identityKit.fetchIcpBalance,
       }}
     >
       <IdentityKitModal />
