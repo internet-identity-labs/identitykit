@@ -28,6 +28,9 @@ const defaultState: IdentityKitProvider = {
   disconnect: () => {
     throw new Error("disconnect not implemented")
   },
+  connect: () => {
+    throw new Error("connect not implemented")
+  },
   agent: null,
   authType: IdentityKitAuthType.ACCOUNTS,
 }
@@ -49,11 +52,20 @@ export function useIdentityKit(): {
     subAccount?: SubAccount
   }[]
   identity?: Identity | PartialIdentity
+  connect: () => void
   disconnect: () => Promise<void>
   fetchIcpBalance?: () => Promise<void>
 } {
-  const { selectedSigner, agent, user, icpBalance, authType, disconnect, fetchIcpBalance } =
-    useContext(IdentityKitContext)
+  const {
+    selectedSigner,
+    agent,
+    user,
+    icpBalance,
+    authType,
+    connect,
+    disconnect,
+    fetchIcpBalance,
+  } = useContext(IdentityKitContext)
 
   const { identity } = useIdentity()
   const { delegationType } = useDelegationType()
@@ -68,6 +80,7 @@ export function useIdentityKit(): {
     accounts,
     delegationType,
     identity,
+    connect,
     disconnect,
     fetchIcpBalance,
   }
