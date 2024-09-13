@@ -5,13 +5,14 @@ authors:
   - name: "Dan Ostrovsky"
 ---
 
-# ICP transfer request `WIP`
+# ICP transfer request
 
-The below will display a wallet approval prompt if the user connected with an Account Delegation or
-Account.
+The below will display a wallet approval prompt regardless if the user connected with an Account
+Delegation or Account.
 
 If the user connected with a Relying Party Delegation, your application can already call the ledger
-on the user's behalf.
+on the user's behalf, but this connected wallet address will never be seen elsewhere in the
+ecossytem and should therefore not be encouraged to hold a balance.
 
 ```typescript
 // agent will know which is the currently connected wallet
