@@ -41,7 +41,6 @@ export function useIdentityKit(): {
     principal: Principal
     subaccount?: SubAccount
   }
-  disconnect: () => unknown
   icpBalance?: number
   authType: IdentityKitAuthType
   delegationType?: IdentityKitDelegationType
@@ -50,8 +49,10 @@ export function useIdentityKit(): {
     subAccount?: SubAccount
   }[]
   identity?: Identity | PartialIdentity
+  disconnect: () => Promise<void>
+  fetchIcpBalance?: () => Promise<void>
 } {
-  const { selectedSigner, agent, user, disconnect, icpBalance, authType } =
+  const { selectedSigner, agent, user, icpBalance, authType, disconnect, fetchIcpBalance } =
     useContext(IdentityKitContext)
 
   const { identity } = useIdentity()
@@ -68,5 +69,6 @@ export function useIdentityKit(): {
     delegationType,
     identity,
     disconnect,
+    fetchIcpBalance,
   }
 }

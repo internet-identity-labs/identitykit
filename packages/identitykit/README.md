@@ -37,7 +37,7 @@ IdentityKit requires certain peer dependencies to function correctly. Ensure the
 are installed in your project:
 
 ```sh npm2yarn
-npm install @dfinity/ledger-icp @dfinity/identity @dfinity/agent @dfinity/candid @dfinity/principal @dfinity/utils
+npm install @dfinity/ledger-icp @dfinity/identity @dfinity/agent @dfinity/candid @dfinity/principal @dfinity/utils @dfinity/auth-client
 ```
 
 **Note:** IdentityKit is a React library and exports styles that need to be imported into your
