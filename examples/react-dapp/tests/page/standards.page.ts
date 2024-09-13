@@ -10,16 +10,11 @@ export class StandardsPage {
     this.disconnectButton = this.page.locator("#disconnect")
   }
 
-  static async getAccounts(page): Promise<Account[]> {
-    const mockedSignerButton: Account = {
-      locator: page.locator("#signer_MockedSigner"),
-      type: AccountType.MockedSigner,
-    }
-    const NFIDSignerButton: Account = {
-      locator: page.locator("#signer_NFIDW"),
-      type: AccountType.NFIDW,
-    }
-    return [mockedSignerButton, NFIDSignerButton]
+  static async getAccounts(): Promise<Account[]> {
+    return [
+      new Account("#signer_MockedSigner", AccountType.MockedSigner),
+      new Account("#signer_NFIDW", AccountType.NFIDW),
+    ]
   }
 
   async goto() {
@@ -27,13 +22,8 @@ export class StandardsPage {
   }
 
   async login(account: Account) {
-    try {
-      await this.connectButton.click({ timeout: 5000 })
-      await account.locator.click({ timeout: 5000 })
-    } catch (e) {
-      await this.logout()
-      throw new Error(`Login failed for user: ${account.type}`)
-    }
+    await this.connectButton.click({ timeout: 5000 })
+    await this.page.locator(account.locator).click({ timeout: 5000 })
   }
 
   async setAccount(anchor: number, page: Page) {
@@ -46,9 +36,14 @@ export class StandardsPage {
   }
 }
 
-export interface Account {
-  locator: Locator
+export class Account {
+  locator: string
   type: AccountType
+
+  constructor(id: string, type: AccountType) {
+    this.locator = id
+    this.type = type
+  }
 }
 
 export enum AccountType {
