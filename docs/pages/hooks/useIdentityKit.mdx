@@ -20,8 +20,17 @@ import { useIdentityKit } from "@nfid/identitykit/react"
 ## Usage
 
 ```typescript
-const { agent, user, icpBalance, signer, identity, delegationType, accounts, disconnect } =
-  useIdentityKit()
+const {
+  agent,
+  user,
+  icpBalance,
+  signer,
+  identity,
+  delegationType,
+  accounts,
+  disconnect,
+  fetchIcpBalance,
+} = useIdentityKit()
 ```
 
 ## Return values
@@ -76,6 +85,14 @@ Will contain connected accounts in case `IdentityKitProvider.authType` is set to
 
 ### disconnect
 
-`function{:typescript}`
+`() => Promise<void>{:typescript}`
 
 Function to trigger manual disconnect
+
+### fetchIcpBalance
+
+`() => Promise<void> | undefined{:typescript}`
+
+Function to manually fetch ICP balance of connected user, will be undefined if user is not
+connected. Note function does not return balance, instead updates `icpBalance` from
+`useIdentityKit()`
