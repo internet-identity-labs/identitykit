@@ -28,6 +28,7 @@ const {
   identity,
   delegationType,
   accounts,
+  connect,
   disconnect,
   fetchIcpBalance,
 } = useIdentityKit()
@@ -82,6 +83,13 @@ connected, otherwise will be undefined
 
 Will contain connected accounts in case `IdentityKitProvider.authType` is set to
 `IdentityKitAuthType.ACCOUNTS` and user is connected, otherwise will be undefined
+
+### connect
+
+`() => void{:typescript}`
+
+Function to trigger manual connect (opening of signers modal), will throw error if modal already
+opened or user is already connected
 
 ### disconnect
 

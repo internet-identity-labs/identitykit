@@ -22,6 +22,7 @@ export interface IdentityKitProvider {
   toggleModal: () => void
   selectSigner: (signerId?: string) => Promise<SignerConfig | void>
   selectCustomSigner: (url: string) => Promise<void>
+  connect: () => void
   disconnect: () => Promise<void>
   fetchIcpBalance?: () => Promise<void>
 }

@@ -81,6 +81,12 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
     realConnectDisabled,
   })
 
+  const connect = useCallback(() => {
+    if (isModalOpen) throw new Error("Modal already opened")
+    if (identityKit.user) throw new Error("Already connected")
+    setIsModalOpen(true)
+  }, [identityKit.user, isModalOpen, setIsModalOpen])
+
   const theme = useTheme(props.theme)
 
   return (
@@ -99,6 +105,7 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
         toggleModal,
         selectSigner,
         selectCustomSigner,
+        connect,
         disconnect: identityKit.disconnect,
         fetchIcpBalance: identityKit.fetchIcpBalance,
       }}
