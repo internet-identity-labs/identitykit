@@ -78,38 +78,6 @@ const App = () => {
 };
 ```
 
-### 3. Check Delegation `WIP`
-
-Users will choose whether to continue to your application with a delegation for their main wallet
-address or for a wallet address specific to your app's URL. You'll know which you've received using
-`delegationType` from `useIdentityKit()`:
-
-```typescript
-if delegationType {
-  if delegationType === IdentityKitDelegationType.ANONYMOUS {
-    // This is an Account Delegation for the user's main wallet address
-
-    // Every transaction to a target canister WILL NOT result in a wallet approval pop-up
-    // But every transaction to a non-target-canister WILL
-
-    // Create your own agent when making calls to your own canisters
-    // Use the agent from useIdentityKit hook when making calls to other canisters
-
-  } else {
-    // This is a Relying Party Delegation for the user's URL-specific wallet address
-
-    // Every transaction to any canister WILL NOT result in a wallet approval pop-up
-
-    // Create your own agent to make calls to any canister
-  }
-} else {
-  // Every transaction WILL result in a wallet approval pop-up
-
-  // Use the agent from useIdentityKit hook when making calls to any canister
-}
-
-```
-
 ## Resources
 
 Read about the differences working with [accounts and delegations](/miscellaneous/auth-options).
