@@ -1,0 +1,48 @@
+---
+title: "Advanced Options"
+date: "2024-06-03"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+IdentityKitProvider also allows to set some advanced props listed below:
+
+## signerClientOptions
+
+```jsx
+import { IdentityKitProvider } from "@nfid/identitykit/react"
+
+export const YourApp = () => {
+  return (
+    <IdentityKitProvider signerClientOptions={{}}>
+      <ConnectWallet />
+    </IdentityKitProvider>
+  )
+}
+```
+
+### idleOptions
+
+Customize idle
+
+```jsx
+import { IdentityKitProvider } from "@nfid/identitykit/react"
+
+export const YourApp = () => {
+  return (
+    <IdentityKitProvider
+      signerClientOptions={{
+        idleOptions: {},
+      }}
+    >
+      <ConnectWallet />
+    </IdentityKitProvider>
+  )
+}
+```
+
+#### idleTimeout
+
+`number{:typescript}`
+
+Idle timeout in milliseconds, optional, 600_000 (30min) by default

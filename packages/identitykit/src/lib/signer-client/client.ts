@@ -18,7 +18,7 @@ export interface IdleOptions extends IdleManagerOptions {
   disableIdle?: boolean
 
   /**
-   * Disables default idle behavior - call logout & reload window
+   * Disables default idle behavior - call logout
    * @default false
    */
   disableDefaultIdleCallback?: boolean
