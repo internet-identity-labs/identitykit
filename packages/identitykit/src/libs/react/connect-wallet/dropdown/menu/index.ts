@@ -1,6 +1,5 @@
 export {
   Item as MenuItem,
-  ItemText as MenuItemText,
   Items as MenuItems,
   AddressItem as MenuAddressItem,
   DisconnectItem as MenuDisconnectItem,
@@ -8,4 +7,11 @@ export {
 export * from "./menu"
 export { Button as MenuButton } from "./button"
 
-export { type ButtonProps as MenuButtonProps } from "./button"
+export type {
+  ItemProps as MenuItemProps,
+  ItemsProps as MenuItemsProps,
+  AddressItemProps as MenuAddressItemProps,
+  DisconnectItemProps as MenuDisconnectItemProps,
+  ItemTextProps as MenuItemTextProps,
+} from "./items"
+export type { ButtonProps as MenuButtonProps } from "./button"

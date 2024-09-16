@@ -1,6 +1,8 @@
 import clsx from "clsx"
 
-export function ItemText(props: React.HTMLProps<HTMLSpanElement>) {
+export type ItemTextProps = React.HTMLProps<HTMLSpanElement>
+
+export function ItemText(props: ItemTextProps) {
   return (
     <small
       {...props}

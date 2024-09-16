@@ -1,8 +1,9 @@
 import clsx from "clsx"
-import { HTMLAttributes } from "react"
 import { formatIcp } from "../utils"
+import { MenuButton } from "./dropdown/menu"
+import { MenuButtonProps } from "@headlessui/react"
 
-export type ConnectedButtonProps = HTMLAttributes<HTMLButtonElement> & {
+export type ConnectedButtonProps = MenuButtonProps & {
   connectedAccount: string
   icpBalance?: number
 }
@@ -15,7 +16,7 @@ export function ConnectedButton({
   ...props
 }: ConnectedButtonProps) {
   return (
-    <button
+    <MenuButton
       id={"connect"}
       type="button"
       {...props}
@@ -43,6 +44,6 @@ export function ConnectedButton({
           </div>
         </>
       )}
-    </button>
+    </MenuButton>
   )
 }

@@ -1,12 +1,9 @@
 import { MenuItems, MenuItemsProps } from "@headlessui/react"
 import clsx from "clsx"
 
-export function Items({
-  className,
-  innerClassName,
-  children,
-  ...props
-}: MenuItemsProps & { innerClassName?: string }) {
+export type ItemsProps = MenuItemsProps & { innerClassName?: string }
+
+export function Items({ className, innerClassName, children, ...props }: ItemsProps) {
   const menuItems = !Array.isArray(children) ? [children] : children
   return (
     <MenuItems
