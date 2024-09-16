@@ -3,5 +3,6 @@
   "connect-wallet": "ConnectWallet",
   "signers-list": "Signers List",
   "featured-signer": "Featured Signer",
-  "theming": "Theming"
+  "theming": "Theming",
+  "advanced-options": "Advanced Options"
 }

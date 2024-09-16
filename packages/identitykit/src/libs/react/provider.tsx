@@ -82,10 +82,8 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
   })
 
   const connect = useCallback(() => {
-    if (isModalOpen) throw new Error("Modal already opened")
-    if (identityKit.user) throw new Error("Already connected")
     setIsModalOpen(true)
-  }, [identityKit.user, isModalOpen, setIsModalOpen])
+  }, [setIsModalOpen])
 
   const theme = useTheme(props.theme)
 
