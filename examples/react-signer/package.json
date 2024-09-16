@@ -14,32 +14,32 @@
     "lint-staged": "lint-staged --no-stash"
   },
   "dependencies": {
-    "@dfinity/agent": "^2.0.0",
-    "@dfinity/candid": "^2.0.0",
-    "@dfinity/identity": "^2.0.0",
-    "@dfinity/ledger-icp": "^2.4.0",
-    "@dfinity/principal": "^2.0.0",
-    "@dfinity/utils": "^2.4.0",
+    "@dfinity/agent": "^2.1.1",
+    "@dfinity/candid": "^2.1.1",
+    "@dfinity/identity": "^2.1.1",
+    "@dfinity/ledger-icp": "^2.5.0",
+    "@dfinity/principal": "^2.1.1",
+    "@dfinity/utils": "^2.5.0",
     "@radix-ui/themes": "^3.1.3",
     "@slide-computer/signer": "^3.1.0",
     "idb": "8.0.0",
     "next-themes": "^0.3.0",
-    "postcss": "^8.4.41",
+    "postcss": "^8.4.47",
     "radix-themes-tw": "^0.2.3",
-    "tailwindcss": "^3.4.10",
+    "tailwindcss": "^3.4.11",
     "micromatch": "4.0.8",
-    "typescript": "^5.5.4"
+    "typescript": "^5.6.2"
   },
   "devDependencies": {
     "@nfid/eslint-config": "*",
-    "@types/react": "^18.3.4",
+    "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
-    "@typescript-eslint/eslint-plugin": "^8.2.0",
-    "@typescript-eslint/parser": "^8.2.0",
+    "@typescript-eslint/eslint-plugin": "^8.5.0",
+    "@typescript-eslint/parser": "^8.5.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "eslint-plugin-react-refresh": "^0.4.11"
+    "eslint-plugin-react-refresh": "^0.4.12"
   },
   "lint-staged": {
     "src/*.{js,jsx,ts,tsx} !(src/idl/*.ts)": [
