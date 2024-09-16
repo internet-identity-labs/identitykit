@@ -1,7 +1,7 @@
 import { AccountIdentifier } from "@dfinity/ledger-icp"
 import { Principal } from "@dfinity/principal"
 import { Method } from "../ui/atoms/method.js"
-import { fromHexString } from "ictool"
+import { fromHexString } from "@dfinity/candid"
 import { ISection } from "../ui/organisms/section.js"
 
 export interface Request {
@@ -100,7 +100,8 @@ export const ledger: RequestExample = {
     }
   },
   getCodeSnippet(request) {
-    return `const { agent } = useIdentityKit()
+    return `import { fromHexString } from "@dfinity/candid"
+const { agent } = useIdentityKit()
 
 const actor = Actor.createActor(idlFactory, {
   agent,
