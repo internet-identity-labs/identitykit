@@ -1,11 +1,7 @@
 import clsx from "clsx"
-import { MouseEventHandler, PropsWithChildren } from "react"
+import { HTMLProps } from "react"
 
-export type ConnectButtonProps = PropsWithChildren<{
-  onClick?: MouseEventHandler<HTMLButtonElement>
-  className?: string
-  disabled?: boolean
-}>
+export type ConnectButtonProps = HTMLProps<HTMLButtonElement>
 
 export function ConnectButton({ onClick, className, disabled, children }: ConnectButtonProps) {
   return (
