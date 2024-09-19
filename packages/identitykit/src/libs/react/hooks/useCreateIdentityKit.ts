@@ -10,6 +10,7 @@ import { Signer } from "@slide-computer/signer"
 import { Principal } from "@dfinity/principal"
 import { SignerAgent } from "@slide-computer/signer-agent"
 import { SubAccount } from "@dfinity/ledger-icp"
+import { HttpAgent } from "@dfinity/agent"
 
 const DEFAULT_IDLE_TIMEOUT = 14_400_000
 
@@ -49,6 +50,7 @@ export function useCreateIdentityKit<
     | undefined
   >()
   const [icpBalance, setIcpBalance] = useState<undefined | number>()
+  // final agent with predefined user
   const [agent, setAgent] = useState<SignerAgent<Signer> | null>(null)
 
   // create disconnect func
@@ -122,14 +124,23 @@ export function useCreateIdentityKit<
   // create signer agent and save to state
   useEffect(() => {
     if (ik && user) {
-      ik.createSignerAgent({
-        ...agentOptions,
-        signer: selectedSigner!,
-        account: user.principal,
-      }).then((agent) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        setAgent(agent as any)
-      })
+      const createSignerAgent = (agent?: HttpAgent) =>
+        ik
+          .createSignerAgent({
+            ...agentOptions,
+            signer: selectedSigner!,
+            account: user.principal,
+            agent,
+          })
+          .then((agent) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            setAgent(agent as any)
+          })
+      if (!agentOptions?.agent) {
+        HttpAgent.create({ host: "https://icp-api.io/" }).then(createSignerAgent)
+      } else {
+        createSignerAgent(agentOptions?.agent)
+      }
     }
   }, [ik, user])
 

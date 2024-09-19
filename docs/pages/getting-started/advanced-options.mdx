@@ -46,3 +46,32 @@ export const YourApp = () => {
 `number{:typescript}`
 
 Idle timeout in milliseconds, optional, 600_000 (30min) by default
+
+## agent
+
+By default `@nfid/identitykit` uses dfinity HttpAgent with host https://icp-api.io/ to interact with
+global network, it's possible to use your own agent and pass it via props, as a result you will
+receive your agent with predefined connected account from `useIdentityKit()` hook. For example to
+interact with local replica:
+
+```jsx
+import { useState } from "react"
+import { HttpAgent } from "@dfinity/agent"
+import { IdentityKitProvider } from "@nfid/identitykit/react"
+
+export const YourApp = () => {
+  const [localAgent, setLocalAgent] = useState<HttpAgent | undefined>()
+
+  useEffect(() => {
+    HttpAgent.create({ host: "http://localhost:{your_dfx_local_replica_port}" }).then(setLocalAgent)
+  }, [])
+
+  return localAgent && (
+    <IdentityKitProvider
+      agent={localAgent}
+    >
+      <ConnectWallet />
+    </IdentityKitProvider>
+  )
+}
+```
