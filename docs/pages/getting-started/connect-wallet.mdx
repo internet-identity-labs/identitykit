@@ -5,6 +5,8 @@ authors:
   - name: "Dan Ostrovsky"
 ---
 
+import { Callout } from "nextra/components"
+
 # Using and customizing the ConnectWallet
 
 This is the main component. It is responsible for rendering the connect/disconnect button.
@@ -109,9 +111,11 @@ function CustomConnectedWalletButton({ connectedAccount, icpBalance, ...props }:
 }
 ```
 
-> Note: ConnectedWalletButton is basically DropdownMenuButton with additional styles and manages
-> opening of dropdown under the hood, so in case you want to use your own existing component for
-> this purpose just wrap it with `ConnectWalletDropdownMenuButton` component
+<Callout type="info" emoji="ℹ️">
+  Note: ConnectedWalletButton is basically DropdownMenuButton with additional styles and manages
+  opening of dropdown under the hood, so in case you want to use your own existing component for
+  this purpose just wrap it with `ConnectWalletDropdownMenuButton` component
+</Callout>
 
 ### ConnectWalletDropdownMenu
 

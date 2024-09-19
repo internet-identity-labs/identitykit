@@ -5,6 +5,8 @@ authors:
   - name: "Dan Ostrovsky"
 ---
 
+import { Callout } from "nextra/components"
+
 # Executing canister calls
 
 Your application will likely execute calls to your own canisters
@@ -19,7 +21,7 @@ execute.
 
 ### 1. Connect Wallet
 
-Follow the [connect-button](/getting-started/connect-button) guide to connect a wallet address.
+Follow the [connect-wallet](/getting-started/connect-wallet) guide to connect a wallet address.
 
 ### 2. Import idlFactories
 
@@ -47,18 +49,30 @@ import { HttpAgent, Actor } from "@dfinity/agent"
 const { delegationType, identity, agent } = useIdentityKit()
 
 // Create an unauthenticatedAgent when you need to execute calls for which the user doesn't need to execute themselves
-const unauthenticatedAgent = HttpAgent.createSync()
+const [unauthenticatedAgent, setUnauthenticatedAgent] = useState<HttpAgent | undefined>()
+
+useEffect(() => {
+  HttpAgent.create().then(setUnauthenticatedAgent)
+}, [])
 
 // Create an HttpAgent in case the connected delegation is not for their wallet address
-const [anonymousAgent, setAnonymousAgent] = useState()
+const [authenticatedNonTargetAgent, setAuthenticatedNonTargetAgent] = useState<
+  HttpAgent | undefined
+>()
+
 useEffect(() => {
-  setAnonymousAgent(
-    identity && delegationType === IdentityKitDelegationType.ANONYMOUS
-      ? HttpAgent.createSync({ identity })
-      : undefined
-  )
+  if (identity && delegationType === IdentityKitDelegationType.ANONYMOUS) {
+    HttpAgent.create({ identity }).then(setAuthenticatedNonTargetAgent)
+  }
 }, [identity, delegationType])
 ```
+
+<Callout type="warning" emoji="⚠️">
+  Example created for global network interaction, check also
+  <a href="/guides/local-development">
+    <strong>local-development</strong>
+  </a>
+</Callout>
 
 ### 4. Create actors
 
@@ -66,17 +80,26 @@ Create actors for the canisters you want to call with the idlFactories you impor
 canister IDs.
 
 ```typescript
+import { useIdentityKit } from "@nfid/identitykit/react"
+
+const { agent, identity, delegationType } = useIdentityKit()
+
 // Actor for one of your application's target canisters
-const targetActor = Actor.createActor(targetIdlFactory, {
-  agent: anonymousAgent || agent,
-  canisterId: TARGET_CANISTER_ID_TO_CALL,
-})
+const targetActor =
+  agent &&
+  Actor.createActor(targetIdlFactory, {
+    agent,
+    canisterId: TARGET_CANISTER_ID_TO_CALL,
+  })
 
 // Actor for a different canister in the ecosystem (i.e. icrc2_approve)
-const nonTargetActor = Actor.createActor(nontargetIdlFactory, {
-  agent: anonymousAgent || agent,
-  canisterId: NON_TARGET_CANISTER_ID_TO_CALL,
-})
+const nonTargetActor =
+  identity && delegationType === IdentityKitDelegationType.ANONYMOUS && authenticatedNonTargetAgent
+    ? Actor.createActor(nontargetIdlFactory, {
+        agent: authenticatedNonTargetAgent,
+        canisterId: NON_TARGET_CANISTER_ID_TO_CALL,
+      })
+    : undefined
 
 // Actor for methods the user doesn't need to be authenticated to call (i.e. icrc2_allowance)
 // These will never result in a wallet approval prompt.
@@ -91,7 +114,9 @@ const nonTargetUnauthenticatedActor = Actor.createActor(nontargetIdlFactory, {
 Execute your calls.
 
 ```typescript
-const result = await actor.{yourmethod}
+if (actor) {
+  const result = await actor.{yourmethod}
+}
 ```
 
 ## Note on UX
