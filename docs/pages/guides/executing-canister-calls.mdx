@@ -103,10 +103,12 @@ const nonTargetActor =
 
 // Actor for methods the user doesn't need to be authenticated to call (i.e. icrc2_allowance)
 // These will never result in a wallet approval prompt.
-const nonTargetUnauthenticatedActor = Actor.createActor(nontargetIdlFactory, {
-  agent: unauthenticatedAgent,
-  canisterId: NON_TARGET_CANISTER_ID_TO_CALL,
-})
+const nonTargetUnauthenticatedActor =
+  unauthenticatedAgent &&
+  Actor.createActor(nontargetIdlFactory, {
+    agent: unauthenticatedAgent,
+    canisterId: NON_TARGET_CANISTER_ID_TO_CALL,
+  })
 ```
 
 ### 5. Call canister
