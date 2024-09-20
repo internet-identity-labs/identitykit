@@ -20,7 +20,7 @@ export function ConnectWallet({
     }
   >
 }) {
-  const { toggleModal, user, icpBalance, disconnect, selectedSigner } =
+  const { toggleModal, user, icpBalance, disconnect, selectedSigner, theme } =
     useContext(IdentityKitContext)
 
   const ConnectButtonComponent = connectButtonComponent ?? ConnectButton
@@ -45,6 +45,7 @@ export function ConnectWallet({
         disconnect={disconnect}
         icpBalance={icpBalance}
         connectedAccount={connectedAccount}
+        data-identity-kit-theme={theme}
       >
         <ConnectedButtonComponent connectedAccount={connectedAccount} icpBalance={icpBalance} />
         <MenuItems>
