@@ -9,5 +9,6 @@ export async function getPopupTransportBuilder({
   return new PostMessageTransport({
     url,
     crypto: crypto ?? globalThis.crypto,
+    statusTimeout: 15000,
   })
 }
