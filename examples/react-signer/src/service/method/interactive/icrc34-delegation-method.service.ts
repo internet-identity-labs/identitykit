@@ -18,6 +18,8 @@ export interface Icrc34Dto {
   maxTimeToLive: string
 }
 
+const MAX_TIME_TO_LIVE_NANOSECONDS = 28800000000000 // 8 hours
+
 class Icrc34DelegationMethodService extends InteractiveMethodService {
   public getMethod(): string {
     return "icrc34_delegation"
@@ -116,7 +118,9 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
     icrc34Dto: Icrc34Dto,
     sessionPublicKey: Ed25519PublicKey
   ): Promise<DelegationChain> {
-    const maxTimeToLive = icrc34Dto.maxTimeToLive ? Number(icrc34Dto.maxTimeToLive) : 28800000000000
+    const maxTimeToLive = icrc34Dto.maxTimeToLive
+      ? Number(icrc34Dto.maxTimeToLive)
+      : MAX_TIME_TO_LIVE_NANOSECONDS
 
     if (accountKeyIdentity.type === AccountType.GLOBAL) {
       const targets = icrc34Dto.targets.map((x) => Principal.fromText(x))

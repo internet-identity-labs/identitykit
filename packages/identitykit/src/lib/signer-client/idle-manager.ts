@@ -24,6 +24,8 @@ export type IdleManagerOptions = {
 
 const events = ["mousedown", "mousemove", "keydown", "touchstart", "wheel"]
 
+const TIMEOUT_MAX_DELAY = 2147483647
+
 /**
  * Detects if the user has been idle for a duration of `idleTimeout` ms, and calls `onIdle` and registered callbacks.
  * By default, the IdleManager will log a user out after 10 minutes of inactivity.
@@ -42,7 +44,7 @@ export class IdleManager {
     const { onIdle, idleTimeout = 10 * 60 * 1000 } = options || {}
 
     this.callbacks = onIdle ? [onIdle] : []
-    this.idleTimeout = idleTimeout
+    this.idleTimeout = idleTimeout > TIMEOUT_MAX_DELAY ? TIMEOUT_MAX_DELAY : idleTimeout
 
     const _resetTimer = this._resetTimer.bind(this)
 
