@@ -63,7 +63,7 @@ class CallCanisterService {
       effectiveCanisterId: canister,
     })
 
-    if (!response.ok || response.body) {
+    if (!response.ok) {
       throw new UpdateCallRejectedError(canister, methodName, requestId, response)
     }
 
