@@ -1,14 +1,16 @@
 import clsx from "clsx"
-import { HTMLProps } from "react"
+import { HTMLProps, useContext } from "react"
+import { IdentityKitContext } from "../context"
 
 export type ConnectButtonProps = HTMLProps<HTMLButtonElement>
 
 export function ConnectButton({ onClick, className, disabled, children }: ConnectButtonProps) {
+  const { initializing } = useContext(IdentityKitContext)
   return (
     <button
       id={"connect"}
       type="button"
-      disabled={disabled}
+      disabled={disabled || initializing}
       onClick={onClick}
       className={clsx(
         "ik-component ik-border-transparent",
@@ -19,7 +21,7 @@ export function ConnectButton({ onClick, className, disabled, children }: Connec
         className
       )}
     >
-      {children ? children : <small>Connect wallet</small>}
+      {children ?? <small>Connect wallet</small>}
     </button>
   )
 }

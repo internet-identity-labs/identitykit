@@ -42,7 +42,11 @@ export function AppWrappedInIdentityKit() {
         targets: [targetCanister],
       }}
       onConnectFailure={(e) => {
-        toast.error(e.message)
+        toast.error(
+          e.message === "Not supported"
+            ? "Internet Identity doesn’t support accounts. Switch to delegation."
+            : e.message
+        )
       }}
     >
       <App setAuthType={setAuthType} />
