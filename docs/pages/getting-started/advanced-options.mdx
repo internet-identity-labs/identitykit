@@ -51,14 +51,15 @@ export const YourApp = () => {
 
 `number{:typescript}`
 
-Idle timeout in milliseconds, optional, 14_400_000 (4 hours) by default, maximum value is
-2_147_483_647 (~24 days, max 32 bit integer), will be used in case of bigger provided value.
+Timeout to logout user due to inactivity in milliseconds, optional, 14_400_000 (4 hours) by default,
+maximum value is 2_147_483_647 (~24 days, max 32 bit integer), will be used in case of bigger
+provided value.
 
 #### disableIdle
 
 `boolean{:typescript}`
 
-Disable logout on idle, enabled by default.
+Disable logout on idle timeout, enabled by default.
 
 ## agent
 
