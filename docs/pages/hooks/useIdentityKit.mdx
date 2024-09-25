@@ -86,9 +86,10 @@ Will contain connected accounts in case `IdentityKitProvider.authType` is set to
 
 ### connect
 
-`() => void{:typescript}`
+`undefined | () => void{:typescript}`
 
-Function to trigger manual connect (opening of signers modal)
+Function to trigger manual connect (opening of signers modal), will be `undefined` until identitykit
+initializes.
 
 ### disconnect
 

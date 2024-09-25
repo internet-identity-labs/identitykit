@@ -1,4 +1,4 @@
-import { useState, useCallback, PropsWithChildren } from "react"
+import { useState, useCallback, PropsWithChildren, useEffect } from "react"
 import { SignerConfig } from "../../lib/types"
 import { IdentityKitContext } from "./context"
 import { IdentityKitModal } from "./modal"
@@ -16,6 +16,7 @@ import {
 import { useCreateIdentityKit, useSigner, useTheme } from "./hooks"
 import { SignerOptions, Transport } from "@slide-computer/signer"
 import { Signer } from "@slide-computer/signer"
+import { TransportBuilder } from "../../lib/service"
 
 interface IdentityKitProviderProps<
   T extends IdentityKitAuthType = typeof IdentityKitAuthType.ACCOUNTS,
@@ -56,12 +57,32 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
   const toggleModal = useCallback(() => {
     setIsModalOpen((prev) => !prev)
   }, [])
+  const [transports, setTransports] = useState<
+    Array<{ transport: Transport; signerId: string }> | undefined
+  >()
 
   const signers =
     !props.signers || !props.signers.length ? [NFIDW, Plug, InternetIdentity, Stoic] : props.signers
 
+  useEffect(() => {
+    Promise.all(
+      signers.map(async (s) => {
+        return {
+          transport: await TransportBuilder.build({
+            id: s.id,
+            transportType: s.transportType,
+            url: s.providerUrl,
+            crypto,
+          }),
+          signerId: s.id,
+        }
+      })
+    ).then(setTransports)
+  }, [signers])
+
   const { selectSigner, clearSigner, selectedSigner, selectCustomSigner } = useSigner({
     signers,
+    transports,
     closeModal: () => setIsModalOpen(false),
     crypto,
     options: signerOptions,
@@ -100,6 +121,7 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
         icpBalance: identityKit.icpBalance,
         authType,
         signerClient: identityKit.signerClient,
+        initializing: !transports?.length,
         toggleModal,
         selectSigner,
         selectCustomSigner,
