@@ -7,6 +7,6 @@ export const getRequestObject = (requestJSON: string) => {
     : {}
   return {
     method: basicRequest.method,
-    params,
+    ...params,
   }
 }
