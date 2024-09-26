@@ -33,7 +33,8 @@ const defaultState: IdentityKitProvider = {
   },
   agent: null,
   authType: IdentityKitAuthType.ACCOUNTS,
-  initializing: true,
+  isInitializing: true,
+  isUserConnecting: false,
 }
 
 export const IdentityKitContext = createContext<IdentityKitProvider>(defaultState)
@@ -53,7 +54,9 @@ export function useIdentityKit(): {
     subAccount?: SubAccount
   }[]
   identity?: Identity | PartialIdentity
-  connect?: () => void
+  isInitializing: boolean
+  isUserConnecting: boolean
+  connect: () => void
   disconnect: () => Promise<void>
   fetchIcpBalance?: () => Promise<void>
 } {
@@ -63,7 +66,8 @@ export function useIdentityKit(): {
     user,
     icpBalance,
     authType,
-    initializing,
+    isInitializing,
+    isUserConnecting,
     connect,
     disconnect,
     fetchIcpBalance,
@@ -82,7 +86,9 @@ export function useIdentityKit(): {
     accounts,
     delegationType,
     identity,
-    connect: !initializing ? connect : undefined,
+    isInitializing,
+    isUserConnecting,
+    connect,
     disconnect,
     fetchIcpBalance,
   }

@@ -1,27 +1,24 @@
-import clsx from "clsx"
-import { HTMLProps, useContext } from "react"
-import { IdentityKitContext } from "../context"
+import { HTMLProps } from "react"
+import { Button } from "../ui/button"
 
-export type ConnectButtonProps = HTMLProps<HTMLButtonElement>
+export type ConnectButtonProps = HTMLProps<HTMLButtonElement> & { loading?: boolean }
 
-export function ConnectButton({ onClick, className, disabled, children }: ConnectButtonProps) {
-  const { initializing } = useContext(IdentityKitContext)
+export function ConnectButton({
+  onClick,
+  className,
+  disabled,
+  loading,
+  children,
+}: ConnectButtonProps) {
   return (
-    <button
+    <Button
       id={"connect"}
-      type="button"
-      disabled={disabled || initializing}
+      disabled={disabled}
+      loading={loading}
       onClick={onClick}
-      className={clsx(
-        "ik-component ik-border-transparent",
-        "ik-bg-primary ik-text-white hover:ik-bg-teal-600 active:ik-bg-teal-700 active:ik-border-primary",
-        "hover:ik-shadow-md",
-        "ik-font-bold ik-px-[10px] ik-min-w-[140px] ik-h-[40px] ik-flex ik-items-center ik-justify-center",
-        "ik-px-[15px] ik-rounded-xl border",
-        className
-      )}
+      className={className}
     >
       {children ?? <small>Connect wallet</small>}
-    </button>
+    </Button>
   )
 }
