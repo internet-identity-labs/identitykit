@@ -31,7 +31,7 @@ export const SignerInput = () => {
       </div>
       <div className="ik-flex ik-items-center ik-gap-[12px] ik-relative">
         <input
-          className="ik-rounded-xl ik-border ik-border-gray-400 ik-px-[10px] ik-h-[48px] ik-flex-1 ik-flex-shrink ik-text-sm ik-text-gray-400 focus:ik-border-gray-400 dark:ik-text-white [&:has(:focus-visible)]:ik-outline-none"
+          className="ik-rounded-xl ik-border ik-border-gray-400 ik-px-[10px] ik-h-[48px] ik-flex-1 ik-flex-shrink ik-text-sm ik-text-black dark:ik-text-white focus:ik-border-gray-400 dark:ik-text-white ik-outline-none"
           placeholder="https://wallet.url"
           type="text"
           {...register("url", {
@@ -41,18 +41,17 @@ export const SignerInput = () => {
           name="url"
         />
         <Button
+          large
           disabled={Boolean(errors.url) || !customSignerUrl}
           className="ik-w-[110px]"
           onClick={submitHandler}
         >
-          Connect
+          <small>Connect</small>
         </Button>
-        {errors.url && (
-          <p className="ik-absolute ik-text-xs ik-text-red-500 ik-top-[100%]">
-            {errors.url.message}
-          </p>
-        )}
       </div>
+      {errors.url && (
+        <p className="ik-text-xs ik-text-red-500 ik-block ik-mt-1">{errors.url.message}</p>
+      )}
     </div>
   )
 }
