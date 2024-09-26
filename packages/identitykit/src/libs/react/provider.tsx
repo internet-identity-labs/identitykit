@@ -1,4 +1,4 @@
-import { useState, useCallback, PropsWithChildren, useEffect } from "react"
+import { useState, useCallback, PropsWithChildren, useEffect, useMemo } from "react"
 import { SignerConfig } from "../../lib/types"
 import { IdentityKitContext } from "./context"
 import { IdentityKitModal } from "./modal"
@@ -102,9 +102,20 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
     realConnectDisabled,
   })
 
+  const isInitializing = useMemo(() => !transports?.length, [transports])
+  const isUserConnecting = useMemo(
+    () => !!selectedSigner && !identityKit.user,
+    [selectedSigner, identityKit.user]
+  )
+
   const connect = useCallback(() => {
+    if (isInitializing) throw new Error("Identitykit is not initialized yet")
+    if (isUserConnecting) throw new Error("User is connecting")
+    if (identityKit.user) {
+      throw new Error("User is already connected")
+    }
     setIsModalOpen(true)
-  }, [setIsModalOpen])
+  }, [setIsModalOpen, isInitializing, isUserConnecting, identityKit.user])
 
   const theme = useTheme(props.theme)
 
@@ -121,7 +132,8 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
         icpBalance: identityKit.icpBalance,
         authType,
         signerClient: identityKit.signerClient,
-        initializing: !transports?.length,
+        isInitializing,
+        isUserConnecting,
         toggleModal,
         selectSigner,
         selectCustomSigner,

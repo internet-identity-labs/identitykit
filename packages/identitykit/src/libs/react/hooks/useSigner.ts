@@ -26,12 +26,12 @@ export function useSigner({
 
   const selectSigner = useCallback(
     async (cb: (signer?: Signer) => unknown, signerId?: string) => {
-      if (!transports) throw new Error("Identitykit not initialized yet")
-
       if (!signerId) {
         localStorage.removeItem("signerId")
         return cb(undefined)
       }
+
+      if (!transports) throw new Error("Identitykit not initialized yet")
 
       const signer = signers.find((s) => s.id === signerId)
       if (!signer) throw new Error(`Signer with id ${signerId} not found`)

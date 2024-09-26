@@ -19,7 +19,8 @@ export interface IdentityKitProvider {
   icpBalance?: number
   authType: IdentityKitAuthType
   signerClient?: IdentityKitSignerClient
-  initializing: boolean
+  isInitializing: boolean
+  isUserConnecting: boolean
   toggleModal: () => void
   selectSigner: (signerId?: string) => Promise<SignerConfig | void>
   selectCustomSigner: (url: string) => Promise<void>
