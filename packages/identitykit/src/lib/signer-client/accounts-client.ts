@@ -18,6 +18,12 @@ export class AccountsSignerClient extends SignerClient {
 
   public async login(): Promise<void> {
     // get and transform accounts from signer
+    const params = this.options.derivationOrigin
+      ? {
+          derivationOrigin: this.options.derivationOrigin,
+        }
+      : {}
+
     const accountsResponse = await this.options.signer.sendRequest<
       AccountsRequest,
       AccountsResponse
@@ -25,11 +31,7 @@ export class AccountsSignerClient extends SignerClient {
       method: "icrc27_accounts",
       id: this.crypto.randomUUID(),
       jsonrpc: "2.0",
-      params: this.options.derivationOrigin
-        ? {
-            derivationOrigin: this.options.derivationOrigin,
-          }
-        : undefined,
+      ...params,
     })
 
     if ("error" in accountsResponse) {
