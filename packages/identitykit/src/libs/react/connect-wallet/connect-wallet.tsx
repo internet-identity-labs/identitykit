@@ -20,7 +20,7 @@ export function ConnectWallet({
     }
   >
 }) {
-  const { toggleModal, user, icpBalance, disconnect, selectedSigner } =
+  const { toggleModal, user, icpBalance, disconnect, isInitializing, isUserConnecting } =
     useContext(IdentityKitContext)
 
   const ConnectButtonComponent = connectButtonComponent ?? ConnectButton
@@ -33,7 +33,8 @@ export function ConnectWallet({
         onClick={() => {
           toggleModal()
         }}
-        disabled={selectedSigner && !user}
+        disabled={isInitializing}
+        loading={isUserConnecting}
       />
     )
 
