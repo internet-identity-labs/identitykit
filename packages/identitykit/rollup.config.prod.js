@@ -130,14 +130,14 @@ export default [
     ],
     plugins: [
       ...commonPlugins,
-      generatePackageJson({
-        baseContents: (bC) => ({
-          ...bC,
-          exports: bC.exportsProd,
-          exportsProd: undefined,
-        }),
-        outputFolder: `dist/`,
-      }),
+      // generatePackageJson({
+      //   baseContents: (bC) => ({
+      //     ...bC,
+      //     exports: bC.exportsProd,
+      //     exportsProd: undefined,
+      //   }),
+      //   outputFolder: `dist/`,
+      // }),
     ],
     external: [/node_modules/],
   },
