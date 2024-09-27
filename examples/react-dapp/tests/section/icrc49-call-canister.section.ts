@@ -73,16 +73,22 @@ export class Icrc49CallCanisterSection extends Section {
         }
         await context
           .pages()[2]
-          .locator('//button[.//text()="Try again"]')
+          .locator('//button[.//text()="Approve"]')
           .waitFor({ state: "attached", timeout: 5000 })
+      } catch (e) {
+        /* empty */
+      }
+      expect(await this.getPopupTextsNFID(await context.pages()[2])).toEqual(textsExpected)
+      try {
+        await context.pages()[2].locator('//button[.//text()="Approve"]').click()
+        await context
+          .pages()[2]
+          .locator('//button[.//text()="Approve"]')
+          .waitFor({ state: "detached", timeout: 5000 })
         done = true
       } catch (e) {
         /* empty */
       }
     }
-    expect(await this.getPopupTextsNFID(await context.pages()[2])).toEqual(textsExpected)
-    //TODO uncomment after fix of nfid wallet delegation
-    // await context.pages()[2].locator("//button[.//text()=\"Approve\"]").click()
-    await context.pages()[2].close()
   }
 }
