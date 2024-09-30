@@ -73,7 +73,7 @@ test.describe("ICRC25 call-canister", () => {
     }
   })
 
-  test("should make canister call with no consent", async ({
+  test("should make canister call: Basic", async ({
     section,
     demoPage,
     requestPermissionSection,
@@ -103,7 +103,7 @@ test.describe("ICRC25 call-canister", () => {
     await demoPage.logout()
   })
 
-  test("should make canister call with consent", async ({
+  test("should make canister call: With consent message", async ({
     section,
     demoPage,
     requestPermissionSection,
@@ -113,6 +113,9 @@ test.describe("ICRC25 call-canister", () => {
     await nfidPage.title()
     const account = accounts[0]
     await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
+
+    await section.selectConsentTab()
+
     if (account.type === AccountType.MockedSigner) {
       const popup = await section.openPopup()
       const texts = await section.getPopupTexts(popup)
@@ -130,6 +133,31 @@ test.describe("ICRC25 call-canister", () => {
     const actualResponse = await section.getResponseJson()
 
     expect(actualResponse).toMatchObject(ExpectedTexts.Mocked.ConsentCaseCanisterCallResponse)
+    await demoPage.logout()
+  })
+
+  test("MOCK: should make canister call: ICRC-2 approve", async ({
+    section,
+    demoPage,
+    requestPermissionSection,
+    nfidPage,
+  }) => {
+    await nfidPage.title()
+    const account = accounts[0]
+    await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
+
+    await section.selectConsentTab()
+
+    const popup = await section.openPopup()
+    const texts = await section.getPopupTexts(popup)
+
+    expect(texts).toEqual(ExpectedTexts.Mocked.CanisterCallIcrc2ApproveRequest)
+    await section.approve(popup)
+
+    await section.waitForResponse()
+    const actualResponse = await section.getResponseJson()
+
+    expect(actualResponse).toMatchObject(ExpectedTexts.Mocked.CanisterCallIcrc2ApproveResponse)
     await demoPage.logout()
   })
 })
