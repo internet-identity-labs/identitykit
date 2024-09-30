@@ -5,6 +5,8 @@ authors:
   - name: "Dan Ostrovsky"
 ---
 
+import { Callout } from "nextra/components"
+
 # useIdentityKit
 
 `@nfid/identitykit` exports only one react hook, which is needed for getting the agent for the
@@ -22,18 +24,28 @@ import { useIdentityKit } from "@nfid/identitykit/react"
 ```typescript
 const {
   agent,
+  isInitializing,
   user,
+  isUserConnecting,
   icpBalance,
   signer,
   identity,
   delegationType,
   accounts,
+  connect,
   disconnect,
   fetchIcpBalance,
 } = useIdentityKit()
 ```
 
 ## Return values
+
+### isInitializing
+
+`boolean{:typescript}`
+
+Boolean representing wether identitykit initialized or not (Connect wallet will be disabled until
+initialization finishes).
 
 ### agent
 
@@ -47,6 +59,13 @@ should be used if canister call requires approve. Will be null until successfull
 `{ principal: Principal, subaccount?: SubAccount} | undefined{:typescript}`
 
 Currently connected user principal and subaccount. Will be undefined until successfull connect.
+
+### isUserConnecting
+
+`boolean{:typescript}`
+
+Boolean representing wether user is connecting or not (signer selected, but user still not
+connected).
 
 ### icpBalance
 
@@ -82,6 +101,17 @@ connected, otherwise will be undefined
 
 Will contain connected accounts in case `IdentityKitProvider.authType` is set to
 `IdentityKitAuthType.ACCOUNTS` and user is connected, otherwise will be undefined
+
+### connect
+
+`() => void{:typescript}`
+
+Function to trigger manual connect (opening of signers modal).
+
+<Callout type="warning" emoji="⚠️">
+  Function will throw `Error("Identitykit is not initialized yet"){:typescript}` until identitykit <a href="/hooks/useIdentityKit#isinitializing"><strong>initializes</strong></a>, `Error("User is already connecting"){:typescript}` if signer
+  is selected, but <a href="/hooks/useIdentityKit#isuserconnecting"><strong>user is still connecting</strong></a> or `Error("Identitykit is already connected"){:typescript}` for <a href="/hooks/useIdentityKit#user"><strong>connected user</strong></a>. So make sure you disable your connect button in these cases.
+</Callout>
 
 ### disconnect
 

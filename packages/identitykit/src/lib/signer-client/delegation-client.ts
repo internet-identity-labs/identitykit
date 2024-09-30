@@ -46,6 +46,11 @@ export interface DelegationSignerClientOptions extends SignerClientOptions {
    */
   keyType?: BaseKeyType
   targets?: string[]
+  /**
+   * Expiration of the delegation in nanoseconds
+   * @default BigInt(28_800_000_000_000) nanoseconds (8 hours)
+   */
+  maxTimeToLive?: bigint
 }
 
 export class DelegationSignerClient extends SignerClient {
@@ -53,7 +58,8 @@ export class DelegationSignerClient extends SignerClient {
     options: SignerClientOptions,
     private identity: Identity | PartialIdentity,
     private baseIdentity: SignIdentity,
-    private targets: string[] | undefined
+    private targets: string[] = [],
+    private maxTimeToLive?: bigint
   ) {
     super(options)
   }
@@ -85,7 +91,8 @@ export class DelegationSignerClient extends SignerClient {
       options,
       identity,
       baseIdentity,
-      options.targets
+      options.targets,
+      options.maxTimeToLive
     )
 
     if (this.shouldCheckIsUserConnected()) {
@@ -106,13 +113,7 @@ export class DelegationSignerClient extends SignerClient {
     return DelegationIdentity.fromDelegation(baseIdentity, delegationChain)
   }
 
-  public async login(options?: {
-    /**
-     * Expiration of the authentication in nanoseconds
-     * @default  BigInt(8) hours * BigInt(3_600_000_000_000) nanoseconds
-     */
-    maxTimeToLive?: bigint
-  }): Promise<void> {
+  public async login(): Promise<void> {
     const delegationChainResponse = await this.options.signer.sendRequest<
       DelegationRequest,
       DelegationResponse
@@ -123,8 +124,7 @@ export class DelegationSignerClient extends SignerClient {
       params: {
         publicKey: toBase64(this.baseIdentity.getPublicKey().toDer()),
         targets: this.targets,
-        maxTimeToLive:
-          options?.maxTimeToLive === undefined ? undefined : String(options.maxTimeToLive),
+        maxTimeToLive: this.maxTimeToLive === undefined ? undefined : String(this.maxTimeToLive),
       },
     })
 

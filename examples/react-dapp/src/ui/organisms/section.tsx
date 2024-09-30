@@ -64,7 +64,7 @@ export const Section: React.FC<ISection> = ({
       return toast.error("Invalid JSON")
     }
 
-    const requestObject = getRequestObject(requestValue)
+    const requestObject: any = getRequestObject(requestValue)
 
     let res
 

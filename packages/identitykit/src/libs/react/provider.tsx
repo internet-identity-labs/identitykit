@@ -1,4 +1,4 @@
-import { useState, useCallback, PropsWithChildren } from "react"
+import { useState, useCallback, PropsWithChildren, useEffect, useMemo } from "react"
 import { SignerConfig } from "../../lib/types"
 import { IdentityKitContext } from "./context"
 import { IdentityKitModal } from "./modal"
@@ -16,6 +16,7 @@ import {
 import { useCreateIdentityKit, useSigner, useTheme } from "./hooks"
 import { SignerOptions, Transport } from "@slide-computer/signer"
 import { Signer } from "@slide-computer/signer"
+import { TransportBuilder } from "../../lib/service"
 
 interface IdentityKitProviderProps<
   T extends IdentityKitAuthType = typeof IdentityKitAuthType.ACCOUNTS,
@@ -56,12 +57,32 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
   const toggleModal = useCallback(() => {
     setIsModalOpen((prev) => !prev)
   }, [])
+  const [transports, setTransports] = useState<
+    Array<{ transport: Transport; signerId: string }> | undefined
+  >()
 
   const signers =
     !props.signers || !props.signers.length ? [NFIDW, Plug, InternetIdentity, Stoic] : props.signers
 
+  useEffect(() => {
+    Promise.all(
+      signers.map(async (s) => {
+        return {
+          transport: await TransportBuilder.build({
+            id: s.id,
+            transportType: s.transportType,
+            url: s.providerUrl,
+            crypto,
+          }),
+          signerId: s.id,
+        }
+      })
+    ).then(setTransports)
+  }, [signers])
+
   const { selectSigner, clearSigner, selectedSigner, selectCustomSigner } = useSigner({
     signers,
+    transports,
     closeModal: () => setIsModalOpen(false),
     crypto,
     options: signerOptions,
@@ -81,6 +102,21 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
     realConnectDisabled,
   })
 
+  const isInitializing = useMemo(() => !transports?.length, [transports])
+  const isUserConnecting = useMemo(
+    () => !!selectedSigner && !identityKit.user,
+    [selectedSigner, identityKit.user]
+  )
+
+  const connect = useCallback(() => {
+    if (isInitializing) throw new Error("Identitykit is not initialized yet")
+    if (isUserConnecting) throw new Error("User is connecting")
+    if (identityKit.user) {
+      throw new Error("User is already connected")
+    }
+    setIsModalOpen(true)
+  }, [setIsModalOpen, isInitializing, isUserConnecting, identityKit.user])
+
   const theme = useTheme(props.theme)
 
   return (
@@ -96,9 +132,12 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
         icpBalance: identityKit.icpBalance,
         authType,
         signerClient: identityKit.signerClient,
+        isInitializing,
+        isUserConnecting,
         toggleModal,
         selectSigner,
         selectCustomSigner,
+        connect,
         disconnect: identityKit.disconnect,
         fetchIcpBalance: identityKit.fetchIcpBalance,
       }}

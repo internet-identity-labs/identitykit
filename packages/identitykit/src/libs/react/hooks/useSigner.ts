@@ -5,11 +5,13 @@ import { TransportType, SignerConfig } from "../../../lib/types"
 
 export function useSigner({
   signers,
+  transports,
   closeModal,
   crypto,
   ...props
 }: {
   signers: SignerConfig[]
+  transports?: Array<{ transport: Transport; signerId: string }>
   closeModal: () => unknown
   options: Pick<
     SignerOptions<Transport>,
@@ -32,22 +34,17 @@ export function useSigner({
       const signer = signers.find((s) => s.id === signerId)
       if (!signer) throw new Error(`Signer with id ${signerId} not found`)
 
-      const { transportType, providerUrl } = signer
+      const transport = transports?.find((t) => t.signerId === signerId)
 
-      const transport = await TransportBuilder.build({
-        id: signer.id,
-        transportType,
-        url: providerUrl,
-        crypto,
-      })
+      if (!transport) return
 
-      if (!transport.connection?.connected) {
-        await transport.connection?.connect()
+      if (!transport?.transport.connection?.connected) {
+        await transport?.transport.connection?.connect()
       }
 
       const createdSigner = new Signer({
         ...options,
-        transport,
+        transport: transport!.transport,
       })
       cb(createdSigner)
 

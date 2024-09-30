@@ -8,6 +8,7 @@ import { useIdentityKit } from "@nfid/identitykit/react"
 
 function App({ setAuthType }: { setAuthType: (k: IdentityKitAuthType) => void }) {
   const { disconnect } = useIdentityKit()
+
   return (
     <div className="h-full min-h-screen bg-white dark:bg-dark px-[30px] pb-[25px]">
       <ToastContainer />

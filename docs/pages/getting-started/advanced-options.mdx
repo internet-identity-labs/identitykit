@@ -1,0 +1,90 @@
+---
+title: "Advanced Options"
+date: "2024-06-03"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+IdentityKitProvider also allows to set some advanced props listed below:
+
+## signerClientOptions
+
+```jsx
+import { IdentityKitProvider } from "@nfid/identitykit/react"
+
+export const YourApp = () => {
+  return (
+    <IdentityKitProvider signerClientOptions={{}}>
+      <ConnectWallet />
+    </IdentityKitProvider>
+  )
+}
+```
+
+### maxTimeToLive
+
+`bigint{:typescript}`
+
+Expiration of the delegation in nanoseconds, optional, 28_800_000_000_000 (8 hours) by default.
+
+### idleOptions
+
+Customize idle
+
+```jsx
+import { IdentityKitProvider } from "@nfid/identitykit/react"
+
+export const YourApp = () => {
+  return (
+    <IdentityKitProvider
+      signerClientOptions={{
+        idleOptions: {},
+      }}
+    >
+      <ConnectWallet />
+    </IdentityKitProvider>
+  )
+}
+```
+
+#### idleTimeout
+
+`number{:typescript}`
+
+Timeout to logout user due to inactivity in milliseconds, optional, 14_400_000 (4 hours) by default,
+maximum value is 2_147_483_647 (~24 days, max 32 bit integer), will be used in case of bigger
+provided value.
+
+#### disableIdle
+
+`boolean{:typescript}`
+
+Disable logout on idle timeout, enabled by default.
+
+## agent
+
+By default `@nfid/identitykit` uses default dfinity HttpAgent with host https://icp-api.io/ to
+interact with global network, it's possible to use your own agent and pass it via props, as a result
+you will receive your agent with predefined connected account from `useIdentityKit()` hook.
+
+```jsx
+import { useState } from "react"
+import { HttpAgent } from "@dfinity/agent"
+import { IdentityKitProvider } from "@nfid/identitykit/react"
+
+export const YourApp = () => {
+  const [customAgent, setCustomAgent] = useState<HttpAgent | undefined>()
+
+  useEffect(() => {
+    HttpAgent.create(customOptions).then(setCustomAgent)
+  }, [])
+
+  return customAgent && (
+    <IdentityKitProvider
+      agent={customAgent}
+    >
+      <ConnectWallet />
+    </IdentityKitProvider>
+  )
+}
+```

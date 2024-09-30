@@ -29,6 +29,7 @@ describe("getPopupTransportBuilder", () => {
     expect(PostMessageTransport).toHaveBeenCalledWith({
       url: "http://example.com",
       crypto: globalThis.crypto,
+      statusTimeout: 15000,
     })
   })
 })

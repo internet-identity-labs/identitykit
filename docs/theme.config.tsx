@@ -47,6 +47,14 @@ const theme = {
     dark: 69,
     light: 38,
   },
+  banner: {
+    key: "0.0.3-release",
+    text: (
+      <a href="https://www.npmjs.com/package/@nfid/identitykit" target="_blank">
+        🎉 @nfid/identitykit@0.0.3 is released.
+      </a>
+    ),
+  },
   head: () => {
     const { frontMatter } = useConfig()
 

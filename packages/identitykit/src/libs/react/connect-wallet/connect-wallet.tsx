@@ -3,7 +3,7 @@ import { IdentityKitContext } from "../context"
 import { ConnectButton, ConnectButtonProps } from "./connect-button"
 import { ConnectedButton, ConnectedButtonProps } from "./connected-button"
 import { DropdownMenu, DropdownMenuProps } from "./dropdown"
-import { MenuAddressItem, MenuItems, MenuDisconnectItem, MenuButton } from "./dropdown/menu"
+import { MenuAddressItem, MenuItems, MenuDisconnectItem } from "./dropdown/menu"
 
 export function ConnectWallet({
   connectButtonComponent,
@@ -20,7 +20,7 @@ export function ConnectWallet({
     }
   >
 }) {
-  const { toggleModal, user, icpBalance, disconnect, selectedSigner } =
+  const { toggleModal, user, icpBalance, disconnect, isInitializing, isUserConnecting } =
     useContext(IdentityKitContext)
 
   const ConnectButtonComponent = connectButtonComponent ?? ConnectButton
@@ -33,7 +33,8 @@ export function ConnectWallet({
         onClick={() => {
           toggleModal()
         }}
-        disabled={selectedSigner && !user}
+        disabled={isInitializing}
+        loading={isUserConnecting}
       />
     )
 
@@ -46,9 +47,7 @@ export function ConnectWallet({
         icpBalance={icpBalance}
         connectedAccount={connectedAccount}
       >
-        <MenuButton>
-          <ConnectedButtonComponent connectedAccount={connectedAccount} icpBalance={icpBalance} />
-        </MenuButton>
+        <ConnectedButtonComponent connectedAccount={connectedAccount} icpBalance={icpBalance} />
         <MenuItems>
           <MenuAddressItem value={connectedAccount} />
           <MenuDisconnectItem onClick={disconnect} />

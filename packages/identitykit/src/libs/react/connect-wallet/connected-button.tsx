@@ -1,8 +1,9 @@
-import clsx from "clsx"
-import { HTMLAttributes } from "react"
 import { formatIcp } from "../utils"
+import { MenuButton } from "./dropdown/menu"
+import { MenuButtonProps } from "@headlessui/react"
+import { getButtonClassName } from "../ui/button"
 
-export type ConnectedButtonProps = HTMLAttributes<HTMLButtonElement> & {
+export type ConnectedButtonProps = MenuButtonProps & {
   connectedAccount: string
   icpBalance?: number
 }
@@ -15,18 +16,11 @@ export function ConnectedButton({
   ...props
 }: ConnectedButtonProps) {
   return (
-    <button
+    <MenuButton
       id={"connect"}
       type="button"
       {...props}
-      className={clsx(
-        "ik-component ik-border-transparent",
-        "ik-bg-gray-200 ik-text-black hover:ik-bg-gray-100 active:ik-bg-gray-300 active:ik-border-gray-200",
-        "hover:ik-shadow-md",
-        "ik-font-bold ik-px-[10px] ik-min-w-[140px] ik-h-[40px] ik-flex ik-items-center ik-justify-center",
-        "ik-px-[15px] ik-rounded-xl ik-border",
-        className
-      )}
+      className={getButtonClassName({ className: className as string, type: "secondary" })}
     >
       {children ? (
         children
@@ -43,6 +37,6 @@ export function ConnectedButton({
           </div>
         </>
       )}
-    </button>
+    </MenuButton>
   )
 }
