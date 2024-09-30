@@ -146,7 +146,7 @@ test.describe("ICRC25 call-canister", () => {
     const account = accounts[0]
     await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
 
-    await section.selectConsentTab()
+    await section.selectIcrc2ApprovalTab()
 
     const popup = await section.openPopup()
     const texts = await section.getPopupTexts(popup)
