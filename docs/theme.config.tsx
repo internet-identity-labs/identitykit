@@ -49,7 +49,7 @@ const theme = {
   },
   banner: {
     key: "0.0.3-release",
-    text: (
+    content: (
       <a href="https://www.npmjs.com/package/@nfid/identitykit" target="_blank">
         🎉 @nfid/identitykit@0.0.3 is released.
       </a>

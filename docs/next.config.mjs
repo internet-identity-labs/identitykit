@@ -1,4 +1,5 @@
-/** @type {import('next').NextConfig} */
+import nextra from 'nextra'
+
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
@@ -10,9 +11,13 @@ const nextConfig = {
   output: 'export'
 }
 
-const withNextra = require('nextra')({
+const withNextra = nextra({
   theme: 'nextra-theme-docs',
   themeConfig: './theme.config.tsx',
+  latex: true,
+  search: {
+    codeblocks: false
+  }
 })
 
-module.exports = withNextra(nextConfig)
+export default withNextra(nextConfig)
