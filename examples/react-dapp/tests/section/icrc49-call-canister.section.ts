@@ -1,6 +1,6 @@
 import { BrowserContext, expect, Page } from "@playwright/test"
 import { Section } from "./section.ts"
-import { Account, DemoPage } from "../page/demo.page.ts"
+import { Account, StandardsPage } from "../page/standards.page.ts"
 import { Icrc25RequestPermissionsSection } from "./icrc25-request-permissions.section.ts"
 
 export class Icrc49CallCanisterSection extends Section {
@@ -47,7 +47,7 @@ export class Icrc49CallCanisterSection extends Section {
   }
 
   async loginAndApprovePermissions(
-    demoPage: DemoPage,
+    demoPage: StandardsPage,
     requestPermissionSection: Icrc25RequestPermissionsSection,
     account: Account
   ) {

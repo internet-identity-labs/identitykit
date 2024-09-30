@@ -22,3 +22,25 @@ export function readFile(filename: string): TestUser[] {
 export async function expectTrue(a: Promise<boolean> | boolean, message?: string) {
   if (!(await a)) throw new Error(message || `Failed comparison`)
 }
+
+export async function waitUntil(
+  condition: () => Promise<boolean>,
+  options: WaitUntilOptions = {}
+): Promise<void> {
+  const { timeout = 20000, interval = 1000, message = "Timeout waiting for condition" } = options
+  const startTime = Date.now()
+
+  while (Date.now() - startTime < timeout) {
+    if (await condition()) {
+      return
+    }
+    await new Promise((resolve) => setTimeout(resolve, interval))
+  }
+  throw new Error(message)
+}
+
+interface WaitUntilOptions {
+  timeout?: number
+  interval?: number
+  message?: string
+}

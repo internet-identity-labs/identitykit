@@ -1,7 +1,7 @@
 import { Locator, Page } from "@playwright/test"
 import { UserService } from "../helpers/accounts-service.ts"
 
-export class DemoPage {
+export class StandardsPage {
   private readonly connectButton: Locator
   private readonly disconnectButton: Locator
 
@@ -10,16 +10,11 @@ export class DemoPage {
     this.disconnectButton = this.page.locator("#disconnect")
   }
 
-  static async getAccounts(page): Promise<Account[]> {
-    const mockedSignerButton: Account = {
-      locator: page.locator("#signer_MockedSigner"),
-      type: AccountType.MockedSigner,
-    }
-    const NFIDSignerButton: Account = {
-      locator: page.locator("#signer_NFIDW"),
-      type: AccountType.NFIDW,
-    }
-    return [mockedSignerButton, NFIDSignerButton]
+  static async getAccounts(): Promise<Account[]> {
+    return [
+      new Account("#signer_MockedSigner", AccountType.MockedSigner),
+      new Account("#signer_NFIDW", AccountType.NFIDW),
+    ]
   }
 
   async goto() {
@@ -27,8 +22,8 @@ export class DemoPage {
   }
 
   async login(account: Account) {
-    await this.connectButton.click()
-    await account.locator.click()
+    await this.connectButton.click({ timeout: 5000 })
+    await this.page.locator(account.locator).click({ timeout: 5000 })
   }
 
   async setAccount(anchor: number, page: Page) {
@@ -41,9 +36,14 @@ export class DemoPage {
   }
 }
 
-export interface Account {
-  locator: Locator
+export class Account {
+  locator: string
   type: AccountType
+
+  constructor(id: string, type: AccountType) {
+    this.locator = id
+    this.type = type
+  }
 }
 
 export enum AccountType {
@@ -56,4 +56,4 @@ export enum ProfileType {
   Session = "Session",
 }
 
-export default (page: Page) => new DemoPage(page)
+export default (page: Page) => new StandardsPage(page)

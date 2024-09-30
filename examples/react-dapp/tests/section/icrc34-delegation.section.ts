@@ -1,6 +1,6 @@
 import { BrowserContext, expect, Page } from "@playwright/test"
 import { Section } from "./section.ts"
-import { ProfileType } from "../page/demo.page.ts"
+import { ProfileType } from "../page/standards.page.ts"
 
 export class Icrc34DelegationSection extends Section {
   constructor(public readonly page: Page) {

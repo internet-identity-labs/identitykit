@@ -1,12 +1,12 @@
 import { expect, Page, test as base } from "@playwright/test"
-import { Account, AccountType, DemoPage, ProfileType } from "./page/demo.page.ts"
+import { Account, AccountType, StandardsPage, ProfileType } from "./page/standards.page.ts"
 import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
 import { Icrc34DelegationSection } from "./section/icrc34-delegation.section.ts"
 import { ExpectedTexts } from "./section/expectedTexts.ts"
 
 type Fixtures = {
   section: Icrc34DelegationSection
-  demoPage: DemoPage
+  demoPage: StandardsPage
   requestPermissionSection: Icrc25RequestPermissionsSection
   nfidPage: Page
 }
@@ -17,7 +17,7 @@ const test = base.extend<Fixtures>({
     await use(section)
   },
   demoPage: async ({ page }, use) => {
-    const demoPage = new DemoPage(page)
+    const demoPage = new StandardsPage(page)
     await demoPage.goto()
     await use(demoPage)
   },
@@ -38,8 +38,8 @@ const test = base.extend<Fixtures>({
 test.describe("ICRC25 delegation", () => {
   let accounts: Account[] = []
 
-  test.beforeEach(async ({ page }) => {
-    accounts = await DemoPage.getAccounts(page)
+  test.beforeEach(async () => {
+    accounts = await StandardsPage.getAccounts()
   })
   test("should check request and response has correct initial state", async ({
     section,
