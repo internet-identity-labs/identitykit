@@ -38,8 +38,8 @@ const test = base.extend<Fixtures>({
 test.describe("ICRC25 delegation", () => {
   let accounts: Account[] = []
 
-  test.beforeEach(async ({ page }) => {
-    accounts = await StandardsPage.getAccounts(page)
+  test.beforeEach(async () => {
+    accounts = await StandardsPage.getAccounts()
   })
   test("should check request and response has correct initial state", async ({
     section,

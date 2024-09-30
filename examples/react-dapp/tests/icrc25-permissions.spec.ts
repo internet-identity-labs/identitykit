@@ -67,13 +67,10 @@ for (const account of accounts) {
       standardsPage,
     }) => {
       await standardsPage.login(account)
-
       await requestPermissionSection.approvePermissions(account)
       await section.clickSubmitButton()
       await section.waitForResponse()
-      await standardsPage.logout()
       const responseJson = await section.getResponseJson()
-      await standardsPage.logout()
 
       expect
         .soft(responseJson, `Full list of permissions is Invalid for ${account.type} user`)
