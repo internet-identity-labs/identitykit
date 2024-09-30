@@ -20,12 +20,21 @@ export const Header = () => {
   return (
     <div className="mb-3">
       <div className="flex items-center justify-between h-[68px]">
-        <img className="dark:hidden w-[130px] sm:w-[140px] md:w-auto" src={IconLogo} alt="nfid" />
-        <img
-          className="hidden dark:block w-[130px] sm:w-[140px] md:w-auto"
-          src={IconLogoWhite}
-          alt="nfid"
-        />
+        <div className="flex flex-col relative">
+          <img className="dark:hidden w-[130px] sm:w-[140px] md:w-auto" src={IconLogo} alt="nfid" />
+          <img
+            className="hidden dark:block w-[130px] sm:w-[140px] md:w-auto"
+            src={IconLogoWhite}
+            alt="nfid"
+          />
+          <a
+            target="_blank"
+            href="https://www.npmjs.com/package/@nfid/identitykit"
+            className="absolute text-[10px] text-primary dark:text-teal-500 text-right right-0 bottom-0 mb-[-10px] me-[-10px]"
+          >
+            v0.0.3
+          </a>
+        </div>
         <div className="flex items-center space-x-2 sm:space-x-4">
           <a
             target="_blank"

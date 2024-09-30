@@ -20,7 +20,13 @@ export function ConnectWalletButton() {
         "h-12 px-[15px] rounded-xl border"
       )}
     >
-      {selectedSigner ? "Connected" : "Connect wallet"}
+      {selectedSigner ? (
+        "Connected"
+      ) : (
+        <>
+          Connect<span className="hidden md:inline-block">&nbsp;wallet</span>
+        </>
+      )}
     </button>
   )
 }
