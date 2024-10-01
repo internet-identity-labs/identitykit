@@ -2,8 +2,8 @@ import { IDL } from "@dfinity/candid"
 import { Principal } from "@dfinity/principal"
 import {
   Actor,
+  ActorMethod,
   ActorSubclass,
-  Agent,
   Certificate,
   HttpAgent,
   LookupResultFound,
@@ -13,16 +13,40 @@ import { GenericError } from "./exception-handler.service"
 
 const CANDID_UI_CANISTER = "a4gq6-oaaaa-aaaab-qaa4q-cai"
 
+interface Canister {
+  __get_candid_interface_tmp_hack: ActorMethod<[], string>
+}
+
+const CANISTER_INTERFACE: IDL.InterfaceFactory = ({ IDL }) =>
+  IDL.Service({
+    __get_candid_interface_tmp_hack: IDL.Func([], [IDL.Text], ["query"]),
+  })
+
 class InterfaceFactoryService {
   public async getInterfaceFactory(
     canisterId: string,
-    agent: Agent
+    agent: HttpAgent
   ): Promise<IDL.InterfaceFactory> {
-    const candidFile: string | undefined = await this.getCandidFile(canisterId, agent as never)
-    if (!candidFile) {
-      throw new GenericError(`Unable to retrieve candid file for the canister ${canisterId}`)
+    let candidFile: string
+
+    try {
+      candidFile = await this.getCandidFile(canisterId, agent)
+    } catch (e) {
+      console.warn(
+        "The candid file cannot be received in a default way, trying Dfinity's getDidJsFromTmpHack.",
+        e
+      )
+
+      const candidFileMaybe = await this.getDidJsFromTmpHack(Principal.fromText(canisterId), agent)
+
+      if (!candidFileMaybe) {
+        throw new GenericError(`Unable to retrieve candid file for the canister ${canisterId}`)
+      }
+
+      candidFile = candidFileMaybe
     }
-    const candidJs = await this.transformDidToJs(candidFile, agent as never)
+
+    const candidJs = await this.transformDidToJs(candidFile, agent)
     const dataUri = "data:text/javascript;charset=utf-8," + encodeURIComponent(candidJs)
     const interfaceFactory = await eval('import("' + dataUri + '")')
     return interfaceFactory.idlFactory
@@ -52,7 +76,27 @@ class InterfaceFactoryService {
       rootKey: agent.rootKey,
     })
     const dataCandid = certificate.lookup(pathCandid)
-    return new TextDecoder().decode((dataCandid as LookupResultFound).value as ArrayBuffer)
+    const candidFileMabye = new TextDecoder().decode(
+      (dataCandid as LookupResultFound).value as ArrayBuffer
+    )
+
+    if (!candidFileMabye) {
+      throw new GenericError("Empty candid file has been received.")
+    }
+
+    return candidFileMabye
+  }
+
+  private async getDidJsFromTmpHack(
+    canisterId: Principal,
+    agent: HttpAgent
+  ): Promise<undefined | string> {
+    const actor: ActorSubclass<Canister> = Actor.createActor<Canister>(CANISTER_INTERFACE, {
+      agent,
+      canisterId,
+    })
+    const candid = await actor.__get_candid_interface_tmp_hack()
+    return candid
   }
 
   private async transformDidToJs(candid: string, agent: HttpAgent): Promise<string> {
