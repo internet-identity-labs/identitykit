@@ -10,6 +10,23 @@ authors:
 ### Prerequisites
 
 - An ICP project with a frontend canister.
+- Node.js version >= 12.7.0
+
+#### If you use Typescript:
+
+- Typescript version >= 4.7
+- `tsconfig.json` module set to `node16` or `nodenext` or any other with moduleResolution set to
+  `node16` or `nodenext`
+
+```typescript
+{
+    "compilerOptions": {
+        "module": "node16",
+        // or
+        "moduleResolution": "node16"
+    }
+}
+```
 
 ### Install
 
