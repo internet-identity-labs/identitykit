@@ -250,7 +250,9 @@ const response = await actor.${request.params.method}(icrc2_transfer_from_args)`
   },
 }
 
-const icrc49 = [basic, withConsentMessage, ledger, icrc2approve, icrc2transfer]
+const icrc49 = [basic, withConsentMessage, ledger, icrc2approve, icrc2transfer].filter(
+  (rE) => import.meta.env.VITE_ENVIRONMENT === "dev" || rE.title !== icrc2transfer.title
+)
 
 export const icrc49CallCanisterSection: ISection = {
   id: "icrc49_call_canister",

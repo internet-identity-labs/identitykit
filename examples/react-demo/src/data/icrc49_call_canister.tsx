@@ -260,10 +260,12 @@ export const icrc49CallCanisterSection = {
       <Method>icrc49_call_canister</Method> requests are subject to user approval.
     </>
   ),
-  requestsExamples: [basic, withConsentMessage, ledger, icrc2approve, icrc2transfer].map((el) => ({
-    config: el,
-    value: JSON.stringify(el.request, null, 2),
-  })),
+  requestsExamples: [basic, withConsentMessage, ledger, icrc2approve, icrc2transfer]
+    .filter((rE) => import.meta.env.VITE_ENVIRONMENT === "dev" || rE.title !== icrc2transfer.title)
+    .map((el) => ({
+      config: el,
+      value: JSON.stringify(el.request, null, 2),
+    })),
   getCodeSnippet: (requestJson: string) => {
     const request = JSON.parse(requestJson)
     const requestExample = icrc49CallCanisterSection.requestsExamples.find(
