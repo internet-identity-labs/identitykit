@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import App from "./App.tsx"
 import { useTheme } from "next-themes"
 import { IdentityKitProvider, IdentityKitTheme } from "@nfid/identitykit/react"
@@ -32,6 +32,11 @@ export function AppWrappedInIdentityKit() {
     })
   }
 
+  useEffect(() => {
+    const localStorageAuthType = localStorage.getItem("authType")
+    if (localStorageAuthType) setAuthType(localStorageAuthType as IdentityKitAuthType)
+  }, [])
+
   return (
     <IdentityKitProvider
       signers={signers}
@@ -48,8 +53,16 @@ export function AppWrappedInIdentityKit() {
             : e.message
         )
       }}
+      onConnectSuccess={() => {
+        localStorage.setItem("authType", authType)
+      }}
     >
-      <App setAuthType={setAuthType} />
+      <App
+        setAuthType={(aT) => {
+          setAuthType(aT)
+          localStorage.removeItem("authType")
+        }}
+      />
     </IdentityKitProvider>
   )
 }

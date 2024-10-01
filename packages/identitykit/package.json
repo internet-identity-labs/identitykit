@@ -53,7 +53,7 @@
     }
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=12.7.0"
   },
   "scripts": {
     "dev": "npm run build-dev --watch",
