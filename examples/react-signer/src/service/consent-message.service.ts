@@ -18,7 +18,7 @@ export const consentMessageService = {
       const actor = actorService.getActor<ConsentMessageCanister>(
         canisterId,
         ConsentMessageCanisterIDL,
-        agent as never
+        agent
       )
 
       const request: icrc21_consent_message_request = {
