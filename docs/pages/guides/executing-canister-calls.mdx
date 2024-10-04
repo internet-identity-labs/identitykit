@@ -32,39 +32,42 @@ You'll need an idlFactory for each canister you want to call.
 import { idlFactory as targetIdlFactory } from "/path/to/target/did.js"
 
 // import the idlFactory of another canister (i.e. ICRC1 token ledger)
-import { idlFactory as nontargetIdlFactory } from "/path/to/nontarget/did.js"
+import { idlFactory as nonTargetIdlFactory } from "/path/to/nontarget/did.js"
 ```
 
 ### 3. Set up agents
 
-IdentityKit comes bundled with an agent that can be used to create actors for calling canisters. You
-should also import `@dfinity/agent` for cases when your users connect with an anonymous relying
-party delegation or when you need to query something for which the user doesn't need to execute
-themselves.
+IdentityKit comes bundled with hooks to create agents for calling
+[target](../hooks/useTargetAuthenticatedAgent) and
+[non target](<(../hooks/useNonTargetAuthenticatedAgent)>) canisters and
+[agent](../hooks/useIdentityKit#agent) to implement custom logic.
 
 ```typescript
-import { useIdentityKit } from "@nfid/identitykit/react"
+import {
+  useTargetAuthenticatedAgent,
+  useNonTargetAuthenticatedAgent,
+} from "@nfid/identitykit/react"
 import { HttpAgent, Actor } from "@dfinity/agent"
+import { useEffect } from "react"
 
-const { delegationType, identity, agent } = useIdentityKit()
+const ICP_API_HOST = "https://icp-api.io/"
 
 // Create an unauthenticatedAgent when you need to execute calls for which the user doesn't need to execute themselves
 const [unauthenticatedAgent, setUnauthenticatedAgent] = useState<HttpAgent | undefined>()
 
 useEffect(() => {
-  HttpAgent.create({ host: "https://icp-api.io/" }).then(setUnauthenticatedAgent)
+  HttpAgent.create({ host: ICP_API_HOST }).then(setUnauthenticatedAgent)
 }, [])
 
-// Create an HttpAgent in case the connected delegation is not for their wallet address
-const [authenticatedNonTargetAgent, setAuthenticatedNonTargetAgent] = useState<
-  HttpAgent | undefined
->()
+// Agent should be used for your target canisters
+// It will be identitykit agent when authType is ACCOUNTS,
+// otherwise dfinity HttpAgent with identity from identitykit
+const targetAuthenticatedAgent = useTargetAuthenticatedAgent()
 
-useEffect(() => {
-  if (identity && delegationType === IdentityKitDelegationType.ANONYMOUS) {
-    HttpAgent.create({ identity, host: "https://icp-api.io/" }).then(setAuthenticatedNonTargetAgent)
-  }
-}, [identity, delegationType])
+// Agent should be used for a different canister in the ecosystem (i.e. icrc2_approve).
+// It will be identitykit agent when authType is ACCOUNTS or you have Account delegation,
+// otherwise dfinity HttpAgent with identity from identitykit
+const nonTargetAuthenticatedAgent = useNonTargetAuthenticatedAgent()
 ```
 
 <Callout type="warning" emoji="⚠️">
@@ -80,27 +83,6 @@ Create actors for the canisters you want to call with the idlFactories you impor
 canister IDs.
 
 ```typescript
-import { useIdentityKit } from "@nfid/identitykit/react"
-
-const { agent, identity, delegationType } = useIdentityKit()
-
-// Actor for one of your application's target canisters
-const targetActor =
-  agent &&
-  Actor.createActor(targetIdlFactory, {
-    agent,
-    canisterId: TARGET_CANISTER_ID_TO_CALL,
-  })
-
-// Actor for a different canister in the ecosystem (i.e. icrc2_approve)
-const nonTargetActor =
-  identity && delegationType === IdentityKitDelegationType.ANONYMOUS && authenticatedNonTargetAgent
-    ? Actor.createActor(nontargetIdlFactory, {
-        agent: authenticatedNonTargetAgent,
-        canisterId: NON_TARGET_CANISTER_ID_TO_CALL,
-      })
-    : undefined
-
 // Actor for methods the user doesn't need to be authenticated to call (i.e. icrc2_allowance)
 // These will never result in a wallet approval prompt.
 const nonTargetUnauthenticatedActor =
@@ -109,6 +91,32 @@ const nonTargetUnauthenticatedActor =
     agent: unauthenticatedAgent,
     canisterId: NON_TARGET_CANISTER_ID_TO_CALL,
   })
+
+// Actor for one of your application's target canisters
+// Will be undefined while identitykit agent is being created
+// Diagram at bottom of the page shows when it will result with approval prompt
+const authenticatedTargetActor = useMemo(() => {
+  return (
+    authenticatedTargetAgent &&
+    Actor.createActor(targetIdlFactory, {
+      agent: authenticatedTargetAgent,
+      canisterId: TARGET_CANISTER_ID_TO_CALL,
+    })
+  )
+}, [authenticatedTargetAgent, targetIdlFactory])
+
+// Actor for a different canister in the ecosystem (i.e. icrc2_approve)
+// Will be undefined while ientitykit agent is being created
+// Diagram at bottom of the page shows when it will result with approval prompt
+const authenticatedNonTargetActor = useMemo(() => {
+  return (
+    authenticatedNonTargetAgent &&
+    Actor.createActor(nonTargetIdlFactory, {
+      agent: authenticatedNonTargetAgent,
+      canisterId: NON_TARGET_CANISTER_ID_TO_CALL,
+    })
+  )
+}, [authenticatedNonTargetAgent, nonTargetIdlFactory])
 ```
 
 ### 5. Call canister
@@ -130,6 +138,16 @@ The user may see a wallet approval pop-up depending on how they authenticated:
 | Account                  | Global             | Yes                                                          | Yes                                                           |
 | Account Delegation       | Global             | No                                                           | Yes                                                           |
 | Relying Party Delegation | Unique to dApp URL | No                                                           | No                                                            |
+
+```mermaid
+flowchart LR
+   A["IdentityKitAuthType.ACCOUNTS"] ==>|"Approval pop-up"| P[("Target canisters")]
+   A ==>|"Approval pop-up"| Q[("Non-target canisters")]
+   B["IdentityKitAuthType.DELEGATION <br>IdentityKitDelegationType.ACCOUNT"] -->|"No pop-up"| P
+   B ==>|"Approval pop-up"| Q
+   C["IdentityKitAuthType.DELEGATION<br>IdentityKitDelegationType.RELYING_PARTY"] --> |"No pop-up"| P
+   C --> |"No pop-up"| Q
+```
 
 Use the Delegation Toolkit to
 [remove wallet approval pop-ups for executing calls to your canisters](./removing-wallet-pop-ups)

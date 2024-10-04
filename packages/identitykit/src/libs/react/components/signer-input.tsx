@@ -5,7 +5,10 @@ import { IdentityKitContext } from "../context"
 import { Button } from "../ui/button"
 
 export const SignerInput = () => {
-  const { selectCustomSigner } = useContext(IdentityKitContext)
+  const ctx = useContext(IdentityKitContext)
+  if (!ctx) {
+    throw new Error("Identitykit Context is null")
+  }
   const {
     register,
     formState: { errors },
@@ -21,7 +24,7 @@ export const SignerInput = () => {
 
   const submitHandler = async () => {
     if (!customSignerUrl) return
-    await selectCustomSigner(customSignerUrl)
+    await ctx.selectCustomSigner(customSignerUrl)
   }
 
   return (

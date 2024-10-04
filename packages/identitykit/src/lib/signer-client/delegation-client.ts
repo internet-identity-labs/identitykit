@@ -30,8 +30,8 @@ const ED25519_KEY_LABEL = "Ed25519"
 type BaseKeyType = typeof ECDSA_KEY_LABEL | typeof ED25519_KEY_LABEL
 
 export enum DelegationType {
-  GLOBAL = "GLOBAL",
-  ANONYMOUS = "ANONYMOUS",
+  ACCOUNT = "ACCOUNT",
+  RELYING_PARTY = "RELYING_PARTY",
 }
 
 export interface DelegationSignerClientOptions extends SignerClientOptions {
@@ -188,7 +188,7 @@ export class DelegationSignerClient extends SignerClient {
     const delegationChain = await getDelegationChain(STORAGE_KEY, this.storage)
     if (!delegationChain) throw new Error("Not authorized")
     return delegationChain.delegations[0].delegation.targets?.length
-      ? DelegationType.GLOBAL
-      : DelegationType.ANONYMOUS
+      ? DelegationType.ACCOUNT
+      : DelegationType.RELYING_PARTY
   }
 }

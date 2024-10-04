@@ -1,7 +1,6 @@
 import { createContext, useContext } from "react"
 import { IdentityKitProvider } from "./types"
 import { Signer } from "@slide-computer/signer"
-import { IdentityKitTheme } from "./constants"
 import { SignerAgent } from "@slide-computer/signer-agent"
 import { IdentityKitAuthType } from "../../lib/identity-kit"
 import { SubAccount } from "@dfinity/ledger-icp"
@@ -11,33 +10,7 @@ import { IdentityKitDelegationType } from "../../lib"
 import { type Identity } from "@dfinity/agent"
 import { PartialIdentity } from "@dfinity/identity"
 
-const defaultState: IdentityKitProvider = {
-  signers: [],
-  selectedSigner: undefined,
-  isModalOpen: false,
-  toggleModal: () => {
-    throw new Error("toggleModal not implemented")
-  },
-  selectSigner: () => {
-    throw new Error("selectSigner not implemented")
-  },
-  selectCustomSigner: () => {
-    throw new Error("signer is not available on this url")
-  },
-  theme: IdentityKitTheme.SYSTEM,
-  disconnect: () => {
-    throw new Error("disconnect not implemented")
-  },
-  connect: () => {
-    throw new Error("connect not implemented")
-  },
-  agent: null,
-  authType: IdentityKitAuthType.ACCOUNTS,
-  isInitializing: true,
-  isUserConnecting: false,
-}
-
-export const IdentityKitContext = createContext<IdentityKitProvider>(defaultState)
+export const IdentityKitContext = createContext<IdentityKitProvider | null>(null)
 
 export function useIdentityKit(): {
   signer?: Signer
@@ -60,6 +33,12 @@ export function useIdentityKit(): {
   disconnect: () => Promise<void>
   fetchIcpBalance?: () => Promise<void>
 } {
+  const ctx = useContext(IdentityKitContext)
+
+  if (!ctx) {
+    throw new Error("Identitykit Context is null")
+  }
+
   const {
     selectedSigner,
     agent,
@@ -71,7 +50,7 @@ export function useIdentityKit(): {
     connect,
     disconnect,
     fetchIcpBalance,
-  } = useContext(IdentityKitContext)
+  } = ctx
 
   const { identity } = useIdentity()
   const { delegationType } = useDelegationType()

@@ -8,8 +8,13 @@ import { SelectWalletList } from "./components/select-wallet-list"
 import useClickOutside from "./hooks/use-click-outside"
 
 export const IdentityKitModal = () => {
-  const { isModalOpen, toggleModal, signers, selectSigner, theme, featuredSigner } =
-    useContext(IdentityKitContext)
+  const ctx = useContext(IdentityKitContext)
+
+  if (!ctx) {
+    throw new Error("Identitykit Context is null")
+  }
+
+  const { isModalOpen, toggleModal, signers, selectSigner, theme, featuredSigner } = ctx
 
   const [isViewAll, setIsViewAll] = useState(false)
   const ref = useClickOutside<HTMLDivElement>(() => {

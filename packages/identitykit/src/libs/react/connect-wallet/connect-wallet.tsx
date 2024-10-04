@@ -20,8 +20,13 @@ export function ConnectWallet({
     }
   >
 }) {
-  const { toggleModal, user, icpBalance, disconnect, isInitializing, isUserConnecting } =
-    useContext(IdentityKitContext)
+  const ctx = useContext(IdentityKitContext)
+
+  if (!ctx) {
+    throw new Error("Identitykit Context is null")
+  }
+
+  const { toggleModal, user, icpBalance, disconnect, isInitializing, isUserConnecting } = ctx
 
   const ConnectButtonComponent = connectButtonComponent ?? ConnectButton
   const ConnectedButtonComponent = connectedButtonComponent ?? ConnectedButton

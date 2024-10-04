@@ -5,7 +5,13 @@ import { IdentityKitAuthType } from "../../../lib/identity-kit"
 
 export function useDelegationType() {
   const [delegationType, setDelegetaionType] = useState<DelegationType | undefined>()
-  const { signerClient, authType, user } = useContext(IdentityKitContext)
+  const ctx = useContext(IdentityKitContext)
+
+  if (!ctx) {
+    throw new Error("Identitykit Context is null")
+  }
+
+  const { signerClient, authType, user } = ctx
 
   useEffect(() => {
     if (user) {
