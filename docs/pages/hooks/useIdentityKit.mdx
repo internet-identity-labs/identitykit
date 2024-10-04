@@ -89,11 +89,11 @@ user not connected
 
 ### delegationType
 
-`IdentityKitDelegationType.GLOBAL | IdentityKitDelegationType.ANONYMOUS{:typescript}`
+`IdentityKitDelegationType.ACCOUNT | IdentityKitDelegationType.RELYING_PARTY{:typescript}`
 
-Will contain type of delegation depending whether `IdentityKitProvider.targets` were provided or not
-in case `IdentityKitProvider.authType` is set to `IdentityKitAuthType.DELEGATION` and user is
-connected, otherwise will be undefined
+Equals `IdentityKitDelegationType.ACCOUNT` if delegation has targets,
+`IdentityKitDelegationType.RELYING_PARTY` if delegation doesn't have targets, and `undefined` if
+user is not connected or authType is set to `IdentityKitAuthType.ACCOUNTS`
 
 ### accounts
 

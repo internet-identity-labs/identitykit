@@ -6,7 +6,14 @@ import { Principal } from "@dfinity/principal"
 import { SubAccount } from "@dfinity/ledger-icp"
 
 export function useAccounts() {
-  const { authType, signerClient, user } = useContext(IdentityKitContext)
+  const ctx = useContext(IdentityKitContext)
+
+  if (!ctx) {
+    throw new Error("Identitykit Context is null")
+  }
+
+  const { authType, signerClient, user } = ctx
+
   const [accounts, setAccounts] = useState<
     | {
         principal: Principal
