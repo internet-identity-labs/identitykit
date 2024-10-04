@@ -4,12 +4,14 @@ import { TransportType } from "../../types"
 import { getExtensionTransportBuilder } from "./extension-transport.builder"
 import { getAuthClientTransportBuilder } from "./auth-client-transport.builder"
 import { getStoicTransportBuilder } from "./stoic-transport.builder"
+import { DEFAULT_MAX_TIME_TO_LIVE } from "../../constants"
 
 export interface TransportBuilderRequest {
   id?: string
   transportType: TransportType
   url: string
   crypto?: Pick<Crypto, "getRandomValues" | "randomUUID">
+  maxTimeToLive?: bigint
 }
 
 export class TransportBuilder {
@@ -24,6 +26,9 @@ export class TransportBuilder {
   }
 
   public static async build(request: TransportBuilderRequest): Promise<Transport> {
-    return await TransportBuilder.builders[request.transportType](request)
+    return await TransportBuilder.builders[request.transportType]({
+      ...request,
+      maxTimeToLive: request.maxTimeToLive || DEFAULT_MAX_TIME_TO_LIVE,
+    })
   }
 }

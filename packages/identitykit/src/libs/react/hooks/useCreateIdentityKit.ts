@@ -5,12 +5,13 @@ import {
   IdentityKitAccountsSignerClientOptions,
   IdentityKitDelegationSignerClientOptions,
   IdentityKitSignerAgentOptions,
+  IdentityKitDelegationSignerClient,
 } from "../../../lib"
 import { Signer } from "@slide-computer/signer"
 import { Principal } from "@dfinity/principal"
 import { SignerAgent } from "@slide-computer/signer-agent"
 import { SubAccount } from "@dfinity/ledger-icp"
-import { HttpAgent } from "@dfinity/agent"
+import { HttpAgent, AnonymousIdentity } from "@dfinity/agent"
 
 const DEFAULT_IDLE_TIMEOUT = 14_400_000
 
@@ -106,6 +107,11 @@ export function useCreateIdentityKit<
               onConnectFailure?.(e as Error)
             }
           } else {
+            if (
+              (instance.signerClient as IdentityKitDelegationSignerClient).getIdentity() instanceof
+              AnonymousIdentity
+            )
+              return disconnect()
             setUser(instance.signerClient.connectedUser)
           }
         }

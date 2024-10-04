@@ -2,6 +2,7 @@ import { TransportBuilderRequest } from "./transport.builder"
 import { PostMessageTransport } from "@slide-computer/signer-web"
 import { getPopupTransportBuilder } from "./new-tab-transport.builder"
 import { TransportType } from "../../types"
+import { DEFAULT_MAX_TIME_TO_LIVE } from "../../constants"
 
 jest.mock("@slide-computer/signer-web", () => ({
   PostMessageTransport: jest.fn(),
@@ -17,6 +18,7 @@ describe("getPopupTransportBuilder", () => {
   const request: TransportBuilderRequest = {
     transportType: TransportType.NEW_TAB,
     url: mockUrl,
+    maxTimeToLive: DEFAULT_MAX_TIME_TO_LIVE,
   }
 
   it("should return an instance of PostMessageTransport", async () => {

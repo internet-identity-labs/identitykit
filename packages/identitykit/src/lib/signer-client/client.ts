@@ -72,7 +72,7 @@ export abstract class SignerClient {
     }
   }
 
-  public async logout(options?: { returnTo?: string }): Promise<void> {
+  protected async logout(options?: { returnTo?: string }): Promise<void> {
     await this.setConnectedUserToStorage(undefined)
     this.idleManager?.exit()
     this.idleManager = undefined

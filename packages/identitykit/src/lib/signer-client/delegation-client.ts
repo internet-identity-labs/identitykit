@@ -23,6 +23,7 @@ import { IdleManager } from "./idle-manager"
 import { STORAGE_KEY, SignerClient, SignerClientOptions } from "./client"
 import { DelegationRequest, DelegationResponse, fromBase64, toBase64 } from "@slide-computer/signer"
 import { type Signature } from "@dfinity/agent"
+import { DEFAULT_MAX_TIME_TO_LIVE } from "../constants"
 
 const ECDSA_KEY_LABEL = "ECDSA"
 const ED25519_KEY_LABEL = "Ed25519"
@@ -48,7 +49,6 @@ export interface DelegationSignerClientOptions extends SignerClientOptions {
   targets?: string[]
   /**
    * Expiration of the delegation in nanoseconds
-   * @default BigInt(28_800_000_000_000) nanoseconds (8 hours)
    */
   maxTimeToLive?: bigint
 }
@@ -58,9 +58,10 @@ export class DelegationSignerClient extends SignerClient {
     options: SignerClientOptions,
     private identity: Identity | PartialIdentity,
     private baseIdentity: SignIdentity,
-    private targets: string[] = [],
-    private maxTimeToLive?: bigint
+    private targets?: string[],
+    private maxTimeToLive: bigint = BigInt(DEFAULT_MAX_TIME_TO_LIVE)
   ) {
+    // TODO for delegation use delegation expiration as idle timeout
     super(options)
   }
 
@@ -81,10 +82,9 @@ export class DelegationSignerClient extends SignerClient {
     }
     if (this.shouldCheckIsUserConnected()) {
       const delegationChain = await getDelegationChain(STORAGE_KEY, storage)
-      identity =
-        baseIdentity && delegationChain && isDelegationValid(delegationChain)
-          ? DelegationSignerClient.createIdentity(baseIdentity, delegationChain)
-          : new AnonymousIdentity()
+      if (baseIdentity && delegationChain && isDelegationValid(delegationChain))
+        identity = DelegationSignerClient.createIdentity(baseIdentity, delegationChain)
+      else identity = new AnonymousIdentity()
     }
 
     const signerClient = new DelegationSignerClient(
