@@ -75,6 +75,7 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
             crypto,
             maxTimeToLive: (signerClientOptions as IdentityKitDelegationSignerClientOptions)
               .maxTimeToLive,
+            derivationOrigin: signerClientOptions.derivationOrigin,
           }),
           signerId: s.id,
         }
