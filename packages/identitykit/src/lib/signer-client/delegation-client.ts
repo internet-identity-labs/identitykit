@@ -114,6 +114,11 @@ export class DelegationSignerClient extends SignerClient {
   }
 
   public async login(): Promise<void> {
+    const params = this.options.derivationOrigin
+      ? {
+          derivationOrigin: this.options.derivationOrigin,
+        }
+      : {}
     const delegationChainResponse = await this.options.signer.sendRequest<
       DelegationRequest,
       DelegationResponse
@@ -122,6 +127,7 @@ export class DelegationSignerClient extends SignerClient {
       jsonrpc: "2.0",
       method: "icrc34_delegation",
       params: {
+        ...params,
         publicKey: toBase64(this.baseIdentity.getPublicKey().toDer()),
         targets: this.targets,
         maxTimeToLive: this.maxTimeToLive === undefined ? undefined : String(this.maxTimeToLive),
