@@ -12,6 +12,7 @@ export interface TransportBuilderRequest {
   url: string
   crypto?: Pick<Crypto, "getRandomValues" | "randomUUID">
   maxTimeToLive?: bigint
+  derivationOrigin?: string
 }
 
 export class TransportBuilder {
