@@ -59,6 +59,7 @@ export function useCreateIdentityKit<
     const finalFunc = async () => {
       await selectedSigner?.transport.connection?.disconnect()
       await clearSigner()
+      setIk(null)
       setUser(undefined)
       setIcpBalance(undefined)
       setAgent(null)
@@ -108,10 +109,14 @@ export function useCreateIdentityKit<
             }
           } else {
             if (
-              (instance.signerClient as IdentityKitDelegationSignerClient).getIdentity() instanceof
-              AnonymousIdentity
-            )
-              return disconnect()
+              (
+                instance.signerClient as IdentityKitDelegationSignerClient
+              ).getIdentity?.() instanceof AnonymousIdentity
+            ) {
+              await instance.signerClient.logout()
+              await disconnect()
+              return
+            }
             setUser(instance.signerClient.connectedUser)
           }
         }
