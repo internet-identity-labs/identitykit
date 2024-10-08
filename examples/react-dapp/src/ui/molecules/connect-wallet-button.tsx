@@ -3,7 +3,11 @@ import clsx from "clsx"
 import { useContext } from "react"
 
 export function ConnectWalletButton() {
-  const { selectedSigner, toggleModal } = useContext(IdentityKitContext)
+  const ctx = useContext(IdentityKitContext)
+  if (!ctx) throw new Error("Identitykit Context is null")
+
+  const { selectedSigner, toggleModal } = ctx
+
   return (
     <button
       id={"connect"}

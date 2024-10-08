@@ -4,7 +4,13 @@ import { AccountsSignerClient, DelegationSignerClient } from "../../../lib/signe
 import { IdentityKitAuthType } from "../../../lib/identity-kit"
 
 export function useIdentity() {
-  const { signerClient, authType } = useContext(IdentityKitContext)
+  const ctx = useContext(IdentityKitContext)
+
+  if (!ctx) {
+    throw new Error("Identitykit Context is null")
+  }
+
+  const { signerClient, authType } = ctx
 
   const identity = useMemo(
     () =>
