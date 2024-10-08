@@ -133,14 +133,16 @@ export class DelegationSignerClient extends SignerClient {
     }
 
     const delegationChain = DelegationChain.fromDelegations(
-      delegationChainResponse.result.signerDelegation.map((delegation) => ({
-        delegation: new Delegation(
-          fromBase64(delegation.delegation.pubkey),
-          BigInt(delegation.delegation.expiration),
-          delegation.delegation.targets?.map((principal) => Principal.fromText(principal))
-        ),
-        signature: fromBase64(delegation.signature) as Signature,
-      })),
+      delegationChainResponse.result.signerDelegation.map((delegation) => {
+        return {
+          delegation: new Delegation(
+            fromBase64(delegation.delegation.pubkey),
+            BigInt(delegation.delegation.expiration),
+            delegation.delegation.targets?.map((principal) => Principal.fromText(principal))
+          ),
+          signature: fromBase64(delegation.signature) as Signature,
+        }
+      }),
       fromBase64(delegationChainResponse.result.publicKey)
     )
 
