@@ -122,7 +122,7 @@ function CustomConnectedWalletButton({ connectedAccount, icpBalance, ...props }:
 Props
 `ConnectWalletDropdownMenuProps = { connectedAccount: string, icpBalance?: number, disconnect: () => Promise<void>}{:typescript}`
 
-`ConnectWalletDropdownMenu` is built from the next components, which `@nfid/identitykit` exports:
+Children will be passed by default, but `@nfid/identitykit` also exports:
 
 - ConnectWalletDropdownMenuButton
 - ConnectWalletDropdownMenuItems
