@@ -45,12 +45,18 @@ export function ConnectWallet({
 
   const connectedAccount = user.principal.toString()
 
+  const props = { disconnect, icpBalance, connectedAccount }
+
   return (
     <>
       <DropdownMenuComponent
-        disconnect={disconnect}
-        icpBalance={icpBalance}
-        connectedAccount={connectedAccount}
+        {...(dropdownMenuComponent
+          ? props
+          : ({} as DropdownMenuProps & {
+              disconnect: () => unknown
+              icpBalance?: number
+              connectedAccount: string
+            }))}
       >
         <ConnectedButtonComponent connectedAccount={connectedAccount} icpBalance={icpBalance} />
         <MenuItems>

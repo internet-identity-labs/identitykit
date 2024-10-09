@@ -25,7 +25,6 @@
     "clsx": "^2.1.1",
     "ictool": "^1.1.1",
     "react": "^18.3.1",
-    "react-css-blur": "^1.1.1",
     "react-dom": "^18.3.1",
     "react-toastify": "^10.0.5",
     "vite-plugin-node-polyfills": "^0.22.0"

@@ -9,7 +9,6 @@ import { useIdentityKit } from "@nfid/identitykit/react"
 import { Actor } from "@dfinity/agent"
 import { getRequestObject } from "../../utils/requests"
 import { DropdownSelect } from "../molecules/dropdown-select"
-import Blur from "react-css-blur"
 import "react-toastify/dist/ReactToastify.css"
 
 import { idlFactory as demoIDL } from "../../idl/service_idl"
@@ -115,50 +114,58 @@ export const Section: React.FC<ISection> = ({
   }, [requestsExamples])
 
   return (
-    <Blur radius={!user || !agent ? "5px" : "0"} transition="400ms">
-      <div id={id}>
-        <p className="block text-sm my-[25px]">{description}</p>
-        {requestsOptions.length > 1 ? (
-          <DropdownSelect
-            id="select-request"
-            isMultiselect={false}
-            options={requestsOptions}
-            selectedValues={[requestsOptions[selectedRequestIndex].value]}
-            setSelectedValues={(values) => {
-              setSelectedRequestIndex(requestsOptions.findIndex((o) => o.value === values[0]))
-              setRequestValue(values[0])
-            }}
-          />
-        ) : null}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-[25px] my-[25px]">
-          <RequestSection value={requestValue} setValue={setRequestValue} />
-          <ResponseSection value={responseValue} />
-        </div>
-        <CodeSection value={codeSection.error ?? codeSection.value} />
-        <div className="flex gap-5">
-          <Button
-            id="submit"
-            loading={isLoading}
-            className="w-[160px] mt-5"
-            onClick={handleSubmit}
-            disabled={!!codeSection.error || !agent || !user}
-            isSmall
-          >
-            Submit
-          </Button>
-          <Button
-            type="stroke"
-            className="w-[160px] mt-5"
-            onClick={() => {
-              setRequestValue(requestsExamples[selectedRequestIndex].value)
-              setResponseValue(JSON.stringify(undefined))
-            }}
-            isSmall
-          >
-            Reset
-          </Button>
-        </div>
+    <div
+      style={
+        !user || !agent
+          ? {
+              filter: "blur(5px)",
+              pointerEvents: "none",
+            }
+          : undefined
+      }
+      id={id}
+    >
+      <p className="block text-sm my-[25px]">{description}</p>
+      {requestsOptions.length > 1 ? (
+        <DropdownSelect
+          id="select-request"
+          isMultiselect={false}
+          options={requestsOptions}
+          selectedValues={[requestsOptions[selectedRequestIndex].value]}
+          setSelectedValues={(values) => {
+            setSelectedRequestIndex(requestsOptions.findIndex((o) => o.value === values[0]))
+            setRequestValue(values[0])
+          }}
+        />
+      ) : null}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-[25px] my-[25px]">
+        <RequestSection value={requestValue} setValue={setRequestValue} />
+        <ResponseSection value={responseValue} />
       </div>
-    </Blur>
+      <CodeSection value={codeSection.error ?? codeSection.value} />
+      <div className="flex gap-5">
+        <Button
+          id="submit"
+          loading={isLoading}
+          className="w-[160px] mt-5"
+          onClick={handleSubmit}
+          disabled={!!codeSection.error || !agent || !user}
+          isSmall
+        >
+          Submit
+        </Button>
+        <Button
+          type="stroke"
+          className="w-[160px] mt-5"
+          onClick={() => {
+            setRequestValue(requestsExamples[selectedRequestIndex].value)
+            setResponseValue(JSON.stringify(undefined))
+          }}
+          isSmall
+        >
+          Reset
+        </Button>
+      </div>
+    </div>
   )
 }

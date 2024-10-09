@@ -63,6 +63,7 @@ export const IdentityKitModal = () => {
               isModalOpen ? "ik-flex" : "ik-hidden"
             )}
           >
+            <Dialog.Title className="hidden">Select signer</Dialog.Title>
             <div
               className={clsx(
                 "ik-flex ik-flex-col ik-rounded-xl ik-h-full",
