@@ -1,22 +1,21 @@
 import { useState, useCallback, PropsWithChildren, useEffect, useMemo } from "react"
-import { SignerConfig } from "../../lib/types"
-import { IdentityKitContext } from "./context"
-import { IdentityKitModal } from "./modal"
-import { IdentityKitTheme } from "./constants"
+import { SignerOptions, Transport } from "@slide-computer/signer"
+import { HttpAgent } from "@dfinity/agent"
 import {
   IdentityKitAuthType,
   IdentityKitAccountsSignerClientOptions,
   IdentityKitDelegationSignerClientOptions,
-  IdentityKitSignerAgentOptions,
   NFIDW,
   Plug,
   InternetIdentity,
   Stoic,
 } from "../../lib"
 import { useCreateIdentityKit, useSigner, useTheme } from "./hooks"
-import { SignerOptions, Transport } from "@slide-computer/signer"
-import { Signer } from "@slide-computer/signer"
 import { TransportBuilder } from "../../lib/service"
+import { SignerConfig } from "../../lib/types"
+import { IdentityKitContext } from "./context"
+import { IdentityKitModal } from "./modal"
+import { IdentityKitTheme } from "./constants"
 
 interface IdentityKitProviderProps<
   T extends IdentityKitAuthType = typeof IdentityKitAuthType.ACCOUNTS,
@@ -32,7 +31,7 @@ interface IdentityKitProviderProps<
     SignerOptions<Transport>,
     "autoCloseTransportChannel" | "closeTransportChannelAfter"
   >
-  agent?: IdentityKitSignerAgentOptions<Signer>["agent"]
+  agent?: HttpAgent
   onConnectFailure?: (e: Error) => unknown
   onConnectSuccess?: () => unknown
   onDisconnect?: () => unknown
@@ -95,9 +94,7 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
     selectedSigner,
     clearSigner,
     signerClientOptions: { ...signerClientOptions, crypto },
-    agentOptions: {
-      agent,
-    },
+    agent,
     authType,
     onConnectSuccess: props.onConnectSuccess,
     onConnectFailure: props.onConnectFailure,
@@ -130,7 +127,7 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
         isModalOpen,
         theme,
         featuredSigner: featuredSigner === false ? undefined : (featuredSigner ?? signers[0]),
-        agent: identityKit.agent,
+        agent,
         user: identityKit.user,
         icpBalance: identityKit.icpBalance,
         authType,

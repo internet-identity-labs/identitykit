@@ -1,7 +1,5 @@
-export {
-  SignerAgent as IdentityKitSignerAgent,
-  type SignerAgentOptions as IdentityKitSignerAgentOptions,
-} from "@slide-computer/signer-agent"
+export { SignerAgent, type SignerAgentOptions } from "@slide-computer/signer-agent"
+export { Agent as IdentityKitAgent, type AgentOptions as IdentityKitAgentOptions } from "./agent"
 export {
   SignerClient as IdentityKitSignerClient,
   DelegationSignerClient as IdentityKitDelegationSignerClient,
