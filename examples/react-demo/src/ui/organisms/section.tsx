@@ -5,7 +5,7 @@ import { toast } from "react-toastify"
 import { isValidJSON } from "../../utils/json"
 import { Button } from "../atoms/button"
 import { CodeSection } from "../molecules/code-section"
-import { useIdentityKit } from "@nfid/identitykit/react"
+import { useAgent, useIdentityKit } from "@nfid/identitykit/react"
 import { Actor } from "@dfinity/agent"
 import { getRequestObject } from "../../utils/requests"
 import { DropdownSelect } from "../molecules/dropdown-select"
@@ -43,7 +43,8 @@ export const Section: React.FC<ISection> = ({
   const [responseValue, setResponseValue] = useState("{}")
   const [actorResponse, setActorResponse] = useState<string | undefined>(undefined)
 
-  const { signer, agent, user } = useIdentityKit()
+  const { signer, user } = useIdentityKit()
+  const { signerAgent } = useAgent()
 
   useEffect(() => {
     if (user) {
@@ -69,7 +70,7 @@ export const Section: React.FC<ISection> = ({
       setActorResponse(undefined)
       const { canisterId } = requestObject.params
       const actor = Actor.createActor(canistersIDLs[canisterId], {
-        agent: agent!,
+        agent: signerAgent!,
         canisterId,
       })
       setActorResponse((await actor[requestObject.params.method](args)) as string)
@@ -116,7 +117,7 @@ export const Section: React.FC<ISection> = ({
   return (
     <div
       style={
-        !user || !agent
+        !user || !signerAgent
           ? {
               filter: "blur(5px)",
               pointerEvents: "none",
@@ -149,7 +150,7 @@ export const Section: React.FC<ISection> = ({
           loading={isLoading}
           className="w-[160px] mt-5"
           onClick={handleSubmit}
-          disabled={!!codeSection.error || !agent || !user}
+          disabled={!!codeSection.error || !signerAgent || !user}
           isSmall
         >
           Submit
