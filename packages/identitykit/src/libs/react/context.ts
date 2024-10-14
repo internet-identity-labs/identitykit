@@ -1,7 +1,6 @@
 import { createContext, useContext } from "react"
 import { IdentityKitProvider } from "./types"
 import { Signer } from "@slide-computer/signer"
-import { SignerAgent } from "@slide-computer/signer-agent"
 import { IdentityKitAuthType } from "../../lib/identity-kit"
 import { SubAccount } from "@dfinity/ledger-icp"
 import { Principal } from "@dfinity/principal"
@@ -14,7 +13,6 @@ export const IdentityKitContext = createContext<IdentityKitProvider | null>(null
 
 export function useIdentityKit(): {
   signer?: Signer
-  agent: SignerAgent<Signer> | null
   user?: {
     principal: Principal
     subaccount?: SubAccount
@@ -41,7 +39,6 @@ export function useIdentityKit(): {
 
   const {
     selectedSigner,
-    agent,
     user,
     icpBalance,
     authType,
@@ -58,7 +55,6 @@ export function useIdentityKit(): {
 
   return {
     signer: selectedSigner,
-    agent,
     user,
     icpBalance,
     authType,
