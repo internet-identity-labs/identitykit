@@ -1,5 +1,4 @@
 export default {
-  "removing-wallet-pop-ups": "Removing Wallet Pop-ups",
   "executing-canister-calls": "Executing Canister Calls",
   "request-transfer": "Requesting a Transfer",
   "deploying-to-production": "Deploying to Production",
