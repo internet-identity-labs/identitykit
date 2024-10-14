@@ -4,12 +4,10 @@ import {
   IdentityKit,
   IdentityKitAccountsSignerClientOptions,
   IdentityKitDelegationSignerClientOptions,
-  IdentityKitSignerAgentOptions,
   IdentityKitDelegationSignerClient,
 } from "../../../lib"
 import { Signer } from "@slide-computer/signer"
 import { Principal } from "@dfinity/principal"
-import { SignerAgent } from "@slide-computer/signer-agent"
 import { SubAccount } from "@dfinity/ledger-icp"
 import { HttpAgent, AnonymousIdentity } from "@dfinity/agent"
 
@@ -22,7 +20,6 @@ export function useCreateIdentityKit<
   clearSigner,
   signerClientOptions = {},
   authType,
-  agentOptions,
   onConnectFailure,
   onConnectSuccess,
   onDisconnect,
@@ -34,9 +31,7 @@ export function useCreateIdentityKit<
   signerClientOptions?: T extends typeof IdentityKitAuthType.DELEGATION
     ? Omit<IdentityKitDelegationSignerClientOptions, "signer">
     : Omit<IdentityKitAccountsSignerClientOptions, "signer">
-  agentOptions?: {
-    agent?: IdentityKitSignerAgentOptions<Signer>["agent"]
-  }
+  agent?: HttpAgent
   onConnectFailure?: (e: Error) => unknown
   onConnectSuccess?: () => unknown
   onDisconnect?: () => unknown
@@ -51,8 +46,6 @@ export function useCreateIdentityKit<
     | undefined
   >()
   const [icpBalance, setIcpBalance] = useState<undefined | number>()
-  // final agent with predefined user
-  const [agent, setAgent] = useState<SignerAgent<Signer> | null>(null)
 
   // create disconnect func
   const disconnect = useCallback(async () => {
@@ -62,7 +55,6 @@ export function useCreateIdentityKit<
       setIk(null)
       setUser(undefined)
       setIcpBalance(undefined)
-      setAgent(null)
       onDisconnect?.()
     }
     if (ik?.signerClient) {
@@ -70,7 +62,7 @@ export function useCreateIdentityKit<
     } else {
       await finalFunc()
     }
-  }, [ik?.signerClient, clearSigner, setUser, setIcpBalance, onDisconnect, setAgent])
+  }, [ik?.signerClient, clearSigner, setUser, setIcpBalance, onDisconnect])
 
   // create fetchBalance func
   const fetchIcpBalance = useCallback(() => {
@@ -132,31 +124,7 @@ export function useCreateIdentityKit<
     }
   }, [icpBalance, user, fetchIcpBalance])
 
-  // create signer agent and save to state
-  useEffect(() => {
-    if (ik && user) {
-      const createSignerAgent = (agent?: HttpAgent) =>
-        ik
-          .createSignerAgent({
-            ...agentOptions,
-            signer: selectedSigner!,
-            account: user.principal,
-            agent,
-          })
-          .then((agent) => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            setAgent(agent as any)
-          })
-      if (!agentOptions?.agent) {
-        HttpAgent.create({ host: "https://icp-api.io/" }).then(createSignerAgent)
-      } else {
-        createSignerAgent(agentOptions?.agent)
-      }
-    }
-  }, [ik, user])
-
   return {
-    agent,
     user,
     disconnect,
     icpBalance,
