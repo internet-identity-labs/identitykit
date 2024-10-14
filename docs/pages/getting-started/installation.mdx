@@ -5,6 +5,8 @@ authors:
   - name: "Dan Ostrovsky"
 ---
 
+import { Callout } from "nextra/components"
+
 # Get up and running with IdentityKit
 
 ### Prerequisites
@@ -59,15 +61,57 @@ import { IdentityKitProvider } from "@nfid/identitykit/react"
 
 ### Wrap provider
 
-Wrap your application with `IdentityKitProvider`.
+Wrap your application with `IdentityKitProvider`, set `authType` to delegation, and add **your**
+backend canisters to the `targets` array.
+
+<Callout type="warning" emoji="⚠️">
+  Add only **your** backend canister IDs to the `targets` array.
+  <a href="/miscellaneous/delegation-toolkit">
+    <strong>More about the Delegation Toolkit.</strong>
+  </a>
+</Callout>
 
 ```jsx
 const App = () => {
   return (
-    <IdentityKitProvider>
+    <IdentityKitProvider
+      authType={IdentityKitAuthType.DELEGATION}
+      signerClientOptions={{
+        targets=["canisterID1", "canisterID2",...] // **IMPORTANT**: these are *your* canisters, not ledger canisters
+      }}>
       <YourApp />
     </IdentityKitProvider>
   )
+}
+```
+
+### Support on-chain wallets
+
+Add the following snippet to each of the canisters you added to `targets` in the step above.
+
+```rust
+use candid::{self, CandidType, Deserialize};
+
+#[derive(Clone, Debug, CandidType, Deserialize)]
+pub struct Icrc28TrustedOriginsResponse {
+    pub trusted_origins: Vec<String>
+}
+
+// list every base URL that users will authenticate to your app from
+#[update]
+fn icrc28_trusted_origins() -> Icrc28TrustedOriginsResponse {
+    let trusted_origins = vec![
+        String::from("https://your-frontend-canister-id.icp0.io"),
+        String::from("https://your-frontend-canister-id.raw.icp0.io"),
+        String::from("https://your-frontend-canister-id.ic0.app"),
+        String::from("https://your-frontend-canister-id.raw.ic0.app"),
+        String::from("https://your-frontend-canister-id.icp0.icp-api.io"),
+        String::from("https://your-frontend-canister-id.icp-api.io"),
+        String::from("https://yourcustomdomain.com"),
+        String::from("https://yourothercustomdomain.com")
+    ];
+
+    return Icrc28TrustedOriginsResponse { trusted_origins }
 }
 ```
 
