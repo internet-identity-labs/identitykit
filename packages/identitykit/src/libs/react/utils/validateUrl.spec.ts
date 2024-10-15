@@ -22,18 +22,18 @@ describe("validateUrl", () => {
   })
 
   it('should return "Invalid URL" for an invalid URL with spaces', () => {
-    expect(validateUrl("https://example .com")).toBe("Invalid URL")
+    expect(validateUrl("https://example .com")).toBe(false)
   })
 
   it('should return "Invalid URL" for an invalid URL without a domain', () => {
-    expect(validateUrl("https://")).toBe("Invalid URL")
+    expect(validateUrl("https://")).toBe(false)
   })
 
   it('should return "Invalid URL" for a URL with invalid characters', () => {
-    expect(validateUrl("https://example.com/<script>alert(1)</script>")).toBe("Invalid URL")
+    expect(validateUrl("https://example.com/<script>alert(1)</script>")).toBe(false)
   })
 
   it('should return "Invalid URL" for a URL with only a schema', () => {
-    expect(validateUrl("http://")).toBe("Invalid URL")
+    expect(validateUrl("http://")).toBe(false)
   })
 })

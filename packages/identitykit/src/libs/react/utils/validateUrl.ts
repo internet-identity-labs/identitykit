@@ -10,9 +10,5 @@ export const validateUrl = (url: string) => {
     "i"
   )
 
-  if (!urlPattern.test(url)) {
-    return "Invalid URL"
-  }
-
-  return true
+  return urlPattern.test(url)
 }

@@ -104,9 +104,10 @@ Will contain connected accounts in case `IdentityKitProvider.authType` is set to
 
 ### connect
 
-`() => void{:typescript}`
+`(signerIdOrUrl?: string) => void{:typescript}`
 
-Function to trigger manual connect (opening of signers modal).
+Function to trigger will open connect wallet modal wihout `signerIdOrUrl` provided, will open signer
+if signers includes one with provided id or provided value is valid signer url.
 
 <Callout type="warning" emoji="⚠️">
   Function will throw `Error("Identitykit is not initialized yet"){:typescript}` until identitykit <a href="/hooks/useIdentityKit#isinitializing"><strong>initializes</strong></a>, `Error("User is already connecting"){:typescript}` if signer

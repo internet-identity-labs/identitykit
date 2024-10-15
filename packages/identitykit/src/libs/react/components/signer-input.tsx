@@ -39,7 +39,7 @@ export const SignerInput = () => {
           type="text"
           {...register("url", {
             required: true,
-            validate: validateUrl,
+            validate: validateUrl || "Invalid url",
           })}
           name="url"
         />

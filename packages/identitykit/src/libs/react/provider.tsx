@@ -17,6 +17,7 @@ import { useCreateIdentityKit, useSigner, useTheme } from "./hooks"
 import { SignerOptions, Transport } from "@slide-computer/signer"
 import { Signer } from "@slide-computer/signer"
 import { TransportBuilder } from "../../lib/service"
+import { validateUrl } from "./utils"
 
 interface IdentityKitProviderProps<
   T extends IdentityKitAuthType = typeof IdentityKitAuthType.ACCOUNTS,
@@ -111,14 +112,25 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
     [selectedSigner, identityKit.user]
   )
 
-  const connect = useCallback(() => {
-    if (isInitializing) throw new Error("Identitykit is not initialized yet")
-    if (isUserConnecting) throw new Error("User is connecting")
-    if (identityKit.user) {
-      throw new Error("User is already connected")
-    }
-    setIsModalOpen(true)
-  }, [setIsModalOpen, isInitializing, isUserConnecting, identityKit.user])
+  const connect = useCallback(
+    (signerIdOrUrl?: string) => {
+      if (isInitializing) throw new Error("Identitykit is not initialized yet")
+      if (isUserConnecting) throw new Error("User is connecting")
+      if (identityKit.user) {
+        throw new Error("User is already connected")
+      }
+      if (!signerIdOrUrl) setIsModalOpen(true)
+      else {
+        if (signers.find((s) => s.id === signerIdOrUrl)) selectSigner(signerIdOrUrl)
+        else {
+          if (!validateUrl(signerIdOrUrl))
+            throw new Error("Provided value is not valid signer id or url")
+          selectCustomSigner(signerIdOrUrl)
+        }
+      }
+    },
+    [setIsModalOpen, isInitializing, isUserConnecting, identityKit.user, signers]
+  )
 
   const theme = useTheme(props.theme)
 

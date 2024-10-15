@@ -29,7 +29,7 @@ export function useIdentityKit(): {
   identity?: Identity | PartialIdentity
   isInitializing: boolean
   isUserConnecting: boolean
-  connect: () => void
+  connect: (signerIdOrUrl?: string) => void
   disconnect: () => Promise<void>
   fetchIcpBalance?: () => Promise<void>
 } {
