@@ -27,8 +27,8 @@ export const YourApp = () => {
 };
 ```
 
-But `@nfid/identitykit` also exports all components of which `ConnectWallet` is built to prodive as
-maximum customizations as possile.
+But `@nfid/identitykit` also exports all components that comprise `ConnectWallet` to provide as
+much customization as you'd like.
 
 ```jsx
 import {
@@ -54,7 +54,7 @@ export const YourApp = () => {
 ## Custom components
 
 The `ConnectWalletButton`, `ConnectedWalletButton` and `ConnectWalletDropdown` components expose
-several ways to customize its appearance:
+several ways to customize their appearance:
 
 ### ConnectWalletButton
 
@@ -73,8 +73,8 @@ And of course `className`. For example to make button background red.
 <ConnectWalletButton className="bg-red">Sign in</ConnectWalletButton>
 ```
 
-And also it's possible to create your own custom button, or even not a button, just attach `onClick`
-prop to any element, which you want to open signers modal on click:
+It's also possible to create your own custom button, or even attach an `onClick`
+prop to any element to open the signers modal on click:
 
 ```jsx
 function ConnectWalletButton({ onClick, ...props }: ConnectWalletButtonProps) {
