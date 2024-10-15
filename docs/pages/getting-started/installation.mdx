@@ -49,7 +49,8 @@ as well:
 npm i @dfinity/ledger-icp @dfinity/identity @dfinity/agent @dfinity/candid @dfinity/identity @dfinity/principal @dfinity/utils @dfinity/auth-client
 ```
 
-> Note: IdentityKit is a React library and exports styles, that you need to import in your project.
+> Note: IdentityKit is a React library and exports styles that need to be imported into your
+> project.
 
 ### Import
 
@@ -129,3 +130,15 @@ export const YourApp = () => {
 
 IdentityKit will now handle your user's wallet selection, display wallet information, and handle
 wallet switching.
+
+## Signer support
+
+Currently known support for the icrc34_delegation standard:
+
+| Signer            | icrc34_delegation support |
+| ----------------- | ------------------------- |
+| NFID Wallet       | Yes                       |
+| Plug              | Yes                       |
+| Oisy              | No                        |
+| Internet Identity | Yes                       |
+| Stoic             | Yes                       |

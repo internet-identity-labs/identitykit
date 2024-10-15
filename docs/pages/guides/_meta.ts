@@ -1,5 +1,5 @@
 export default {
-  "executing-canister-calls": "Executing Canister Calls",
+  "authenticating-accounts": "Authenticating Accounts",
   "request-transfer": "Requesting a Transfer",
   "deploying-to-production": "Deploying to Production",
   "configuring-custom-domains": "Configuring Custom Domains",

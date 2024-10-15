@@ -10,8 +10,7 @@ import { Callout } from "nextra/components"
 # Executing canister calls
 
 Your application will likely execute calls to your own canisters
-([targets](removing-wallet-pop-ups#1-on-chain-wallet-support)) and others (non-targets i.e. ledger
-canisters).
+([targets](installation#wrap-provider)) and others (non-targets i.e. ledger canisters).
 
 The following guide teaches you how to set up actors to each depending on how the user
 authenticated, whether the canister is a target, and if the method being called requires a user to
@@ -21,7 +20,7 @@ execute.
 
 ### 1. Connect Wallet
 
-Follow the [connect-wallet](/getting-started/connect-wallet) guide to connect a wallet address.
+Follow the [installation](installation) guide to connect a wallet address.
 
 ### 2. Import idlFactories
 
@@ -37,9 +36,9 @@ import { idlFactory as nonTargetIdlFactory } from "/path/to/nontarget/did.js"
 
 ### 3. Set up agents
 
-IdentityKit comes bundled with [hook](../hooks/useAgent) to get agent for making authenticated calls
-to target and non target canisters, which manages wether to show approval pop-ups or not. Read more
-about approval pop-ups management under the hood at the bottom of the page.
+IdentityKit comes bundled with a [hook](../hooks/useAgent) to get the agent for making authenticated
+calls to target and non target canisters, and manages whether or not to show approval pop-ups. You
+should also set up an unauthenticatedAgent for calls the user doesn't need to execute themselves.
 
 ```typescript
 import { useAgent } from "@nfid/identitykit/react"
@@ -48,15 +47,16 @@ import { useEffect } from "react"
 
 const ICP_API_HOST = "https://icp-api.io/"
 
-// Create an unauthenticatedAgent when you need to execute calls for which the user doesn't need to execute themselves
+// Use an unauthenticatedAgent (aka anonymous agent)
+// when the user doesn't need to execute the call themselves.
 const [unauthenticatedAgent, setUnauthenticatedAgent] = useState<HttpAgent | undefined>()
 
 useEffect(() => {
   HttpAgent.create({ host: ICP_API_HOST }).then(setUnauthenticatedAgent)
 }, [])
 
-// IdentityKitAgent should be used when making authenticated call to target or non-target canisters
-// It will manage when to show approval pop-ups and when to not.
+// Use an authenticatedAgent when making authenticated calls.
+// A wallet approval pop-up will be displayed if necessary.
 const authenticatedAgent = useAgent()
 ```
 
@@ -73,7 +73,7 @@ Create actors for the canisters you want to call with the idlFactories you impor
 canister IDs.
 
 ```typescript
-// Actor for methods the user DOES NOT need to be authenticated to call (i.e. icrc2_allowance)
+// Actor for methods the user DOES NOT need to be authenticated to call (i.e. icrc2_allowance).
 // These will never result in a wallet approval prompt.
 const nonTargetUnauthenticatedActor =
   unauthenticatedAgent &&
@@ -82,8 +82,9 @@ const nonTargetUnauthenticatedActor =
     canisterId: NON_TARGET_CANISTER_ID_TO_CALL,
   })
 
-// Actor for methods the user DOES need to be authenticated to call (i.e. icrc2_approve)
-// Will be undefined until user is not connected or IdentityKitAgent is being created
+// Actor for methods the user DOES need to be authenticated to call (i.e. icrc2_approve).
+// These may result in a wallet approval prompt depending on how the user authenticated.
+// Will be undefined until user is not connected or IdentityKitAgent is being created.
 const authenticatedActor = useMemo(() => {
   return (
     authenticatedAgent &&
@@ -126,6 +127,5 @@ flowchart LR
    C --> |"No pop-up"| Q
 ```
 
-Use the Delegation Toolkit to
-[remove wallet approval pop-ups for executing calls to your canisters](./removing-wallet-pop-ups)
-and read more about the [differences between accounts and delegations](/miscellaneous/auth-options).
+Read more about the [Delegation Toolkit](/miscellaneous/delegation-toolkit) and
+[differences between accounts and delegations](/miscellaneous/auth-options).
