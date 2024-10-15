@@ -9,13 +9,15 @@ import { Callout } from "nextra/components"
 
 # What is an Account?
 
-An Account is a principal/subaccount pair, better known as an [ICRC1 account](https://internetcomputer.org/docs/current/references/icrc1-standard#textual-encoding-of-accounts).
-Other decentralized networks (i.e. EVM, SOL) started with accounts as the primary identifier and required
-users to approve every transaction. For better or worse ICP started with the "delegation", which is effectively
-an Account that's been pre-approved to make calls on behalf of the user (read more about [delegations](/miscellaneous/delegation-toolkit)).
+An Account is a principal/subaccount pair, better known as an
+[ICRC1 account](https://internetcomputer.org/docs/current/references/icrc1-standard#textual-encoding-of-accounts).
+Other decentralized networks (i.e. EVM, SOL) started with accounts as the primary identifier and
+required users to approve every transaction. For better or worse ICP started with the "delegation",
+which is effectively an Account that's been pre-approved to make calls on behalf of the user (read
+more about [delegations](/miscellaneous/delegation-toolkit)).
 
-The following guide teaches you how to use Accounts instead of Delegations so that
-every authenticated transaction will display a wallet prompt for explicit user approval.
+The following guide teaches you how to use Accounts instead of Delegations so that every
+authenticated transaction will display a wallet prompt for explicit user approval.
 
 ## Steps
 
@@ -24,9 +26,7 @@ every authenticated transaction will display a wallet prompt for explicit user a
 ```jsx
 const App = () => {
   return (
-    <IdentityKitProvider
-      authType={IdentityKitAuthType.ACCOUNTS}
-      >
+    <IdentityKitProvider authType={IdentityKitAuthType.ACCOUNTS}>
       <YourApp />
     </IdentityKitProvider>
   )
@@ -35,17 +35,17 @@ const App = () => {
 
 ### 2. Execute calls
 
-Follow the same steps for [executing canister calls](/getting-started/executing-canister-calls)
-with the understanding that every authenticated call will result in an approval prompt.
+Follow the same steps for [executing canister calls](/getting-started/executing-canister-calls) with
+the understanding that every authenticated call will result in an approval prompt.
 
 ## Note on wallet support
 
 Currently known support for the icrc27_accounts standard:
 
-| Signer              | icrc27_accounts support     |
-| ------------------------ | ------------------ |
-| NFID Wallet                  | Yes             |
-| Plug | Yes |
-| Oisy | Yes |
-| Internet Identity       | No             |
-| Stoic | No |
+| Signer            | icrc27_accounts support |
+| ----------------- | ----------------------- |
+| NFID Wallet       | Yes                     |
+| Plug              | Yes                     |
+| Oisy              | Yes                     |
+| Internet Identity | No                      |
+| Stoic             | No                      |
