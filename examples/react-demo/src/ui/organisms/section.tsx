@@ -5,7 +5,7 @@ import { toast } from "react-toastify"
 import { isValidJSON } from "../../utils/json"
 import { Button } from "../atoms/button"
 import { CodeSection } from "../molecules/code-section"
-import { useIdentityKit } from "@nfid/identitykit/react"
+import { useAgent, useIdentityKit } from "@nfid/identitykit/react"
 import { Actor } from "@dfinity/agent"
 import { getRequestObject } from "../../utils/requests"
 import { DropdownSelect } from "../molecules/dropdown-select"
@@ -43,7 +43,8 @@ export const Section: React.FC<ISection> = ({
   const [responseValue, setResponseValue] = useState("{}")
   const [actorResponse, setActorResponse] = useState<string | undefined>(undefined)
 
-  const { signer, agent, user } = useIdentityKit()
+  const { signer, user } = useIdentityKit()
+  const agent = useAgent()
 
   useEffect(() => {
     if (user) {

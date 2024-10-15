@@ -21,7 +21,7 @@ export interface RequestExample {
 }
 
 export const basic: RequestExample = {
-  title: "Basic",
+  title: "Canister call to a target canister",
   request: {
     method: "icrc49_call_canister",
     params: {
@@ -260,7 +260,7 @@ export const icrc49CallCanisterSection = {
       <Method>icrc49_call_canister</Method> requests are subject to user approval.
     </>
   ),
-  requestsExamples: [basic, withConsentMessage, ledger, icrc2approve, icrc2transfer]
+  requestsExamples: [basic, ledger, icrc2approve, icrc2transfer]
     .filter((rE) => import.meta.env.VITE_ENVIRONMENT === "dev" || rE.title !== icrc2transfer.title)
     .map((el) => ({
       config: el,

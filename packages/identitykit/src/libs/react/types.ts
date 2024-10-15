@@ -1,9 +1,10 @@
-import { SignerConfig } from "../../lib/types"
 import { Signer } from "@slide-computer/signer"
-import { IdentityKitTheme } from "./constants"
 import { Principal } from "@dfinity/principal"
-import { IdentityKitAuthType, IdentityKitSignerAgent, IdentityKitSignerClient } from "../../lib"
 import { SubAccount } from "@dfinity/ledger-icp"
+
+import { IdentityKitAuthType, IdentityKitSignerClient } from "../../lib"
+import { SignerConfig } from "../../lib/types"
+import { IdentityKitTheme } from "./constants"
 
 export interface IdentityKitProvider {
   signers: SignerConfig[]
@@ -11,7 +12,6 @@ export interface IdentityKitProvider {
   selectedSigner?: Signer
   isModalOpen: boolean
   theme: IdentityKitTheme
-  agent: IdentityKitSignerAgent<Signer> | null
   user?: {
     principal: Principal
     subAccount?: SubAccount

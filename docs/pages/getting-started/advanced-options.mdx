@@ -60,31 +60,3 @@ provided value.
 `boolean{:typescript}`
 
 Disable logout on idle timeout, enabled by default.
-
-## agent
-
-By default `@nfid/identitykit` uses default dfinity HttpAgent with host https://icp-api.io/ to
-interact with global network, it's possible to use your own agent and pass it via props, as a result
-you will receive your agent with predefined connected account from `useIdentityKit()` hook.
-
-```jsx
-import { useState } from "react"
-import { HttpAgent } from "@dfinity/agent"
-import { IdentityKitProvider } from "@nfid/identitykit/react"
-
-export const YourApp = () => {
-  const [customAgent, setCustomAgent] = useState<HttpAgent | undefined>()
-
-  useEffect(() => {
-    HttpAgent.create(customOptions).then(setCustomAgent)
-  }, [])
-
-  return customAgent && (
-    <IdentityKitProvider
-      agent={customAgent}
-    >
-      <ConnectWallet />
-    </IdentityKitProvider>
-  )
-}
-```

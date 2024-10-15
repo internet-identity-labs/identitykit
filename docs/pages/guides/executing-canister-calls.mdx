@@ -37,17 +37,13 @@ import { idlFactory as nonTargetIdlFactory } from "/path/to/nontarget/did.js"
 
 ### 3. Set up agents
 
-IdentityKit comes bundled with hooks to create agents for calling
-[target](../hooks/useTargetAuthenticatedAgent) and
-[non target](<(../hooks/useNonTargetAuthenticatedAgent)>) canisters and
-[agent](../hooks/useIdentityKit#agent) to implement custom logic.
+IdentityKit comes bundled with [hook](../hooks/useAgent) to get agent for making authenticated calls
+to target and non target canisters, which manages wether to show approval pop-ups or not. Read more
+about approval pop-ups management under the hood at the bottom of the page.
 
 ```typescript
-import {
-  useTargetAuthenticatedAgent,
-  useNonTargetAuthenticatedAgent,
-} from "@nfid/identitykit/react"
-import { HttpAgent, Actor } from "@dfinity/agent"
+import { useAgent } from "@nfid/identitykit/react"
+import { HttpAgent } from "@dfinity/agent"
 import { useEffect } from "react"
 
 const ICP_API_HOST = "https://icp-api.io/"
@@ -59,15 +55,9 @@ useEffect(() => {
   HttpAgent.create({ host: ICP_API_HOST }).then(setUnauthenticatedAgent)
 }, [])
 
-// Agent should be used for your target canisters
-// It will be identitykit agent when authType is ACCOUNTS,
-// otherwise dfinity HttpAgent with identity from identitykit
-const targetAuthenticatedAgent = useTargetAuthenticatedAgent()
-
-// Agent should be used for a different canister in the ecosystem (i.e. icrc2_approve).
-// It will be identitykit agent when authType is ACCOUNTS or you have Account delegation,
-// otherwise dfinity HttpAgent with identity from identitykit
-const nonTargetAuthenticatedAgent = useNonTargetAuthenticatedAgent()
+// IdentityKitAgent should be used when making authenticated call to target or non-target canisters
+// It will manage when to show approval pop-ups and when to not.
+const authenticatedAgent = useAgent()
 ```
 
 <Callout type="warning" emoji="⚠️">
@@ -83,7 +73,7 @@ Create actors for the canisters you want to call with the idlFactories you impor
 canister IDs.
 
 ```typescript
-// Actor for methods the user doesn't need to be authenticated to call (i.e. icrc2_allowance)
+// Actor for methods the user DOES NOT need to be authenticated to call (i.e. icrc2_allowance)
 // These will never result in a wallet approval prompt.
 const nonTargetUnauthenticatedActor =
   unauthenticatedAgent &&
@@ -92,31 +82,18 @@ const nonTargetUnauthenticatedActor =
     canisterId: NON_TARGET_CANISTER_ID_TO_CALL,
   })
 
-// Actor for one of your application's target canisters
-// Will be undefined while identitykit agent is being created
-// Diagram at bottom of the page shows when it will result with approval prompt
-const authenticatedTargetActor = useMemo(() => {
+// Actor for methods the user DOES need to be authenticated to call (i.e. icrc2_approve)
+// Will be undefined until user is not connected or IdentityKitAgent is being created
+const authenticatedActor = useMemo(() => {
   return (
-    authenticatedTargetAgent &&
+    authenticatedAgent &&
+    // or nonTargetIdlFactory
     Actor.createActor(targetIdlFactory, {
-      agent: authenticatedTargetAgent,
-      canisterId: TARGET_CANISTER_ID_TO_CALL,
+      agent: authenticatedAgent,
+      canisterId: TARGET_CANISTER_ID_TO_CALL, // or NON_TARGET_CANISTER_ID_TO_CALL
     })
   )
-}, [authenticatedTargetAgent, targetIdlFactory])
-
-// Actor for a different canister in the ecosystem (i.e. icrc2_approve)
-// Will be undefined while ientitykit agent is being created
-// Diagram at bottom of the page shows when it will result with approval prompt
-const authenticatedNonTargetActor = useMemo(() => {
-  return (
-    authenticatedNonTargetAgent &&
-    Actor.createActor(nonTargetIdlFactory, {
-      agent: authenticatedNonTargetAgent,
-      canisterId: NON_TARGET_CANISTER_ID_TO_CALL,
-    })
-  )
-}, [authenticatedNonTargetAgent, nonTargetIdlFactory])
+}, [identityKitAgent, targetIdlFactory])
 ```
 
 ### 5. Call canister

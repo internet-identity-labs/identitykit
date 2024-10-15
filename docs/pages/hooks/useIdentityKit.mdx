@@ -23,7 +23,6 @@ import { useIdentityKit } from "@nfid/identitykit/react"
 
 ```typescript
 const {
-  agent,
   isInitializing,
   user,
   isUserConnecting,
@@ -46,13 +45,6 @@ const {
 
 Boolean representing wether identitykit initialized or not (Connect wallet will be disabled until
 initialization finishes).
-
-### agent
-
-`SignerAgent<Signer<Transport>> | null{:typescript}`
-
-`@nfid/identitykit` agent which implements `@dfinity/agent` Agent, it comes with predefined user and
-should be used if canister call requires approve. Will be null until successfull connect.
 
 ### user
 

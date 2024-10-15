@@ -191,4 +191,9 @@ export class DelegationSignerClient extends SignerClient {
       ? DelegationType.ACCOUNT
       : DelegationType.RELYING_PARTY
   }
+
+  public async getDelegation() {
+    const chain = await getDelegationChain(STORAGE_KEY, this.storage)
+    return chain?.delegations[0]
+  }
 }
