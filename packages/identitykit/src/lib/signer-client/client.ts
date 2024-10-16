@@ -2,6 +2,7 @@ import { type SignIdentity } from "@dfinity/agent"
 import { PartialIdentity } from "@dfinity/identity"
 import type { Signer } from "@slide-computer/signer"
 import { IdbStorage, type SignerStorage } from "@slide-computer/signer-storage"
+import { AuthClientStorage } from "@dfinity/auth-client"
 import { IdleManager, type IdleManagerOptions } from "./idle-manager"
 import { SubAccount } from "@dfinity/ledger-icp"
 import { Principal } from "@dfinity/principal"
@@ -38,7 +39,7 @@ export interface SignerClientOptions {
   /**
    * Optional storage with get, set, and remove. Uses {@link IdbStorage} by default
    */
-  storage?: SignerStorage
+  storage?: AuthClientStorage
   /**
    * Options to handle idle timeouts
    * @default after 30 minutes, invalidates the identity
@@ -57,7 +58,7 @@ export abstract class SignerClient {
       this.idleManager = IdleManager.create(options.idleOptions)
       this.registerDefaultIdleCallback()
     }
-    if (options.storage) this.storage = options.storage
+    if (options.storage) this.storage = options.storage as SignerStorage
   }
 
   protected registerDefaultIdleCallback() {

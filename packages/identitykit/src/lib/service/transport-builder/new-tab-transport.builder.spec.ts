@@ -1,8 +1,5 @@
-import { TransportBuilderRequest } from "./transport.builder"
-import { PostMessageTransport } from "@slide-computer/signer-web"
+import { PostMessageTransport, PostMessageTransportOptions } from "@slide-computer/signer-web"
 import { getPopupTransportBuilder } from "./new-tab-transport.builder"
-import { TransportType } from "../../types"
-import { DEFAULT_MAX_TIME_TO_LIVE } from "../../constants"
 
 jest.mock("@slide-computer/signer-web", () => ({
   PostMessageTransport: jest.fn(),
@@ -15,10 +12,8 @@ jest.mock("../../../libs/react/utils", () => ({
 describe("getPopupTransportBuilder", () => {
   const mockUrl = "http://example.com"
 
-  const request: TransportBuilderRequest = {
-    transportType: TransportType.NEW_TAB,
+  const request: PostMessageTransportOptions = {
     url: mockUrl,
-    maxTimeToLive: DEFAULT_MAX_TIME_TO_LIVE,
   }
 
   it("should return an instance of PostMessageTransport", async () => {
@@ -29,8 +24,7 @@ describe("getPopupTransportBuilder", () => {
   it("should pass url to PostMessageTransport", async () => {
     await getPopupTransportBuilder(request)
     expect(PostMessageTransport).toHaveBeenCalledWith({
-      url: "http://example.com",
-      crypto: globalThis.crypto,
+      url: mockUrl,
       statusTimeout: 15000,
     })
   })

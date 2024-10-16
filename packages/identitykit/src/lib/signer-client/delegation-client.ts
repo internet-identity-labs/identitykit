@@ -12,6 +12,7 @@ import {
 } from "@dfinity/identity"
 import {
   IdbStorage,
+  SignerStorage,
   getDelegationChain,
   getIdentity,
   removeDelegationChain,
@@ -38,7 +39,7 @@ export interface DelegationSignerClientOptions extends SignerClientOptions {
   /**
    * An identity to use as the base
    */
-  identity?: SignIdentity
+  identity?: SignIdentity | PartialIdentity
   /**
    * type to use for the base key
    * @default 'ECDSA'
@@ -57,7 +58,7 @@ export class DelegationSignerClient extends SignerClient {
   constructor(
     options: SignerClientOptions,
     private identity: Identity | PartialIdentity,
-    private baseIdentity: SignIdentity,
+    private baseIdentity: SignIdentity | PartialIdentity,
     private targets?: string[],
     private maxTimeToLive: bigint = BigInt(DEFAULT_MAX_TIME_TO_LIVE)
   ) {
@@ -72,7 +73,7 @@ export class DelegationSignerClient extends SignerClient {
     let baseIdentity = options.identity
     let identity = new AnonymousIdentity()
     if (this.shouldCheckIsUserConnected() && !baseIdentity) {
-      baseIdentity = await getIdentity(STORAGE_KEY, storage)
+      baseIdentity = await getIdentity(STORAGE_KEY, storage as SignerStorage)
     }
     if (!baseIdentity) {
       const createdBaseIdentity = await (!options?.keyType || options?.keyType === ED25519_KEY_LABEL
@@ -81,7 +82,7 @@ export class DelegationSignerClient extends SignerClient {
       baseIdentity = createdBaseIdentity
     }
     if (this.shouldCheckIsUserConnected()) {
-      const delegationChain = await getDelegationChain(STORAGE_KEY, storage)
+      const delegationChain = await getDelegationChain(STORAGE_KEY, storage as SignerStorage)
       if (baseIdentity && delegationChain && isDelegationValid(delegationChain))
         identity = DelegationSignerClient.createIdentity(baseIdentity, delegationChain)
       else identity = new AnonymousIdentity()

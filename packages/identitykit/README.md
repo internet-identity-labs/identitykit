@@ -19,16 +19,13 @@ Before using NFID IdentityKit, ensure that you have:
 
 ## 📦 Installation
 
-To install IdentityKit, you'll need the following libraries:
+A library to integrate compatible ICP wallets into your application, which contains React-specific
+components for integrating compatible ICP wallets into your application.
 
-- `@nfid/identitykit` - A library to integrate compatible ICP wallets into your application.
-- `@nfid/identitykit/react` - A library containing React-specific components for integrating
-  compatible ICP wallets into your application.
-
-Install both with the following command:
+Install library with the following command:
 
 ```sh npm2yarn
-npm install @nfid/identitykit @nfid/identitykit/react
+npm install @nfid/identitykit
 ```
 
 ### 🔗 Peer Dependencies

@@ -3,7 +3,6 @@ import { TransportType } from "../../types"
 import { getPopupTransportBuilder } from "./new-tab-transport.builder"
 import { getExtensionTransportBuilder } from "./extension-transport.builder"
 import { TransportBuilder, TransportBuilderRequest } from "./transport.builder"
-import { DEFAULT_MAX_TIME_TO_LIVE } from "../../constants"
 
 jest.mock("./new-tab-transport.builder")
 jest.mock("./extension-transport.builder")
@@ -24,12 +23,15 @@ describe("TransportBuilder", () => {
     const request: TransportBuilderRequest = {
       transportType: TransportType.NEW_TAB,
       url: "https://example.com",
-      maxTimeToLive: DEFAULT_MAX_TIME_TO_LIVE,
     }
 
     const result = await TransportBuilder.build(request)
 
-    expect(getPopupTransportBuilder).toHaveBeenCalledWith(request)
+    expect(getPopupTransportBuilder).toHaveBeenCalledWith({
+      url: "https://example.com",
+      crypto: undefined,
+      window: undefined,
+    })
     expect(result).toBe(mockTransport)
   })
 
@@ -37,12 +39,11 @@ describe("TransportBuilder", () => {
     const request: TransportBuilderRequest = {
       transportType: TransportType.EXTENSION,
       url: "https://example.com",
-      maxTimeToLive: DEFAULT_MAX_TIME_TO_LIVE,
     }
 
     const result = await TransportBuilder.build(request)
 
-    expect(getExtensionTransportBuilder).toHaveBeenCalledWith(request)
+    expect(getExtensionTransportBuilder).toHaveBeenCalledWith({ id: undefined })
     expect(result).toBe(mockTransport)
   })
 })
