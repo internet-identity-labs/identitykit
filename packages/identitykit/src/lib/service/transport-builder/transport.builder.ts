@@ -5,25 +5,54 @@ import { getExtensionTransportBuilder } from "./extension-transport.builder"
 import { getAuthClientTransportBuilder } from "./auth-client-transport.builder"
 import { getStoicTransportBuilder } from "./stoic-transport.builder"
 import { DEFAULT_MAX_TIME_TO_LIVE } from "../../constants"
+import { AuthClientCreateOptions } from "@dfinity/auth-client"
 
-export interface TransportBuilderRequest {
+export type TransportBuilderRequest = {
   id?: string
   transportType: TransportType
   url: string
-  crypto?: Pick<Crypto, "getRandomValues" | "randomUUID">
   maxTimeToLive?: bigint
   derivationOrigin?: string
-}
+  crypto?: Pick<Crypto, "randomUUID">
+  window?: Window
+  allowInternetIdentityPinAuthentication?: boolean
+} & Pick<AuthClientCreateOptions, "identity" | "keyType" | "storage">
 
 export class TransportBuilder {
   private static builders: Record<
     TransportType,
     (request: TransportBuilderRequest) => Promise<Transport>
   > = {
-    [TransportType.NEW_TAB]: getPopupTransportBuilder,
-    [TransportType.EXTENSION]: getExtensionTransportBuilder,
-    [TransportType.INTERNET_IDENTITY]: getAuthClientTransportBuilder,
-    [TransportType.STOIC]: getStoicTransportBuilder,
+    [TransportType.NEW_TAB]: ({ url, crypto, window }) =>
+      getPopupTransportBuilder({
+        url,
+        crypto,
+        window,
+      }),
+    [TransportType.EXTENSION]: ({ id }) => getExtensionTransportBuilder({ id }),
+    [TransportType.INTERNET_IDENTITY]: ({
+      maxTimeToLive,
+      derivationOrigin,
+      identity,
+      keyType,
+      storage,
+      allowInternetIdentityPinAuthentication,
+      url,
+    }) =>
+      getAuthClientTransportBuilder({
+        authClientCreateOptions: {
+          identity,
+          keyType,
+          storage,
+        },
+        authClientLoginOptions: {
+          maxTimeToLive,
+          derivationOrigin,
+          allowPinAuthentication: allowInternetIdentityPinAuthentication,
+          identityProvider: url,
+        },
+      }),
+    [TransportType.STOIC]: ({ maxTimeToLive }) => getStoicTransportBuilder({ maxTimeToLive }),
   }
 
   public static async build(request: TransportBuilderRequest): Promise<Transport> {

@@ -1,5 +1,5 @@
 import { useState, useCallback, PropsWithChildren, useEffect, useMemo } from "react"
-import { SignerOptions, Transport } from "@slide-computer/signer"
+import { Transport } from "@slide-computer/signer"
 import {
   IdentityKitAuthType,
   IdentityKitAccountsSignerClientOptions,
@@ -27,15 +27,13 @@ interface IdentityKitProviderProps<
   signerClientOptions?: T extends typeof IdentityKitAuthType.DELEGATION
     ? Omit<IdentityKitDelegationSignerClientOptions, "signer" | "crypto" | "agent">
     : Omit<IdentityKitAccountsSignerClientOptions, "signer" | "crypto" | "agent">
-  signerOptions?: Pick<
-    SignerOptions<Transport>,
-    "autoCloseTransportChannel" | "closeTransportChannelAfter"
-  >
   onConnectFailure?: (e: Error) => unknown
   onConnectSuccess?: () => unknown
   onDisconnect?: () => unknown
   realConnectDisabled?: boolean
   crypto?: Pick<Crypto, "getRandomValues" | "randomUUID">
+  window?: Window
+  allowInternetIdentityPinAuthentication?: boolean
 }
 
 globalThis.global = globalThis
@@ -43,11 +41,12 @@ globalThis.global = globalThis
 export const IdentityKitProvider = <T extends IdentityKitAuthType>({
   children,
   signerClientOptions = {},
-  signerOptions = {},
   crypto = globalThis.crypto,
+  window = globalThis.window,
   authType = IdentityKitAuthType.ACCOUNTS as T,
   featuredSigner,
   realConnectDisabled,
+  allowInternetIdentityPinAuthentication,
   ...props
 }: IdentityKitProviderProps<T>) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -58,9 +57,11 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
     Array<{ transport: Transport; signerId: string }> | undefined
   >()
 
+  const { maxTimeToLive, keyType, storage, identity } =
+    signerClientOptions as IdentityKitDelegationSignerClientOptions
+
   const signers =
     !props.signers || !props.signers.length ? [NFIDW, Plug, InternetIdentity, Stoic] : props.signers
-
   useEffect(() => {
     Promise.all(
       signers.map(async (s) => {
@@ -70,9 +71,13 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
             transportType: s.transportType,
             url: s.providerUrl,
             crypto,
-            maxTimeToLive: (signerClientOptions as IdentityKitDelegationSignerClientOptions)
-              .maxTimeToLive,
+            maxTimeToLive,
             derivationOrigin: signerClientOptions.derivationOrigin,
+            allowInternetIdentityPinAuthentication,
+            keyType,
+            storage,
+            identity,
+            window,
           }),
           signerId: s.id,
         }
@@ -85,7 +90,7 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
     transports,
     closeModal: () => setIsModalOpen(false),
     crypto,
-    options: signerOptions,
+    window,
   })
 
   const identityKit = useCreateIdentityKit({
