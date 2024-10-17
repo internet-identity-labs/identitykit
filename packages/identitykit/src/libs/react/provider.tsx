@@ -43,7 +43,7 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
   signerClientOptions = {},
   crypto = globalThis.crypto,
   window = globalThis.window,
-  authType = IdentityKitAuthType.ACCOUNTS as T,
+  authType = IdentityKitAuthType.DELEGATION as T,
   featuredSigner,
   realConnectDisabled,
   allowInternetIdentityPinAuthentication,

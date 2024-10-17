@@ -11,7 +11,7 @@ import { NFIDW, IdentityKitAuthType } from "@nfid/identitykit"
 <IdentityKitProvider 
   signers={[NFIDW]}
   theme={IdentityKitTheme.LIGHT} // LIGHT, DARK, SYSTEM (by default)
-  authType={IdentityKitAuthType.${authType}} // DELEGATION, ACCOUNTS (by default)
+  authType={IdentityKitAuthType.${authType}} // ACCOUNTS, DELEGATION (by default)
 >
   <ConnectWalletButton />
 </IdentityKitProvider>`
@@ -27,29 +27,29 @@ export function AuthTypeTabs({ onChange }: { onChange: (type: IdentityKitAuthTyp
         <ul className="flex flex-wrap">
           <li
             onClick={() => {
-              if (!isAccounts) onChange(IdentityKitAuthType.ACCOUNTS)
-            }}
-            className={clsx(
-              "w-1/2 sm:w-auto cursor-pointer border-b-2 -mb-[1px] sm:mr-[25px]",
-              isAccounts
-                ? "border-primary"
-                : "border-transparent text-zinc-500 hover:text-dark dark:hover:text-white hover:border-primary"
-            )}
-          >
-            <div className="inline-block py-2 rounded-t-lg">Account</div>
-          </li>
-          <li
-            onClick={() => {
               if (isAccounts) onChange(IdentityKitAuthType.DELEGATION)
             }}
             className={clsx(
-              "w-1/2 sm:w-auto cursor-pointer border-b-2 -mb-[1px]",
+              "w-1/2 sm:w-auto cursor-pointer border-b-2 -mb-[1px] sm:mr-[25px]",
               !isAccounts
                 ? "border-primary"
                 : "border-transparent text-zinc-500 hover:text-dark dark:hover:text-white hover:border-primary"
             )}
           >
             <div className="inline-block py-2 rounded-t-lg">Delegation</div>
+          </li>
+          <li
+            onClick={() => {
+              if (!isAccounts) onChange(IdentityKitAuthType.ACCOUNTS)
+            }}
+            className={clsx(
+              "w-1/2 sm:w-auto cursor-pointer border-b-2 -mb-[1px]",
+              isAccounts
+                ? "border-primary"
+                : "border-transparent text-zinc-500 hover:text-dark dark:hover:text-white hover:border-primary"
+            )}
+          >
+            <div className="inline-block py-2 rounded-t-lg">Account</div>
           </li>
         </ul>
       </div>
