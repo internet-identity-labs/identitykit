@@ -20,7 +20,7 @@ const targetCanister = import.meta.env.VITE_TARGET_CANISTER
 const environment = import.meta.env.VITE_ENVIRONMENT
 
 export function AppWrappedInIdentityKit() {
-  const [authType, setAuthType] = useState<IdentityKitAuthType>(IdentityKitAuthType.ACCOUNTS)
+  const [authType, setAuthType] = useState<IdentityKitAuthType>(IdentityKitAuthType.DELEGATION)
   const { resolvedTheme } = useTheme()
   const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
   const signers = [nfidw, Plug, InternetIdentity, Stoic]
