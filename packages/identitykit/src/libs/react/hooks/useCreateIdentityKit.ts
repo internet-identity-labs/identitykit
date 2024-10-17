@@ -11,8 +11,6 @@ import { Principal } from "@dfinity/principal"
 import { SubAccount } from "@dfinity/ledger-icp"
 import { AnonymousIdentity } from "@dfinity/agent"
 
-const DEFAULT_IDLE_TIMEOUT = 14_400_000
-
 export function useCreateIdentityKit<
   T extends IdentityKitAuthType = typeof IdentityKitAuthType.ACCOUNTS,
 >({
@@ -22,15 +20,15 @@ export function useCreateIdentityKit<
   authType,
   onConnectFailure,
   onConnectSuccess,
-  onDisconnect,
   realConnectDisabled,
+  ...props
 }: {
   selectedSigner?: Signer
   clearSigner: () => Promise<unknown>
   authType: T
   signerClientOptions?: T extends typeof IdentityKitAuthType.DELEGATION
-    ? Omit<IdentityKitDelegationSignerClientOptions, "signer">
-    : Omit<IdentityKitAccountsSignerClientOptions, "signer">
+    ? Omit<IdentityKitDelegationSignerClientOptions, "signer" | "onLogout">
+    : Omit<IdentityKitAccountsSignerClientOptions, "signer" | "onLogout">
   onConnectFailure?: (e: Error) => unknown
   onConnectSuccess?: () => unknown
   onDisconnect?: () => unknown
@@ -46,22 +44,19 @@ export function useCreateIdentityKit<
   >()
   const [icpBalance, setIcpBalance] = useState<undefined | number>()
 
+  const onDisconnect = useCallback(async () => {
+    await selectedSigner?.transport.connection?.disconnect()
+    await clearSigner()
+    setIk(null)
+    setUser(undefined)
+    setIcpBalance(undefined)
+    props.onDisconnect?.()
+  }, [ik?.signerClient, clearSigner, setUser, setIcpBalance, props.onDisconnect])
+
   // create disconnect func
   const disconnect = useCallback(async () => {
-    const finalFunc = async () => {
-      await selectedSigner?.transport.connection?.disconnect()
-      await clearSigner()
-      setIk(null)
-      setUser(undefined)
-      setIcpBalance(undefined)
-      onDisconnect?.()
-    }
-    if (ik?.signerClient) {
-      ik?.signerClient?.logout().then(finalFunc)
-    } else {
-      await finalFunc()
-    }
-  }, [ik?.signerClient, clearSigner, setUser, setIcpBalance, onDisconnect])
+    return ik?.signerClient?.logout()
+  }, [ik?.signerClient])
 
   // create fetchBalance func
   const fetchIcpBalance = useCallback(() => {
@@ -78,14 +73,7 @@ export function useCreateIdentityKit<
           ...signerClientOptions,
           crypto,
           signer: selectedSigner,
-          idleOptions: {
-            idleTimeout: DEFAULT_IDLE_TIMEOUT,
-            ...signerClientOptions.idleOptions,
-            onIdle: async () => {
-              signerClientOptions.idleOptions?.onIdle?.()
-              await disconnect()
-            },
-          },
+          onLogout: onDisconnect,
         },
       }).then(async (instance) => {
         if (!realConnectDisabled) {
