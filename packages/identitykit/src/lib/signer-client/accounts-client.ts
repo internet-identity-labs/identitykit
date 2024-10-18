@@ -1,8 +1,8 @@
-import { IdleManager } from "./idle-manager"
 import { Principal } from "@dfinity/principal"
 import { SignerClient, SignerClientOptions, STORAGE_KEY } from "./client"
 import { AccountsRequest, AccountsResponse, fromBase64 } from "@slide-computer/signer"
 import { SubAccount } from "@dfinity/ledger-icp"
+import { IdleManager } from "../timeout-managers/idle-manager"
 
 export interface AccountsSignerClientOptions extends SignerClientOptions {}
 
@@ -49,7 +49,7 @@ export class AccountsSignerClient extends SignerClient {
 
     if (!account.subaccount) {
       if (!this.options?.idleOptions?.disableIdle && !this.idleManager) {
-        this.idleManager = IdleManager.create(this.options.idleOptions)
+        this.idleManager = new IdleManager(this.options.idleOptions)
         this.registerDefaultIdleCallback()
       }
       await this.setConnectedUserToStorage({ owner: account.owner.toString() })
@@ -62,7 +62,7 @@ export class AccountsSignerClient extends SignerClient {
     })
 
     if (!this.options?.idleOptions?.disableIdle && !this.idleManager) {
-      this.idleManager = IdleManager.create(this.options.idleOptions)
+      this.idleManager = new IdleManager(this.options.idleOptions)
       this.registerDefaultIdleCallback()
     }
   }

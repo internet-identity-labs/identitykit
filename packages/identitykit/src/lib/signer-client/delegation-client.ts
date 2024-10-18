@@ -20,11 +20,12 @@ import {
   setDelegationChain,
   setIdentity,
 } from "@slide-computer/signer-storage"
-import { IdleManager } from "./idle-manager"
 import { STORAGE_KEY, SignerClient, SignerClientOptions } from "./client"
 import { DelegationRequest, DelegationResponse, fromBase64, toBase64 } from "@slide-computer/signer"
 import { type Signature } from "@dfinity/agent"
 import { DEFAULT_MAX_TIME_TO_LIVE } from "../constants"
+import { IdleManager } from "../timeout-managers/idle-manager"
+import { TimeoutManager } from "../timeout-managers/timeout-manager"
 
 const ECDSA_KEY_LABEL = "ECDSA"
 const ED25519_KEY_LABEL = "Ed25519"
@@ -34,6 +35,8 @@ export enum DelegationType {
   ACCOUNT = "ACCOUNT",
   RELYING_PARTY = "RELYING_PARTY",
 }
+
+const NANOS_IN_MILLIS = BigInt(1000000)
 
 export interface DelegationSignerClientOptions extends SignerClientOptions {
   /**
@@ -55,6 +58,8 @@ export interface DelegationSignerClientOptions extends SignerClientOptions {
 }
 
 export class DelegationSignerClient extends SignerClient {
+  private expirationManager?: TimeoutManager
+
   constructor(
     options: SignerClientOptions,
     private identity: Identity | PartialIdentity,
@@ -166,8 +171,26 @@ export class DelegationSignerClient extends SignerClient {
     await this.setConnectedUserToStorage({ owner: this.identity.getPrincipal().toString() })
 
     if (!this.options?.idleOptions?.disableIdle && !this.idleManager) {
-      this.idleManager = IdleManager.create(this.options.idleOptions)
+      this.idleManager = new IdleManager(this.options.idleOptions)
       this.registerDefaultIdleCallback()
+    }
+
+    if (!this.expirationManager) {
+      const delegationExpirationInMillis =
+        Number(
+          delegationChain.delegations.reduce(
+            (acc, value) => {
+              const bigIntValue = BigInt(value.delegation.expiration) / NANOS_IN_MILLIS
+              return bigIntValue > acc ? bigIntValue : acc
+            },
+            BigInt(delegationChain.delegations[0].delegation.expiration) / NANOS_IN_MILLIS
+          )
+        ) - Date.now()
+
+      this.expirationManager = new TimeoutManager({ timeout: delegationExpirationInMillis })
+      this.expirationManager?.registerCallback(async () => {
+        await this.logout()
+      })
     }
   }
 
