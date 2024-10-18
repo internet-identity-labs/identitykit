@@ -3,9 +3,9 @@ import { PartialIdentity } from "@dfinity/identity"
 import type { Signer } from "@slide-computer/signer"
 import { IdbStorage, type SignerStorage } from "@slide-computer/signer-storage"
 import { AuthClientStorage } from "@dfinity/auth-client"
-import { IdleManager, type IdleManagerOptions } from "./idle-manager"
 import { SubAccount } from "@dfinity/ledger-icp"
 import { Principal } from "@dfinity/principal"
+import { IdleManager, IdleManagerOptions } from "../timeout-managers/idle-manager"
 
 export const STORAGE_KEY = "client"
 export const STORAGE_CONNECTED_OWNER_KEY = "connected-owner"
@@ -46,6 +46,7 @@ export interface SignerClientOptions {
    */
   idleOptions?: IdleOptions
   derivationOrigin?: string
+  onLogout?: () => unknown
 }
 
 export abstract class SignerClient {
@@ -55,7 +56,7 @@ export abstract class SignerClient {
 
   constructor(protected options: SignerClientOptions) {
     if (!options?.idleOptions?.disableIdle) {
-      this.idleManager = IdleManager.create(options.idleOptions)
+      this.idleManager = new IdleManager(options.idleOptions)
       this.registerDefaultIdleCallback()
     }
     if (options.storage) this.storage = options.storage as SignerStorage
@@ -77,6 +78,7 @@ export abstract class SignerClient {
     await this.setConnectedUserToStorage(undefined)
     this.idleManager?.exit()
     this.idleManager = undefined
+    this.options.onLogout?.()
     if (options?.returnTo) {
       try {
         window.history.pushState({}, "", options.returnTo)
