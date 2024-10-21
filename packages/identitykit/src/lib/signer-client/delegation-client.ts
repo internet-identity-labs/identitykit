@@ -88,9 +88,27 @@ export class DelegationSignerClient extends SignerClient {
     }
     if (this.shouldCheckIsUserConnected()) {
       const delegationChain = await getDelegationChain(STORAGE_KEY, storage as SignerStorage)
-      if (baseIdentity && delegationChain && isDelegationValid(delegationChain))
-        identity = DelegationSignerClient.createIdentity(baseIdentity, delegationChain)
-      else identity = new AnonymousIdentity()
+      const delegationValid = baseIdentity && delegationChain && isDelegationValid(delegationChain)
+      identity = delegationValid
+        ? DelegationSignerClient.createIdentity(baseIdentity, delegationChain)
+        : new AnonymousIdentity()
+
+      const signerClient = new DelegationSignerClient(
+        options,
+        identity,
+        baseIdentity,
+        options.targets,
+        options.maxTimeToLive
+      )
+
+      if (delegationValid) {
+        signerClient.initExpirationManager(delegationChain)
+      }
+
+      const storageConnectedUser = await signerClient.getConnectedUserFromStorage()
+      await signerClient.setConnectedUser(storageConnectedUser)
+
+      return signerClient
     }
 
     const signerClient = new DelegationSignerClient(
@@ -100,11 +118,6 @@ export class DelegationSignerClient extends SignerClient {
       options.targets,
       options.maxTimeToLive
     )
-
-    if (this.shouldCheckIsUserConnected()) {
-      const storageConnectedUser = await signerClient.getConnectedUserFromStorage()
-      await signerClient.setConnectedUser(storageConnectedUser)
-    }
 
     return signerClient
   }
@@ -175,6 +188,10 @@ export class DelegationSignerClient extends SignerClient {
       this.registerDefaultIdleCallback()
     }
 
+    return this.initExpirationManager(delegationChain)
+  }
+
+  private initExpirationManager(delegationChain: DelegationChain): void {
     if (!this.expirationManager) {
       const delegationExpirationInMillis =
         Number(
