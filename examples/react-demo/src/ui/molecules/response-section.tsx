@@ -1,7 +1,6 @@
 import CodeMirror, { ReactCodeMirrorProps } from "@uiw/react-codemirror"
 import { langs } from "@uiw/codemirror-extensions-langs"
-import { Copy } from "../atoms/copy"
-import { E2ELogger } from "../atoms/e2e"
+import { Copy, E2ELogger } from "../atoms"
 import { useTheme } from "next-themes"
 import clsx from "clsx"
 

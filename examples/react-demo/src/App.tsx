@@ -1,9 +1,6 @@
-import { Header } from "./ui/molecules/header"
-import { icrc49CallCanisterSection } from "./data"
-import { Section } from "./ui/organisms/section"
+import { Header, AuthTypeTabs, CallCanisterSection } from "./ui"
 import { ToastContainer } from "react-toastify"
 import { IdentityKitAuthType } from "@nfid/identitykit"
-import { AuthTypeTabs } from "./ui/organisms"
 import { useIdentityKit } from "@nfid/identitykit/react"
 
 function App({ setAuthType }: { setAuthType: (k: IdentityKitAuthType) => void }) {
@@ -28,7 +25,7 @@ function App({ setAuthType }: { setAuthType: (k: IdentityKitAuthType) => void })
       <h3 className="text-xl mb-[25px]">
         Step 3. Interact with other smart contract canisters on behalf of your connected user
       </h3>
-      <Section {...icrc49CallCanisterSection} />
+      <CallCanisterSection />
     </div>
   )
 }

@@ -1,35 +1,54 @@
-import { useIdentityKit } from "@nfid/identitykit/react"
-import { useMemo, useState } from "react"
+import { useAgent, useIdentityKit } from "@nfid/identitykit/react"
+import { useEffect, useMemo, useState } from "react"
 import { toast } from "react-toastify"
-import { Button } from "../atoms"
-import { CodeSection, RequestSection, ResponseSection } from "../molecules"
-import { JsonRequest } from "@slide-computer/signer"
+import { Actor } from "@dfinity/agent"
+import { IDL } from "@dfinity/candid"
+import { Button } from "../../atoms"
+import { CodeSection, RequestSection, ResponseSection } from "../../molecules"
+import { CALL_CANISTER_METHODS, CallCanisterMethodType } from "./constants"
 
-export function Section<TRequest extends JsonRequest>({
+type Request = {
+  method: string
+  params: {
+    canisterId: string
+    sender: string
+    method: CallCanisterMethodType
+    arg: string
+  }
+}
+
+export function Section({
   getCodeSnippet,
-  title,
-  description,
-  id,
+  canisterIDL,
+  actorArgs,
   ...props
 }: {
-  getCodeSnippet: (req: TRequest) => string
-  handleSubmit: (req: TRequest) => Promise<unknown>
-  request: TRequest
-  title?: string
-  description?: React.ReactNode
-  id: string
+  getCodeSnippet: (params: { canisterId: string; method: CallCanisterMethodType }) => string
+  request: Request
+  canisterIDL: IDL.InterfaceFactory
+  actorArgs: unknown
 }) {
   const [isLoading, setIsLoading] = useState(false)
-  const [request, setRequest] = useState(JSON.stringify(props.request, null, 2))
+  const [request, setRequest] = useState<string>(JSON.stringify(props.request, null, 2))
   const [response, setResponse] = useState<string>(JSON.stringify(undefined))
 
-  const { signer } = useIdentityKit()
+  useEffect(() => {
+    setRequest(JSON.stringify(props.request, null, 2))
+  }, [props.request])
+
+  const { signer, user } = useIdentityKit()
+  const agent = useAgent()
 
   const codeSection = useMemo(() => {
     try {
-      const parsedJson = JSON.parse(request) as TRequest
+      const parsedJson = JSON.parse(request) as Request
+      if (!CALL_CANISTER_METHODS.includes(parsedJson.params.method))
+        throw new Error("Method not supported")
       return {
-        value: getCodeSnippet(parsedJson),
+        value: getCodeSnippet({
+          canisterId: parsedJson.params.canisterId,
+          method: parsedJson.params.method,
+        }),
       }
     } catch (e) {
       if (e instanceof SyntaxError) return { error: "Invalid JSON" }
@@ -45,11 +64,14 @@ export function Section<TRequest extends JsonRequest>({
     setResponse(JSON.stringify(undefined))
 
     try {
-      const parsedJson = JSON.parse(request) as TRequest
-
+      const parsedJson = JSON.parse(request) as Request
+      const actor = Actor.createActor(canisterIDL, {
+        agent: agent!,
+        canisterId: parsedJson.params.canisterId,
+      })
       setResponse(
         JSON.stringify(
-          await props.handleSubmit(parsedJson),
+          (await actor[parsedJson.params.method](actorArgs)) as string,
           (_, value) => (typeof value === "bigint" ? value.toString() : value),
           2
         )
@@ -57,12 +79,6 @@ export function Section<TRequest extends JsonRequest>({
     } catch (e) {
       if (e instanceof Error) {
         console.error(e)
-        if (e.message === "Not supported") {
-          toast.error(
-            `The connected signer does not support one of the methods for which permission was requested`
-          )
-          return
-        }
         toast.error(e.message)
       }
     } finally {
@@ -71,9 +87,7 @@ export function Section<TRequest extends JsonRequest>({
   }
 
   return (
-    <div id={id}>
-      {title && <h2 className="mb-5 text-xl font-normal">{title}</h2>}
-      {description && <div className="text-sm leading-[22px]">{description}</div>}
+    <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-[25px] my-[25px]">
         <RequestSection value={request} setValue={setRequest} />
         <ResponseSection value={response} />
@@ -85,7 +99,7 @@ export function Section<TRequest extends JsonRequest>({
           loading={isLoading}
           className="w-[160px] mt-5"
           onClick={handleSubmit}
-          disabled={!!codeSection.error || !signer}
+          disabled={!!codeSection.error || !agent || !user}
         >
           Submit
         </Button>
@@ -100,6 +114,6 @@ export function Section<TRequest extends JsonRequest>({
           Reset
         </Button>
       </div>
-    </div>
+    </>
   )
 }
