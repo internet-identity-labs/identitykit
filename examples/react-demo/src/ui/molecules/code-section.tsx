@@ -1,6 +1,6 @@
 import CodeMirror, { ReactCodeMirrorProps } from "@uiw/react-codemirror"
 import { langs } from "@uiw/codemirror-extensions-langs"
-import { Copy } from "../atoms/copy"
+import { Copy } from "../atoms"
 import { useTheme } from "next-themes"
 
 export interface CodeSectionProps {

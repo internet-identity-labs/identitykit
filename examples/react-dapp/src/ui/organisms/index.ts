@@ -1,0 +1,6 @@
+export * from "./icrc25-permissions-section"
+export * from "./icrc25-request-permissions-section"
+export * from "./icrc25-supported-standards-section"
+export * from "./icrc27-accounts-section"
+export * from "./icrc34-delegation-section"
+export * from "./icrc49-call-canister-section"

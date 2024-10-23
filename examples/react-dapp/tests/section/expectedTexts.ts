@@ -110,56 +110,41 @@ export class ExpectedTexts {
       },
     ],
     ListOfAccountsResponse: {
-      id: "8c417beb-e7b1-4925-94b3-c737697e51bf",
-      jsonrpc: "2.0",
-      origin: "http://localhost:3001",
-      result: {
-        accounts: [
-          {
-            owner: "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
-            subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
-          },
-          {
-            owner: "6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae",
-            subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=",
-          },
-        ],
-      },
+      accounts: [
+        {
+          owner: "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
+          subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+        },
+        {
+          owner: "6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae",
+          subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=",
+        },
+      ],
     },
     DelegationWithTargetsResponse: {
-      id: "8932ce44-a693-4d1a-a087-8468aafe536e",
-      jsonrpc: "2.0",
-      origin: "http://localhost:3001",
-      result: {
-        signerDelegation: [
-          {
-            delegation: {
-              expiration: expect.anything(),
-              pubkey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
-              targets: ["do25a-dyaaa-aaaak-qifua-cai"],
-            },
-            signature: expect.anything(),
+      signerDelegation: [
+        {
+          delegation: {
+            expiration: expect.anything(),
+            pubkey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
+            targets: ["do25a-dyaaa-aaaak-qifua-cai"],
           },
-        ],
-        publicKey: "MCowBQYDK2VwAyEAq24mMq2DrldUMLxC8PFielFi+DphaUGDLrMYeUGHoOc=",
-      },
+          signature: expect.anything(),
+        },
+      ],
+      publicKey: "MCowBQYDK2VwAyEAq24mMq2DrldUMLxC8PFielFi+DphaUGDLrMYeUGHoOc=",
     },
     NoTargetsDelegationResponse: {
-      id: "8932ce44-a693-4d1a-a087-8468aafe536e",
-      jsonrpc: "2.0",
-      origin: "http://localhost:3001",
-      result: {
-        signerDelegation: [
-          {
-            delegation: {
-              expiration: expect.anything(),
-              pubkey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
-            },
-            signature: expect.anything(),
+      signerDelegation: [
+        {
+          delegation: {
+            expiration: expect.anything(),
+            pubkey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
           },
-        ],
-        publicKey: "MCowBQYDK2VwAyEAMAityFffzQR3p6qgGmV8ppI852wHZFcEsehy3rElO6o=",
-      },
+          signature: expect.anything(),
+        },
+      ],
+      publicKey: "MCowBQYDK2VwAyEAMAityFffzQR3p6qgGmV8ppI852wHZFcEsehy3rElO6o=",
     },
     ConsentCaseCanisterCallRequest: [
       "Request from http://localhost:3001",
@@ -172,13 +157,8 @@ export class ExpectedTexts {
       "Produce the following greeting text: > Hello, me!",
     ],
     ConsentCaseCanisterCallResponse: {
-      origin: "http://localhost:3001",
-      jsonrpc: "2.0",
-      id: "8932ce44-a693-4d1a-a087-8468aafe536e",
-      result: {
-        contentMap: expect.anything(),
-        certificate: expect.anything(),
-      },
+      contentMap: expect.anything(),
+      certificate: expect.anything(),
     },
     NoConsentCaseCanisterCallRequest: [
       "Request from http://localhost:3001",
@@ -190,13 +170,8 @@ export class ExpectedTexts {
       '["me"]',
     ],
     NoConsentCaseCanisterCallResponse: {
-      origin: "http://localhost:3001",
-      jsonrpc: "2.0",
-      id: "8932ce44-a693-4d1a-a087-8468aafe536e",
-      result: {
-        contentMap: expect.anything(),
-        certificate: expect.anything(),
-      },
+      contentMap: expect.anything(),
+      certificate: expect.anything(),
     },
     CanisterCallIcrc2ApproveRequest: [
       "Request from http://localhost:3001",
@@ -209,13 +184,8 @@ export class ExpectedTexts {
       "# Authorize another address to withdraw from your account **The following address is allowed to withdraw from your account:** 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe **Your account:** gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe **Requested withdrawal allowance:** 5000 ckPEPE ⚠ The allowance will be set to 5000 ckPEPE independently of any previous allowance. Until this transaction has been executed the spender can still exercise the previous allowance (if any) to it's full amount. **Expiration date:** No expiration. **Approval fee:** 1000 ckPEPE **Transaction fees to be paid by:** gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
     ],
     CanisterCallIcrc2ApproveResponse: {
-      origin: "http://localhost:3001",
-      jsonrpc: "2.0",
-      id: "8932ce44-a693-4d1a-a087-8468aafe536e",
-      result: {
-        contentMap: expect.anything(),
-        certificate: expect.anything(),
-      },
+      contentMap: expect.anything(),
+      certificate: expect.anything(),
     },
   }
 
@@ -261,34 +231,24 @@ export class ExpectedTexts {
       },
     ],
     ListOfAccountsResponse: {
-      id: "8c417beb-e7b1-4925-94b3-c737697e51bf",
-      jsonrpc: "2.0",
-      origin: "http://localhost:3001",
-      result: {
-        accounts: [
-          {
-            owner: "7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae",
-            subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
-          },
-        ],
-      },
+      accounts: [
+        {
+          owner: "7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae",
+          subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+        },
+      ],
     },
     NoTargetsDelegationResponse: {
-      id: "8932ce44-a693-4d1a-a087-8468aafe536e",
-      jsonrpc: "2.0",
-      origin: "http://localhost:3001",
-      result: {
-        signerDelegation: [
-          {
-            delegation: {
-              expiration: expect.anything(),
-              pubkey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
-            },
-            signature: expect.anything(),
+      signerDelegation: [
+        {
+          delegation: {
+            expiration: expect.anything(),
+            pubkey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
           },
-        ],
-        publicKey: "MCowBQYDK2VwAyEALHdjGe0ciJb8Kmq4Xsc2/hn760QS+QgdJh7LUPc/wn0=",
-      },
+          signature: expect.anything(),
+        },
+      ],
+      publicKey: "MCowBQYDK2VwAyEALHdjGe0ciJb8Kmq4Xsc2/hn760QS+QgdJh7LUPc/wn0=",
     },
     ConsentCaseCanisterCall: [
       "Request from localhost:3001",

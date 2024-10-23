@@ -16,12 +16,12 @@ export class Icrc49CallCanisterSection extends Section {
 
   async selectConsentTab(): Promise<void> {
     await this.page.locator("#select-request").click()
-    await this.page.locator(`#dropdown-options label:nth-child(2)`).click()
+    await this.page.locator(`#dropdown-options div:nth-child(2)`).click()
   }
 
   async selectIcrc2ApprovalTab(): Promise<void> {
     await this.page.locator("#select-request").click()
-    await this.page.locator(`#dropdown-options label:nth-child(4)`).click()
+    await this.page.locator(`#dropdown-options div:nth-child(4)`).click()
   }
 
   async getPopupTexts(popup: Page): Promise<string[]> {
