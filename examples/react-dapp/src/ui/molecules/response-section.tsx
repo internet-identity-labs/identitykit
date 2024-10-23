@@ -8,12 +8,13 @@ import clsx from "clsx"
 export interface ResponseSectionProps {
   value: string
   className?: string
+  id?: string
 }
 
-export const ResponseSection: React.FC<ResponseSectionProps> = ({ value, className }) => {
+export const ResponseSection: React.FC<ResponseSectionProps> = ({ value, className, id }) => {
   const { resolvedTheme } = useTheme()
   return (
-    <div>
+    <div id={id}>
       <p className={clsx("text-slate-500 dark:text-zinc-500 font-semibold mb-1", className)}>
         Response
       </p>

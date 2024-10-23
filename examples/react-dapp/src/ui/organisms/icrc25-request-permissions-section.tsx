@@ -6,7 +6,7 @@ import { RequestPermissionsRequest } from "@slide-computer/signer"
 export function Icrc25RequestPermissionsSection() {
   const { signer } = useIdentityKit()
   return (
-    <Section<RequestPermissionsRequest>
+    <Section<Omit<RequestPermissionsRequest, "jsonrpc">>
       id="icrc25_request_permissions"
       title="1.a icrc25_request_permissions"
       description={
@@ -19,8 +19,6 @@ export function Icrc25RequestPermissionsSection() {
         </>
       }
       request={{
-        id: "8932ce44-a693-4d1a-a087-8468aafe536e",
-        jsonrpc: "2.0",
         method: "icrc25_request_permissions",
         params: {
           scopes: [

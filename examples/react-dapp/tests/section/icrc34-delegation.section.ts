@@ -52,7 +52,9 @@ export class Icrc34DelegationSection extends Section {
       await page.waitForTimeout(1000)
       if (
         (await page
-          .locator(`#${this.section} #response-section div.cm-line > span:nth-child(2)`)
+          .locator(
+            `#${this.section} #response-section-${this.section} div.cm-line > span:nth-child(2)`
+          )
           .count()) > 0
       )
         done = true
@@ -62,9 +64,9 @@ export class Icrc34DelegationSection extends Section {
   async setRequestWithNoTargets(): Promise<void> {
     await this.page.evaluate(() => {
       const element = document.querySelector(
-        `#icrc34_delegation #request-section div.cm-line:nth-child(6) > span`
+        `#request-section-icrc34_delegation div.cm-line:nth-child(6) > span`
       )
-      if (element) element.textContent = ""
+      if (element) element.innerHTML = ""
     })
   }
 }

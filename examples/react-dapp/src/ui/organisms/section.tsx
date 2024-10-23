@@ -5,7 +5,7 @@ import { Button } from "../atoms"
 import { CodeSection, RequestSection, ResponseSection } from "../molecules"
 import { JsonRequest } from "@slide-computer/signer"
 
-export function Section<TRequest extends JsonRequest>({
+export function Section<TRequest extends Omit<JsonRequest, "jsonrpc">>({
   getCodeSnippet,
   title,
   description,
@@ -75,13 +75,13 @@ export function Section<TRequest extends JsonRequest>({
       {title && <h2 className="mb-5 text-xl font-normal">{title}</h2>}
       {description && <div className="text-sm leading-[22px]">{description}</div>}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-[25px] my-[25px]">
-        <RequestSection value={request} setValue={setRequest} />
-        <ResponseSection value={response} />
+        <RequestSection id={"request-section-" + id} value={request} setValue={setRequest} />
+        <ResponseSection id={"response-section-" + id} value={response} />
       </div>
       <CodeSection value={codeSection.error ?? codeSection.value} />
       <div className="flex gap-5">
         <Button
-          id="submit"
+          id={"submit-" + id}
           loading={isLoading}
           className="w-[160px] mt-5"
           onClick={handleSubmit}

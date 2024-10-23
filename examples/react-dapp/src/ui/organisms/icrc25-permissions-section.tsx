@@ -16,8 +16,6 @@ export function Icrc25PermissionsSection() {
       }
       request={{
         method: "icrc25_permissions",
-        id: "8932ce44-a693-4d1a-a087-8468aafe536e",
-        jsonrpc: "2.0",
       }}
       getCodeSnippet={(request) => `await IdentityKit.init()
   const grantedPermsissions = await IdentityKit.request(${JSON.stringify(request, null, 2)})`}

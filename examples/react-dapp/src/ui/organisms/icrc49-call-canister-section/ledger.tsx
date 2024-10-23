@@ -5,8 +5,6 @@ export function Ledger() {
   return (
     <Section
       request={{
-        id: "8932ce44-a693-4d1a-a087-8468aafe536e",
-        jsonrpc: "2.0",
         method: "icrc49_call_canister",
         params: {
           canisterId: "ryjl3-tyaaa-aaaaa-aaaba-cai",

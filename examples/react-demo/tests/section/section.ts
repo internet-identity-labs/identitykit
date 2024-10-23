@@ -9,19 +9,23 @@ export abstract class Section {
     public readonly page: Page,
     protected readonly section: string
   ) {
-    this.requestSection = this.page.locator(`#${this.section} #request-section div.cm-content`)
-    this.responseSection = this.page.locator(`#${this.section} #response-section div.cm-content`)
-    this.submitButton = this.page.locator(`#${this.section} #submit`)
+    this.requestSection = this.page.locator(
+      `#${this.section} #request-section-${this.section} div.cm-content`
+    )
+    this.responseSection = this.page.locator(
+      `#${this.section} #response-section-${this.section} div.cm-content`
+    )
+    this.submitButton = this.page.locator(`#${this.section} #submit-${this.section}`)
   }
 
   async getRequestJson(): Promise<string> {
-    const json = (await this.requestSection.textContent()) ?? "{}"
-    return JSON.parse(json)
+    const json = await this.requestSection.textContent()
+    return json ? JSON.parse(json) : {}
   }
 
   async getResponseJson(): Promise<string> {
-    const json = (await this.responseSection.textContent()) ?? "{}"
-    return JSON.parse(json)
+    const json = await this.responseSection.textContent()
+    return json ? JSON.parse(json) : {}
   }
 
   async clickSubmitButton(): Promise<void> {
@@ -30,7 +34,7 @@ export abstract class Section {
 
   async waitForResponse(): Promise<void> {
     await this.page.waitForSelector(
-      `#${this.section} #response-section div.cm-line > span:nth-child(2)`
+      `#${this.section} #response-section-${this.section} div.cm-line:nth-child(1)`
     )
   }
 }

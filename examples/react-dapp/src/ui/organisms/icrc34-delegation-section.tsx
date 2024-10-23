@@ -8,7 +8,7 @@ const targetCanister = import.meta.env.VITE_TARGET_CANISTER
 export function Icrc34DelegationSection() {
   const { signer } = useIdentityKit()
   return (
-    <Section<DelegationRequest>
+    <Section<Omit<DelegationRequest, "jsonrpc">>
       id="icrc34_delegation"
       title="3.a icrc34_delegation"
       description={
@@ -19,8 +19,6 @@ export function Icrc34DelegationSection() {
         </>
       }
       request={{
-        id: "8932ce44-a693-4d1a-a087-8468aafe536e",
-        jsonrpc: "2.0",
         method: "icrc34_delegation",
         params: {
           publicKey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
@@ -39,7 +37,11 @@ const delegation = await IdentityKit.request({
   }
 })`}
       handleSubmit={async (request) => {
-        const response = await signer!.sendRequest<DelegationRequest, DelegationResponse>(request)
+        const response = await signer!.sendRequest<DelegationRequest, DelegationResponse>({
+          ...request,
+          id: "8932ce44-a693-4d1a-a087-8468aafe536e",
+          jsonrpc: "2.0",
+        })
         if ("error" in response) {
           throw new Error(response.error.message)
         }

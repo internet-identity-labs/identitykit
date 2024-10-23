@@ -7,12 +7,13 @@ import { Copy } from "../atoms"
 export interface RequestSectionProps {
   value: string
   setValue: (value: string) => void
+  id?: string
 }
 
-export const RequestSection: React.FC<RequestSectionProps> = ({ value, setValue }) => {
+export const RequestSection: React.FC<RequestSectionProps> = ({ value, setValue, id }) => {
   const { resolvedTheme } = useTheme()
   return (
-    <div>
+    <div id={id}>
       <p className="text-slate-500 dark:text-zinc-500 font-semibold mb-1">
         Request <span className="text-sm opacity-50">(editable)</span>
       </p>

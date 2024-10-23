@@ -5,8 +5,6 @@ export function Icrc2Transfer() {
   return (
     <Section
       request={{
-        id: "8932ce44-a693-4d1a-a087-8468aafe536e",
-        jsonrpc: "2.0",
         method: "icrc49_call_canister",
         params: {
           canisterId: "etik7-oiaaa-aaaar-qagia-cai",

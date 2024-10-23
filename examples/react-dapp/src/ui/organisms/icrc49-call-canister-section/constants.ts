@@ -1,11 +1,11 @@
 type ObjectValuesType<T> = T[keyof T]
 
 export const CallCanisterMethod = {
+  greet_no_consent: "greet_no_consent",
+  greet: "greet",
+  transfer: "transfer",
   icrc2_approve: "icrc2_approve",
   icrc2_transfer_from: "icrc2_transfer_from",
-  transfer: "transfer",
-  greet: "greet",
-  greet_no_consent: "greet_no_consent",
 } as const
 
 export const CallCanisterMethodTitle = {

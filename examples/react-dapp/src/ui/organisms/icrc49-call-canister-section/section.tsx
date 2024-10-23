@@ -3,16 +3,18 @@ import { CallCanisterRequest } from "@slide-computer/signer"
 import { useIdentityKit } from "@nfid/identitykit/react"
 import { CALL_CANISTER_METHODS, CallCanisterMethodType } from "./constants"
 
+type SectionRequest = Omit<CallCanisterRequest, "jsonrpc">
+
 export function Section({
   getCodeSnippet,
   request,
 }: {
   getCodeSnippet: (params: { canisterId: string; method: string }) => string
-  request: CallCanisterRequest
+  request: SectionRequest
 }) {
   const { signer } = useIdentityKit()
   return (
-    <BaseSection<CallCanisterRequest>
+    <BaseSection<SectionRequest>
       request={request}
       id="icrc49_call_canister"
       getCodeSnippet={({ params }) => {
@@ -21,7 +23,11 @@ export function Section({
         return getCodeSnippet({ canisterId: params!.canisterId, method: params!.method })
       }}
       handleSubmit={async (request) => {
-        const response = await signer!.sendRequest(request)
+        const response = await signer!.sendRequest({
+          ...request,
+          id: "8932ce44-a693-4d1a-a087-8468aafe536e",
+          jsonrpc: "2.0",
+        })
         if ("error" in response) {
           throw new Error(response.error.message)
         }

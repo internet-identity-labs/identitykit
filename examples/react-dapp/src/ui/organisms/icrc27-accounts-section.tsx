@@ -16,8 +16,6 @@ export function Icrc27AccountsSection() {
         </>
       }
       request={{
-        id: "8932ce44-a693-4d1a-a087-8468aafe536e",
-        jsonrpc: "2.0",
         method: "icrc27_accounts" as const,
       }}
       getCodeSnippet={() => `await IdentityKit.init()
@@ -28,7 +26,11 @@ export function Icrc27AccountsSection() {
     }
   })`}
       handleSubmit={async (request) => {
-        const response = await signer!.sendRequest<AccountsRequest, AccountsResponse>(request)
+        const response = await signer!.sendRequest<AccountsRequest, AccountsResponse>({
+          ...request,
+          id: "8932ce44-a693-4d1a-a087-8468aafe536e",
+          jsonrpc: "2.0",
+        })
         if ("error" in response) {
           throw new Error(response.error.message)
         }

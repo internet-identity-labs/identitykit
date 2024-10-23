@@ -61,7 +61,6 @@ async function testFullPermissions(
 ) {
   await demoPage.login(account)
   await section.approvePermissions(account)
-  await section.clickSubmitButton()
   const actualResponse = await section.getResponseJson()
   expect(actualResponse).toStrictEqual(
     account.type === AccountType.MockedSigner
