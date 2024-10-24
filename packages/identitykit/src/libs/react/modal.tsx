@@ -58,7 +58,7 @@ export const IdentityKitModal = () => {
             aria-describedby={undefined}
             className={clsx(
               "ik-component ik-flex-col ik-fixed ik-p-0 focus:ik-outline-none ik-z-[1010]",
-              "ik-shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px]",
+              "ik-shadow-lg",
               "ik-top-[50%] ik-left-[50%] ik-max-h-[85vh] ik-w-[90vw] ik-max-w-[490px] ik-translate-x-[-50%] ik-translate-y-[-50%]",
               isModalOpen ? "ik-flex" : "ik-hidden"
             )}
