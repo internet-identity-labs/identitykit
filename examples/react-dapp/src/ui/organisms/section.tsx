@@ -8,12 +8,14 @@ import { JsonRequest } from "@slide-computer/signer"
 export function Section<TRequest extends Omit<JsonRequest, "jsonrpc">>({
   getCodeSnippet,
   title,
+  className,
   description,
   id,
   ...props
 }: {
   getCodeSnippet: (req: TRequest) => string
   handleSubmit: (req: TRequest) => Promise<unknown>
+  className?: string
   request: TRequest
   title?: string
   description?: React.ReactNode
@@ -71,7 +73,7 @@ export function Section<TRequest extends Omit<JsonRequest, "jsonrpc">>({
   }
 
   return (
-    <div id={id}>
+    <div className={className} id={id}>
       {title && <h2 className="mb-5 text-xl font-normal">{title}</h2>}
       {description && <div className="text-sm leading-[22px]">{description}</div>}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-[25px] my-[25px]">

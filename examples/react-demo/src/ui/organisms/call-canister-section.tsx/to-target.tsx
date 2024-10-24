@@ -3,11 +3,12 @@ import { idlFactory as demoIDL } from "../../../idl/service_idl"
 import { useIdentityKit } from "@nfid/identitykit/react"
 import { CallCanisterMethod } from "./constants"
 
-export function ToTarget() {
+export function ToTarget({ className }: { className?: string }) {
   const { user } = useIdentityKit()
 
   return (
     <Section
+      className={className}
       request={{
         method: "icrc49_call_canister",
         params: {

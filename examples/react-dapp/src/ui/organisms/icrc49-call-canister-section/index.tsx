@@ -26,8 +26,6 @@ export function Icrc49CallCanisterSection() {
     CallCanisterMethod.greet_no_consent
   )
 
-  const Component = MethodComponent[selectedMethod]
-
   return (
     <div>
       <h2 className="mb-5 text-xl font-normal">4.a icrc49_call_canister</h2>
@@ -50,7 +48,9 @@ export function Icrc49CallCanisterSection() {
         value={selectedMethod}
         onChange={(value) => setSelectedMethod(value as CallCanisterMethodType)}
       />
-      <Component />
+      {Object.entries(MethodComponent).map(([key, Component]) => {
+        return <Component className={key !== selectedMethod ? "hidden" : undefined} />
+      })}
     </div>
   )
 }

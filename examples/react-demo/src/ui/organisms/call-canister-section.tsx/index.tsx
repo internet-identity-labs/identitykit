@@ -27,8 +27,6 @@ export function CallCanisterSection() {
     CallCanisterMethod.greet_no_consent
   )
 
-  const Component = MethodComponent[selectedMethod]
-
   return (
     <div
       style={
@@ -60,7 +58,9 @@ export function CallCanisterSection() {
         value={selectedMethod}
         onChange={(value) => setSelectedMethod(value as CallCanisterMethodType)}
       />
-      <Component />
+      {Object.entries(MethodComponent).map(([key, Component]) => {
+        return <Component className={key !== selectedMethod ? "hidden" : undefined} />
+      })}
     </div>
   )
 }

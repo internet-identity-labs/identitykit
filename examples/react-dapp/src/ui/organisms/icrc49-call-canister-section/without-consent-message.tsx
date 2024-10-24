@@ -1,9 +1,10 @@
 import { CallCanisterMethod } from "./constants"
 import { Section } from "./section"
 
-export function WithoutConsentMessage() {
+export function WithoutConsentMessage({ className }: { className?: string }) {
   return (
     <Section
+      className={className}
       request={{
         method: "icrc49_call_canister",
         params: {

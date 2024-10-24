@@ -21,8 +21,10 @@ export function Section({
   getCodeSnippet,
   canisterIDL,
   actorArgs,
+  className,
   ...props
 }: {
+  className?: string
   getCodeSnippet: (params: { canisterId: string; method: CallCanisterMethodType }) => string
   request: Request
   canisterIDL: IDL.InterfaceFactory
@@ -87,7 +89,7 @@ export function Section({
   }
 
   return (
-    <>
+    <div className={className}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-[25px] my-[25px]">
         <RequestSection value={request} setValue={setRequest} />
         <ResponseSection value={response} />
@@ -114,6 +116,6 @@ export function Section({
           Reset
         </Button>
       </div>
-    </>
+    </div>
   )
 }
