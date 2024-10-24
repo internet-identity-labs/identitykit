@@ -7,16 +7,19 @@ type SectionRequest = Omit<CallCanisterRequest, "jsonrpc">
 
 export function Section({
   getCodeSnippet,
+  className,
   request,
 }: {
   getCodeSnippet: (params: { canisterId: string; method: string }) => string
+  className?: string
   request: SectionRequest
 }) {
   const { signer } = useIdentityKit()
   return (
     <BaseSection<SectionRequest>
+      className={className}
       request={request}
-      id="icrc49_call_canister"
+      id={"icrc49_call_canister-" + request.params?.method}
       getCodeSnippet={({ params }) => {
         if (!CALL_CANISTER_METHODS.includes(params!.method as CallCanisterMethodType))
           throw new Error("Method not supported")

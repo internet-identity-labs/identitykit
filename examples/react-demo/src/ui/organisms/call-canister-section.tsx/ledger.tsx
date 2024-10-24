@@ -6,7 +6,7 @@ import { fromHexString } from "@dfinity/candid"
 import { useIdentityKit } from "@nfid/identitykit/react"
 import { CallCanisterMethod } from "./constants"
 
-export function Ledger() {
+export function Ledger({ className }: { className?: string }) {
   const { user } = useIdentityKit()
 
   const address = AccountIdentifier.fromPrincipal({
@@ -24,6 +24,7 @@ export function Ledger() {
 
   return (
     <Section
+      className={className}
       request={{
         method: "icrc49_call_canister",
         params: {

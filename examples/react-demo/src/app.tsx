@@ -14,9 +14,9 @@ function App({ setAuthType }: { setAuthType: (k: IdentityKitAuthType) => void })
         Step 1. Choose which authentication method your users will connect with
       </h3>
       <AuthTypeTabs
-        onChange={(type) => {
+        onChange={async (type) => {
+          await disconnect()
           setAuthType(type)
-          disconnect()
         }}
       />
       <h3 className="text-xl mt-[30px] mb-[25px]">

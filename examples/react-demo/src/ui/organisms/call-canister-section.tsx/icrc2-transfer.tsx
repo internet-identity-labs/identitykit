@@ -4,7 +4,7 @@ import { Principal } from "@dfinity/principal"
 import { useIdentityKit } from "@nfid/identitykit/react"
 import { CallCanisterMethod } from "./constants"
 
-export function Icrc2Transfer() {
+export function Icrc2Transfer({ className }: { className?: string }) {
   const { user } = useIdentityKit()
 
   const myAcc = {
@@ -31,6 +31,7 @@ export function Icrc2Transfer() {
 
   return (
     <Section
+      className={className}
       request={{
         method: "icrc49_call_canister",
         params: {
