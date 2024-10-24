@@ -21,9 +21,10 @@ export function Icrc2Approve({ className }: { className?: string }) {
     memo: [],
     amount: BigInt(5000 * 10 ** 18),
     created_at_time: [],
-    expected_allowance: [BigInt(5000 * 10 ** 18)],
+    expected_allowance: [],
     expires_at: [],
   }
+
   return (
     <Section
       className={className}
