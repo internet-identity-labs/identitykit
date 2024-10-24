@@ -11,7 +11,7 @@ export function Icrc2Transfer({ className }: { className?: string }) {
           canisterId: "etik7-oiaaa-aaaar-qagia-cai",
           sender: "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
           method: CallCanisterMethod.icrc2_transfer_from,
-          arg: "RElETAZufW17bgFueGwCs7DawwNorYbKgwUCbAjG/LYCALqJ5cIEAqLelOsGAoLz85EMA9ijjKgNfZGcnL8NAN6n99oNA8uW3LQOBAEFAAAAAICAgMnVm5n4jJ4EAAABHfiYTFV8824++qVOIjiov3Bgl0gU0RPMROITTCMCAA==",
+          arg: "RElETAZte24AbAKzsNrDA2ithsqDBQFufW54bAf7ygECxvy2AgPhhcGUAgHqyoqeBAK6ieXCBAGC8/ORDATYo4yoDX0BBQEdXdZAg85gOc3s6DkTiv7FBn9RDHSPT6rgmlsBGgIAAAABHWmAyUnBYRms7Y6lfDq9PjTKHNFscdVMFAukRmcCAAAAgICA9d246+S1bA==",
         },
       }}
       getCodeSnippet={({ canisterId, method }) => `const { agent } = useIdentityKit()

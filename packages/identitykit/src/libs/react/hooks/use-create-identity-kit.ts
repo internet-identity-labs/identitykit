@@ -45,7 +45,6 @@ export function useCreateIdentityKit<
   const [icpBalance, setIcpBalance] = useState<undefined | number>()
 
   const onDisconnect = useCallback(async () => {
-    console.log("on disconnect")
     await selectedSigner?.transport.connection?.disconnect()
     await clearSigner()
     setIk(null)
