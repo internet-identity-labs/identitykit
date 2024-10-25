@@ -62,6 +62,7 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
 
   const signers =
     !props.signers || !props.signers.length ? [NFIDW, Plug, InternetIdentity, Stoic] : props.signers
+
   useEffect(() => {
     Promise.all(
       signers.map(async (s) => {
@@ -85,7 +86,13 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
     ).then(setTransports)
   }, [signers])
 
-  const { selectSigner, clearSigner, selectedSigner, selectCustomSigner } = useSigner({
+  const {
+    selectSigner,
+    clearSigner,
+    selectedSigner,
+    selectCustomSigner,
+    setSelectedSignerToLocalStorage,
+  } = useSigner({
     signers,
     transports,
     closeModal: () => setIsModalOpen(false),
@@ -98,13 +105,21 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
     clearSigner,
     signerClientOptions: { ...signerClientOptions, crypto },
     authType,
-    onConnectSuccess: props.onConnectSuccess,
+    onConnectSuccess: () => {
+      setSelectedSignerToLocalStorage()
+      props.onConnectSuccess?.()
+    },
     onConnectFailure: props.onConnectFailure,
     onDisconnect: props.onDisconnect,
     realConnectDisabled,
   })
 
-  const isInitializing = useMemo(() => !transports?.length, [transports])
+  const localStorageSigner = localStorage.getItem("signerId")
+
+  const isInitializing = useMemo(
+    () => !transports?.length || (!!localStorageSigner && !identityKit.user),
+    [transports, localStorageSigner, identityKit.user]
+  )
   const isUserConnecting = useMemo(
     () => !!selectedSigner && !identityKit.user,
     [selectedSigner, identityKit.user]

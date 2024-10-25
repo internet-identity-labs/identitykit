@@ -16,14 +16,15 @@ export function useSigner({
   crypto?: Pick<Crypto, "getRandomValues" | "randomUUID">
   window?: Window
 }) {
-  const [selectedSigner, setSelectedSigner] = useState<Signer | undefined>(undefined)
-  const [prevSigner, setPrevSigner] = useState<Signer | undefined>(undefined)
+  const [selectedSigner, setSelectedSigner] = useState<
+    { signer: Signer<Transport>; signerId?: string } | undefined
+  >(undefined)
 
   const selectSigner = useCallback(
-    async (cb: (signer?: Signer) => unknown, signerId?: string) => {
+    async (signerId?: string) => {
       if (!signerId) {
         localStorage.removeItem("signerId")
-        return cb(undefined)
+        return setSelectedSigner(undefined)
       }
 
       const signer = signers.find((s) => s.id === signerId)
@@ -41,9 +42,9 @@ export function useSigner({
         crypto,
         transport: transport!.transport,
       })
-      cb(createdSigner)
 
-      localStorage.setItem("signerId", signerId)
+      setSelectedSigner({ signer: createdSigner, signerId })
+
       closeModal()
 
       return signer
@@ -61,31 +62,28 @@ export function useSigner({
 
     const createdSigner = new Signer({ crypto, transport })
 
-    setSelectedSigner(createdSigner)
+    setSelectedSigner({ signer: createdSigner })
     closeModal()
   }, [])
 
   // default selected signer from local storage
   useEffect(() => {
-    async function select() {
-      if (!selectedSigner && localStorage.getItem("signerId") && !prevSigner)
-        await selectSigner(setPrevSigner, localStorage.getItem("signerId")!)
-    }
-
-    select()
-  }, [selectedSigner, selectSigner, setPrevSigner, prevSigner])
+    const localStorageSigner = localStorage.getItem("signerId")
+    if (!selectedSigner && localStorageSigner) selectSigner(localStorageSigner)
+  }, [selectedSigner, selectSigner])
 
   return {
-    selectSigner: async (signerId?: string) => {
-      await selectSigner(setSelectedSigner, signerId)
-    },
-    // clear both signer and local storage signer
+    selectSigner,
+    setSelectedSignerToLocalStorage: useCallback(() => {
+      if (selectedSigner && selectedSigner.signerId)
+        localStorage.setItem("signerId", selectedSigner.signerId)
+    }, [selectedSigner]),
+    // clears both local state and local storage
     clearSigner: async () => {
-      await selectSigner(setSelectedSigner)
-      await selectSigner(setPrevSigner)
+      await selectSigner()
     },
     selectCustomSigner,
     // selected signer is local storage signer by default (in case authenticated user)
-    selectedSigner: selectedSigner ?? prevSigner,
+    selectedSigner: selectedSigner?.signer,
   }
 }
