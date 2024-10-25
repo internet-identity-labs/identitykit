@@ -11,7 +11,7 @@ export const CallCanisterMethodTitle = {
   [CallCanisterMethod.icrc2_approve]: "ICRC-2 approve",
   [CallCanisterMethod.icrc2_transfer_from]: "ICRC-2 transfer",
   [CallCanisterMethod.transfer]: "ICP transfer",
-  [CallCanisterMethod.greet_no_consent]: "Canister call to a target canister",
+  [CallCanisterMethod.greet_no_consent]: "Canister call to IdentityKit Demo canister",
 }
 
 export const CALL_CANISTER_METHODS = Object.values(CallCanisterMethod)

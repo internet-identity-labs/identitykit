@@ -12,7 +12,7 @@ export function ToTarget({ className }: { className?: string }) {
       request={{
         method: "icrc49_call_canister",
         params: {
-          canisterId: "do25a-dyaaa-aaaak-qifua-cai",
+          canisterId: import.meta.env.VITE_TARGET_CANISTER,
           sender: user?.principal.toString() || "",
           method: CallCanisterMethod.greet_no_consent,
           arg: "RElETAABcQJtZQ==",
