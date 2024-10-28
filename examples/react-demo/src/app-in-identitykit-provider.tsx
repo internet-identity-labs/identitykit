@@ -10,6 +10,7 @@ import {
   Plug,
   InternetIdentity,
   Stoic,
+  PrimeVault,
 } from "@nfid/identitykit"
 
 import App from "./app"
@@ -24,7 +25,7 @@ export function AppWrappedInIdentityKit() {
   const [authType, setAuthType] = useState<IdentityKitAuthType>(IdentityKitAuthType.DELEGATION)
   const { resolvedTheme } = useTheme()
   const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
-  const signers = [nfidw, Plug, InternetIdentity, Stoic]
+  const signers = [nfidw, Plug, InternetIdentity, Stoic, PrimeVault]
 
   if (environment === "dev") {
     signers.push({

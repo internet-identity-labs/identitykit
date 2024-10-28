@@ -8,6 +8,7 @@ import {
   Plug,
   InternetIdentity,
   Stoic,
+  PrimeVault,
 } from "../../lib"
 import { useCreateIdentityKit, useSigner, useTheme } from "./hooks"
 import { TransportBuilder } from "../../lib/service"
@@ -61,7 +62,9 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
     signerClientOptions as IdentityKitDelegationSignerClientOptions
 
   const signers =
-    !props.signers || !props.signers.length ? [NFIDW, Plug, InternetIdentity, Stoic] : props.signers
+    !props.signers || !props.signers.length
+      ? [NFIDW, Plug, InternetIdentity, Stoic, PrimeVault]
+      : props.signers
 
   useEffect(() => {
     Promise.all(
