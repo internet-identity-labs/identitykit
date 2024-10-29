@@ -90,6 +90,7 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
     selectSigner,
     clearSigner,
     selectedSigner,
+    localStorageSigner,
     selectCustomSigner,
     setSelectedSignerToLocalStorage,
   } = useSigner({
@@ -113,8 +114,6 @@ export const IdentityKitProvider = <T extends IdentityKitAuthType>({
     onDisconnect: props.onDisconnect,
     realConnectDisabled,
   })
-
-  const localStorageSigner = localStorage.getItem("signerId")
 
   const isInitializing = useMemo(
     () => !transports?.length || (!!localStorageSigner && !identityKit.user),
