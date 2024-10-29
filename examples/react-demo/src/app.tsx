@@ -4,7 +4,9 @@ import { IdentityKitAuthType } from "@nfid/identitykit"
 import { useIdentityKit } from "@nfid/identitykit/react"
 
 function App({ setAuthType }: { setAuthType: (k: IdentityKitAuthType) => void }) {
-  const { disconnect } = useIdentityKit()
+  const { disconnect, isInitializing, user } = useIdentityKit()
+
+  console.log({ user, isInitializing })
 
   return (
     <div className="h-full min-h-screen bg-white dark:bg-dark px-[30px] pb-[25px]">
