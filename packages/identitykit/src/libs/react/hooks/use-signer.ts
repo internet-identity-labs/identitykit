@@ -16,6 +16,8 @@ export function useSigner({
   crypto?: Pick<Crypto, "getRandomValues" | "randomUUID">
   window?: Window
 }) {
+  // saved to local storage for next js (localStorage is not defined during server render)
+  const [localStorageSigner, setLocalStorageSigner] = useState<string | undefined>()
   const [selectedSigner, setSelectedSigner] = useState<
     { signer: Signer<Transport>; signerId?: string } | undefined
   >(undefined)
@@ -68,8 +70,11 @@ export function useSigner({
 
   // default selected signer from local storage
   useEffect(() => {
-    const localStorageSigner = localStorage.getItem("signerId")
-    if (!selectedSigner && localStorageSigner) selectSigner(localStorageSigner)
+    const storageSigner = localStorage.getItem("signerId")
+    if (!selectedSigner && storageSigner) {
+      setLocalStorageSigner(storageSigner)
+      selectSigner(storageSigner)
+    }
   }, [selectedSigner, selectSigner])
 
   return {
@@ -85,5 +90,7 @@ export function useSigner({
     selectCustomSigner,
     // selected signer is local storage signer by default (in case authenticated user)
     selectedSigner: selectedSigner?.signer,
+    // signer id in localStorage (used on connected user page reload)
+    localStorageSigner,
   }
 }
