@@ -32,7 +32,7 @@ export const Header = () => {
             href="https://www.npmjs.com/package/@nfid/identitykit"
             className="absolute text-[10px] text-primary dark:text-teal-500 text-right right-0 bottom-0 mb-[-10px] me-[-10px]"
           >
-            v1.0.0
+            v1.0.1
           </a>
         </div>
         <div className="flex items-center space-x-2 sm:space-x-4">
