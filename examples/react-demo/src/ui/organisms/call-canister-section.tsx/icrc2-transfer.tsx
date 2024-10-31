@@ -8,7 +8,7 @@ export function Icrc2Transfer({ className }: { className?: string }) {
   const { user } = useAuth()
 
   const myAcc = {
-    owner: Principal.fromText("otmgz-w3jqd-eutql-bdgwo-3dvfp-q5l2p-ruzio-nc3dr-2vgbi-c5eiz-tqe"),
+    owner: Principal.fromText("gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe"), // mocked signer main account
     subaccount: [],
   }
 
@@ -38,7 +38,7 @@ export function Icrc2Transfer({ className }: { className?: string }) {
           canisterId: "etik7-oiaaa-aaaar-qagia-cai",
           sender: user?.principal.toString() || "",
           method: CallCanisterMethod.icrc2_transfer_from,
-          arg: "RElETAZufW17bgFueGwCs7DawwNorYbKgwUCbAjG/LYCALqJ5cIEAqLelOsGAoLz85EMA9ijjKgNfZGcnL8NAN6n99oNA8uW3LQOBAEFAAAAAICAgMnVm5n4jJ4EAAABHfiYTFV8824++qVOIjiov3Bgl0gU0RPMROITTCMCAA==",
+          arg: "RElETAZte24AbAKzsNrDA2ithsqDBQFufW54bAf7ygECxvy2AgPhhcGUAgHqyoqeBAK6ieXCBAGC8/ORDATYo4yoDX0BBQEdXdZAg85gOc3s6DkTiv7FBn9RDHSPT6rgmlsBGgIAAAABHddbvOJ4U2u2S79mR0+xkJBPtwHztu02la8/gFECAAAAgICA9d246+S1bA==",
         },
       }}
       canisterIDL={pepeIDL}
@@ -51,7 +51,7 @@ export function Icrc2Transfer({ className }: { className?: string }) {
   })
     
   const myAcc = {
-    owner: Principal.fromText("otmgz-w3jqd-eutql-bdgwo-3dvfp-q5l2p-ruzio-nc3dr-2vgbi-c5eiz-tqe"),
+    owner: Principal.fromText("gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe"), // mocked signer first account
     subaccount: [],
   }
   
