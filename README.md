@@ -1,4 +1,4 @@
-# NFID IdentityKit
+# NFID IdentityKit Test
 
 NFID IdentityKit is a React library designed to simplify adding a wallet connection to your
 decentralized application (dApp). With intuitive, responsive, and customizable components,
