@@ -25,12 +25,6 @@ RUN mkdir -p /etc/apt/keyrings \
     && apt-get update \
     && apt-get install -y nodejs
 
-# Install YARN
-RUN mkdir -p /etc/apt/keyrings \
-    && curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor -o /etc/apt/keyrings/yarnkey.gpg >/dev/null \
-    && echo "deb [signed-by=/etc/apt/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | sudo tee /etc/apt/sources.list.d/yarn.list \
-    && apt-get update && apt-get install -y yarn
-
 # Install test dependencies
 RUN apt-get install -y \
     libglib2.0-0 \

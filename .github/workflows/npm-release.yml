@@ -1,37 +1,8 @@
 name: Dispatch NPM release
 
-permissions:
-  contents: "write"
-
 on:
   workflow_dispatch:
     inputs:
-      package:
-        type: choice
-        description: "Package to release"
-        required: true
-        options:
-          - "identitykit"
-
-      level:
-        type: choice
-        description: Select the release update level
-        options:
-          - major
-          - minor
-          - patch
-          - prepatch
-          - preminor
-          - premajor
-          - prerelease
-      preid:
-        type: choice
-        required: false
-        description: Select pre-id (alpha | beta)
-        default: "none"
-        options:
-          - alpha
-          - beta
       registry:
         type: choice
         required: false
@@ -51,63 +22,37 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
-          gpg_private_key: ${{ secrets.NFID_GITHUB_ACTION_GPG_KEY }}
-          passphrase: ${{ secrets.NFID_GITHUB_ACTION_GPG_KEY_PASSPHRASE }}
-          git_user_signingkey: true
-          git_commit_gpgsign: true
-
-      - name: 🔧 Git
-        run: |
-          git config user.email "nfid-github-action@identitylabs.ooo"
-          git config user.name "NFID Github Action"
       - name: 🔧 Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          registry-url: https://registry.npmjs.org/
-
-      - name: 🔧 Yarn
-        run: |
-          npx yarn config set version-git-message "chore(${{ github.event.inputs.package }}): release v%s"
-          npx yarn config set version-tag-prefix "@nfid/${{ github.event.inputs.package }}-v"
+          node-version: 22
 
       - name: 🤖 Install
         run: npm i --frozen-lockfile
-
-      - name: 🤖 Increment package version
-        working-directory: packages/${{ github.event.inputs.package }}
-        run: |
-          if [[ ${{ github.event.inputs.level }} == "pre"* ]]; then
-            npx yarn version --${{ github.event.inputs.level }} --preid ${{ github.event.inputs.preid }}
-          else
-            npx yarn version --${{ github.event.inputs.level }}
-          fi
 
       - name: 🤖 Build
         run: npm run build-identitykit
 
       - name: 📦 Publish package on NPM
         if: ${{ github.event.inputs.registry == 'npm' }}
-        working-directory: packages/${{ github.event.inputs.package }}
-        run: npx yarn publish --access public
+        working-directory: packages/identitykit
+        run: | 
+          echo "registry=https://registry.npmjs.org/" > ~/.npmrc
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
+          
+          npm pkg set 'name'='@internet-identity-labs/identitykit'  
+          npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.IL_GH_NPM_TOKEN }}
 
       - name: 📦 Publish package on GPR
         if: ${{ github.event.inputs.registry == 'github-packages' }}
-        working-directory: packages/${{ github.event.inputs.package }}
+        working-directory: packages/identitykit
         run: |
-          npm pkg set 'name'='@internet-identity-labs/${{ github.event.inputs.package }}'      
-          echo "registry=https://npm.pkg.github.com" >> .npmrc
-          echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
-          yarn publish --access public
+          echo "registry=https://npm.pkg.github.com/" > ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
+
+          npm pkg set 'name'='@internet-identity-labs/identitykit'  
+          npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: 🎉 Push tags and commit with version increment
-        run: |
-          git push
-          git push --tags

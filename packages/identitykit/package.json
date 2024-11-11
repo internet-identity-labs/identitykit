@@ -14,7 +14,7 @@
   "homepage": "https://www.identitykit.xyz/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/internet-identity-labs/identitykit"
+    "url": "git+https://github.com/internet-identity-labs/identitykit.git"
   },
   "license": "MIT",
   "bugs": {

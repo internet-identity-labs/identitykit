@@ -1,7 +1,7 @@
 {
   "name": "nfid",
   "private": false,
-  "packageManager": "yarn@1.22.22",
+  "packageManager": "npm@10.9.0",
   "scripts": {
     "build": "echo '💀 DONT REMOVE THIS 💀'",
     "build-ci": "turbo build",

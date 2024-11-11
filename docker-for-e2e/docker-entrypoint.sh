@@ -14,7 +14,6 @@ fi
 
 ci_echo_title "Current configuration" "warn" >&2
 ci_echo_info "
-YARN=$(yarn --version)
 NPM=$(npm --version)
 
 WORKDIR=${WORKDIR}

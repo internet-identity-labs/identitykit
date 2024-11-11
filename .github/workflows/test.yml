@@ -40,7 +40,6 @@ jobs:
           path: |
             **/node_modules
             **/.eslintcache
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: npm
 
       - name: Install dependencies
@@ -88,7 +87,6 @@ jobs:
           path: |
             **/node_modules
             **/.eslintcache
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: npm
 
       - name: Run tests
