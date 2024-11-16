@@ -217,7 +217,7 @@ export class DelegationSignerClient extends SignerClient {
       removeDelegationChain(STORAGE_KEY, this.storage),
     ])
     this.identity = new AnonymousIdentity()
-    super.logout(options)
+    return super.logout(options)
   }
 
   public getIdentity(): Identity | PartialIdentity {

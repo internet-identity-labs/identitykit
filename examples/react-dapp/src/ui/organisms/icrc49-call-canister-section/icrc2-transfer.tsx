@@ -14,7 +14,7 @@ export function Icrc2Transfer({ className }: { className?: string }) {
           arg: "RElETAZte24AbAKzsNrDA2ithsqDBQFufW54bAf7ygECxvy2AgPhhcGUAgHqyoqeBAK6ieXCBAGC8/ORDATYo4yoDX0BBQEdXdZAg85gOc3s6DkTiv7FBn9RDHSPT6rgmlsBGgIAAAABHWmAyUnBYRms7Y6lfDq9PjTKHNFscdVMFAukRmcCAAAAgICA9d246+S1bA==",
         },
       }}
-      getCodeSnippet={({ canisterId, method }) => `const { agent } = useIdentityKit()
+      getCodeSnippet={({ canisterId, method }) => `const agent = useAgent()
   
   const actor = Actor.createActor(idlFactory, {
     agent,

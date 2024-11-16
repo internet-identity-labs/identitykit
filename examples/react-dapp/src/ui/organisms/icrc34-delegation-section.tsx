@@ -1,4 +1,4 @@
-import { useIdentityKit } from "@nfid/identitykit/react"
+import { useSigner } from "@nfid/identitykit/react"
 import { MethodBadge } from "../atoms"
 import { Section } from "./section"
 import { DelegationRequest, DelegationResponse } from "@slide-computer/signer"
@@ -6,7 +6,7 @@ import { DelegationRequest, DelegationResponse } from "@slide-computer/signer"
 const targetCanister = import.meta.env.VITE_TARGET_CANISTER
 
 export function Icrc34DelegationSection() {
-  const { signer } = useIdentityKit()
+  const signer = useSigner()
   return (
     <Section<Omit<DelegationRequest, "jsonrpc">>
       id="icrc34_delegation"

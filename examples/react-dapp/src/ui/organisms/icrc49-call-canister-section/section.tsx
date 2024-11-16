@@ -1,6 +1,6 @@
 import { Section as BaseSection } from "../section"
 import { CallCanisterRequest } from "@slide-computer/signer"
-import { useIdentityKit } from "@nfid/identitykit/react"
+import { useSigner } from "@nfid/identitykit/react"
 import { CALL_CANISTER_METHODS, CallCanisterMethodType } from "./constants"
 
 type SectionRequest = Omit<CallCanisterRequest, "jsonrpc">
@@ -14,7 +14,7 @@ export function Section({
   className?: string
   request: SectionRequest
 }) {
-  const { signer } = useIdentityKit()
+  const signer = useSigner()
   return (
     <BaseSection<SectionRequest>
       className={className}

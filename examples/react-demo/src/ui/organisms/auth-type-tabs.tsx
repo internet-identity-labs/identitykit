@@ -1,7 +1,7 @@
 import { IdentityKitAuthType } from "@nfid/identitykit"
 import clsx from "clsx"
 import { CodeSection, ResponseSection } from "../molecules"
-import { useIdentityKit } from "@nfid/identitykit/react"
+import { useAccounts, useIdentity } from "@nfid/identitykit/react"
 
 const getUsageExample = (authType: IdentityKitAuthType) =>
   `import { IdentityKitProvider, IdentityKitTheme, ConnectWalletButton } from "@nfid/identitykit/react"
@@ -15,8 +15,15 @@ import { NFIDW, IdentityKitAuthType } from "@nfid/identitykit"
   <ConnectWalletButton />
 </IdentityKitProvider>`
 
-export function AuthTypeTabs({ onChange }: { onChange: (type: IdentityKitAuthType) => void }) {
-  const { authType, accounts, identity } = useIdentityKit()
+export function AuthTypeTabs({
+  onChange,
+  authType,
+}: {
+  onChange: (type: IdentityKitAuthType) => void
+  authType: IdentityKitAuthType
+}) {
+  const accounts = useAccounts()
+  const identity = useIdentity()
 
   const isAccounts = authType === IdentityKitAuthType.ACCOUNTS
 

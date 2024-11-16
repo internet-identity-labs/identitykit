@@ -46,7 +46,7 @@ export interface SignerClientOptions {
    */
   idleOptions?: IdleOptions
   derivationOrigin?: string
-  onLogout?: () => unknown
+  onLogout?: () => Promise<unknown>
 }
 
 export abstract class SignerClient {
@@ -78,7 +78,7 @@ export abstract class SignerClient {
     await this.setConnectedUserToStorage(undefined)
     this.idleManager?.exit()
     this.idleManager = undefined
-    this.options.onLogout?.()
+    await this.options.onLogout?.()
     if (options?.returnTo) {
       try {
         window.history.pushState({}, "", options.returnTo)

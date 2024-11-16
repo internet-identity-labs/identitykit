@@ -1,0 +1,52 @@
+---
+title: "useAuth"
+date: "2024-07-09"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+import { Callout } from "nextra/components"
+
+# useAuth
+
+Hook for connection, disconnection and user data:
+
+## Usage
+
+```typescript
+import { useSigner } from "@nfid/identitykit/react"
+
+const { connect, disconnect, isConnecting, user } = useAuth()
+```
+
+## Return values
+
+### user
+
+`{ principal: Principal, subaccount?: SubAccount} | undefined{:typescript}`
+
+Currently connected user principal and subaccount. Will be undefined until successfull connect.
+
+### isConnecting
+
+`boolean{:typescript}`
+
+Boolean representing wether user is connecting or not (signer selected, but user still not
+connected).
+
+### connect
+
+`(signerIdOrUrl?: string) => void{:typescript}`
+
+Function to trigger will open connect wallet modal wihout `signerIdOrUrl` provided, will open signer
+if signers includes one with provided id or provided value is valid signer url.
+
+<Callout type="warning" emoji="⚠️">
+  Function will throw `Error("Identitykit is not initialized yet"){:typescript}` until identitykit <a href="/hooks/useIdentityKit#isinitializing"><strong>initializes</strong></a>. So make sure you disable your connect button in these cases.
+</Callout>
+
+### disconnect
+
+`() => Promise<void>{:typescript}`
+
+Function to trigger manual disconnect

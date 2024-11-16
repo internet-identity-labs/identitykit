@@ -69,7 +69,7 @@ export class AccountsSignerClient extends SignerClient {
 
   public async logout(options?: { returnTo?: string }): Promise<void> {
     await this.storage.remove(`accounts-${STORAGE_KEY}`)
-    super.logout(options)
+    return super.logout(options)
   }
 
   private async setAccounts(

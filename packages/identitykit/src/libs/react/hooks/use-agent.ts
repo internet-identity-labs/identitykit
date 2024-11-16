@@ -1,21 +1,19 @@
 import { useAsyncMemo } from "use-async-memo"
-import { IdentityKitContext } from "../context"
 import { SignerAgent } from "@slide-computer/signer-agent"
 import { HttpAgent } from "@dfinity/agent"
 import { IdentityKitAgent, IdentityKitAuthType } from "../../../lib"
 import { useIdentity } from "./use-identity"
-import { useContext } from "react"
 import { DelegationSignerClient } from "../../../lib/signer-client"
+import { useAuthType, useSigner, useSignerClient, useUser } from "./context-selectors"
 
 export function useAgent(
   agentOptions: Omit<Parameters<typeof HttpAgent.create>[0], "identity"> = {}
 ) {
-  const ctx = useContext(IdentityKitContext)
-  const { identity } = useIdentity()
-
-  if (!ctx) throw new Error("Identitykit Context is null")
-
-  const { selectedSigner, user, signerClient, authType } = ctx
+  const identity = useIdentity()
+  const selectedSigner = useSigner()
+  const user = useUser()
+  const signerClient = useSignerClient()
+  const authType = useAuthType()
 
   const ikAgent = useAsyncMemo(async () => {
     if (!selectedSigner || !user || !signerClient) return undefined

@@ -1,6 +1,36 @@
-export { IdentityKitProvider } from "./provider"
-export { useIdentityKit, IdentityKitContext } from "./context"
 export * from "./constants"
-export * from "./connect-wallet"
+export {
+  Provider as IdentityKitProvider,
+  ConnectWallet,
+  ConnectWalletButton,
+  ConnectedWalletButton,
+  ConnectWalletDropdownMenu,
+  ConnectWalletDropdownMenuItems,
+  ConnectWalletDropdownMenuItem,
+  ConnectWalletDropdownMenuAddressItem,
+  ConnectWalletDropdownMenuDisconnectItem,
+  ConnectWalletDropdownMenuButton,
+} from "./components"
+export type {
+  ConnectWalletDropdownMenuButtonProps,
+  ConnectWalletDropdownMenuProps,
+  ConnectWalletDropdownMenuItemProps,
+  ConnectWalletDropdownMenuItemsProps,
+  ConnectWalletDropdownMenuAddressItemProps,
+  ConnectWalletDropdownMenuDisconnectItemProps,
+  ConnectWalletDropdownMenuItemTextProps,
+  ConnectWalletButtonProps,
+  ConnectedWalletButtonProps,
+} from "./components"
 export { formatIcp } from "./utils"
-export { useAgent } from "./hooks"
+export {
+  useIsInitializing,
+  useAuth,
+  useBalance,
+  useSigner,
+  useAgent,
+  useAccounts,
+  useIdentity,
+  useDelegationType,
+  useIdentityKit,
+} from "./hooks"
