@@ -14,7 +14,7 @@ export function WithoutConsentMessage({ className }: { className?: string }) {
           arg: "RElETAABcQJtZQ==",
         },
       }}
-      getCodeSnippet={({ canisterId, method }) => `const { agent } = useIdentityKit()
+      getCodeSnippet={({ canisterId, method }) => `const agent = useAgent()
   const actor = Actor.createActor(idlFactory, {
     agent,
     canisterId: "${canisterId}",

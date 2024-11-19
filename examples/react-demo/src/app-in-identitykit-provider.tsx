@@ -20,18 +20,18 @@ const nfidSignerProviderUrl = import.meta.env.VITE_MOCKED_NFID_SIGNER_PROVIDER_U
 const targetCanister = import.meta.env.VITE_TARGET_CANISTER
 const environment = import.meta.env.VITE_ENVIRONMENT
 
+const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
+const signers = [nfidw, Plug, InternetIdentity, Stoic]
+if (environment === "dev") {
+  signers.push({
+    ...MockedSigner,
+    providerUrl: mockedSignerProviderUrl,
+  })
+}
+
 export function AppWrappedInIdentityKit() {
   const [authType, setAuthType] = useState<IdentityKitAuthType>(IdentityKitAuthType.DELEGATION)
   const { resolvedTheme } = useTheme()
-  const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
-  const signers = [nfidw, Plug, InternetIdentity, Stoic]
-
-  if (environment === "dev") {
-    signers.push({
-      ...MockedSigner,
-      providerUrl: mockedSignerProviderUrl,
-    })
-  }
 
   useEffect(() => {
     const localStorageAuthType = localStorage.getItem("authType")
@@ -63,6 +63,7 @@ export function AppWrappedInIdentityKit() {
           setAuthType(aT)
           localStorage.removeItem("authType")
         }}
+        authType={authType}
       />
     </IdentityKitProvider>
   )

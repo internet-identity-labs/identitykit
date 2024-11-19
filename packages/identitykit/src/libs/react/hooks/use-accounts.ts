@@ -1,18 +1,14 @@
-import { useContext, useEffect, useState } from "react"
-import { IdentityKitContext } from "../context"
+import { useEffect, useState } from "react"
 import { IdentityKitAuthType } from "../../../lib/identity-kit"
 import { AccountsSignerClient } from "../../../lib/signer-client"
 import { Principal } from "@dfinity/principal"
 import { SubAccount } from "@dfinity/ledger-icp"
+import { useAuthType, useSignerClient, useUser } from "./context-selectors"
 
 export function useAccounts() {
-  const ctx = useContext(IdentityKitContext)
-
-  if (!ctx) {
-    throw new Error("Identitykit Context is null")
-  }
-
-  const { authType, signerClient, user } = ctx
+  const authType = useAuthType()
+  const signerClient = useSignerClient()
+  const user = useUser()
 
   const [accounts, setAccounts] = useState<
     | {
@@ -36,7 +32,5 @@ export function useAccounts() {
     }
   }, [user, authType, signerClient])
 
-  return {
-    accounts,
-  }
+  return accounts
 }

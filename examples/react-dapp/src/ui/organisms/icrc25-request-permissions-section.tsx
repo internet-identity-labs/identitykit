@@ -1,10 +1,10 @@
-import { useIdentityKit } from "@nfid/identitykit/react"
+import { useSigner } from "@nfid/identitykit/react"
 import { Link, MethodBadge } from "../atoms"
 import { Section } from "./section"
 import { RequestPermissionsRequest } from "@slide-computer/signer"
 
 export function Icrc25RequestPermissionsSection() {
-  const { signer } = useIdentityKit()
+  const signer = useSigner()
   return (
     <Section<Omit<RequestPermissionsRequest, "jsonrpc">>
       id="icrc25_request_permissions"

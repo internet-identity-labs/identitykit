@@ -1,10 +1,10 @@
 import { Section } from "./section"
 import { idlFactory as demoIDL } from "../../../idl/service_idl"
-import { useIdentityKit } from "@nfid/identitykit/react"
+import { useAuth } from "@nfid/identitykit/react"
 import { CallCanisterMethod } from "./constants"
 
 export function ToTarget({ className }: { className?: string }) {
-  const { user } = useIdentityKit()
+  const { user } = useAuth()
 
   return (
     <Section
@@ -20,7 +20,7 @@ export function ToTarget({ className }: { className?: string }) {
       }}
       canisterIDL={demoIDL}
       actorArgs={"me"}
-      getCodeSnippet={({ canisterId, method }) => `const { agent } = useIdentityKit()
+      getCodeSnippet={({ canisterId, method }) => `const agent = useAgent()
   const actor = Actor.createActor(idlFactory, {
     agent,
     canisterId: "${canisterId}",

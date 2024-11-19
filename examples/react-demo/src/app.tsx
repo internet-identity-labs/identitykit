@@ -1,10 +1,16 @@
 import { Header, AuthTypeTabs, CallCanisterSection } from "./ui"
 import { ToastContainer } from "react-toastify"
 import { IdentityKitAuthType } from "@nfid/identitykit"
-import { useIdentityKit } from "@nfid/identitykit/react"
+import { useAuth } from "@nfid/identitykit/react"
 
-function App({ setAuthType }: { setAuthType: (k: IdentityKitAuthType) => void }) {
-  const { disconnect } = useIdentityKit()
+function App({
+  setAuthType,
+  authType,
+}: {
+  setAuthType: (k: IdentityKitAuthType) => void
+  authType: IdentityKitAuthType
+}) {
+  const { disconnect } = useAuth()
 
   return (
     <div className="h-full min-h-screen bg-white dark:bg-dark px-[30px] pb-[25px]">
@@ -18,6 +24,7 @@ function App({ setAuthType }: { setAuthType: (k: IdentityKitAuthType) => void })
           await disconnect()
           setAuthType(type)
         }}
+        authType={authType}
       />
       <h3 className="text-xl mt-[30px] mb-[25px]">
         Step 2. Click Connect Wallet button (or disconnect and reconnect)

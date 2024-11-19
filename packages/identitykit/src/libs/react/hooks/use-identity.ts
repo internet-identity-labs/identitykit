@@ -1,16 +1,11 @@
-import { useContext, useMemo } from "react"
-import { IdentityKitContext } from "../context"
+import { useMemo } from "react"
 import { AccountsSignerClient, DelegationSignerClient } from "../../../lib/signer-client"
 import { IdentityKitAuthType } from "../../../lib/identity-kit"
+import { useAuthType, useSignerClient } from "./context-selectors"
 
 export function useIdentity() {
-  const ctx = useContext(IdentityKitContext)
-
-  if (!ctx) {
-    throw new Error("Identitykit Context is null")
-  }
-
-  const { signerClient, authType } = ctx
+  const signerClient = useSignerClient()
+  const authType = useAuthType()
 
   const identity = useMemo(
     () =>
@@ -20,7 +15,5 @@ export function useIdentity() {
     [authType, signerClient]
   )
 
-  return {
-    identity,
-  }
+  return identity
 }

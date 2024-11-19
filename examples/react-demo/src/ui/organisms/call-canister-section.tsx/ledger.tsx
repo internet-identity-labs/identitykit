@@ -3,11 +3,11 @@ import { idlFactory as ledgerIDL } from "../../../idl/ledger"
 import { AccountIdentifier } from "@dfinity/ledger-icp"
 import { Principal } from "@dfinity/principal"
 import { fromHexString } from "@dfinity/candid"
-import { useIdentityKit } from "@nfid/identitykit/react"
+import { useAuth } from "@nfid/identitykit/react"
 import { CallCanisterMethod } from "./constants"
 
 export function Ledger({ className }: { className?: string }) {
-  const { user } = useIdentityKit()
+  const { user } = useAuth()
 
   const address = AccountIdentifier.fromPrincipal({
     principal: Principal.fromText("do25a-dyaaa-aaaak-qifua-cai"),
@@ -41,7 +41,7 @@ export function Ledger({ className }: { className?: string }) {
           throw new Error("Only ryjl3-tyaaa-aaaaa-aaaba-cai canister supported for this method")
         }
         return `import { fromHexString } from "@dfinity/candid"
-  const { agent } = useIdentityKit()
+  const agent = useAgent()
   
   const actor = Actor.createActor(idlFactory, {
     agent,
