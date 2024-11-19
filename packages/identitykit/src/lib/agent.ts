@@ -79,6 +79,7 @@ export class Agent implements DfinityAgent {
     return strategy.readState(...params)
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async createReadStateRequest?(): Promise<any> {
     return {
       body: {
