@@ -83,6 +83,7 @@
   ],
   "dependencies": {
     "@headlessui/react": "2.1.8",
+    "@primevault/signer-transport-primevault": "^1.0.3",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.2",
     "@slide-computer/signer": "^3.6.4",
