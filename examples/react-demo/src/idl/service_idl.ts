@@ -39,7 +39,6 @@ export const idlFactory = ({ IDL }: any) => {
   })
   const Result = IDL.Variant({ Ok: Icrc21ConsentInfo, Err: Icrc21Error })
   return IDL.Service({
-    get_trusted_origins: IDL.Func([], [IDL.Vec(IDL.Text)], []),
     greet: IDL.Func([IDL.Text], [IDL.Text], ["query"]),
     greet_no_consent: IDL.Func([IDL.Text], [IDL.Text], ["query"]),
     icrc21_canister_call_consent_message: IDL.Func([Icrc21ConsentMessageRequest], [Result], []),
