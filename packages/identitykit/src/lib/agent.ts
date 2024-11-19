@@ -78,4 +78,14 @@ export class Agent implements DfinityAgent {
 
     return strategy.readState(...params)
   }
+
+  async createReadStateRequest?(): Promise<any> {
+    return {
+      body: {
+        content: {
+          ingress_expiry: undefined,
+        },
+      },
+    }
+  }
 }
