@@ -6,6 +6,7 @@ import { getAuthClientTransportBuilder } from "./auth-client-transport.builder"
 import { getStoicTransportBuilder } from "./stoic-transport.builder"
 import { DEFAULT_MAX_TIME_TO_LIVE } from "../../constants"
 import { AuthClientCreateOptions } from "@dfinity/auth-client"
+import { getPlugTransportBuilder } from "./plug-transport.builder"
 
 export type TransportBuilderRequest = {
   id?: string
@@ -29,7 +30,12 @@ export class TransportBuilder {
         crypto,
         window,
       }),
-    [TransportType.EXTENSION]: ({ id }) => getExtensionTransportBuilder({ id }),
+    [TransportType.EXTENSION]: ({ id }) => {
+      if(!id) {
+        throw Error('Id is required to find the ICRC-94 specific wallet');
+      }
+      return getExtensionTransportBuilder({ uuid: id })
+    },
     [TransportType.INTERNET_IDENTITY]: ({
       maxTimeToLive,
       derivationOrigin,
@@ -52,6 +58,7 @@ export class TransportBuilder {
           identityProvider: url,
         },
       }),
+    [TransportType.PLUG]: () => getPlugTransportBuilder(),
     [TransportType.STOIC]: ({ maxTimeToLive }) => getStoicTransportBuilder({ maxTimeToLive }),
   }
 

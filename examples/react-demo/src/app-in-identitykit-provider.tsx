@@ -13,6 +13,7 @@ import {
 } from "@nfid/identitykit"
 
 import App from "./app"
+import { PrimeVault } from "@nfid/identitykit/src/lib/signers.ts"
 
 const mockedSignerProviderUrl = import.meta.env.VITE_MOCKED_SIGNER_PROVIDER_URL
 const nfidSignerProviderUrl = import.meta.env.VITE_MOCKED_NFID_SIGNER_PROVIDER_URL
@@ -21,7 +22,7 @@ const targetCanister = import.meta.env.VITE_TARGET_CANISTER
 const environment = import.meta.env.VITE_ENVIRONMENT
 
 const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
-const signers = [nfidw, Plug, InternetIdentity, Stoic]
+const signers = [nfidw, Plug, InternetIdentity, PrimeVault, Stoic]
 if (environment === "dev") {
   signers.push({
     ...MockedSigner,
