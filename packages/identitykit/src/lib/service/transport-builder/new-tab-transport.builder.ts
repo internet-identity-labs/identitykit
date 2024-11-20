@@ -6,6 +6,5 @@ export async function getPopupTransportBuilder(
 ): Promise<Transport> {
   return new PostMessageTransport({
     ...options,
-    statusTimeout: options.statusTimeout || 15000,
   })
 }
