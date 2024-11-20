@@ -9,11 +9,11 @@ import {
   NFIDW,
   Plug,
   InternetIdentity,
+  PrimeVault,
   Stoic,
 } from "@nfid/identitykit"
 
 import App from "./app"
-import { PrimeVault } from "@nfid/identitykit/src/lib/signers.ts"
 
 const mockedSignerProviderUrl = import.meta.env.VITE_MOCKED_SIGNER_PROVIDER_URL
 const nfidSignerProviderUrl = import.meta.env.VITE_MOCKED_NFID_SIGNER_PROVIDER_URL
