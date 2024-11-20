@@ -6,7 +6,8 @@ import {
   NFIDW,
   Plug,
   InternetIdentity,
-  Stoic, PrimeVault,
+  Stoic,
+  PrimeVault,
 } from "../../../../lib"
 import { useCreateIdentityKit, useProceedSigner } from "../../hooks"
 import { validateUrl } from "../../utils"

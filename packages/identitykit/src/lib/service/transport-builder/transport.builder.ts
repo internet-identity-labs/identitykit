@@ -31,8 +31,8 @@ export class TransportBuilder {
         window,
       }),
     [TransportType.EXTENSION]: ({ id }) => {
-      if(!id) {
-        throw Error('Id is required to find the ICRC-94 specific wallet');
+      if (!id) {
+        throw Error("Id is required to find the ICRC-94 specific wallet")
       }
       return getExtensionTransportBuilder({ uuid: id })
     },
