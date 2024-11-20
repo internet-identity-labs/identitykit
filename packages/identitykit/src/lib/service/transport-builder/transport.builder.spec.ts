@@ -43,7 +43,7 @@ describe("TransportBuilder", () => {
 
     const result = await TransportBuilder.build(request)
 
-    expect(getPlugTransportBuilder).toHaveBeenCalledWith({ id: undefined })
+    expect(getPlugTransportBuilder).toHaveBeenCalledWith()
     expect(result).toBe(mockTransport)
   })
 })
