@@ -1,11 +1,11 @@
 import { Section } from "./section"
 import { idlFactory as pepeIDL } from "../../../idl/token-pepe-ledger"
 import { Principal } from "@dfinity/principal"
-import { useIdentityKit } from "@nfid/identitykit/react"
+import { useAuth } from "@nfid/identitykit/react"
 import { CallCanisterMethod } from "./constants"
 
 export function Icrc2Transfer({ className }: { className?: string }) {
-  const { user } = useIdentityKit()
+  const { user } = useAuth()
 
   const myAcc = {
     owner: Principal.fromText("otmgz-w3jqd-eutql-bdgwo-3dvfp-q5l2p-ruzio-nc3dr-2vgbi-c5eiz-tqe"),
@@ -43,7 +43,7 @@ export function Icrc2Transfer({ className }: { className?: string }) {
       }}
       canisterIDL={pepeIDL}
       actorArgs={actorArgs}
-      getCodeSnippet={({ canisterId, method }) => `const { agent } = useIdentityKit()
+      getCodeSnippet={({ canisterId, method }) => `const agent = useAgent()
   
   const actor = Actor.createActor(idlFactory, {
     agent,

@@ -1,9 +1,9 @@
-import { useIdentityKit } from "@nfid/identitykit/react"
+import { useSigner } from "@nfid/identitykit/react"
 import { MethodBadge } from "../atoms"
 import { Section } from "./section"
 
 export function Icrc25PermissionsSection() {
-  const { signer } = useIdentityKit()
+  const signer = useSigner()
   return (
     <Section
       id="icrc25_permissions"

@@ -1,0 +1,24 @@
+---
+title: "useDelegationType"
+date: "2024-07-09"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+import { Callout } from "nextra/components"
+
+# useDelegationType
+
+`() => IdentityKitDelegationType.ACCOUNT | IdentityKitDelegationType.RELYING_PARTY{:typescript}`
+
+Equals `IdentityKitDelegationType.ACCOUNT` if delegation has targets,
+`IdentityKitDelegationType.RELYING_PARTY` if delegation doesn't have targets, and `undefined` if
+user is not connected or authType is set to `IdentityKitAuthType.ACCOUNTS`:
+
+## Usage
+
+```typescript
+import { useDelegationType } from "@nfid/identitykit/react"
+
+const delegationType = useDelegationType()
+```

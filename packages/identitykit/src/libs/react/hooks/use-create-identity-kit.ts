@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import {
   IdentityKitAuthType,
   IdentityKit,
@@ -45,23 +45,24 @@ export function useCreateIdentityKit<
   const [icpBalance, setIcpBalance] = useState<undefined | number>()
 
   const onDisconnect = useCallback(async () => {
-    await selectedSigner?.transport.connection?.disconnect()
-    await clearSigner()
     setIk(null)
     setUser(undefined)
     setIcpBalance(undefined)
+    await selectedSigner?.transport.connection?.disconnect()
+    await clearSigner()
     props.onDisconnect?.()
-  }, [ik?.signerClient, clearSigner, setUser, setIcpBalance, props.onDisconnect])
+  }, [ik?.signerClient, clearSigner, props.onDisconnect])
 
   // create disconnect func
   const disconnect = useCallback(async () => {
-    return ik?.signerClient?.logout()
+    return await ik?.signerClient?.logout()
   }, [ik?.signerClient])
 
   // create fetchBalance func
-  const fetchIcpBalance = useCallback(() => {
-    return ik?.getIcpBalance().then(setIcpBalance)
-  }, [ik, setIcpBalance])
+  const fetchIcpBalance = useMemo(() => {
+    if (!user || !ik) return
+    return () => ik.getIcpBalance().then(setIcpBalance)
+  }, [ik, user, setIcpBalance])
 
   useEffect(() => {
     setIk(null)
@@ -106,8 +107,8 @@ export function useCreateIdentityKit<
 
   // fetch balance when user connected
   useEffect(() => {
-    if (icpBalance === undefined && user) {
-      fetchIcpBalance()
+    if (icpBalance === undefined) {
+      fetchIcpBalance?.()
     }
   }, [icpBalance, user, fetchIcpBalance])
 
@@ -116,6 +117,6 @@ export function useCreateIdentityKit<
     disconnect,
     icpBalance,
     signerClient: ik?.signerClient,
-    fetchIcpBalance: user ? (fetchIcpBalance as () => Promise<void>) : undefined,
+    fetchIcpBalance,
   }
 }

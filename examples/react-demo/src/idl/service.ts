@@ -45,7 +45,6 @@ export interface Icrc21LineDisplayPage {
 }
 export type Result = { Ok: Icrc21ConsentInfo } | { Err: Icrc21Error }
 export interface _SERVICE {
-  get_trusted_origins: ActorMethod<[], Array<string>>
   greet: ActorMethod<[string], string>
   greet_no_consent: ActorMethod<[string], string>
   icrc21_canister_call_consent_message: ActorMethod<[Icrc21ConsentMessageRequest], Result>

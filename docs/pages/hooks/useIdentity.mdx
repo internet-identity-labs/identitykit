@@ -1,0 +1,22 @@
+---
+title: "useIdentity"
+date: "2024-07-09"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+# useIdentity
+
+`() => (Identity | PartialIdentity | undefined){:typescript}`
+
+If `IdentityKitProvider.authType` is set to `IdentityKitAuthType.DELEGATION` value will contain
+`@dfinity` identity after successful connection, will be undefined if other authType is selected or
+user is not connected:
+
+## Usage
+
+```typescript
+import { useIdentity } from "@nfid/identitykit/react"
+
+const identity = useIdentity()
+```

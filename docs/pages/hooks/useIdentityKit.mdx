@@ -9,9 +9,12 @@ import { Callout } from "nextra/components"
 
 # useIdentityKit
 
-`@nfid/identitykit` exports only one react hook, which is needed for getting the agent for the
-currently connected user, its wallet address (as a valid ICRC1 Account), balance, disconnect
-function and other:
+Hook, which is needed for getting currently connected user, its wallet address (as a valid ICRC1
+Account), balance, disconnect function and other in one place:
+
+<Callout type="warning" emoji="⚠️">
+  Hook is deprecated, please use separate hooks for retrieving data below for better performance
+</Callout>
 
 ## Import
 
@@ -43,9 +46,8 @@ const {
 
 `boolean{:typescript}`
 
-Boolean representing wether identitykit initialized or not, includes validation of delegation
-expiration for connected user on page reload (Connect wallet will be disabled until initialization
-finishes).
+Boolean representing wether identitykit initialized or not for connected user on page reload
+(Connect wallet will be disabled until initialization finishes).
 
 ### user
 
@@ -103,8 +105,7 @@ Function to trigger will open connect wallet modal wihout `signerIdOrUrl` provid
 if signers includes one with provided id or provided value is valid signer url.
 
 <Callout type="warning" emoji="⚠️">
-  Function will throw `Error("Identitykit is not initialized yet"){:typescript}` until identitykit <a href="/hooks/useIdentityKit#isinitializing"><strong>initializes</strong></a>, `Error("User is already connecting"){:typescript}` if signer
-  is selected, but <a href="/hooks/useIdentityKit#isuserconnecting"><strong>user is still connecting</strong></a> or `Error("Identitykit is already connected"){:typescript}` for <a href="/hooks/useIdentityKit#user"><strong>connected user</strong></a>. So make sure you disable your connect button in these cases.
+  Function will throw `Error("Identitykit is not initialized yet"){:typescript}` until identitykit <a href="/hooks/useIdentityKit#isinitializing"><strong>initializes</strong></a>. So make sure you disable your connect button in these cases.
 </Callout>
 
 ### disconnect
@@ -118,5 +119,4 @@ Function to trigger manual disconnect
 `() => Promise<void> | undefined{:typescript}`
 
 Function to manually fetch ICP balance of connected user, will be undefined if user is not
-connected. Note function does not return balance, instead updates `icpBalance` from
-`useIdentityKit()`
+connected.

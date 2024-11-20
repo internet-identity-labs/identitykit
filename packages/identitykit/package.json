@@ -1,6 +1,6 @@
 {
   "name": "@nfid/identitykit",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A React library for adding wallet connections to dApps.",
   "keywords": [
     "ICP",
@@ -14,7 +14,7 @@
   "homepage": "https://www.identitykit.xyz/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/internet-identity-labs/identitykit"
+    "url": "git+https://github.com/internet-identity-labs/identitykit.git"
   },
   "license": "MIT",
   "bugs": {
@@ -85,18 +85,20 @@
     "@headlessui/react": "2.1.8",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.2",
-    "@slide-computer/signer": "^3.6.4",
-    "@slide-computer/signer-agent": "^3.6.4",
-    "@slide-computer/signer-storage": "^3.6.4",
-    "@slide-computer/signer-transport-auth-client": "^3.6.4",
-    "@slide-computer/signer-transport-plug": "^3.6.4",
-    "@slide-computer/signer-transport-stoic": "^3.6.4",
-    "@slide-computer/signer-web": "^3.6.4",
+    "@slide-computer/signer": "^3.7.0",
+    "@slide-computer/signer-agent": "^3.7.0",
+    "@slide-computer/signer-storage": "^3.7.0",
+    "@slide-computer/signer-transport-auth-client": "^3.7.0",
+    "@slide-computer/signer-transport-plug": "^3.7.0",
+    "@slide-computer/signer-transport-stoic": "^3.7.0",
+    "@slide-computer/signer-web": "^3.7.0",
+    "@slide-computer/signer-extension": "^3.7.0",
     "clsx": "^2.1.1",
     "react-hook-form": "^7.53.0",
     "tailwindcss": "^3.4.13",
     "tailwindcss-scoped-preflight": "^3.4.5",
-    "use-async-memo": "^1.2.5"
+    "use-async-memo": "^1.2.5",
+    "use-context-selector": "^2.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.0",

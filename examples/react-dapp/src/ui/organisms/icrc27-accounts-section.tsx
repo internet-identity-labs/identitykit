@@ -1,10 +1,10 @@
-import { useIdentityKit } from "@nfid/identitykit/react"
+import { useSigner } from "@nfid/identitykit/react"
 import { MethodBadge } from "../atoms"
 import { Section } from "./section"
 import { AccountsRequest, AccountsResponse } from "@slide-computer/signer"
 
 export function Icrc27AccountsSection() {
-  const { signer } = useIdentityKit()
+  const signer = useSigner()
   return (
     <Section
       id="icrc27_accounts"

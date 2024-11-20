@@ -1,4 +1,4 @@
-import { useAgent, useIdentityKit } from "@nfid/identitykit/react"
+import { useAgent, useAuth } from "@nfid/identitykit/react"
 import { MethodBadge } from "../../atoms"
 import { ToTarget } from "./to-target"
 import { Ledger } from "./ledger"
@@ -21,7 +21,7 @@ const MethodComponent = {
 }
 
 export function CallCanisterSection() {
-  const { user } = useIdentityKit()
+  const { user } = useAuth()
   const agent = useAgent()
   const [selectedMethod, setSelectedMethod] = useState<CallCanisterMethodType>(
     CallCanisterMethod.greet_no_consent

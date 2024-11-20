@@ -1,17 +1,12 @@
-import { useContext } from "react"
-import { IdentityKitContext } from "../context"
 import { AccountsSignerClient, DelegationSignerClient } from "../../../lib/signer-client"
 import { IdentityKitAuthType } from "../../../lib/identity-kit"
 import { useAsyncMemo } from "use-async-memo"
+import { useAuthType, useSignerClient, useUser } from "./context-selectors"
 
 export function useDelegationType() {
-  const ctx = useContext(IdentityKitContext)
-
-  if (!ctx) {
-    throw new Error("Identitykit Context is null")
-  }
-
-  const { signerClient, authType, user } = ctx
+  const signerClient = useSignerClient()
+  const authType = useAuthType()
+  const user = useUser()
 
   const delegationType = useAsyncMemo(() => {
     if (
@@ -24,7 +19,5 @@ export function useDelegationType() {
     return (signerClient as DelegationSignerClient).getDelegationType()
   }, [user, authType, signerClient])
 
-  return {
-    delegationType,
-  }
+  return delegationType
 }

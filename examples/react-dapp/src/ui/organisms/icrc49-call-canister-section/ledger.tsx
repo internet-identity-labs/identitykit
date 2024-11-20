@@ -19,7 +19,7 @@ export function Ledger({ className }: { className?: string }) {
           throw new Error("Only ryjl3-tyaaa-aaaaa-aaaba-cai canister supported for this method")
         }
         return `import { fromHexString } from "@dfinity/candid"
-  const { agent } = useIdentityKit()
+  const agent = useAgent()
   
   const actor = Actor.createActor(idlFactory, {
     agent,

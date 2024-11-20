@@ -40,7 +40,6 @@ jobs:
           path: |
             **/node_modules
             **/.eslintcache
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: npm
 
       - name: Install dependencies
@@ -58,122 +57,27 @@ jobs:
       - name: Test
         run: npm run test
 
-  docker-for-e2e:
-    name: Docker Image for E2E Test
-    runs-on: ubuntu-latest
-    needs: test
-    permissions:
-      packages: write
-      contents: read
-
-    steps:
-      - name: Checkout repo.
-        uses: actions/checkout@v4
-
-      - name: Log in to registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-
-      - name: Pull Build Push Image
-        run: |
-          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/${IMAGE_NAME}
-
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo ${IMAGE_ID} | tr '[A-Z]' '[a-z]')
-
-          # Check is this pull request
-          if [ -z "${{ github.head_ref }}" ]; then
-            # If NOT
-            # Strip git ref prefix from version
-            VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          else
-            # If YES
-            # Strip git ref prefix from version and left pull-request number
-            VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\([0-9]\+\)/\(.*\),\1-\2,')
-          fi
-
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo ${VERSION} | sed -e 's/^v//')
-
-          # Use Docker `latest` tag convention
-          [ "${VERSION}" == "main" ] && VERSION=latest
-
-          echo "[INFO] IMAGE_ID: ${IMAGE_ID}" >&2
-          echo "[INFO] VERSION : ${VERSION}" >&2
-
-          if DOCKER_CLI_EXPERIMENTAL=enabled docker manifest inspect ${IMAGE_ID}:${VERSION} >/dev/null; then
-            echo "[INFO] Docker image '${IMAGE_ID}:${VERSION}' was found" >&2
-            DOCKER_REBUILD="false"
-          else
-            echo "[WARN] Image '${IMAGE_ID}:${VERSION}' was not found" >&2
-            DOCKER_REBUILD="true"
-          fi
-
-          if git log -1 --name-only --pretty='' | grep -q docker-for-e2e; then
-            echo "[WARN] Files in docker-for-e2e folder was changed" >&2
-            DOCKER_REBUILD="true"
-          fi
-
-          if [ "${DOCKER_REBUILD}" == "true" ] || [ "${{ github.event.inputs.docker_rebuild }}" == "true" ]; then
-            echo "[WARN] Will try to build the Docker Image." >&2
-
-            pushd ./docker-for-e2e
-
-            docker build . \
-              --build-arg USER_ID=$(id -u) \
-              --build-arg GROUP_ID=$(id -g) \
-              --file Dockerfile \
-              --tag ${IMAGE_NAME} \
-              --label "runnumber=${GITHUB_RUN_ID}"
-
-            docker tag ${IMAGE_NAME} ${IMAGE_ID}:${VERSION}
-            docker push ${IMAGE_ID}:${VERSION}
-          fi
-
   e2e-tests:
     name: E2E Test
-    needs: docker-for-e2e
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo.
         uses: actions/checkout@v4
 
-      - name: Log in to registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-
-      - name: Pull Image and preparing Env Vars
-        id: pull_image
+      - name: Docker build
         run: |
-          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/${IMAGE_NAME}
+          pushd ./docker-for-e2e
 
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo ${IMAGE_ID} | tr '[A-Z]' '[a-z]')
-
-          # Check is this pull request
-          if [ -z "${{ github.head_ref }}" ]; then
-            # If NOT
-            # Strip git ref prefix from version
-            VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          else
-            # If YES
-            # Strip git ref prefix from version and left pull-request number
-            VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\([0-9]\+\)/\(.*\),\1-\2,')
-          fi
-
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo ${VERSION} | sed -e 's/^v//')
-
-          # Use Docker `latest` tag convention
-          [ "${VERSION}" == "main" ] && VERSION=latest
-
-          echo "[INFO] IMAGE_ID: ${IMAGE_ID}" >&2
-          echo "[INFO] VERSION : ${VERSION}" >&2
-
-          docker pull ${IMAGE_ID}:${VERSION}
+          docker build . \
+            --build-arg USER_ID=$(id -u) \
+            --build-arg GROUP_ID=$(id -g) \
+            --file Dockerfile \
+            --tag identitykit-test:latest \
+            --label "runnumber=${GITHUB_RUN_ID}"
 
           TEST_ADD_PARAMS=""
 
-          echo "IMAGE_ID=${IMAGE_ID}" >> $GITHUB_ENV
-          echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo "CI_DEBUG=${CI_DEBUG}" >> $GITHUB_ENV
           echo "TEST_ADD_PARAMS="${TEST_ADD_PARAMS}"" >> $GITHUB_ENV
 
@@ -183,7 +87,6 @@ jobs:
           path: |
             **/node_modules
             **/.eslintcache
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: npm
 
       - name: Run tests
@@ -193,5 +96,5 @@ jobs:
           docker run --rm \
             -v $(pwd):/home/user/workdir \
             -e CI_DEBUG="${CI_DEBUG}" \
-            ${IMAGE_ID}:${VERSION} \
+            identitykit-test:latest \
             "${TEST_ADD_PARAMS}"

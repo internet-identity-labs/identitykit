@@ -1,4 +1,4 @@
-import { useAgent, useIdentityKit } from "@nfid/identitykit/react"
+import { useAgent, useSigner, useAuth } from "@nfid/identitykit/react"
 import { useEffect, useMemo, useState } from "react"
 import { toast } from "react-toastify"
 import { Actor } from "@dfinity/agent"
@@ -38,7 +38,9 @@ export function Section({
     setRequest(JSON.stringify(props.request, null, 2))
   }, [props.request])
 
-  const { signer, user } = useIdentityKit()
+  const { user } = useAuth()
+  const signer = useSigner()
+
   const agent = useAgent()
 
   const codeSection = useMemo(() => {

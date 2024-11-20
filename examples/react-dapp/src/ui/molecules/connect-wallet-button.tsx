@@ -1,13 +1,10 @@
-import { IdentityKitContext } from "@nfid/identitykit/react"
+import { useSigner } from "@nfid/identitykit/react"
 import clsx from "clsx"
-import { useContext } from "react"
+import { useModal } from "../../../../../packages/identitykit/src/libs/react/hooks"
 
 export function ConnectWalletButton() {
-  const ctx = useContext(IdentityKitContext)
-  if (!ctx) throw new Error("Identitykit Context is null")
-
-  const { selectedSigner, toggleModal } = ctx
-
+  const selectedSigner = useSigner()
+  const { toggleModal } = useModal()
   return (
     <button
       id={"connect"}

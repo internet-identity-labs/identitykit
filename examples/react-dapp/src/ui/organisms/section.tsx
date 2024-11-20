@@ -1,4 +1,4 @@
-import { useIdentityKit } from "@nfid/identitykit/react"
+import { useSigner } from "@nfid/identitykit/react"
 import { useMemo, useState } from "react"
 import { toast } from "react-toastify"
 import { Button } from "../atoms"
@@ -25,7 +25,7 @@ export function Section<TRequest extends Omit<JsonRequest, "jsonrpc">>({
   const [request, setRequest] = useState(JSON.stringify(props.request, null, 2))
   const [response, setResponse] = useState<string>(JSON.stringify(undefined))
 
-  const { signer } = useIdentityKit()
+  const signer = useSigner()
 
   const codeSection = useMemo(() => {
     try {

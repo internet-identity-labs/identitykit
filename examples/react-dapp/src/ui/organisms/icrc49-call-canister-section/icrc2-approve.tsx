@@ -14,7 +14,7 @@ export function Icrc2Approve({ className }: { className?: string }) {
           arg: "RElETAZufW17bgFueGwCs7DawwNorYbKgwUCbAjG/LYCALqJ5cIEAqLelOsGAoLz85EMA9ijjKgNfZGcnL8NAN6n99oNA8uW3LQOBAEFAAAAAICAgMnVm5n4jJ4EAAABHfiYTFV8824++qVOIjiov3Bgl0gU0RPMROITTCMCAA==",
         },
       }}
-      getCodeSnippet={({ canisterId, method }) => `const { agent } = useIdentityKit()
+      getCodeSnippet={({ canisterId, method }) => `const agent = useAgent()
   
   const actor = Actor.createActor(idlFactory, {
     agent,
