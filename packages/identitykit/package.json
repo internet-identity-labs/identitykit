@@ -92,6 +92,7 @@
     "@slide-computer/signer-transport-plug": "^3.7.0",
     "@slide-computer/signer-transport-stoic": "^3.7.0",
     "@slide-computer/signer-web": "^3.7.0",
+    "@slide-computer/signer-extension": "^3.7.0",
     "clsx": "^2.1.1",
     "react-hook-form": "^7.53.0",
     "tailwindcss": "^3.4.13",

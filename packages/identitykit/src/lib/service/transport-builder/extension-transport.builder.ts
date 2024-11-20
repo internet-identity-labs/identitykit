@@ -1,11 +1,6 @@
 import { Transport } from "@slide-computer/signer"
-import { PlugTransport } from "@slide-computer/signer-transport-plug"
+import { BrowserExtensionTransport } from "@slide-computer/signer-extension"
 
-export async function getExtensionTransportBuilder({ id }: { id?: string }): Promise<Transport> {
-  switch (id) {
-    case "Plug":
-      return new PlugTransport()
-    default:
-      throw Error("The extension wallet is not supported.")
-  }
+export async function getExtensionTransportBuilder({ uuid }: { uuid: string }): Promise<Transport> {
+  return BrowserExtensionTransport.findTransport({ uuid })
 }
