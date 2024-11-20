@@ -36,6 +36,11 @@ export const useSigner = (): UseSignerResponse => {
       }
 
       const componentData = await methodService.invokeAndGetComponentData(message)
+
+      if (!componentData) {
+        return
+      }
+
       const methodComponent = componentData && methodComponents.get(componentData.method)
 
       const timeout: ReturnType<typeof setTimeout> = setTimeout(() => {
