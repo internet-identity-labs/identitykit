@@ -25,6 +25,7 @@ describe("getPopupTransportBuilder", () => {
     await getPopupTransportBuilder(request)
     expect(PostMessageTransport).toHaveBeenCalledWith({
       url: mockUrl,
+      establishTimeout: 15000,
     })
   })
 })
