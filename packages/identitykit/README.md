@@ -98,7 +98,7 @@ If you encounter any issues or have questions, feel free to reach out to the tea
 
 ## 📘 Documentation
 
-For full documentation, visit [docs.identitykit.xyz](https://docs,identitykit.xyz).
+For full documentation, visit [docs.identitykit.xyz](https://docs.identitykit.xyz).
 
 ### 🎉 Try it out
 
