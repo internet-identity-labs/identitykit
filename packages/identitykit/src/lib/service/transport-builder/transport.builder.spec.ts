@@ -3,6 +3,7 @@ import { TransportType } from "../../types"
 import { getPopupTransportBuilder } from "./new-tab-transport.builder"
 import { getExtensionTransportBuilder } from "./extension-transport.builder"
 import { TransportBuilder, TransportBuilderRequest } from "./transport.builder"
+import { getPlugTransportBuilder } from "./plug-transport.builder"
 
 jest.mock("./new-tab-transport.builder")
 jest.mock("./extension-transport.builder")
@@ -35,15 +36,15 @@ describe("TransportBuilder", () => {
     expect(result).toBe(mockTransport)
   })
 
-  it("should build an EXTENSION transport", async () => {
+  it("should build a PLUG transport", async () => {
     const request: TransportBuilderRequest = {
-      transportType: TransportType.EXTENSION,
+      transportType: TransportType.PLUG,
       url: "https://example.com",
     }
 
     const result = await TransportBuilder.build(request)
 
-    expect(getExtensionTransportBuilder).toHaveBeenCalledWith({ id: undefined })
+    expect(getPlugTransportBuilder).toHaveBeenCalledWith({ id: undefined })
     expect(result).toBe(mockTransport)
   })
 })
