@@ -1,19 +1,18 @@
 import { Transport } from "@slide-computer/signer"
 import { TransportType } from "../../types"
 import { getPopupTransportBuilder } from "./new-tab-transport.builder"
-import { getExtensionTransportBuilder } from "./extension-transport.builder"
 import { TransportBuilder, TransportBuilderRequest } from "./transport.builder"
 import { getPlugTransportBuilder } from "./plug-transport.builder"
 
 jest.mock("./new-tab-transport.builder")
-jest.mock("./extension-transport.builder")
+jest.mock("./plug-transport.builder")
 
 describe("TransportBuilder", () => {
   const mockTransport: Transport = {} as Transport
 
   beforeEach(() => {
     ;(getPopupTransportBuilder as jest.Mock).mockReturnValue(mockTransport)
-    ;(getExtensionTransportBuilder as jest.Mock).mockReturnValue(mockTransport)
+    ;(getPlugTransportBuilder as jest.Mock).mockReturnValue(mockTransport)
   })
 
   afterEach(() => {
