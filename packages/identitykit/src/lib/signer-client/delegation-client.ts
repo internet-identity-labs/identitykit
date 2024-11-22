@@ -135,7 +135,7 @@ export class DelegationSignerClient extends SignerClient {
   public async login(): Promise<void> {
     const params = this.options.derivationOrigin
       ? {
-          derivationOrigin: this.options.derivationOrigin,
+          icrc95DerivationOrigin: this.options.derivationOrigin,
         }
       : {}
     const delegationChainResponse = await this.options.signer.sendRequest<

@@ -20,7 +20,9 @@ export class AccountsSignerClient extends SignerClient {
     // get and transform accounts from signer
     const params = this.options.derivationOrigin
       ? {
-          derivationOrigin: this.options.derivationOrigin,
+          params: {
+            icrc95DerivationOrigin: this.options.derivationOrigin,
+          },
         }
       : {}
 
