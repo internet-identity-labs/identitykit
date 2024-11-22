@@ -30,8 +30,9 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
   public async onApprove(message: MessageEvent<RPCMessage>, data?: unknown): Promise<void> {
     const icrc34Dto = message.data.params as unknown as Icrc34Dto
 
-    icrc34Dto.icrc95DerivationOrigin &&
-      (await derivationOriginService.validate(icrc34Dto.icrc95DerivationOrigin, message.origin))
+    if (icrc34Dto.icrc95DerivationOrigin) {
+      await derivationOriginService.validate(icrc34Dto.icrc95DerivationOrigin, message.origin)
+    }
 
     const account = (data as Account[])[0]
     const accountKeyIdentity = await accountService.getAccountKeyIdentityById(account.id)
