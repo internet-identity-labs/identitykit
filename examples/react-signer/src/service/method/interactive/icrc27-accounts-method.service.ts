@@ -20,7 +20,7 @@ class Icrc27AccountsMethodService extends InteractiveMethodService {
   public async onApprove(message: MessageEvent<RPCMessage>, data?: unknown): Promise<void> {
     const icrc27Dto = message.data.params as unknown as Icrc27Dto
 
-    if (icrc27Dto.icrc95DerivationOrigin) {
+    if (icrc27Dto?.icrc95DerivationOrigin) {
       await derivationOriginService.validate(message.origin, icrc27Dto.icrc95DerivationOrigin)
     }
 
