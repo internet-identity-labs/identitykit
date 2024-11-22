@@ -178,10 +178,10 @@ export class ExpectedTexts {
       "Canister ID",
       "etik7-oiaaa-aaaar-qagia-cai",
       "Sender",
-      "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
+      "6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae",
       "Arguments",
-      '[{"fee":[],"memo":[],"from_subaccount":[],"created_at_time":[],"amount":"5000000000000000000000","expected_allowance":[],"expires_at":[],"spender":{"owner":{"__principal__":"535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe"},"subaccount":[]}}]',
-      "# Authorize another address to withdraw from your account **The following address is allowed to withdraw from your account:** 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe **Your account:** gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe **Requested withdrawal allowance:** 5000 ckPEPE ⚠ The allowance will be set to 5000 ckPEPE independently of any previous allowance. Until this transaction has been executed the spender can still exercise the previous allowance (if any) to it's full amount. **Expiration date:** No expiration. **Approval fee:** 1000 ckPEPE **Transaction fees to be paid by:** gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
+      '[{"fee":[],"memo":[],"from_subaccount":[],"created_at_time":[],"amount":"5000000000000000000000","expected_allowance":[],"expires_at":[],"spender":{"owner":{"__principal__":"gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe"},"subaccount":[]}}]',
+      "# Authorize another address to withdraw from your account **The following address is allowed to withdraw from your account:** gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe **Your account:** 6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae **Requested withdrawal allowance:** 5000 ckPEPE ⚠ The allowance will be set to 5000 ckPEPE independently of any previous allowance. Until this transaction has been executed the spender can still exercise the previous allowance (if any) to it's full amount. **Expiration date:** No expiration. **Approval fee:** 1000 ckPEPE **Transaction fees to be paid by:** 6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae",
     ],
     CanisterCallIcrc2ApproveResponse: {
       contentMap: expect.anything(),

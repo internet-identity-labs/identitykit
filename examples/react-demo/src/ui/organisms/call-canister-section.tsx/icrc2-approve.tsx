@@ -9,7 +9,7 @@ export function Icrc2Approve({ className }: { className?: string }) {
 
   const myAcc = {
     owner: Principal.fromText(
-      "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe" // mocked signer main account
+      "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe" // mocked signer main account
     ),
     subaccount: [],
   }
@@ -34,7 +34,7 @@ export function Icrc2Approve({ className }: { className?: string }) {
           canisterId: "etik7-oiaaa-aaaar-qagia-cai",
           sender: user?.principal.toString() || "",
           method: CallCanisterMethod.icrc2_approve,
-          arg: "RElETAZufW17bgFueGwCs7DawwNorYbKgwUCbAjG/LYCALqJ5cIEAqLelOsGAoLz85EMA9ijjKgNfZGcnL8NAN6n99oNA8uW3LQOBAEFAAAAAICAgMnVm5n4jJ4EAAABHfiYTFV8824++qVOIjiov3Bgl0gU0RPMROITTCMCAA==",
+          arg: "RElETAZufW17bgFueGwCs7DawwNorYbKgwUCbAjG/LYCALqJ5cIEAqLelOsGAoLz85EMA9ijjKgNfZGcnL8NAN6n99oNA8uW3LQOBAEFAAAAAICAgMnVm5n4jJ4EAAABHddbvOJ4U2u2S79mR0+xkJBPtwHztu02la8/gFECAA==",
         },
       }}
       canisterIDL={pepeIDL}
@@ -48,7 +48,7 @@ export function Icrc2Approve({ className }: { className?: string }) {
     
   const acc = {
     owner: Principal.fromText(
-      "535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe"
+      "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe" // mocked signer main account
     ),
     subaccount: [],
   }
