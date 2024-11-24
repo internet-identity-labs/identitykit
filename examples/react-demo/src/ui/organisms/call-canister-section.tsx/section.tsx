@@ -1,11 +1,11 @@
 import { useAgent, useSigner, useAuth } from "@nfid/identitykit/react"
-import { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import { Actor } from "@dfinity/agent"
 import { IDL } from "@dfinity/candid"
 import { Button } from "../../atoms"
 import { CodeSection, RequestSection, ResponseSection } from "../../molecules"
-import { CALL_CANISTER_METHODS, CallCanisterMethodType } from "./constants"
+import { CallCanisterMethodType } from "./constants"
 
 type Request = {
   method: string
@@ -18,17 +18,23 @@ type Request = {
 }
 
 export function Section({
-  getCodeSnippet,
+  codeSnippet,
   canisterIDL,
   actorArgs,
   className,
+  form,
+  submitDisabled,
+  onReset,
   ...props
 }: {
   className?: string
-  getCodeSnippet: (params: { canisterId: string; method: CallCanisterMethodType }) => string
+  codeSnippet: string
   request: Request
   canisterIDL: IDL.InterfaceFactory
   actorArgs: unknown
+  form?: React.ReactNode
+  submitDisabled?: boolean
+  onReset?: () => unknown
 }) {
   const [isLoading, setIsLoading] = useState(false)
   const [request, setRequest] = useState<string>(JSON.stringify(props.request, null, 2))
@@ -42,24 +48,6 @@ export function Section({
   const signer = useSigner()
 
   const agent = useAgent()
-
-  const codeSection = useMemo(() => {
-    try {
-      const parsedJson = JSON.parse(request) as Request
-      if (!CALL_CANISTER_METHODS.includes(parsedJson.params.method))
-        throw new Error("Method not supported")
-      return {
-        value: getCodeSnippet({
-          canisterId: parsedJson.params.canisterId,
-          method: parsedJson.params.method,
-        }),
-      }
-    } catch (e) {
-      if (e instanceof SyntaxError) return { error: "Invalid JSON" }
-      if (e instanceof Error) return { error: e.message }
-      throw e
-    }
-  }, [request, getCodeSnippet])
 
   const handleSubmit = async () => {
     if (!signer) return
@@ -96,22 +84,29 @@ export function Section({
         <RequestSection value={request} setValue={setRequest} />
         <ResponseSection value={response} />
       </div>
-      <CodeSection value={codeSection.error ?? codeSection.value} />
-      <div className="flex gap-5">
+      {form ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-[25px]">
+          {form}
+          <CodeSection value={codeSnippet} />
+        </div>
+      ) : (
+        <CodeSection value={codeSnippet} />
+      )}
+      <div className="mt-[25px]">
         <Button
           id="submit"
           loading={isLoading}
-          className="w-[160px] mt-5"
+          className="w-[160px] mr-5"
           onClick={handleSubmit}
-          disabled={!!codeSection.error || !agent || !user}
+          disabled={submitDisabled || !agent || !user}
         >
           Submit
         </Button>
         <Button
           color="stroke"
-          className="w-[160px] mt-5"
+          className="w-[160px]"
           onClick={() => {
-            setRequest(JSON.stringify(props.request))
+            onReset?.()
             setResponse(JSON.stringify(undefined))
           }}
         >

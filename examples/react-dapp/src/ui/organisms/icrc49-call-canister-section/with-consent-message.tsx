@@ -15,11 +15,11 @@ export function WithConsentMessage({ className }: { className?: string }) {
         },
       }}
       getCodeSnippet={({ canisterId, method }) => `const agent = useAgent()
-  const actor = Actor.createActor(idlFactory, {
-    agent,
-    canisterId: "${canisterId}",
-  })
-  const response = await actor.${method}("me")`}
+const actor = Actor.createActor(idlFactory, {
+  agent,
+  canisterId: "${canisterId}",
+})
+const response = await actor.${method}("me")`}
     />
   )
 }

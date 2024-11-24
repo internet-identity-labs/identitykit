@@ -19,26 +19,26 @@ export function Ledger({ className }: { className?: string }) {
           throw new Error("Only ryjl3-tyaaa-aaaaa-aaaba-cai canister supported for this method")
         }
         return `import { fromHexString } from "@dfinity/candid"
-  const agent = useAgent()
-  
-  const actor = Actor.createActor(idlFactory, {
-    agent,
-    canisterId: "${canisterId}",
-  })
-  
-  const address = AccountIdentifier.fromPrincipal({
-    principal: Principal.fromText("do25a-dyaaa-aaaak-qifua-cai"),
-  }).toHex()
-  
-  const transferArgs = {
-    to: fromHexString(address),
-    fee: { e8s: BigInt(10000) },
-    memo: BigInt(0),
-    from_subaccount: [],
-    created_at_time: [],
-    amount: { e8s: BigInt(1000) },
-  }
-  const response = await actor.${method}(transferArgs)`
+const agent = useAgent()
+
+const actor = Actor.createActor(idlFactory, {
+  agent,
+  canisterId: "${canisterId}",
+})
+
+const address = AccountIdentifier.fromPrincipal({
+  principal: Principal.fromText("do25a-dyaaa-aaaak-qifua-cai"),
+}).toHex()
+
+const transferArgs = {
+  to: fromHexString(address),
+  fee: { e8s: BigInt(10000) },
+  memo: BigInt(0),
+  from_subaccount: [],
+  created_at_time: [],
+  amount: { e8s: BigInt(1000) },
+}
+const response = await actor.${method}(transferArgs)`
       }}
     />
   )
