@@ -5,16 +5,18 @@ import { DelegationChain, Ed25519PublicKey } from "@dfinity/identity"
 import { Principal } from "@dfinity/principal"
 import { targetService } from "../../target.service"
 import { GenericError } from "../../exception-handler.service"
+import { derivationOriginService } from "../../derivation-origin.service"
 
 export interface DelegationComponentData extends ComponentData {
   accounts: Account[]
   isPublicAccountsAllowed: boolean
 }
 
-export interface Icrc34Dto {
+interface Icrc34Dto {
   publicKey: string
   targets: string[]
   maxTimeToLive: string
+  icrc95DerivationOrigin: string
 }
 
 const MAX_TIME_TO_LIVE_MILLIS = 28800000 // 8 hours
@@ -27,6 +29,11 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
 
   public async onApprove(message: MessageEvent<RPCMessage>, data?: unknown): Promise<void> {
     const icrc34Dto = message.data.params as unknown as Icrc34Dto
+
+    if (icrc34Dto?.icrc95DerivationOrigin) {
+      await derivationOriginService.validate(icrc34Dto.icrc95DerivationOrigin, message.origin)
+    }
+
     const account = (data as Account[])[0]
     const accountKeyIdentity = await accountService.getAccountKeyIdentityById(account.id)
 
