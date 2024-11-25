@@ -57,6 +57,12 @@ export class Icrc49CallCanisterSection extends Section {
     await this.page.locator(`#dropdown-options div:nth-child(4)`).click()
   }
 
+  async selectIcrc1TransferTab(): Promise<void> {
+    this.setSelectedMethod("icrc1_transfer")
+    await this.page.locator("#select-request").click()
+    await this.page.locator(`#dropdown-options div:nth-child(6)`).click()
+  }
+
   async getPopupTexts(popup: Page): Promise<string[]> {
     await popup.locator("div > small").last().waitFor({ state: "visible" })
     return await popup.locator(`div > small`).allInnerTexts()

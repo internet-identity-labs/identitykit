@@ -1,3 +1,8 @@
+import {
+  MOCKED_SIGNER_MAIN_ACCOUNT,
+  MOCKED_SIGNER_SECOND_ACCOUNT,
+  PEPE_LEDGER_CANISTER_ID,
+} from "../../../constants"
 import { CallCanisterMethod } from "./constants"
 import { Section } from "./section"
 
@@ -8,8 +13,8 @@ export function Icrc2Approve({ className }: { className?: string }) {
       request={{
         method: "icrc49_call_canister",
         params: {
-          canisterId: "etik7-oiaaa-aaaar-qagia-cai",
-          sender: "6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae",
+          canisterId: PEPE_LEDGER_CANISTER_ID,
+          sender: MOCKED_SIGNER_SECOND_ACCOUNT,
           method: CallCanisterMethod.icrc2_approve,
           arg: "RElETAZufW17bgFueGwCs7DawwNorYbKgwUCbAjG/LYCALqJ5cIEAqLelOsGAoLz85EMA9ijjKgNfZGcnL8NAN6n99oNA8uW3LQOBAEFAAAAAICAgMnVm5n4jJ4EAAABHddbvOJ4U2u2S79mR0+xkJBPtwHztu02la8/gFECAA==",
         },
@@ -23,7 +28,7 @@ const actor = Actor.createActor(idlFactory, {
   
 const acc = {
   owner: Principal.fromText(
-    "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe" // mocked signer main account
+    "${MOCKED_SIGNER_MAIN_ACCOUNT}" // mocked signer main account
   ),
   subaccount: [],
 }

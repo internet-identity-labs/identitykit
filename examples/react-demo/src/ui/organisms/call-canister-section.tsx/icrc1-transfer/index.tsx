@@ -4,45 +4,42 @@ import { Principal } from "@dfinity/principal"
 import { useAuth } from "@nfid/identitykit/react"
 import { CallCanisterMethod } from "../constants"
 import * as yup from "yup"
-import { IDL } from "@dfinity/candid"
 import {
+  numberValidation,
   principalValidation,
   subAccountValidation,
-  numberValidation,
 } from "../../../../validations"
+import { MOCKED_SIGNER_SECOND_ACCOUNT, PEPE_LEDGER_CANISTER_ID } from "../../../../constants"
 import { useFormik } from "formik"
 import { Form, FormValues } from "./form"
-import { MOCKED_SIGNER_MAIN_ACCOUNT, PEPE_LEDGER_CANISTER_ID } from "../../../../constants"
+import { IDL } from "@dfinity/candid"
 import { toBase64 } from "@nfid/identitykit"
 
 const schema = yup
   .object({
     canister_id: principalValidation().required("field is required"),
-    spender_principal: principalValidation().required("field is required"),
-    spender_subaccount: subAccountValidation(),
     from_subaccount: subAccountValidation(),
-    fee: numberValidation(),
+    to_principal: principalValidation().required("field is required"),
+    to_subaccount: subAccountValidation(),
     amount: numberValidation().required("field is required"),
     memo: numberValidation(),
     created_at_time: numberValidation(),
-    expires_at: numberValidation(),
-    expected_allowance: numberValidation(),
+    fee: numberValidation(),
   })
   .required()
 
 const initialValues = {
   canister_id: PEPE_LEDGER_CANISTER_ID,
   from_subaccount: "",
-  spender_principal: MOCKED_SIGNER_MAIN_ACCOUNT,
+  to_principal: MOCKED_SIGNER_SECOND_ACCOUNT,
+  to_subaccount: "",
+  amount: (1e21).toString(), // 1000 PEPE tokens
   fee: "",
   memo: "",
-  amount: (5000 * 10 ** 18).toString(),
   created_at_time: "",
-  expected_allowance: "",
-  expires_at: "",
 }
 
-export function Icrc2Approve({ className }: { className?: string }) {
+export function Icrc1Transfer({ className }: { className?: string }) {
   const { user } = useAuth()
 
   const { values, errors, isValid, isValidating, handleChange, handleBlur, setValues } =
@@ -53,38 +50,34 @@ export function Icrc2Approve({ className }: { className?: string }) {
     })
 
   const {
-    spender_principal,
-    spender_subaccount,
-    expected_allowance,
-    fee,
+    from_subaccount,
+    to_principal,
+    to_subaccount,
     amount,
     memo,
-    from_subaccount,
+    fee,
     created_at_time,
-    expires_at,
     canister_id,
   } = values
 
   const isFormValid = isValid && !isValidating
 
   const actorArgs = {
-    spender: {
-      owner: isFormValid ? Principal.fromText(spender_principal) : "",
-      subaccount: isFormValid && spender_subaccount ? [JSON.parse(spender_subaccount)] : [],
+    to: {
+      owner: isFormValid ? Principal.fromText(to_principal) : "",
+      subaccount: isFormValid && to_subaccount ? [JSON.parse(to_subaccount)] : [],
     },
-    fee: fee ? [fee] : [],
     memo: memo ? [[memo]] : [],
+    fee: fee ? [fee] : [],
     from_subaccount: isFormValid && from_subaccount ? [JSON.parse(from_subaccount)] : [],
     created_at_time: isFormValid && created_at_time ? [BigInt(created_at_time)] : [],
-    expires_at: isFormValid && expires_at ? [BigInt(expires_at)] : [],
     amount: Number(amount),
-    expected_allowance: expected_allowance ? [Number(expected_allowance)] : [],
   }
 
   const service = pepeIDL({ IDL })
 
-  const [, approveIDL] = service._fields.find(
-    ([methodName]: [string]) => methodName === CallCanisterMethod.icrc2_approve
+  const [, transferIDL] = service._fields.find(
+    ([methodName]: [string]) => methodName === CallCanisterMethod.icrc1_transfer
   )
 
   return (
@@ -93,10 +86,10 @@ export function Icrc2Approve({ className }: { className?: string }) {
       request={{
         method: "icrc49_call_canister",
         params: {
-          canisterId: canister_id,
+          canisterId: PEPE_LEDGER_CANISTER_ID,
           sender: user?.principal.toString() || "",
-          method: CallCanisterMethod.icrc2_approve,
-          arg: isFormValid ? toBase64(IDL.encode(approveIDL.argTypes, [actorArgs])) : "",
+          method: CallCanisterMethod.icrc1_transfer,
+          arg: isFormValid ? toBase64(IDL.encode(transferIDL.argTypes, [actorArgs])) : "",
         },
       }}
       onReset={() => setValues(initialValues)}
@@ -110,26 +103,22 @@ const actor = Actor.createActor(idlFactory, {
   agent,
   canisterId: "${canister_id}",
 })
-  
-const acc = {
-  owner: Principal.fromText(
-    "${actorArgs.spender.owner}"
-  ),
-  subaccount: ${JSON.stringify(actorArgs.spender.subaccount)},
+
+const toAcc = {
+  owner: Principal.fromText("${actorArgs.to.owner}"),
+  subaccount: ${JSON.stringify(actorArgs.to.subaccount)},
 }
 
-const icrc2_approve_args = {
+const icrc1_transfer = {
   from_subaccount: ${JSON.stringify(actorArgs.from_subaccount)},
-  spender: acc,
+  to: toAcc,
+  amount: BigInt(${actorArgs.amount}),
   fee: ${JSON.stringify(actorArgs.fee)},
   memo: ${JSON.stringify(actorArgs.memo)},
-  amount: BigInt(${actorArgs.amount}),
   created_at_time: ${created_at_time ? `[BigInt(${created_at_time})]` : "[]"},
-  expected_allowance: ${JSON.stringify(actorArgs.expected_allowance)},
-  expires_at: ${expires_at ? `[BigInt(${expires_at})]` : "[]"},
 }
 
-const response = await actor.${CallCanisterMethod.icrc2_approve}(icrc2_approve_args)`}
+const response = await actor.${CallCanisterMethod.icrc1_transfer}(icrc1_transfer_args)`}
     />
   )
 }

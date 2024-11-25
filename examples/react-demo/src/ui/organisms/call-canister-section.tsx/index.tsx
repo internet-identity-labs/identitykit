@@ -4,6 +4,7 @@ import { ToTarget } from "./to-target"
 import { Ledger } from "./ledger"
 import { Icrc2Approve } from "./icrc2-approve"
 import { Icrc2Transfer } from "./icrc2-transfer"
+import { Icrc1Transfer } from "./icrc1-transfer"
 import { useState } from "react"
 import { DropdownSelect } from "../../molecules"
 import {
@@ -18,6 +19,7 @@ const MethodComponent = {
   [CallCanisterMethod.transfer]: Ledger,
   [CallCanisterMethod.icrc2_approve]: Icrc2Approve,
   [CallCanisterMethod.icrc2_transfer_from]: Icrc2Transfer,
+  [CallCanisterMethod.icrc1_transfer]: Icrc1Transfer,
 }
 
 export function CallCanisterSection() {
