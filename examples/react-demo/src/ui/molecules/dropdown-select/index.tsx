@@ -6,6 +6,7 @@ import { Option } from "./option"
 import { useClickOutside } from "../../../hooks"
 import { IconSvgChevronDark, IconSvgChevronLight } from "../../atoms"
 import { useTheme } from "next-themes"
+import { Label } from "../../atoms/label"
 
 export interface IDropdownSelect {
   label?: string
@@ -23,17 +24,13 @@ export const DropdownSelect = ({ label, options, onChange, value, id }: IDropdow
 
   return (
     <div className="relative w-full" ref={ref}>
-      <label
-        className={clsx("text-xs tracking-[0.16px] leading-4 mb-1", "text-black dark:text-white")}
-      >
-        {label}
-      </label>
+      <Label>{label}</Label>
       <div
         className={clsx(
           "bg-white rounded-xl h-12 px-3 py-2.5 w-full",
           "flex justify-between items-center",
           "cursor-pointer select-none",
-          "active:outline active:outline-offset-1",
+          "active:outline active:outline-offset-1 outline-teal-500",
           "dark:text-white dark:bg-white/5",
           "border border-black dark:border-zinc-500",
           isDropdownOpen && "border !bg-teal-50 dark:!bg-teal-500/20 !border-teal-500"

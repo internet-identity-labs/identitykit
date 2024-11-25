@@ -59,7 +59,7 @@ export function CallCanisterSection() {
         onChange={(value) => setSelectedMethod(value as CallCanisterMethodType)}
       />
       {Object.entries(MethodComponent).map(([key, Component]) => {
-        return <Component className={key !== selectedMethod ? "hidden" : undefined} />
+        return <Component key={key} className={key !== selectedMethod ? "hidden" : undefined} />
       })}
     </div>
   )

@@ -16,30 +16,30 @@ export function Icrc2Approve({ className }: { className?: string }) {
       }}
       getCodeSnippet={({ canisterId, method }) => `const agent = useAgent()
   
-  const actor = Actor.createActor(idlFactory, {
-    agent,
-    canisterId: "${canisterId}",
-  })
-    
-  const acc = {
-    owner: Principal.fromText(
-      "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe" // mocked signer main account
-    ),
-    subaccount: [],
-  }
+const actor = Actor.createActor(idlFactory, {
+  agent,
+  canisterId: "${canisterId}",
+})
   
-  const icrc2_approve_args = {
-    from_subaccount: [],
-    spender: acc,
-    fee: [],
-    memo: [],
-    amount: BigInt(5000 * 10 ** 18),
-    created_at_time: [],
-    expected_allowance: [],
-    expires_at: [],
-  }
-  
-  const response = await actor.${method}(icrc2_approve_args)`}
+const acc = {
+  owner: Principal.fromText(
+    "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe" // mocked signer main account
+  ),
+  subaccount: [],
+}
+
+const icrc2_approve_args = {
+  from_subaccount: [],
+  spender: acc,
+  fee: [],
+  memo: [],
+  amount: BigInt(5000 * 10 ** 18),
+  created_at_time: [],
+  expected_allowance: [],
+  expires_at: [],
+}
+
+const response = await actor.${method}(icrc2_approve_args)`}
     />
   )
 }

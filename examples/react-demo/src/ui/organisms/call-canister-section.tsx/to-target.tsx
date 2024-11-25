@@ -20,12 +20,12 @@ export function ToTarget({ className }: { className?: string }) {
       }}
       canisterIDL={demoIDL}
       actorArgs={"me"}
-      getCodeSnippet={({ canisterId, method }) => `const agent = useAgent()
-  const actor = Actor.createActor(idlFactory, {
-    agent,
-    canisterId: "${canisterId}",
-  })
-  const response = await actor.${method}("me")`}
+      codeSnippet={`const agent = useAgent()
+const actor = Actor.createActor(idlFactory, {
+  agent,
+  canisterId: "${import.meta.env.VITE_TARGET_CANISTER}",
+})
+const response = await actor.${CallCanisterMethod.greet_no_consent}("me")`}
     />
   )
 }
