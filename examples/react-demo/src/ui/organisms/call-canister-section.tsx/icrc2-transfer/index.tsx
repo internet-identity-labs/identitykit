@@ -133,8 +133,8 @@ const icrc2_transfer_from_args = {
   from: myAcc,
   to: toAcc,
   amount: BigInt(${actorArgs.amount}),
-  fee: ${actorArgs.fee},
-  memo: ${actorArgs.memo},
+  fee: ${JSON.stringify(actorArgs.fee)},
+  memo: ${JSON.stringify(actorArgs.memo)},
   created_at_time: ${created_at_time ? `[BigInt(${created_at_time})]` : "[]"},
 }
 
