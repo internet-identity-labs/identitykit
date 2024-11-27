@@ -27,9 +27,8 @@ import { DEFAULT_MAX_TIME_TO_LIVE } from "../constants"
 import { IdleManager } from "../timeout-managers/idle-manager"
 import { TimeoutManager } from "../timeout-managers/timeout-manager"
 
-const ECDSA_KEY_LABEL = "ECDSA"
 const ED25519_KEY_LABEL = "Ed25519"
-type BaseKeyType = typeof ECDSA_KEY_LABEL | typeof ED25519_KEY_LABEL
+type BaseKeyType = "ECDSA" | typeof ED25519_KEY_LABEL
 
 export enum DelegationType {
   ACCOUNT = "ACCOUNT",
