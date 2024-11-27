@@ -163,7 +163,9 @@ export abstract class SignerClient {
 
     return {
       owner: owner.toString(),
-      subAccount: subAccount ? new TextEncoder().encode(subAccount.toString()) : undefined,
+      subAccount: subAccount
+        ? (new TextEncoder().encode(subAccount.toString()).buffer as ArrayBuffer)
+        : undefined,
     }
   }
 
