@@ -37,8 +37,7 @@ export class IdleManager extends TimeoutManager {
       document.addEventListener(name, _resetTimer, true)
     })
 
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    const debounce = (func: Function, wait: number) => {
+    const debounce = (func: (...args: unknown[]) => unknown, wait: number) => {
       let timeout: number | undefined
       return (...args: unknown[]) => {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
