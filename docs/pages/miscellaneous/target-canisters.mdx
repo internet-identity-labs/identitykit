@@ -18,6 +18,26 @@ Each target canister that wallet providers will query (as an update call for sec
 should have method `icrc28_trusted_origins()`:
 
 ```rust
+#[derive(CandidType, Deserialize, Eq, PartialEq, Debug)]
+pub struct SupportedStandard {
+    pub url: String,
+    pub name: String,
+}
+
+#[query]
+fn icrc10_supported_standards() -> Vec<SupportedStandard> {
+    vec![
+        SupportedStandard {
+            url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-10/ICRC-10.md".to_string(),
+            name: "ICRC-10".to_string(),
+        },
+        SupportedStandard {
+            url: "https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md".to_string(),
+            name: "ICRC-28".to_string(),
+        },
+    ]
+}
+
 #[derive(Clone, Debug, CandidType, Deserialize)]
 pub struct Icrc28TrustedOriginsResponse {
     pub trusted_origins: Vec<String>
@@ -33,5 +53,5 @@ fn icrc28_trusted_origins() -> Icrc28TrustedOriginsResponse {
 }
 ```
 
-> Note: ICRC-1, ICRC-7, and other asset canister smart contracts are discouraged from implementing
-> this method. Wallets may mark application as a scam if they do.
+> Note: icrc10_supported_standards of the target canister must not include standards supporting
+> tradable assets. In particular, it must not include ICRC-1, ICRC-2, ICRC-7 and ICRC-37.
