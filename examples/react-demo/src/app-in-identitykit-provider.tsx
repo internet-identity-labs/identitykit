@@ -9,7 +9,6 @@ import {
   NFIDW,
   Plug,
   InternetIdentity,
-  PrimeVault,
   Stoic,
 } from "@nfid/identitykit"
 
@@ -22,7 +21,7 @@ const targetCanister = import.meta.env.VITE_TARGET_CANISTER
 const environment = import.meta.env.VITE_ENVIRONMENT
 
 const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
-const signers = [nfidw, Plug, InternetIdentity, PrimeVault, Stoic]
+const signers = [nfidw, Plug, InternetIdentity, Stoic]
 if (environment === "dev") {
   signers.push({
     ...MockedSigner,
@@ -41,7 +40,7 @@ export function AppWrappedInIdentityKit() {
 
   return (
     <IdentityKitProvider
-      signers={signers}
+      // signers={signers}
       featuredSigner={nfidw}
       theme={resolvedTheme as IdentityKitTheme}
       authType={authType}
