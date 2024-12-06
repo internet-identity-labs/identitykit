@@ -13,7 +13,7 @@ export const Modal = () => {
 
   const [isViewAll, setIsViewAll] = useState(false)
   const ref = useClickOutside<HTMLDivElement>(() => {
-    isModalOpen && toggleModal()
+    if (isModalOpen) toggleModal()
   })
 
   useEffect(() => {

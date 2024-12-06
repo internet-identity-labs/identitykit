@@ -1,20 +1,11 @@
 import { validateUrl } from "../../../utils"
-import { useForm } from "react-hook-form"
 import { Button } from "../../ui/button"
+import { useState } from "react"
 
 export const CustomSignerInput = ({ onSubmit }: { onSubmit: (value: string) => unknown }) => {
-  const {
-    register,
-    formState: { errors },
-    watch,
-  } = useForm({
-    mode: "all",
-    defaultValues: {
-      url: "",
-    },
-  })
+  const [value, setValue] = useState("")
 
-  const customSignerUrl = watch("url")
+  const isValueValid = !value || validateUrl(value)
 
   return (
     <div>
@@ -26,23 +17,23 @@ export const CustomSignerInput = ({ onSubmit }: { onSubmit: (value: string) => u
           className="ik-rounded-xl ik-border ik-border-gray-400 ik-px-[10px] ik-h-[48px] ik-flex-1 ik-flex-shrink ik-text-sm ik-text-black dark:ik-text-white focus:ik-border-gray-400 dark:ik-text-white ik-outline-none"
           placeholder="https://wallet.url"
           type="text"
-          {...register("url", {
-            required: true,
-            validate: validateUrl || "Invalid url",
-          })}
+          value={value}
+          onChange={(e) => {
+            setValue(e.target.value)
+          }}
           name="url"
         />
         <Button
           large
-          disabled={Boolean(errors.url) || !customSignerUrl}
+          disabled={!value || !isValueValid}
           className="ik-w-[110px]"
-          onClick={() => onSubmit(customSignerUrl)}
+          onClick={() => onSubmit(value)}
         >
           <small>Connect</small>
         </Button>
       </div>
-      {errors.url && (
-        <p className="ik-text-xs ik-text-red-500 ik-block ik-mt-1">{errors.url.message}</p>
+      {!!value && !isValueValid && (
+        <p className="ik-text-xs ik-text-red-500 ik-block ik-mt-1">Invalid url</p>
       )}
     </div>
   )

@@ -5,6 +5,7 @@ import {
   MockedSigner,
   NFIDW,
   Plug,
+  PrimeVault,
   InternetIdentity,
   IdentityKitSignerConfig,
   Stoic,
@@ -26,14 +27,17 @@ const environment = import.meta.env.VITE_ENVIRONMENT
 function App() {
   const { resolvedTheme } = useTheme()
   const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
-  const signers = [nfidw, Plug, InternetIdentity, Stoic]
-
-  if (environment === "dev") {
-    signers.push({
-      ...MockedSigner,
-      providerUrl: mockedSignerProviderUrl,
-    })
-  }
+  const signers = [nfidw, Plug, InternetIdentity, Stoic].concat(
+    environment === "dev"
+      ? [
+          PrimeVault,
+          {
+            ...MockedSigner,
+            providerUrl: mockedSignerProviderUrl,
+          },
+        ]
+      : []
+  )
 
   return (
     <IdentityKitProvider

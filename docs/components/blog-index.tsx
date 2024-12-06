@@ -1,9 +1,7 @@
 import { getPagesUnderRoute } from "nextra/context"
 import Link from "next/link"
-import { useRouter } from "next/router"
 
 export default function BlogIndex({ more = "Read more" }) {
-  const { locale = "", defaultLocale = "" } = useRouter()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return getPagesUnderRoute("/blog").map((page: any) => {
     return (

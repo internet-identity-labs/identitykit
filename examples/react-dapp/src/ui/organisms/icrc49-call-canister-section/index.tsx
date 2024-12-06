@@ -12,12 +12,14 @@ import {
   CallCanisterMethodType,
 } from "./constants"
 import { MethodBadge } from "../../atoms"
+import { Icrc1Transfer } from "./icrc1-transfer"
 
 const MethodComponent = {
   [CallCanisterMethod.greet_no_consent]: WithoutConsentMessage,
   [CallCanisterMethod.transfer]: Ledger,
   [CallCanisterMethod.icrc2_approve]: Icrc2Approve,
   [CallCanisterMethod.icrc2_transfer_from]: Icrc2Transfer,
+  [CallCanisterMethod.icrc1_transfer]: Icrc1Transfer,
   [CallCanisterMethod.greet]: WithConsentMessage,
 }
 

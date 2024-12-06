@@ -160,4 +160,29 @@ test.describe("ICRC25 call-canister", () => {
     expect(actualResponse).toMatchObject(ExpectedTexts.Mocked.CanisterCallIcrc2ApproveResponse)
     await demoPage.logout()
   })
+
+  test("MOCK: should make canister call: ICRC-1 transfer", async ({
+    section,
+    demoPage,
+    requestPermissionSection,
+    nfidPage,
+  }) => {
+    await nfidPage.title()
+    const account = accounts[0]
+    await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
+
+    await section.selectIcrc1TransferTab()
+
+    const popup = await section.openPopup()
+    const texts = await section.getPopupTexts(popup)
+
+    expect(texts).toEqual(ExpectedTexts.Mocked.CanisterCallIcrc1TransferRequest)
+    await section.approve(popup)
+
+    await section.waitForResponse()
+    const actualResponse = await section.getResponseJson()
+
+    expect(actualResponse).toMatchObject(ExpectedTexts.Mocked.CanisterCallIcrc1TransferResponse)
+    await demoPage.logout()
+  })
 })
