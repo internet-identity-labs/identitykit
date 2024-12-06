@@ -9,7 +9,6 @@ import {
   NFIDW,
   Plug,
   InternetIdentity,
-  PrimeVault,
   Stoic,
 } from "@nfid/identitykit"
 
@@ -25,7 +24,6 @@ const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProvid
 const signers = [nfidw, Plug, InternetIdentity, Stoic].concat(
   environment === "dev"
     ? [
-        PrimeVault,
         {
           ...MockedSigner,
           providerUrl: mockedSignerProviderUrl,
@@ -45,7 +43,7 @@ export function AppWrappedInIdentityKit() {
 
   return (
     <IdentityKitProvider
-      // signers={signers}
+      signers={signers}
       featuredSigner={nfidw}
       theme={resolvedTheme as IdentityKitTheme}
       authType={authType}
