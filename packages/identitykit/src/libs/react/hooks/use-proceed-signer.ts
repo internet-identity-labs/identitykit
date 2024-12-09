@@ -26,7 +26,9 @@ export function useProceedSigner({
   >
 }) {
   // saved to local storage for next js (localStorage is not defined during server render)
-  const [localStorageSigner, setLocalStorageSigner] = useState<string | undefined>()
+  const [localStorageSigner, setLocalStorageSigner] = useState<string | undefined>(
+    (typeof window !== "undefined" && localStorage.getItem("signerId")) || ""
+  )
   const [selectedSigner, setSelectedSigner] = useState<
     { signer: Signer<Transport>; signerId?: string } | undefined
   >(undefined)
@@ -88,10 +90,10 @@ export function useProceedSigner({
 
   // default selected signer from local storage
   useEffect(() => {
-    const storageSigner = localStorage.getItem("signerId")
-    if (!selectedSigner && storageSigner) {
-      setLocalStorageSigner(storageSigner)
-      selectSigner(storageSigner)
+    // for next.js, where localStorage is not available during ssr
+    const lsSigner = localStorage.getItem("signerId")
+    if (!selectedSigner && lsSigner) {
+      selectSigner(lsSigner)
     }
   }, [selectedSigner, selectSigner])
 
