@@ -5,7 +5,6 @@ import {
   MockedSigner,
   NFIDW,
   Plug,
-  PrimeVault,
   InternetIdentity,
   IdentityKitSignerConfig,
   Stoic,
@@ -30,7 +29,6 @@ function App() {
   const signers = [nfidw, Plug, InternetIdentity, Stoic].concat(
     environment === "dev"
       ? [
-          PrimeVault,
           {
             ...MockedSigner,
             providerUrl: mockedSignerProviderUrl,
