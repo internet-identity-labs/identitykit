@@ -27,7 +27,6 @@ export function useAgent(
 
     const defaultAgent = await HttpAgent.create({
       identity,
-      host: "https://icp-api.io/",
       ...agentOptions,
     })
     const signerAgent = await SignerAgent.create({
