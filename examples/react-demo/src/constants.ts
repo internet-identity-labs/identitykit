@@ -7,3 +7,5 @@ export const MOCKED_SIGNER_SECOND_ACCOUNT =
   "6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae"
 
 export const e8s = 10 ** 8
+
+export const ICP_API_HOST = "https://icp-api.io/"

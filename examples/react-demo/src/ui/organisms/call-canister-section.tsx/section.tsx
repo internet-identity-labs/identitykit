@@ -6,6 +6,7 @@ import { IDL } from "@dfinity/candid"
 import { Button } from "../../atoms"
 import { CodeSection, RequestSection, ResponseSection } from "../../molecules"
 import { CallCanisterMethodType } from "./constants"
+import { ICP_API_HOST } from "../../../constants"
 
 type Request = {
   method: string
@@ -47,7 +48,7 @@ export function Section({
   const { user } = useAuth()
   const signer = useSigner()
 
-  const agent = useAgent()
+  const agent = useAgent({ host: ICP_API_HOST })
 
   const handleSubmit = async () => {
     if (!signer) return

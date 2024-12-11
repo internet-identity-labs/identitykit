@@ -8,7 +8,7 @@ import {
   InternetIdentity,
   Stoic,
 } from "../../../../lib"
-import { useCreateIdentityKit, useProceedSigner } from "../../hooks"
+import { useCreateIdentityKit, useCreatePromise, useProceedSigner } from "../../hooks"
 import { validateUrl } from "../../utils"
 import { SignerConfig, TransportType } from "../../../../lib/types"
 import { ConnectWalletModal } from "../connect-wallet"
@@ -50,6 +50,7 @@ export const Provider = <T extends IdentityKitAuthType>({
   ...props
 }: ProviderProps<T>) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const { createPromise, resolve, reject } = useCreatePromise<void>()
   const toggleModal = () => {
     setIsModalOpen((prev) => !prev)
   }
@@ -119,8 +120,8 @@ export const Provider = <T extends IdentityKitAuthType>({
 
   const onConnectSuccess = useCallback(() => {
     setSelectedSignerToLocalStorage()
-    props.onConnectSuccess?.()
-  }, [setSelectedSignerToLocalStorage, props.onConnectSuccess])
+    resolve()
+  }, [setSelectedSignerToLocalStorage, resolve])
 
   const identityKit = useCreateIdentityKit({
     selectedSigner,
@@ -128,7 +129,7 @@ export const Provider = <T extends IdentityKitAuthType>({
     signerClientOptions: { ...signerClientOptions, crypto },
     authType,
     onConnectSuccess,
-    onConnectFailure: props.onConnectFailure,
+    onConnectFailure: reject,
     onDisconnect: props.onDisconnect,
     realConnectDisabled,
   })
@@ -143,17 +144,28 @@ export const Provider = <T extends IdentityKitAuthType>({
   )
 
   const connect = useCallback(
-    (signerIdOrUrl?: string) => {
+    async (signerIdOrUrl?: string) => {
       if (isInitializing) throw new Error("Identitykit is not initialized yet")
       if (!signerIdOrUrl) setIsModalOpen(true)
       else {
-        if (signers.find((s) => s.id === signerIdOrUrl)) selectSigner(signerIdOrUrl)
+        if (signers.find((s) => s.id === signerIdOrUrl)) await selectSigner(signerIdOrUrl)
         else {
           if (!validateUrl(signerIdOrUrl))
             throw new Error("Provided value is not valid signer id or url")
-          selectCustomSigner(signerIdOrUrl)
+          await selectCustomSigner(signerIdOrUrl)
         }
       }
+      return createPromise()
+        .then(() => {
+          props.onConnectSuccess?.()
+        })
+        .catch((e) => {
+          if (props.onConnectFailure) {
+            props.onConnectFailure(e)
+          } else {
+            throw e
+          }
+        })
     },
     [isInitializing, signers]
   )

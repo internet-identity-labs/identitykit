@@ -1,6 +1,6 @@
 {
   "name": "@nfid/identitykit",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A React library for adding wallet connections to dApps.",
   "keywords": [
     "ICP",
@@ -121,6 +121,10 @@
   "peerDependencies": {
     "@dfinity/auth-client": ">=2.1.3",
     "@dfinity/ledger-icp": ">=2.4.0",
+    "@dfinity/identity": ">=2.1.3",
+    "@dfinity/agent": ">=2.1.3",
+    "@dfinity/candid": ">=2.1.3",
+    "@dfinity/principal": ">=2.1.3",
     "react": ">=18.3.1",
     "react-dom": ">=18.3.1"
   },
