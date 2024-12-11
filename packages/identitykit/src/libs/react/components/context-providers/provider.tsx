@@ -1,4 +1,4 @@
-import { useState, useCallback, PropsWithChildren, useMemo } from "react"
+import { useState, useCallback, PropsWithChildren, useMemo, useEffect } from "react"
 import {
   IdentityKitAuthType,
   IdentityKitAccountsSignerClientOptions,
@@ -10,17 +10,19 @@ import {
 } from "../../../../lib"
 import { useCreateIdentityKit, useCreatePromise, useProceedSigner } from "../../hooks"
 import { validateUrl } from "../../utils"
-import { SignerConfig } from "../../../../lib/types"
+import { SignerConfig, TransportType } from "../../../../lib/types"
 import { ConnectWalletModal } from "../connect-wallet"
 import { IdentityKitTheme } from "../../constants"
 import { ThemeProvider } from "./theme-provider"
 import { Context } from "../../contexts"
+import { BrowserExtensionTransport } from "@slide-computer/signer-extension"
 
 interface ProviderProps<T extends IdentityKitAuthType = typeof IdentityKitAuthType.ACCOUNTS>
   extends PropsWithChildren {
   authType?: T
   signers?: SignerConfig[]
   featuredSigner?: SignerConfig | false
+  discoverExtensionSigners?: boolean
   theme?: IdentityKitTheme
   signerClientOptions?: T extends typeof IdentityKitAuthType.DELEGATION
     ? Omit<IdentityKitDelegationSignerClientOptions, "signer" | "crypto" | "agent">
@@ -44,6 +46,7 @@ export const Provider = <T extends IdentityKitAuthType>({
   authType = IdentityKitAuthType.DELEGATION as T,
   realConnectDisabled,
   allowInternetIdentityPinAuthentication,
+  discoverExtensionSigners = true,
   ...props
 }: ProviderProps<T>) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -70,6 +73,29 @@ export const Provider = <T extends IdentityKitAuthType>({
     }
   }, [props.signers, props.featuredSigner, signerClientOptions])
 
+  const [discoveredSigners, setDiscoveredSigners] = useState<SignerConfig[]>([])
+  useEffect(() => {
+    if (!discoverExtensionSigners) {
+      return
+    }
+    BrowserExtensionTransport.discover().then((providerDetails) => {
+      setDiscoveredSigners(
+        providerDetails.map((providerDetail) => ({
+          id: providerDetail.uuid,
+          providerUrl: "",
+          label: providerDetail.name,
+          transportType: TransportType.EXTENSION,
+          icon: providerDetail.icon,
+        }))
+      )
+    })
+  }, [discoverExtensionSigners])
+
+  const signersIncludingDiscovered = useMemo(
+    () => [...signers, ...discoveredSigners],
+    [signers, discoveredSigners]
+  )
+
   const {
     selectSigner,
     clearSigner,
@@ -78,7 +104,7 @@ export const Provider = <T extends IdentityKitAuthType>({
     selectCustomSigner,
     setSelectedSignerToLocalStorage,
   } = useProceedSigner({
-    signers,
+    signers: signersIncludingDiscovered,
     closeModal: () => setIsModalOpen(false),
     crypto,
     window,
@@ -147,7 +173,7 @@ export const Provider = <T extends IdentityKitAuthType>({
   return (
     <Context.Provider
       value={{
-        signers,
+        signers: signersIncludingDiscovered,
         selectedSigner,
         isModalOpen,
         featuredSigner,
