@@ -10,6 +10,7 @@ import {
   Plug,
   InternetIdentity,
   Stoic,
+  OISY,
 } from "@nfid/identitykit"
 
 import App from "./app"
@@ -21,7 +22,7 @@ const targetCanister = import.meta.env.VITE_TARGET_CANISTER
 const environment = import.meta.env.VITE_ENVIRONMENT
 
 const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
-const signers = [nfidw, Plug, InternetIdentity, Stoic].concat(
+const signers = [nfidw, Plug, InternetIdentity, Stoic, OISY].concat(
   environment === "dev"
     ? [
         {
