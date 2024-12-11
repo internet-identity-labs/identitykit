@@ -35,7 +35,7 @@ export class Icrc34DelegationSection extends Section {
   async setRequestWithNoTargets(): Promise<void> {
     await this.page.evaluate(() => {
       const element = document.querySelector(
-        `#icrc34_delegation #request-section div.cm-line:nth-child(6) > span`
+        `#icrc34_delegation #request-section-icrc34_delegation div.cm-line:nth-child(6) > span`
       )
       if (element) element.textContent = ""
     })

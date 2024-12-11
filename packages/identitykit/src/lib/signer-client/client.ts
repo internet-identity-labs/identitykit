@@ -1,5 +1,3 @@
-import { type SignIdentity } from "@dfinity/agent"
-import { PartialIdentity } from "@dfinity/identity"
 import type { Signer } from "@slide-computer/signer"
 import { IdbStorage, type SignerStorage } from "@slide-computer/signer-storage"
 import { AuthClientStorage } from "@dfinity/auth-client"
@@ -28,10 +26,6 @@ export interface IdleOptions extends IdleManagerOptions {
 export interface SignerClientOptions {
   signer: Signer
   /**
-   * An identity to use as the base
-   */
-  identity?: SignIdentity | PartialIdentity
-  /**
    * Optional, used to generate random bytes
    * @default uses browser/node Crypto by default
    */
@@ -46,7 +40,7 @@ export interface SignerClientOptions {
    */
   idleOptions?: IdleOptions
   derivationOrigin?: string
-  onLogout?: () => unknown
+  onLogout?: () => Promise<unknown>
 }
 
 export abstract class SignerClient {
@@ -78,7 +72,7 @@ export abstract class SignerClient {
     await this.setConnectedUserToStorage(undefined)
     this.idleManager?.exit()
     this.idleManager = undefined
-    this.options.onLogout?.()
+    await this.options.onLogout?.()
     if (options?.returnTo) {
       try {
         window.history.pushState({}, "", options.returnTo)
@@ -163,7 +157,9 @@ export abstract class SignerClient {
 
     return {
       owner: owner.toString(),
-      subAccount: subAccount ? new TextEncoder().encode(subAccount.toString()) : undefined,
+      subAccount: subAccount
+        ? (new TextEncoder().encode(subAccount.toString()).buffer as ArrayBuffer)
+        : undefined,
     }
   }
 

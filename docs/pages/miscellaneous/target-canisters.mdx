@@ -1,0 +1,57 @@
+---
+title: "Target Canisters"
+date: "2024-07-10"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+## Target Canisters
+
+3rd party application MUST set an array of target canisters to which delegation identity will make
+authenticated calls without user approvals. These canisters SHOULD be under the 3rd party
+application's control, otherwise the developer opens a trust assumption that other canister
+controllers won't carry out drain attacks on their shared pool of users.
+
+## Rust Implementation
+
+Each target canister that wallet providers will query (as an update call for secure consensus)
+should have method `icrc28_trusted_origins()`:
+
+```rust
+#[derive(CandidType, Deserialize, Eq, PartialEq, Debug)]
+pub struct SupportedStandard {
+    pub url: String,
+    pub name: String,
+}
+
+#[query]
+fn icrc10_supported_standards() -> Vec<SupportedStandard> {
+    vec![
+        SupportedStandard {
+            url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-10/ICRC-10.md".to_string(),
+            name: "ICRC-10".to_string(),
+        },
+        SupportedStandard {
+            url: "https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md".to_string(),
+            name: "ICRC-28".to_string(),
+        },
+    ]
+}
+
+#[derive(Clone, Debug, CandidType, Deserialize)]
+pub struct Icrc28TrustedOriginsResponse {
+    pub trusted_origins: Vec<String>
+}
+
+#[update]
+fn icrc28_trusted_origins() -> Icrc28TrustedOriginsResponse {
+    let trusted_origins = vec![
+        String::from("dscvr.one") // to be replaced with application's frontend origin(s)
+    ];
+
+    return Icrc28TrustedOriginsResponse { trusted_origins }
+}
+```
+
+> Note: icrc10_supported_standards of the target canister must not include standards supporting
+> tradable assets. In particular, it must not include ICRC-1, ICRC-2, ICRC-7 and ICRC-37.

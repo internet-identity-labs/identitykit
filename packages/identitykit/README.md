@@ -95,3 +95,15 @@ Contributions are welcome! To get started, please submit a pull request or open 
 
 If you encounter any issues or have questions, feel free to reach out to the team directly on
 [Discord](https://discord.gg/bJK5HE6KDn).
+
+## 📘 Documentation
+
+For full documentation, visit [docs.identitykit.xyz](https://docs.identitykit.xyz).
+
+### 🎉 Try it out
+
+Here is a short list of live IdentityKit implementations:
+
+- [Demo App](https://demo.identitykit.xyz)
+- [ICRC Standards Implementation](https://standards.identitykit.xyz) (view low-level ICRC standards
+  implementations)

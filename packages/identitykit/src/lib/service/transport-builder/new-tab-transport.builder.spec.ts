@@ -1,5 +1,8 @@
 import { PostMessageTransport, PostMessageTransportOptions } from "@slide-computer/signer-web"
-import { getPopupTransportBuilder } from "./new-tab-transport.builder"
+import {
+  getPopupTransportBuilder,
+  NEW_TAB_TRANSPORT_DEFAULT_ESTABLISH_TIMEOUT,
+} from "./new-tab-transport.builder"
 
 jest.mock("@slide-computer/signer-web", () => ({
   PostMessageTransport: jest.fn(),
@@ -25,7 +28,7 @@ describe("getPopupTransportBuilder", () => {
     await getPopupTransportBuilder(request)
     expect(PostMessageTransport).toHaveBeenCalledWith({
       url: mockUrl,
-      statusTimeout: 15000,
+      establishTimeout: NEW_TAB_TRANSPORT_DEFAULT_ESTABLISH_TIMEOUT,
     })
   })
 })

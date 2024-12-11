@@ -20,7 +20,9 @@ export class AccountsSignerClient extends SignerClient {
     // get and transform accounts from signer
     const params = this.options.derivationOrigin
       ? {
-          derivationOrigin: this.options.derivationOrigin,
+          params: {
+            icrc95DerivationOrigin: this.options.derivationOrigin,
+          },
         }
       : {}
 
@@ -69,7 +71,7 @@ export class AccountsSignerClient extends SignerClient {
 
   public async logout(options?: { returnTo?: string }): Promise<void> {
     await this.storage.remove(`accounts-${STORAGE_KEY}`)
-    super.logout(options)
+    return super.logout(options)
   }
 
   private async setAccounts(

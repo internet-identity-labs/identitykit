@@ -1,0 +1,21 @@
+---
+title: "useAccounts"
+date: "2024-07-09"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+# useAccounts
+
+`() => ({ principal: Principal, subaccount?: SubAccount}[] | undefined){:typescript}`
+
+Will return connected accounts in case `IdentityKitProvider.authType` is set to
+`IdentityKitAuthType.ACCOUNTS` and user is connected, otherwise will be undefined:
+
+## Usage
+
+```typescript
+import { useAccounts } from "@nfid/identitykit/react"
+
+const accounts = useAccounts()
+```

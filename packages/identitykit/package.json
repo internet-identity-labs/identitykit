@@ -1,6 +1,6 @@
 {
   "name": "@nfid/identitykit",
-  "version": "0.0.5",
+  "version": "1.0.3",
   "description": "A React library for adding wallet connections to dApps.",
   "keywords": [
     "ICP",
@@ -14,7 +14,7 @@
   "homepage": "https://www.identitykit.xyz/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/internet-identity-labs/identitykit"
+    "url": "git+https://github.com/internet-identity-labs/identitykit.git"
   },
   "license": "MIT",
   "bugs": {
@@ -57,7 +57,7 @@
   },
   "scripts": {
     "dev": "npm run build-dev --watch",
-    "build": "npm run build-prod && npm run build-dev",
+    "build": "npm run build-prod",
     "build-prod": "rm -rf ./dist && rollup -c rollup.config.prod.js --bundleConfigAsCjs",
     "build-dev": "rm -rf ./dist && rollup -c rollup.config.dev.js --bundleConfigAsCjs",
     "post:build": "node ./scripts/frankBuild.js",
@@ -66,8 +66,6 @@
     "lint:fix": "eslint . --fix --ext ts,tsx --max-warnings 0",
     "size": "size-limit",
     "analyze": "size-limit --why",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
     "format:write": "prettier --write '**/*.{ts,tsx,md,mdx,css}'",
     "lint-staged": "lint-staged --no-stash"
   },
@@ -85,21 +83,22 @@
     "@headlessui/react": "2.1.8",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.2",
-    "@slide-computer/signer": "^3.6.4",
-    "@slide-computer/signer-agent": "^3.6.4",
-    "@slide-computer/signer-storage": "^3.6.4",
-    "@slide-computer/signer-transport-auth-client": "^3.6.4",
-    "@slide-computer/signer-transport-plug": "^3.6.4",
-    "@slide-computer/signer-transport-stoic": "^3.6.4",
-    "@slide-computer/signer-web": "^3.6.4",
+    "@slide-computer/signer": "^3.7.1",
+    "@slide-computer/signer-agent": "^3.7.1",
+    "@slide-computer/signer-extension": "^3.7.1",
+    "@slide-computer/signer-storage": "^3.7.1",
+    "@slide-computer/signer-transport-auth-client": "^3.7.1",
+    "@slide-computer/signer-transport-plug": "^3.7.1",
+    "@slide-computer/signer-transport-stoic": "^3.7.1",
+    "@slide-computer/signer-web": "^3.7.1",
     "clsx": "^2.1.1",
-    "react-hook-form": "^7.53.0",
     "tailwindcss": "^3.4.13",
     "tailwindcss-scoped-preflight": "^3.4.5",
-    "use-async-memo": "^1.2.5"
+    "use-async-memo": "^1.2.5",
+    "use-context-selector": "^2.0.0"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^28.0.0",
+    "@rollup/plugin-commonjs": "^28.0.1",
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-replace": "^6.0.1",
     "@svgr/rollup": "^8.1.0",
@@ -117,11 +116,15 @@
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-typescript2": "^0.36.0",
     "size-limit": "^11.1.6",
-    "storybook": "^8.3.4",
     "ts-jest": "^29.2.5"
   },
   "peerDependencies": {
+    "@dfinity/auth-client": ">=2.1.3",
     "@dfinity/ledger-icp": ">=2.4.0",
+    "@dfinity/identity": ">=2.1.3",
+    "@dfinity/agent": ">=2.1.3",
+    "@dfinity/candid": ">=2.1.3",
+    "@dfinity/principal": ">=2.1.3",
     "react": ">=18.3.1",
     "react-dom": ">=18.3.1"
   },

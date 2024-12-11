@@ -1,8 +1,8 @@
 import CodeMirror, { ReactCodeMirrorProps } from "@uiw/react-codemirror"
 import { langs } from "@uiw/codemirror-extensions-langs"
-import { Copy } from "../atoms/copy"
-import { E2ELogger } from "../atoms/e2e"
+import { E2ELogger } from "../atoms"
 import { useTheme } from "next-themes"
+import { Copy } from "../atoms"
 
 export interface RequestSectionProps {
   value: string
@@ -13,9 +13,7 @@ export const RequestSection: React.FC<RequestSectionProps> = ({ value, setValue 
   const { resolvedTheme } = useTheme()
   return (
     <div>
-      <p className="text-slate-500 dark:text-zinc-500 font-semibold mb-1">
-        Request <span className="text-sm opacity-50">(editable)</span>
-      </p>
+      <p className="text-slate-500 dark:text-zinc-500 font-semibold mb-1">Request</p>
       <div className="relative w-full overflow-hidden !font-mono rounded-xl">
         <div className="absolute z-40 scale-125 w-[24px] right-3 top-3">
           <Copy value={value} />
@@ -34,6 +32,8 @@ export const RequestSection: React.FC<RequestSectionProps> = ({ value, setValue 
             indentOnInput: false,
             highlightActiveLine: false,
           }}
+          readOnly={true}
+          editable={false}
         />
       </div>
     </div>

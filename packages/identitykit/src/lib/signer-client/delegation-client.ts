@@ -27,9 +27,8 @@ import { DEFAULT_MAX_TIME_TO_LIVE } from "../constants"
 import { IdleManager } from "../timeout-managers/idle-manager"
 import { TimeoutManager } from "../timeout-managers/timeout-manager"
 
-const ECDSA_KEY_LABEL = "ECDSA"
 const ED25519_KEY_LABEL = "Ed25519"
-type BaseKeyType = typeof ECDSA_KEY_LABEL | typeof ED25519_KEY_LABEL
+type BaseKeyType = "ECDSA" | typeof ED25519_KEY_LABEL
 
 export enum DelegationType {
   ACCOUNT = "ACCOUNT",
@@ -88,9 +87,27 @@ export class DelegationSignerClient extends SignerClient {
     }
     if (this.shouldCheckIsUserConnected()) {
       const delegationChain = await getDelegationChain(STORAGE_KEY, storage as SignerStorage)
-      if (baseIdentity && delegationChain && isDelegationValid(delegationChain))
-        identity = DelegationSignerClient.createIdentity(baseIdentity, delegationChain)
-      else identity = new AnonymousIdentity()
+      const delegationValid = baseIdentity && delegationChain && isDelegationValid(delegationChain)
+      identity = delegationValid
+        ? DelegationSignerClient.createIdentity(baseIdentity, delegationChain)
+        : new AnonymousIdentity()
+
+      const signerClient = new DelegationSignerClient(
+        options,
+        identity,
+        baseIdentity,
+        options.targets,
+        options.maxTimeToLive
+      )
+
+      if (delegationValid) {
+        signerClient.initExpirationManager(delegationChain)
+      }
+
+      const storageConnectedUser = await signerClient.getConnectedUserFromStorage()
+      await signerClient.setConnectedUser(storageConnectedUser)
+
+      return signerClient
     }
 
     const signerClient = new DelegationSignerClient(
@@ -100,11 +117,6 @@ export class DelegationSignerClient extends SignerClient {
       options.targets,
       options.maxTimeToLive
     )
-
-    if (this.shouldCheckIsUserConnected()) {
-      const storageConnectedUser = await signerClient.getConnectedUserFromStorage()
-      await signerClient.setConnectedUser(storageConnectedUser)
-    }
 
     return signerClient
   }
@@ -122,7 +134,7 @@ export class DelegationSignerClient extends SignerClient {
   public async login(): Promise<void> {
     const params = this.options.derivationOrigin
       ? {
-          derivationOrigin: this.options.derivationOrigin,
+          icrc95DerivationOrigin: this.options.derivationOrigin,
         }
       : {}
     const delegationChainResponse = await this.options.signer.sendRequest<
@@ -175,6 +187,10 @@ export class DelegationSignerClient extends SignerClient {
       this.registerDefaultIdleCallback()
     }
 
+    return this.initExpirationManager(delegationChain)
+  }
+
+  private initExpirationManager(delegationChain: DelegationChain): void {
     if (!this.expirationManager) {
       const delegationExpirationInMillis =
         Number(
@@ -200,7 +216,7 @@ export class DelegationSignerClient extends SignerClient {
       removeDelegationChain(STORAGE_KEY, this.storage),
     ])
     this.identity = new AnonymousIdentity()
-    super.logout(options)
+    return super.logout(options)
   }
 
   public getIdentity(): Identity | PartialIdentity {
