@@ -13,6 +13,7 @@ import {
   CallCanisterMethodTitle,
   CallCanisterMethodType,
 } from "./constants"
+import { ICP_API_HOST } from "../../../constants"
 
 const MethodComponent = {
   [CallCanisterMethod.greet_no_consent]: ToTarget,
@@ -24,7 +25,7 @@ const MethodComponent = {
 
 export function CallCanisterSection() {
   const { user } = useAuth()
-  const agent = useAgent()
+  const agent = useAgent({ host: ICP_API_HOST })
   const [selectedMethod, setSelectedMethod] = useState<CallCanisterMethodType>(
     CallCanisterMethod.greet_no_consent
   )

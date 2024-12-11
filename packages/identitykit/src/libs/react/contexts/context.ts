@@ -23,7 +23,7 @@ interface Context {
   toggleModal: () => void
   selectSigner: (signerId?: string) => Promise<SignerConfig | void>
   selectCustomSigner: (url: string) => Promise<void>
-  connect: (signerIdOrUrl?: string) => void
+  connect: (signerIdOrUrl?: string) => Promise<void>
   disconnect: () => Promise<void>
   fetchIcpBalance?: () => Promise<void>
 }
