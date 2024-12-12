@@ -8,6 +8,8 @@ import { getComponentsFolders } from "./scripts/buildUtils.js"
 import generatePackageJson from "rollup-plugin-generate-package-json"
 import tailwindcss from "tailwindcss"
 import dts from "rollup-plugin-dts"
+import fs from "fs"
+import path from "path"
 
 const packageJson = require("./package.json")
 const tailwindConfig = require("./tailwind.config.js")
@@ -104,6 +106,20 @@ function component(commonPlugins, folder) {
   ]
 }
 
+const manualGeneratePackageJson = () => ({
+  name: "manual-generate-package-json",
+  buildEnd() {
+    const targetPath = path.resolve("dist", "package.json")
+    const updatedPackageJson = {
+      ...packageJson,
+      exports: packageJson.exportsProd,
+      exportsProd: undefined,
+    }
+    fs.writeFileSync(targetPath, JSON.stringify(updatedPackageJson, null, 2), "utf-8")
+    console.log(`Generated package.json at ${targetPath}`)
+  },
+})
+
 export default [
   // Build all components in ./src/libs
   ...[].concat.apply(
@@ -128,17 +144,7 @@ export default [
         banner: `'use client';`,
       },
     ],
-    plugins: [
-      ...commonPlugins,
-      generatePackageJson({
-        baseContents: (bC) => ({
-          ...bC,
-          exports: bC.exportsProd,
-          exportsProd: undefined,
-        }),
-        outputFolder: `dist/`,
-      }),
-    ],
+    plugins: [...commonPlugins, manualGeneratePackageJson()],
     external: [/node_modules/],
   },
   {
