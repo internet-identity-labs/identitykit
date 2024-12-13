@@ -6,8 +6,9 @@ export class Icrc25AccountsSection extends Section {
     super(page, "icrc27_accounts")
   }
 
-  async selectAccountsMocked() {
-    const [popup] = await Promise.all([this.page.waitForEvent("popup"), this.submitButton.click()])
+  async selectAccountsMocked(context: BrowserContext) {
+    await this.submitButton.click()
+    const popup = await context.pages()[context.pages().length - 1]
     await popup.click("#acc_0")
     await popup.click("#acc_1")
     await popup.click("#approve")
