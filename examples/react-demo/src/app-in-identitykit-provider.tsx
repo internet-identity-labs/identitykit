@@ -21,6 +21,12 @@ const nfidSignerProviderUrl = import.meta.env.VITE_MOCKED_NFID_SIGNER_PROVIDER_U
 const targetCanister = import.meta.env.VITE_TARGET_CANISTER
 const environment = import.meta.env.VITE_ENVIRONMENT
 
+const ConnectFailureError: Record<string, string> = {
+  "The request sent by the relying party is not supported by the signer.":
+    "OISY doesn’t support delegation. Switch to accounts.",
+  "Not supported": "Internet Identity doesn’t support accounts. Switch to delegation.",
+}
+
 const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
 const signers = [nfidw, Plug, InternetIdentity, Stoic, OISY].concat(
   environment === "dev"
@@ -52,11 +58,7 @@ export function AppWrappedInIdentityKit() {
         targets: [targetCanister],
       }}
       onConnectFailure={(e) => {
-        toast.error(
-          e.message === "Not supported"
-            ? "Internet Identity doesn’t support accounts. Switch to delegation."
-            : e.message
-        )
+        toast.error(ConnectFailureError[e.message] || e.message)
       }}
       onConnectSuccess={() => {
         localStorage.setItem("authType", authType)
