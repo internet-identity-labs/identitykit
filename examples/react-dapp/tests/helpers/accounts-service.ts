@@ -87,6 +87,15 @@ export class UserService {
         JSON.stringify(state.delegation) === JSON.stringify(testUser.authstate.delegation)
       ) {
         isLoggedIn = true
+
+        console.log(`identity - ${state.identity?.toString()}`)
+        console.log(`delegation - ${JSON.stringify(state.delegation)}`)
+        console.log(
+          `identity равен? - ${state.identity?.toString() === testUser.authstate.identity.toString()}`
+        )
+        console.log(
+          `делегейшн равен? - ${JSON.stringify(state.delegation) === JSON.stringify(testUser.authstate.delegation)}`
+        )
       }
       await new Promise((resolve) => setTimeout(resolve, 1000))
     }
