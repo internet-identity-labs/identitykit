@@ -29,6 +29,7 @@ describe("getPopupTransportBuilder", () => {
     expect(PostMessageTransport).toHaveBeenCalledWith({
       url: mockUrl,
       establishTimeout: NEW_TAB_TRANSPORT_DEFAULT_ESTABLISH_TIMEOUT,
+      detectNonClickEstablishment: false,
     })
   })
 })
