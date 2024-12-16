@@ -8,6 +8,7 @@ export async function getPopupTransportBuilder(
 ): Promise<Transport> {
   return new PostMessageTransport({
     ...options,
+    detectNonClickEstablishment: false,
     establishTimeout: NEW_TAB_TRANSPORT_DEFAULT_ESTABLISH_TIMEOUT, // 1 min
   })
 }
