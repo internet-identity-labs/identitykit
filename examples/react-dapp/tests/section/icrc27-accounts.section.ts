@@ -27,11 +27,18 @@ export class Icrc25AccountsSection extends Section {
         if (popup)
           await context
             .pages()[2]
-            .locator('//button[.//text()="Approve"]')
+            .locator('//button[.//text()="Connect"]')
             .waitFor({ state: "attached", timeout: 5000 })
-        await context.pages()[2].locator('//button[.//text()="Approve"]').click()
+        await context.pages()[2].locator('//button[.//text()="Connect"]').click()
+
+        await context
+          .pages()[2]
+          .locator('//button[.//text()="Continue to app"]')
+          .waitFor({ state: "attached", timeout: 5000 })
+
+        await context.pages()[2].locator('//button[.//text()="Continue to app"]').click()
+
         await page.waitForTimeout(1000)
-        await popup.close()
         done = true
       } catch (e) {
         /* empty */
