@@ -99,6 +99,8 @@ export function useCreateIdentityKit<
             }
             setUser(instance.signerClient.connectedUser)
           }
+        } else {
+          onConnectSuccess?.()
         }
         setIk(instance as IdentityKit)
       })
