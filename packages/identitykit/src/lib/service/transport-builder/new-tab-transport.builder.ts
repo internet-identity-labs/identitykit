@@ -9,6 +9,8 @@ export async function getPopupTransportBuilder(
   return new PostMessageTransport({
     ...options,
     detectNonClickEstablishment: false,
+    statusPollingRate: 1000,
+    disconnectTimeout: 5000,
     establishTimeout: NEW_TAB_TRANSPORT_DEFAULT_ESTABLISH_TIMEOUT, // 1 min
   })
 }
