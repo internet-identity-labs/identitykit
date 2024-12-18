@@ -1,16 +1,17 @@
-import { useSigner } from "@nfid/identitykit/react"
+import { useSigner, useAuth } from "@nfid/identitykit/react"
 import clsx from "clsx"
-import { useModal } from "../../../../../packages/identitykit/src/libs/react/hooks"
 
 export function ConnectWalletButton() {
   const selectedSigner = useSigner()
-  const { toggleModal } = useModal()
+  const { connect } = useAuth()
   return (
     <button
       id={"connect"}
       type="button"
       disabled={!!selectedSigner}
-      onClick={toggleModal}
+      onClick={() => {
+        connect()
+      }}
       className={clsx(
         "text-black bg-transparent border-gray-900",
         "hover:text-white hover:bg-gray-900 hover:border-gray-900 hover:shadow-md",
