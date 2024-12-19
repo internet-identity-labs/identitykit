@@ -26,7 +26,7 @@ const test = base.extend<Fixtures>({
     await nfidPage.goto("https://dev.nfid.one/")
     await demoPage.setAccount(10974, nfidPage)
     // await nfidPage.pause()
-    await context.pages()[0].bringToFront()
+    await context.pages()[0]!.bringToFront()
     await use(nfidPage)
   },
   requestPermissionSection: async ({ page }, use) => {
