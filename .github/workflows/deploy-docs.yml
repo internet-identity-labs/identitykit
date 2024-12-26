@@ -38,7 +38,7 @@ jobs:
           echo "${IDENTITY}" | base64 -d > "${ID_PATH}/identity.pem"
           dfx identity use "${ID_NAME}"
         env:
-          IDENTITY: ${{secrets.DFX_IDENTITY}}
+          IDENTITY: ${{ secrets.DFX_IDENTITY }}
 
       - name: Deploy
         run: |
