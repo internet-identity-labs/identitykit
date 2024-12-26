@@ -11,6 +11,9 @@ on:
         options:
           - github-packages
           - npm
+      confirmation:
+        description: 'For npm publishing - confirm your choice by typing "Yes"'
+        type: string
 
 jobs:
   release:
@@ -19,6 +22,12 @@ jobs:
       packages: write
       contents: write
     steps:
+      - name: INPUT => Checks Publishing
+        if: (github.event.inputs.registry == 'npm') && (github.event.inputs.confirmation != 'Yes')
+        run: |
+          echo "[ERROR] You have try to publish to 'npm' without or with wrong confirmation phrase" >&2
+          exit 1
+
       - name: Checkout code
         uses: actions/checkout@v4
 
