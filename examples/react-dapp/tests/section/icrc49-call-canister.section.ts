@@ -31,10 +31,6 @@ export class Icrc49CallCanisterSection extends Section {
     return this.page.locator("#select-request")
   }
 
-  async clickPopupApproveButton(context: BrowserContext) {
-    this.popup = context.pages()[context.pages().length - 1]
-    await this.popup.click("//button[.//text()='Approve']")
-  }
   async openPopup(context: BrowserContext) {
     await this.callCanisterSubmitButton.click()
     await this.page.waitForTimeout(1000)
