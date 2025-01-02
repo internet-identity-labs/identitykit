@@ -1,5 +1,5 @@
 import { expect, Page, test as base } from "@playwright/test"
-import { Account, AccountType, StandardsPage, ProfileType } from "./page/standards.page.ts"
+import { AccountType, ProfileType, StandardsPage } from "./page/standards.page.ts"
 import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
 import { Icrc34DelegationSection } from "./section/icrc34-delegation.section.ts"
 import { ExpectedTexts } from "./section/expectedTexts.ts"
@@ -31,21 +31,16 @@ const test = base.extend<Fixtures>({
     await demoPage.setAccount(10974, nfidPage)
     await context.pages()[0].bringToFront()
     await use(nfidPage)
-    await nfidPage.close()
   },
 })
 
-test.describe("ICRC25 delegation", () => {
-  let accounts: Account[] = []
-
-  test.beforeEach(async () => {
-    accounts = await StandardsPage.getAccounts()
-  })
-  test("should check request and response has correct initial state", async ({
-    section,
-    demoPage,
-  }) => {
-    for (const account of accounts) {
+const accounts = await StandardsPage.getAccounts()
+for (const account of accounts) {
+  test.describe(`ICRC25 delegation for ${account.type} user`, () => {
+    test(`should check request and response has correct initial state for ${account.type} user`, async ({
+      section,
+      demoPage,
+    }) => {
       await demoPage.login(account)
 
       const initialRequest = await section.getRequestJson()
@@ -54,60 +49,62 @@ test.describe("ICRC25 delegation", () => {
       const initialResponse = await section.getResponseJson()
       expect(initialResponse).toStrictEqual({})
       await demoPage.logout()
-    }
-  })
+    })
 
-  test("should request global delegation with targets", async ({
-    section,
-    demoPage,
-    requestPermissionSection,
-    nfidPage,
-    context,
-  }) => {
-    await nfidPage.title()
-    const account = accounts[0]
-    await demoPage.login(account)
-    await requestPermissionSection.approvePermissions(account)
+    test(`${account.type} user should request global delegation with targets`, async ({
+      section,
+      demoPage,
+      requestPermissionSection,
+      nfidPage,
+      context,
+    }) => {
+      await nfidPage.title()
+      await demoPage.login(account)
+      await requestPermissionSection.approvePermissions(account)
 
-    if (account.type === AccountType.MockedSigner) {
-      await section.selectProfileMocked(ProfileType.Global, (isGlobalDisabled) =>
-        expect(isGlobalDisabled).toBeFalsy()
+      if (account.type === AccountType.MockedSigner) {
+        await section.selectProfileMocked(ProfileType.Global, (isGlobalDisabled) =>
+          expect(isGlobalDisabled).toBeFalsy()
+        )
+      } else await section.selectProfileNFID(demoPage.page, "anonymous", context)
+
+      await section.waitForResponse()
+      const actualResponse = await section.getResponseJson()
+      expect(actualResponse).toStrictEqual(
+        account.type === AccountType.MockedSigner
+          ? ExpectedTexts.Mocked.DelegationWithTargetsResponse
+          : ExpectedTexts.NFID.DelegationWithTargetsResponse
       )
-    } else await section.selectProfileNFID(demoPage.page, context)
+      await demoPage.logout()
+      await nfidPage.close()
+    })
 
-    await section.waitForResponse()
-    const actualResponse = await section.getResponseJson()
+    test(`${account.type} user should request session delegation with no targets`, async ({
+      section,
+      demoPage,
+      requestPermissionSection,
+      nfidPage,
+      context,
+    }) => {
+      await demoPage.login(account)
+      await requestPermissionSection.approvePermissions(account)
+      await section.setRequestWithNoTargets()
 
-    expect(actualResponse).toMatchObject(ExpectedTexts.Mocked.DelegationWithTargetsResponse)
-    await demoPage.logout()
-  })
+      if (account.type === AccountType.MockedSigner) {
+        await section.selectProfileMocked(ProfileType.Session, (isGlobalDisabled) =>
+          expect(isGlobalDisabled).toBeTruthy()
+        )
+      } else await section.selectProfileNFID(demoPage.page, "anonymous", context)
 
-  test("should request session delegation with no targets", async ({
-    section,
-    demoPage,
-    requestPermissionSection,
-    nfidPage,
-    context,
-  }) => {
-    const account = accounts[0]
-    await nfidPage.title()
-    await demoPage.login(account)
-    await requestPermissionSection.approvePermissions(account)
-    await section.setRequestWithNoTargets()
-
-    if (account.type === AccountType.MockedSigner) {
-      await section.selectProfileMocked(ProfileType.Session, (isGlobalDisabled) =>
-        expect(isGlobalDisabled).toBeTruthy()
+      await section.waitForResponse()
+      const actualResponse = await section.getResponseJson()
+      expect(actualResponse).toMatchObject(
+        account.type === AccountType.MockedSigner
+          ? ExpectedTexts.Mocked.NoTargetsDelegationResponse
+          : ExpectedTexts.NFID.NoTargetsDelegationResponse
       )
-    } else await section.selectProfileNFID(demoPage.page, context)
-
-    await section.waitForResponse()
-    const actualResponse = await section.getResponseJson()
-    expect(actualResponse).toMatchObject(
-      account.type === AccountType.MockedSigner
-        ? ExpectedTexts.Mocked.NoTargetsDelegationResponse
-        : ExpectedTexts.NFID.NoTargetsDelegationResponse
-    )
-    await demoPage.logout()
+      await demoPage.logout()
+      await nfidPage.close()
+    })
   })
-})
+}

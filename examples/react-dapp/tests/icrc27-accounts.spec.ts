@@ -25,7 +25,6 @@ const test = base.extend<Fixtures>({
     const nfidPage = await context.newPage()
     await nfidPage.goto("https://dev.nfid.one/")
     await demoPage.setAccount(10974, nfidPage)
-    // await nfidPage.pause()
     await context.pages()[0]!.bringToFront()
     await use(nfidPage)
   },
@@ -74,6 +73,7 @@ for (const account of accounts) {
           : ExpectedTexts.NFID.ListOfAccountsResponse
       )
       await demoPage.logout()
+      await nfidPage.close()
     })
   })
 }
