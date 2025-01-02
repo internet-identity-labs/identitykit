@@ -25,22 +25,24 @@ export async function expectTrue(a: Promise<boolean> | boolean, message?: string
 
 export async function waitUntil(
   condition: () => Promise<boolean>,
-  options: WaitUntilOptions = {}
+  timeout: number = 10000,
+  interval: number = 300
 ): Promise<void> {
-  const { timeout = 20000, interval = 1000, message = "Timeout waiting for condition" } = options
   const startTime = Date.now()
-
-  while (Date.now() - startTime < timeout) {
-    if (await condition()) {
-      return
+  return new Promise((resolve, reject) => {
+    const checkCondition = async () => {
+      try {
+        if (await condition()) {
+          return resolve()
+        }
+        if (Date.now() - startTime >= timeout) {
+          return reject(new Error("Timeout waiting for condition"))
+        }
+        setTimeout(checkCondition, interval)
+      } catch (error) {
+        reject(error)
+      }
     }
-    await new Promise((resolve) => setTimeout(resolve, interval))
-  }
-  throw new Error(message)
-}
-
-interface WaitUntilOptions {
-  timeout?: number
-  interval?: number
-  message?: string
+    checkCondition()
+  })
 }

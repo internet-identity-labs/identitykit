@@ -5,7 +5,7 @@ export abstract class Section {
   private readonly requestSection: Locator
   private readonly responseSection: Locator
 
-  constructor(
+  protected constructor(
     public readonly page: Page,
     protected readonly section: string
   ) {

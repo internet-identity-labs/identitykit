@@ -85,9 +85,9 @@ export class UserService {
       if (
         state.identity?.toString() === testUser.authstate.identity.toString() &&
         JSON.stringify(state.delegation) === JSON.stringify(testUser.authstate.delegation)
-      ) {
+      )
         isLoggedIn = true
-      }
+
       await new Promise((resolve) => setTimeout(resolve, 1000))
     }
 
