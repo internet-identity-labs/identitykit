@@ -190,7 +190,7 @@ for (const account of accounts) {
       section,
       demoPage,
       requestPermissionSection,
-      _icrc25AccountsSection,
+      // icrc25AccountsSection,
       context,
       nfidPage,
     }) => {
