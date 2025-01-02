@@ -18,13 +18,14 @@ export class Icrc34DelegationSection extends Section {
   popupMocked = {
     globalProfile: (): Locator => this.popup.locator("#acc_1"),
     anonymousProfile: (): Locator => this.popup.locator("#acc_2"),
-    approveButton: (): Locator => this.popup.locator("#acc_2"),
+    approveButton: (): Locator => this.popup.locator("#approve"),
   }
 
-  async openPopup(): Promise<Page> {
-    const [popup] = await Promise.all([this.page.waitForEvent("popup"), this.submitButton.click()])
+  async openPopup(context: BrowserContext): Promise<Page> {
+    this.popup = context.pages()[context.pages().length - 1]
+    await this.popup.bringToFront()
 
-    return popup
+    return this.popup
   }
 
   async isDisabledGlobalAccount(popup: Page): Promise<boolean> {
@@ -35,8 +36,13 @@ export class Icrc34DelegationSection extends Section {
     return await popup.locator("#acc_2").isDisabled()
   }
 
-  async selectProfileMocked(account: ProfileType, checkGlobalAcc: (value) => void): Promise<void> {
-    const popup = await this.openPopup()
+  async selectProfileMocked(
+    account: ProfileType,
+    context: BrowserContext,
+    checkGlobalAcc: (value) => void
+  ): Promise<void> {
+    await this.submitButton.click()
+    const popup = await this.openPopup(context)
     const isDisabledGlobalAccount = await this.isDisabledGlobalAccount(popup)
     checkGlobalAcc(isDisabledGlobalAccount)
     const isDisabledSessionAccount = await this.isDisabledSessionAccount(popup)
@@ -47,7 +53,6 @@ export class Icrc34DelegationSection extends Section {
       await this.popupMocked.anonymousProfile().click()
     }
     await this.popupMocked.approveButton().click()
-    await popup.close()
   }
 
   async selectProfileNFID(page: Page, profileType: string, context: BrowserContext): Promise<void> {

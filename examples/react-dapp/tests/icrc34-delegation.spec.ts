@@ -63,7 +63,7 @@ for (const account of accounts) {
       await requestPermissionSection.approvePermissions(account)
 
       if (account.type === AccountType.MockedSigner) {
-        await section.selectProfileMocked(ProfileType.Global, (isGlobalDisabled) =>
+        await section.selectProfileMocked(ProfileType.Global, context, (isGlobalDisabled) =>
           expect(isGlobalDisabled).toBeFalsy()
         )
       } else await section.selectProfileNFID(demoPage.page, "anonymous", context)
@@ -91,7 +91,7 @@ for (const account of accounts) {
       await section.setRequestWithNoTargets()
 
       if (account.type === AccountType.MockedSigner) {
-        await section.selectProfileMocked(ProfileType.Session, (isGlobalDisabled) =>
+        await section.selectProfileMocked(ProfileType.Session, context, (isGlobalDisabled) =>
           expect(isGlobalDisabled).toBeTruthy()
         )
       } else await section.selectProfileNFID(demoPage.page, "anonymous", context)
