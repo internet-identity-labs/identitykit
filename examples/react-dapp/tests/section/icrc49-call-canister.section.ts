@@ -117,7 +117,6 @@ export class Icrc49CallCanisterSection extends Section {
   ): Promise<void> {
     await this.popup.bringToFront()
     expect(await this.getNFIDPopupText(await context.pages()[2])).toEqual(textsExpected.join(","))
-    await this.nfidApproveButton.click()
   }
 
   async setCallCanisterOwner(sender: string): Promise<void> {

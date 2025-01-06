@@ -1,7 +1,7 @@
 import {
   MOCKED_SIGNER_MAIN_ACCOUNT,
   MOCKED_SIGNER_SECOND_ACCOUNT,
-  PEPE_LEDGER_CANISTER_ID,
+  ALIEN_LEDGER_CANISTER_ID,
 } from "../../../constants"
 import { CallCanisterMethod } from "./constants"
 import { Section } from "./section"
@@ -13,10 +13,10 @@ export function Icrc1Transfer({ className }: { className?: string }) {
       request={{
         method: "icrc49_call_canister",
         params: {
-          canisterId: PEPE_LEDGER_CANISTER_ID,
+          canisterId: ALIEN_LEDGER_CANISTER_ID,
           sender: MOCKED_SIGNER_MAIN_ACCOUNT,
           method: CallCanisterMethod.icrc1_transfer,
-          arg: "RElETAZte24AbAKzsNrDA2ithsqDBQFufW54bAb7ygECxvy2AgO6ieXCBAGi3pTrBgGC8/ORDATYo4yoDX0BBQEdXdZAg85gOc3s6DkTiv7FBn9RDHSPT6rgmlsBGgIAAAAAAICAgPXduOvktWw=",
+          arg: "RElETAZte24AbAKzsNrDA2ithsqDBQFufW54bAb7ygECxvy2AgO6ieXCBAGi3pTrBgGC8/ORDATYo4yoDX0BBQEdXdZAg85gOc3s6DkTiv7FBn9RDHSPT6rgmlsBGgIAAAAAAIDIr6Al",
         },
       }}
       getCodeSnippet={({ canisterId, method }) => `const agent = useAgent()

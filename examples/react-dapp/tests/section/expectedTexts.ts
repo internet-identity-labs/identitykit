@@ -194,12 +194,11 @@ export class ExpectedTexts {
     CanisterCallIcrc1TransferRequest: [
       "Request from http://localhost:3001",
       "Canister ID",
-      "etik7-oiaaa-aaaar-qagia-cai",
+      "7tvr6-fqaaa-aaaan-qmira-cai",
       "Sender",
       "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
       "Arguments",
-      '[{"to":{"owner":{"__principal__":"6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae"},"subaccount":[]},"fee":[],"memo":[],"from_subaccount":[],"created_at_time":[],"amount":"1000000000000000000000"}]',
-      "# Approve the transfer of funds **Amount:** 1000 ckPEPE **From:** gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe **To:** 6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae **Fee:** 1000 ckPEPE",
+      '[{"to":{"owner":{"__principal__":"6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae"},"subaccount":[]},"fee":[],"memo":[],"from_subaccount":[],"created_at_time":[],"amount":"10000000000"}]',
     ],
   }
 
@@ -296,11 +295,6 @@ export class ExpectedTexts {
       "Transaction details",
       "Proceed with caution. This website can spend up to the spending cap until you revoke this permission.",
     ],
-    CanisterCallIcrc1TransferRequest: [
-      "Request from localhost:3001",
-      "1000 ckPEPE",
-      "0.02 USD",
-      "Insufficient ckPEPE balance",
-    ],
+    CanisterCallIcrc1TransferRequest: ["Request from localhost:3001", "100 ALIEN", "0.00 USD"],
   }
 }

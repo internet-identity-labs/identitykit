@@ -43,7 +43,7 @@ const test = base.extend<Fixtures>({
 
 const accounts = await StandardsPage.getAccounts()
 for (const account of accounts) {
-  test.describe(`ICRC25 delegation for ${account.type} user`, () => {
+  test.describe(`ICRC49-call-canister methods for ${account.type} user`, () => {
     test(`${account.type} user should check request and response has correct initial state for no consent case`, async ({
       section,
       demoPage,
@@ -101,6 +101,7 @@ for (const account of accounts) {
           context,
           ExpectedTexts.NFID.NoConsentCaseCanisterCall
         )
+        await section.nfidApproveButton.click()
       }
 
       await section.waitForResponse()
@@ -138,6 +139,7 @@ for (const account of accounts) {
           context,
           ExpectedTexts.NFID.ConsentCaseCanisterCall
         )
+        await section.nfidApproveButton.click()
       }
 
       await section.waitForResponse()
@@ -177,6 +179,7 @@ for (const account of accounts) {
           context,
           ExpectedTexts.NFID.CanisterCallIcrc2ApproveRequest
         )
+        await section.nfidApproveButton.click()
       }
 
       await section.waitForResponse()
@@ -186,11 +189,11 @@ for (const account of accounts) {
       await demoPage.logout()
     })
 
-    test(`${account.type} user MOCK: should make canister call: ICRC-1 transfer`, async ({
+    test(`${account.type} user should make canister call: ICRC-1 transfer`, async ({
       section,
       demoPage,
       requestPermissionSection,
-      // icrc25AccountsSection,
+      icrc25AccountsSection,
       context,
       nfidPage,
     }) => {
@@ -205,16 +208,17 @@ for (const account of accounts) {
         expect(texts).toEqual(ExpectedTexts.Mocked.CanisterCallIcrc1TransferRequest)
         await section.mockedApproveButton.click()
       } else {
-        return
-        // await icrc25AccountsSection.selectAccountsNFID(demoPage.page, context)
-        // await section.setCallCanisterOwner("\"7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae\"")
-        // await section.openPopup(context)
-        // await section.checkPopupTextNFID(
-        //   demoPage.page,
-        //   context,
-        //   ExpectedTexts.NFID.CanisterCallIcrc1TransferRequest,
-        // )
-        // await section.clickPopupApproveButton(context)
+        await icrc25AccountsSection.selectAccountsNFID(demoPage.page, context)
+        await section.setCallCanisterOwner(
+          '"7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae"'
+        )
+        await section.openPopup(context)
+        await section.checkPopupTextNFID(
+          demoPage.page,
+          context,
+          ExpectedTexts.NFID.CanisterCallIcrc1TransferRequest
+        )
+        await section.nfidApproveButton.click()
       }
 
       await section.waitForResponse()
