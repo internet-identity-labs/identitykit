@@ -18,7 +18,7 @@ export const consentMessageService = {
       const actor = actorService.getActor<ConsentMessageCanister>(
         canisterId,
         ConsentMessageCanisterIDL,
-        agent as never
+        agent
       )
 
       const request: icrc21_consent_message_request = {
@@ -43,7 +43,7 @@ export const consentMessageService = {
 
       return consentMessageResult.Ok.consent_message.GenericDisplayMessage
     } catch (error) {
-      console.error("consentMessageService getConsentMessage", error)
+      console.warn("consentMessageService getConsentMessage", error)
       return undefined
     }
   },

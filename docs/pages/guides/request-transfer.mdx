@@ -6,3 +6,39 @@ authors:
 ---
 
 # ICP transfer request
+
+The below will display a wallet approval prompt regardless if the user connected with an Account
+Delegation or Account.
+
+If the user connected with a Relying Party Delegation, your application can already call the ledger
+on the user's behalf, but this connected wallet address will never be seen elsewhere in the
+ecossytem and should therefore not be encouraged to hold a balance.
+
+```typescript
+// agent will know which is the currently connected wallet
+const agent = useAgent()
+
+// you'll need to import the idlFactory for ICP (or any other ledger canister)
+// and specify which canister you're calling, in this case the ICP ledger.
+// note: it would be very helpful to have a common 'ICRCledgerFactory'
+// so individual ledger canister idl's don't need to be imported.
+const actor = Actor.createActor(idlFactory, {
+  agent,
+  canisterId: "ryjl3-tyaaa-aaaaa-aaaba-cai",
+})
+
+const destinationPrincipal = SOME_DESTINATION_PRINCIPAL
+const address = AccountIdentifier.fromPrincipal({
+  principal: Principal.fromText(destinationPrincipal),
+}).toHex()
+
+const transferArgs = {
+  to: fromHexString(address),
+  fee: { e8s: BigInt(10000) },
+  memo: BigInt(0),
+  from_subaccount: [],
+  created_at_time: [],
+  amount: { e8s: BigInt(1000) },
+}
+const response = await actor.transfer(transferArgs)
+```

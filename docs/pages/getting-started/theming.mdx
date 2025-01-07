@@ -11,24 +11,19 @@ You can pick from a few pre-defined themes to match your branding.
 
 There are 3 built-in theme functions:
 
-- `lightTheme` (default)
-- `darkTheme`
-- `systemTheme`
+- `SYSTEM` (default)
+- `DARK`
+- `LIGHT`
 
-A theme function returns a theme object. You can pass the object to the `IdentityKitProvider`'s
-`theme` prop.
+You can pass one of the `IdentityKitTheme` values to the `IdentityKitProvider`'s `theme` prop.
 
-```typescript
-import { IdentityKitProvider, systemTheme } from '@nfid/identitykit';
-// import lightTheme, darkTheme, or systemTheme
-// and pass into theme prop
+```jsx
+import { IdentityKitProvider } from "@nfid/identitykit/react"
+import { IdentityKitTheme } from "@nfid/identitykit/react"
 
 export const App = () => (
-  <IdentityKitProvider
-    theme={systemTheme()}
-    {...etc}
-  >
-    {/* Your App */}
+  <IdentityKitProvider theme={IdentityKitTheme.DARK} {...etc}>
+    <YourApp />
   </IdentityKitProvider>
-);
+)
 ```

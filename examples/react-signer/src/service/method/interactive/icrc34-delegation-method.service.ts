@@ -5,18 +5,22 @@ import { DelegationChain, Ed25519PublicKey } from "@dfinity/identity"
 import { Principal } from "@dfinity/principal"
 import { targetService } from "../../target.service"
 import { GenericError } from "../../exception-handler.service"
-import { fromBase64, toBase64 } from "@slide-computer/signer"
+import { derivationOriginService } from "../../derivation-origin.service"
 
 export interface DelegationComponentData extends ComponentData {
   accounts: Account[]
   isPublicAccountsAllowed: boolean
 }
 
-export interface Icrc34Dto {
+interface Icrc34Dto {
   publicKey: string
   targets: string[]
   maxTimeToLive: string
+  icrc95DerivationOrigin: string
 }
+
+const MAX_TIME_TO_LIVE_MILLIS = 28800000 // 8 hours
+const NANOS_IN_MILLIS = 1000000
 
 class Icrc34DelegationMethodService extends InteractiveMethodService {
   public getMethod(): string {
@@ -25,6 +29,11 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
 
   public async onApprove(message: MessageEvent<RPCMessage>, data?: unknown): Promise<void> {
     const icrc34Dto = message.data.params as unknown as Icrc34Dto
+
+    if (icrc34Dto?.icrc95DerivationOrigin) {
+      await derivationOriginService.validate(icrc34Dto.icrc95DerivationOrigin, message.origin)
+    }
+
     const account = (data as Account[])[0]
     const accountKeyIdentity = await accountService.getAccountKeyIdentityById(account.id)
 
@@ -32,7 +41,7 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
       throw new GenericError("User data has not been found")
     }
 
-    const sessionPublicKey = Ed25519PublicKey.fromDer(fromBase64(icrc34Dto.publicKey))
+    const sessionPublicKey = Ed25519PublicKey.fromDer(this.fromBase64(icrc34Dto.publicKey))
     const chain = await this.getChain(accountKeyIdentity, icrc34Dto, sessionPublicKey)
 
     const response: RPCSuccessResponse = {
@@ -46,12 +55,13 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
   }
 
   public async getСomponentData(
-    message: MessageEvent<RPCMessage>
+    message: MessageEvent<RPCMessage>,
+    isAskOnUse: boolean
   ): Promise<DelegationComponentData> {
     const icrc34Dto = message.data.params as unknown as Icrc34Dto
 
     try {
-      Ed25519PublicKey.fromDer(fromBase64(icrc34Dto.publicKey))
+      Ed25519PublicKey.fromDer(this.fromBase64(icrc34Dto.publicKey))
     } catch (e) {
       console.error("Icrc34DelegationMethodService getСomponentData", e)
       throw new GenericError("Incorrect public key")
@@ -67,7 +77,7 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
       throw new GenericError("User data has not been found")
     }
 
-    const baseData = await super.getСomponentData(message)
+    const baseData = await super.getСomponentData(message, isAskOnUse)
     return {
       ...baseData,
       accounts,
@@ -84,16 +94,16 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
           delegation: Object.assign(
             {
               expiration: delegation.expiration,
-              pubkey: toBase64(delegation.pubkey),
+              pubkey: this.toBase64(delegation.pubkey),
             },
             targets && {
               targets: targets.map((t) => t.toText()),
             }
           ),
-          signature: toBase64(signature),
+          signature: this.toBase64(signature),
         }
       }),
-      publicKey: toBase64(chain.publicKey),
+      publicKey: this.toBase64(chain.publicKey),
     }
   }
 
@@ -115,7 +125,9 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
     icrc34Dto: Icrc34Dto,
     sessionPublicKey: Ed25519PublicKey
   ): Promise<DelegationChain> {
-    const maxTimeToLive = icrc34Dto.maxTimeToLive ? Number(icrc34Dto.maxTimeToLive) : 28800000000000
+    const maxTimeToLive = icrc34Dto.maxTimeToLive
+      ? Number(icrc34Dto.maxTimeToLive) / NANOS_IN_MILLIS
+      : MAX_TIME_TO_LIVE_MILLIS
 
     if (accountKeyIdentity.type === AccountType.GLOBAL) {
       const targets = icrc34Dto.targets.map((x) => Principal.fromText(x))
@@ -134,6 +146,26 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
       sessionPublicKey,
       new Date(Date.now() + maxTimeToLive)
     )
+  }
+
+  private fromBase64(base64: string): ArrayBuffer {
+    if (typeof globalThis.Buffer !== "undefined") {
+      return globalThis.Buffer.from(base64, "base64").buffer
+    }
+    if (typeof globalThis.atob !== "undefined") {
+      return Uint8Array.from(globalThis.atob(base64), (m) => m.charCodeAt(0)).buffer
+    }
+    throw Error("Could not decode base64 string")
+  }
+
+  private toBase64(bytes: ArrayBuffer): string {
+    if (typeof globalThis.Buffer !== "undefined") {
+      return globalThis.Buffer.from(bytes).toString("base64")
+    }
+    if (typeof globalThis.btoa !== "undefined") {
+      return btoa(String.fromCharCode(...new Uint8Array(bytes)))
+    }
+    throw Error("Could not encode base64 string")
   }
 }
 

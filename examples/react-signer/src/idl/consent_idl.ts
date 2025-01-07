@@ -44,8 +44,10 @@ export const idlFactory = ({ IDL }: any) => {
     Ok: icrc21_consent_info,
     Err: icrc21_error,
   })
+  const icrc28_trusted_origins_response = IDL.Record({
+    trusted_origins: IDL.Vec(IDL.Text),
+  })
   return IDL.Service({
-    get_trusted_origins: IDL.Func([], [IDL.Vec(IDL.Text)], []),
     greet: IDL.Func([IDL.Text], [IDL.Text], ["query"]),
     greet_no_consent: IDL.Func([IDL.Text], [IDL.Text], ["query"]),
     icrc10_supported_standards: IDL.Func(
@@ -58,6 +60,7 @@ export const idlFactory = ({ IDL }: any) => {
       [icrc21_consent_message_response],
       []
     ),
+    icrc28_trusted_origins: IDL.Func([], [icrc28_trusted_origins_response], []),
   })
 }
 export const init = ({}) => {

@@ -4,6 +4,7 @@ import { RPCMessage } from "../type"
 import { methodComponents } from "../component/method/method.component"
 import { accountService } from "../service/account.service"
 import { NotSupportedError, exceptionHandlerService } from "../service/exception-handler.service"
+import { authService } from "../service/auth.service"
 
 export type UseSignerResponse = {
   component?: ReactNode
@@ -35,6 +36,11 @@ export const useSigner = (): UseSignerResponse => {
       }
 
       const componentData = await methodService.invokeAndGetComponentData(message)
+
+      if (!componentData) {
+        return
+      }
+
       const methodComponent = componentData && methodComponents.get(componentData.method)
 
       const timeout: ReturnType<typeof setTimeout> = setTimeout(() => {
@@ -54,7 +60,7 @@ export const useSigner = (): UseSignerResponse => {
   React.useEffect(() => {
     ;(async () => {
       window.addEventListener("message", handleMessage, false)
-      await accountService.initWithPredefinedUsers()
+      await Promise.all([accountService.initWithPredefinedUsers(), authService.initPermissions()])
       console.debug("useSigner useEffect: The Ready message has been sent.")
     })()
 

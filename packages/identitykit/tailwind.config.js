@@ -1,7 +1,11 @@
+const { scopedPreflightStyles, isolateInsideOfContainer } = require("tailwindcss-scoped-preflight")
+
 const colors = require("tailwindcss/colors")
+const plugin = require("tailwindcss/plugin")
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  prefix: "ik-",
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
@@ -26,6 +30,21 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function ({ addComponents }) {
+      addComponents({
+        ".gradient-border": {
+          position: "relative",
+          padding: "1px",
+          "border-radius": "12px",
+          background: "linear-gradient(135deg, #ed71ff, #899dff 51%, #63ffeb)",
+          "background-clip": "border-box",
+        },
+      })
+    }),
+    scopedPreflightStyles({
+      isolationStrategy: isolateInsideOfContainer(".ik-component"),
+    }),
+  ],
   darkMode: ["selector", "[data-identity-kit-theme*='dark']"],
 }

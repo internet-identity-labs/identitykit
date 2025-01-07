@@ -1,5 +1,5 @@
 import { expect, Page, test as base } from "@playwright/test"
-import { Account, AccountType, DemoPage } from "./page/demo.page.ts"
+import { Account, AccountType, StandardsPage } from "./page/standards.page.ts"
 import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
 import { Icrc49CallCanisterSection } from "./section/icrc49-call-canister.section.ts"
 import { ExpectedTexts } from "./section/expectedTexts.ts"
@@ -7,7 +7,7 @@ import { Icrc25AccountsSection } from "./section/icrc27-accounts.section.ts"
 
 type Fixtures = {
   section: Icrc49CallCanisterSection
-  demoPage: DemoPage
+  demoPage: StandardsPage
   requestPermissionSection: Icrc25RequestPermissionsSection
   accountsSection: Icrc25AccountsSection
   nfidPage: Page
@@ -19,7 +19,7 @@ const test = base.extend<Fixtures>({
     await use(section)
   },
   demoPage: async ({ page }, use) => {
-    const demoPage = new DemoPage(page)
+    const demoPage = new StandardsPage(page)
     await demoPage.goto()
     await use(demoPage)
   },
@@ -44,8 +44,8 @@ const test = base.extend<Fixtures>({
 test.describe("ICRC25 call-canister", () => {
   let accounts: Account[] = []
 
-  test.beforeEach(async ({ page }) => {
-    accounts = await DemoPage.getAccounts(page)
+  test.beforeEach(async () => {
+    accounts = await StandardsPage.getAccounts()
   })
 
   test("should check request and response has correct initial state for no consent case", async ({
@@ -79,7 +79,7 @@ test.describe("ICRC25 call-canister", () => {
     }
   })
 
-  test("should make canister call with no consent", async ({
+  test("should make canister call: Basic", async ({
     section,
     demoPage,
     requestPermissionSection,
@@ -117,7 +117,7 @@ test.describe("ICRC25 call-canister", () => {
     }
   })
 
-  test("should make canister call with consent", async ({
+  test("should make canister call: With consent message", async ({
     section,
     demoPage,
     requestPermissionSection,
@@ -148,11 +148,62 @@ test.describe("ICRC25 call-canister", () => {
         )
       }
 
+
       await section.waitForResponse()
       const actualResponse = await section.getResponseJson()
 
       expect(actualResponse).toMatchObject(ExpectedTexts.Mocked.ConsentCaseCanisterCallResponse)
       await demoPage.logout()
     }
+  })
+
+  test("MOCK: should make canister call: ICRC-2 approve", async ({
+    section,
+    demoPage,
+    requestPermissionSection,
+    nfidPage,
+  }) => {
+    await nfidPage.title()
+    const account = accounts[0]
+    await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
+
+    await section.selectIcrc2ApprovalTab()
+
+    const popup = await section.openPopup()
+    const texts = await section.getPopupTexts(popup)
+
+    expect(texts).toEqual(ExpectedTexts.Mocked.CanisterCallIcrc2ApproveRequest)
+    await section.approve(popup)
+
+    await section.waitForResponse()
+    const actualResponse = await section.getResponseJson()
+
+    expect(actualResponse).toMatchObject(ExpectedTexts.Mocked.CanisterCallIcrc2ApproveResponse)
+    await demoPage.logout()
+  })
+
+  test("MOCK: should make canister call: ICRC-1 transfer", async ({
+    section,
+    demoPage,
+    requestPermissionSection,
+    nfidPage,
+  }) => {
+    await nfidPage.title()
+    const account = accounts[0]
+    await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
+
+    await section.selectIcrc1TransferTab()
+
+    const popup = await section.openPopup()
+    const texts = await section.getPopupTexts(popup)
+
+    expect(texts).toEqual(ExpectedTexts.Mocked.CanisterCallIcrc1TransferRequest)
+    await section.approve(popup)
+
+    await section.waitForResponse()
+    const actualResponse = await section.getResponseJson()
+
+    expect(actualResponse).toMatchObject(ExpectedTexts.Mocked.CanisterCallIcrc1TransferResponse)
+    await demoPage.logout()
   })
 })

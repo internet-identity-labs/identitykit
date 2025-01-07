@@ -36,7 +36,7 @@ export const CallCanister = ({
           {origin}
         </a>
       </small>
-      <div className="flex flex-col p-5 pb-8 mt-5 space-y-4 rounded-xl bg-neutral-100 text-neutral-500">
+      <div className="flex flex-col p-5 pb-8 mt-5 space-y-4 rounded-xl bg-neutral-100 text-neutral-500 max-h-96 overflow-auto">
         <div className="flex">
           <small className="block font-bold w-[100px]">Canister ID</small>
           <small>{canisterId}</small>

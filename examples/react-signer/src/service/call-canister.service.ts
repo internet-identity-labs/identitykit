@@ -1,8 +1,20 @@
-import { Agent, blsVerify, CallRequest, Cbor, UpdateCallRejectedError } from "@dfinity/agent"
+import {
+  Agent,
+  blsVerify,
+  CallRequest,
+  Cbor,
+  Certificate,
+  lookupResultToBuffer,
+  UpdateCallRejectedError,
+  v2ResponseBody,
+  v3ResponseBody,
+} from "@dfinity/agent"
 import { Principal } from "@dfinity/principal"
 import { DelegationIdentity } from "@dfinity/identity"
 import { GenericError } from "./exception-handler.service"
 import { defaultStrategy, pollForResponse } from "@dfinity/agent/lib/cjs/polling"
+import { bufFromBufLike } from "@dfinity/candid"
+import { AgentError } from "@dfinity/agent/lib/cjs/errors"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ;(BigInt.prototype as any).toJSON = function () {
@@ -40,7 +52,13 @@ class CallCanisterService {
         contentMap,
       }
     } catch (error) {
-      throw new GenericError("The call cannot be executed")
+      console.error("The canister call cannot be executed:", error)
+
+      if (error instanceof Error) {
+        throw new GenericError(`The canister call cannot be executed: ${error.message}`)
+      }
+
+      throw new GenericError("The canister call cannot be executed")
     }
   }
 
@@ -50,26 +68,77 @@ class CallCanisterService {
     agent: Agent,
     arg: ArrayBuffer
   ): Promise<{ certificate: Uint8Array; contentMap: CallRequest | undefined }> {
-    const canister = Principal.from(canisterId)
-    const { requestId, response, requestDetails } = await agent.call(canister, {
+    const cid = Principal.from(canisterId)
+
+    if (agent.rootKey == null)
+      throw new AgentError("Agent root key not initialized before making call")
+
+    const { requestId, response, requestDetails } = await agent.call(cid, {
       methodName,
       arg,
-      effectiveCanisterId: canister,
+      effectiveCanisterId: cid,
     })
 
-    if (!response.ok || response.body) {
-      throw new UpdateCallRejectedError(canister, methodName, requestId, response)
+    let certificate: Certificate | undefined
+
+    if (response.body && (response.body as v3ResponseBody).certificate) {
+      const cert = (response.body as v3ResponseBody).certificate
+      certificate = await Certificate.create({
+        certificate: bufFromBufLike(cert),
+        rootKey: agent.rootKey,
+        canisterId: Principal.from(canisterId),
+        blsVerify,
+      })
+      const path = [new TextEncoder().encode("request_status"), requestId]
+      const status = new TextDecoder().decode(
+        lookupResultToBuffer(certificate.lookup([...path, "status"]))
+      )
+
+      switch (status) {
+        case "replied":
+          break
+        case "rejected": {
+          // Find rejection details in the certificate
+          const rejectCode = new Uint8Array(
+            lookupResultToBuffer(certificate.lookup([...path, "reject_code"]))!
+          )[0]
+          const rejectMessage = new TextDecoder().decode(
+            lookupResultToBuffer(certificate.lookup([...path, "reject_message"]))!
+          )
+          const error_code_buf = lookupResultToBuffer(certificate.lookup([...path, "error_code"]))
+          const error_code = error_code_buf ? new TextDecoder().decode(error_code_buf) : undefined
+          throw new UpdateCallRejectedError(
+            cid,
+            methodName,
+            requestId,
+            response,
+            rejectCode,
+            rejectMessage,
+            error_code
+          )
+        }
+      }
+    } else if (response.body && "reject_message" in response.body) {
+      // handle v2 response errors by throwing an UpdateCallRejectedError object
+      const { reject_code, reject_message, error_code } = response.body as v2ResponseBody
+      throw new UpdateCallRejectedError(
+        cid,
+        methodName,
+        requestId,
+        response,
+        reject_code,
+        reject_message,
+        error_code
+      )
     }
 
-    const pollStrategy = defaultStrategy()
-    const { certificate } = await pollForResponse(
-      agent,
-      canister,
-      requestId,
-      pollStrategy,
-      undefined,
-      blsVerify
-    )
+    // Fall back to polling if we receive an Accepted response code
+    if (response.status === 202) {
+      const pollStrategy = defaultStrategy()
+      // Contains the certificate and the reply from the boundary node
+      const response = await pollForResponse(agent, cid, requestId, pollStrategy, blsVerify)
+      certificate = response.certificate
+    }
 
     return {
       contentMap: requestDetails,

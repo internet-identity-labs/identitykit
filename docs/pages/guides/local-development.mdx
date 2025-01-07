@@ -1,0 +1,22 @@
+---
+title: "Local Development"
+date: "2024-06-05"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+# Local Development ![Static Badge](https://img.shields.io/badge/status-wip-red)
+
+For making canister calls to local replica you need to have dfx running, and url of local replica
+(will be printed to console on dfx start). All of the agents from
+[executing-canister-calls-example](/getting-started/executing-canister-calls#3-set-up-agents) should
+be created with `host=http://localhost:{your_dfx_local_replica_port}`.
+
+## Troubleshooting
+
+In case of not running local replica and not using it's url as a host for agents you will see 404
+requests to ledger canister with retries (only in local development). That is because `dfinity`
+HttpAgent tries to fetch root key with few retries and by default will try to fetch it from your
+application url as well as canister calls.
+
+![NFID No featured signer](../../../docs/public/img/404.png)

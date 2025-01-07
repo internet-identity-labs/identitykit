@@ -4,13 +4,13 @@ export type SignerConfig = {
   label: string
   transportType: TransportType
   icon?: string
-  popupHeight?: number
-  popupWidth?: number
   description?: string
 }
 
 export enum TransportType {
-  POPUP,
-  IFRAME,
+  NEW_TAB,
   EXTENSION,
+  INTERNET_IDENTITY,
+  STOIC,
+  PLUG,
 }

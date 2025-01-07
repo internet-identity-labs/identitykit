@@ -1,60 +1,49 @@
 import { Transport } from "@slide-computer/signer"
 import { TransportType } from "../../types"
-import { getPopupTransportBuilder } from "./popup-transport.builder"
-import { getIframeTransportBuilder } from "./iframe-transport.builder"
-import { getExtensionTransportBuilder } from "./extension-transport.builder"
+import { getPopupTransportBuilder } from "./new-tab-transport.builder"
 import { TransportBuilder, TransportBuilderRequest } from "./transport.builder"
+import { getPlugTransportBuilder } from "./plug-transport.builder"
 
-jest.mock("./popup-transport.builder")
-jest.mock("./iframe-transport.builder")
-jest.mock("./extension-transport.builder")
+jest.mock("./new-tab-transport.builder")
+jest.mock("./plug-transport.builder")
 
 describe("TransportBuilder", () => {
   const mockTransport: Transport = {} as Transport
 
   beforeEach(() => {
     ;(getPopupTransportBuilder as jest.Mock).mockReturnValue(mockTransport)
-    ;(getIframeTransportBuilder as jest.Mock).mockReturnValue(mockTransport)
-    ;(getExtensionTransportBuilder as jest.Mock).mockReturnValue(mockTransport)
+    ;(getPlugTransportBuilder as jest.Mock).mockReturnValue(mockTransport)
   })
 
   afterEach(() => {
     jest.clearAllMocks()
   })
 
-  it("should build a POPUP transport", () => {
+  it("should build a NEW_TAB transport", async () => {
     const request: TransportBuilderRequest = {
-      transportType: TransportType.POPUP,
+      transportType: TransportType.NEW_TAB,
       url: "https://example.com",
     }
 
-    const result = TransportBuilder.build(request)
+    const result = await TransportBuilder.build(request)
 
-    expect(getPopupTransportBuilder).toHaveBeenCalledWith(request)
+    expect(getPopupTransportBuilder).toHaveBeenCalledWith({
+      url: "https://example.com",
+      crypto: undefined,
+      window: undefined,
+    })
     expect(result).toBe(mockTransport)
   })
 
-  it("should build an IFRAME transport", () => {
+  it("should build a PLUG transport", async () => {
     const request: TransportBuilderRequest = {
-      transportType: TransportType.IFRAME,
+      transportType: TransportType.PLUG,
       url: "https://example.com",
     }
 
-    const result = TransportBuilder.build(request)
+    const result = await TransportBuilder.build(request)
 
-    expect(getIframeTransportBuilder).toHaveBeenCalledWith(request)
-    expect(result).toBe(mockTransport)
-  })
-
-  it("should build an EXTENSION transport", () => {
-    const request: TransportBuilderRequest = {
-      transportType: TransportType.EXTENSION,
-      url: "https://example.com",
-    }
-
-    const result = TransportBuilder.build(request)
-
-    expect(getExtensionTransportBuilder).toHaveBeenCalledWith(request)
+    expect(getPlugTransportBuilder).toHaveBeenCalledWith()
     expect(result).toBe(mockTransport)
   })
 })

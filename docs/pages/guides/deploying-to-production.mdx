@@ -80,55 +80,36 @@ might access your application from:
 
 ## IdentityKitProvider steps
 
-### 1. Add `production` prop
-
-[Make production ICP wallets available](/miscellaneous/local-development) by setting `production` to
-`true`.
-
-```typescript
-const App = () => {
-  return (
-    <IdentityKitProvider
-      authOption="account"
-      walletsList=["NFIDWallet", "Plug", "Oisy"]
-      modalMode="featured"
-      featuredWallet="NFIDWallet"
-      theme={systemTheme()}
-      production="true"
-    >
-      {/* Your App */}
-    </IdentityKitProvider>
-  );
-};
-```
-
-### 2. Add `derivationOrigin` prop
+### 1. Add `derivationOrigin` to `signerClientOptions` prop
 
 Setting your `derivationOrigin` to the default canister deployment location
 (https://your-canister-id.icp0.io) will ensure your users authenticate against that origin even if
 you [change your frontend URL](./configuring-custom-domain).
 
-```typescript
+```jsx
+import { IdentityKitProvider, IdentityKitTheme } from "@nfid/identitykit/react"
+import { NFIDW } from "@nfid/identitykit"
+
 const App = () => {
   return (
     <IdentityKitProvider
-      authOption="account"
-      walletsList=["NFIDWallet", "Plug", "Oisy"]
-      modalMode="featured"
-      featuredWallet="NFIDWallet"
-      theme={systemTheme()}
-      production="true"
-      derivationOrigin="https://your-canister-id.icp0.io"
+      authType={IdentityKitAuthType.ACCOUNTS}
+      signers={[NFIDW]}
+      featuredSigner={NFIDW}
+      theme={IdentityKitTheme.LIGHT}
+      signerClientOptions={{
+        derivationOrigin: "https://your-canister-id.icp0.io",
+      }}
     >
-      {/* Your App */}
+      <YourApp />
     </IdentityKitProvider>
-  );
-};
+  )
+}
 ```
 
-### 3. Deploy to production
+### 2. Deploy to production
 
-You're now ready to deploy!
+Send it!
 
 ## Troubleshooting
 

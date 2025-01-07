@@ -9,39 +9,47 @@ import {
 } from "../atoms/icons"
 import {
   formatIcp,
-  IdentityKitConnectWallet,
-  IdentityKitConnectWalletButton,
+  ConnectWallet,
+  ConnectWalletButton,
+  ConnectedWalletButton,
 } from "@nfid/identitykit/react"
-import { toast } from "react-toastify"
 
-export const Header = ({
-  onConnectWalletSuccess,
-  onWalletDisconnect,
-  triggerManualWalletDisconnect,
-}: {
-  onConnectWalletSuccess?: (response: object) => unknown
-  onWalletDisconnect?: () => unknown
-  triggerManualWalletDisconnect?: boolean
-}) => {
-  const { theme, setTheme } = useTheme()
+export const Header = () => {
+  const { resolvedTheme, setTheme } = useTheme()
 
   return (
     <div className="mb-3">
       <div className="flex items-center justify-between h-[68px]">
-        <img className="dark:hidden w-[130px] sm:w-[140px] md:w-auto" src={IconLogo} alt="nfid" />
-        <img
-          className="hidden dark:block w-[130px] sm:w-[140px] md:w-auto"
-          src={IconLogoWhite}
-          alt="nfid"
-        />
-        <div className="flex items-center space-x-2 sm:space-x-4">
-          <p className="text-sm font-bold hidden sm:block">NFID IdentityKit Docs</p>
+        <div className="flex flex-col relative">
+          <img className="dark:hidden w-[130px] sm:w-[140px] md:w-auto" src={IconLogo} alt="nfid" />
           <img
-            className="block sm:hidden"
-            src={theme === "light" ? IconSvgDocsLight : IconSvgDocsDark}
+            className="hidden dark:block w-[130px] sm:w-[140px] md:w-auto"
+            src={IconLogoWhite}
+            alt="nfid"
+          />
+          <a
+            target="_blank"
+            href="https://www.npmjs.com/package/@nfid/identitykit"
+            className="absolute text-[10px] text-primary dark:text-teal-500 text-right right-0 bottom-0 mb-[-10px] me-[-10px]"
+          >
+            v1.0.7
+          </a>
+        </div>
+        <div className="flex items-center space-x-2 sm:space-x-4">
+          <a
+            target="_blank"
+            href="https://docs.identitykit.xyz/"
+            className="text-sm font-bold hidden sm:block"
+          >
+            Dev docs
+          </a>
+          <img
+            className="block sm:hidden cursor-pointer"
+            src={resolvedTheme === "light" ? IconSvgDocsLight : IconSvgDocsDark}
+            onClick={() => window.open("https://docs.identitykit.xyz/", "_blank")}
             alt="docs"
           />
-          {theme === "light" ? (
+          {resolvedTheme === "light" ? (
             <img
               className="w-5 transition-opacity cursor-pointer hover:opacity-50"
               src={IconSvgSun}
@@ -56,37 +64,29 @@ export const Header = ({
               onClick={() => setTheme("light")}
             />
           )}
-          <IdentityKitConnectWallet
-            triggerManualDisconnect={triggerManualWalletDisconnect}
-            onConnectFailure={(e) => {
-              toast.error(e.message)
-            }}
-            onConnectSuccess={onConnectWalletSuccess}
-            onDisconnect={onWalletDisconnect}
-            buttonComponent={(props) => {
+          <ConnectWallet
+            connectButtonComponent={(props) => {
               return (
-                <IdentityKitConnectWalletButton
-                  {...props}
-                  className="min-w-[100px] sm:min-w-[140px]"
-                >
-                  {!props.connectedAccount ? (
-                    <small className="flex">
-                      Connect<span className="hidden md:block ms-2">wallet</span>
+                <ConnectWalletButton {...props} className="min-w-[100px] sm:min-w-[140px]">
+                  <small className="flex">
+                    Connect<span className="hidden md:block">&nbsp;wallet</span>
+                  </small>
+                </ConnectWalletButton>
+              )
+            }}
+            connectedButtonComponent={(props) => {
+              return (
+                <ConnectedWalletButton {...props} className="min-w-[100px] sm:min-w-[140px]">
+                  <small className="mr-2 hidden md:block">
+                    {props.connectedAccount.substring(0, 5)}...
+                    {props.connectedAccount.substring(props.connectedAccount.length - 5)}
+                  </small>
+                  <div className="bg-white px-[5px] rounded-md">
+                    <small className="text-black font-normal text-xs">
+                      {props.icpBalance !== undefined && `${formatIcp(props.icpBalance)} ICP`}
                     </small>
-                  ) : (
-                    <>
-                      <small className="mr-2 hidden md:block">
-                        {props.connectedAccount.substring(0, 5)}...
-                        {props.connectedAccount.substring(props.connectedAccount.length - 5)}
-                      </small>
-                      <div className="bg-white px-[5px] rounded-md">
-                        <small className="text-black font-normal text-xs">
-                          {props.icpBalance !== undefined && `${formatIcp(props.icpBalance)} ICP`}
-                        </small>
-                      </div>
-                    </>
-                  )}
-                </IdentityKitConnectWalletButton>
+                  </div>
+                </ConnectedWalletButton>
               )
             }}
           />

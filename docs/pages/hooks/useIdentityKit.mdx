@@ -1,8 +1,122 @@
 ---
 title: "useIdentityKit"
-date: "2024-07-11"
+date: "2024-07-09"
 authors:
   - name: "Dan Ostrovsky"
 ---
 
+import { Callout } from "nextra/components"
+
 # useIdentityKit
+
+Hook, which is needed for getting currently connected user, its wallet address (as a valid ICRC1
+Account), balance, disconnect function and other in one place:
+
+<Callout type="warning" emoji="⚠️">
+  Hook is deprecated, please use separate hooks for retrieving data below for better performance
+</Callout>
+
+## Import
+
+```typescript
+import { useIdentityKit } from "@nfid/identitykit/react"
+```
+
+## Usage
+
+```typescript
+const {
+  isInitializing,
+  user,
+  isUserConnecting,
+  icpBalance,
+  signer,
+  identity,
+  delegationType,
+  accounts,
+  connect,
+  disconnect,
+  fetchIcpBalance,
+} = useIdentityKit()
+```
+
+## Return values
+
+### isInitializing
+
+`boolean{:typescript}`
+
+Boolean representing wether identitykit initialized or not for connected user on page reload
+(Connect wallet will be disabled until initialization finishes).
+
+### user
+
+`{ principal: Principal, subaccount?: SubAccount} | undefined{:typescript}`
+
+Currently connected user principal and subaccount. Will be undefined until successfull connect.
+
+### isUserConnecting
+
+`boolean{:typescript}`
+
+Boolean representing wether user is connecting or not (signer selected, but user still not
+connected).
+
+### icpBalance
+
+`number | undefined{:typescript}`
+
+Balance of connected user, will be undefined until successfull connect
+
+### signer
+
+`Signer<Transport> | undefined{:typescript}`
+
+Selected signer, undefined until selection
+
+### identity
+
+`Identity | PartialIdentity | undefined{:typescript}`
+
+If `IdentityKitProvider.authType` is set to `IdentityKitAuthType.DELEGATION` value will contain
+`@dfinity` identity after successfull connect, will be undefined if other authType is selected or
+user not connected
+
+### delegationType
+
+`IdentityKitDelegationType.ACCOUNT | IdentityKitDelegationType.RELYING_PARTY{:typescript}`
+
+Equals `IdentityKitDelegationType.ACCOUNT` if delegation has targets,
+`IdentityKitDelegationType.RELYING_PARTY` if delegation doesn't have targets, and `undefined` if
+user is not connected or authType is set to `IdentityKitAuthType.ACCOUNTS`
+
+### accounts
+
+`{ principal: Principal, subaccount?: SubAccount}[] | undefined{:typescript}`
+
+Will contain connected accounts in case `IdentityKitProvider.authType` is set to
+`IdentityKitAuthType.ACCOUNTS` and user is connected, otherwise will be undefined
+
+### connect
+
+`(signerIdOrUrl?: string) => void{:typescript}`
+
+Function to trigger will open connect wallet modal wihout `signerIdOrUrl` provided, will open signer
+if signers includes one with provided id or provided value is valid signer url.
+
+<Callout type="warning" emoji="⚠️">
+  Function will throw `Error("Identitykit is not initialized yet"){:typescript}` until identitykit <a href="/hooks/useIdentityKit#isinitializing"><strong>initializes</strong></a>. So make sure you disable your connect button in these cases.
+</Callout>
+
+### disconnect
+
+`() => Promise<void>{:typescript}`
+
+Function to trigger manual disconnect
+
+### fetchIcpBalance
+
+`() => Promise<void> | undefined{:typescript}`
+
+Function to manually fetch ICP balance of connected user, will be undefined if user is not
+connected.

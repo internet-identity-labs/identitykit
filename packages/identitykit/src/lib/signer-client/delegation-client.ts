@@ -8,6 +8,7 @@ import {
   isDelegationValid,
   PartialDelegationIdentity,
   PartialIdentity,
+  Delegation,
 } from "@dfinity/identity"
 import {
   IdbStorage,
@@ -19,28 +20,28 @@ import {
   setDelegationChain,
   setIdentity,
 } from "@slide-computer/signer-storage"
-import { IdleManager } from "./idle-manager"
-import {
-  STORAGE_CONNECTED_OWNER_KEY,
-  STORAGE_KEY,
-  SignerClient,
-  SignerClientOptions,
-} from "./client"
+import { STORAGE_KEY, SignerClient, SignerClientOptions } from "./client"
+import { DelegationRequest, DelegationResponse, fromBase64, toBase64 } from "@slide-computer/signer"
+import { type Signature } from "@dfinity/agent"
+import { DEFAULT_MAX_TIME_TO_LIVE } from "../constants"
+import { IdleManager } from "../timeout-managers/idle-manager"
+import { TimeoutManager } from "../timeout-managers/timeout-manager"
 
-const ECDSA_KEY_LABEL = "ECDSA"
 const ED25519_KEY_LABEL = "Ed25519"
-type BaseKeyType = typeof ECDSA_KEY_LABEL | typeof ED25519_KEY_LABEL
+type BaseKeyType = "ECDSA" | typeof ED25519_KEY_LABEL
+
+export enum DelegationType {
+  ACCOUNT = "ACCOUNT",
+  RELYING_PARTY = "RELYING_PARTY",
+}
+
+const NANOS_IN_MILLIS = BigInt(1000000)
 
 export interface DelegationSignerClientOptions extends SignerClientOptions {
   /**
    * An identity to use as the base
    */
   identity?: SignIdentity | PartialIdentity
-  /**
-   * Optional, used to generate random bytes
-   * @default uses browser/node Crypto by default
-   */
-  crypto?: Pick<Crypto, "getRandomValues">
   /**
    * type to use for the base key
    * @default 'ECDSA'
@@ -49,43 +50,75 @@ export interface DelegationSignerClientOptions extends SignerClientOptions {
    */
   keyType?: BaseKeyType
   targets?: string[]
+  /**
+   * Expiration of the delegation in nanoseconds
+   */
+  maxTimeToLive?: bigint
 }
 
 export class DelegationSignerClient extends SignerClient {
+  private expirationManager?: TimeoutManager
+
   constructor(
-    options: DelegationSignerClientOptions,
-    storage: SignerStorage,
-    private keyType: BaseKeyType,
+    options: SignerClientOptions,
     private identity: Identity | PartialIdentity,
-    private targets: string[] | undefined,
-    public connectedUser: { owner: string } | undefined
+    private baseIdentity: SignIdentity | PartialIdentity,
+    private targets?: string[],
+    private maxTimeToLive: bigint = BigInt(DEFAULT_MAX_TIME_TO_LIVE)
   ) {
-    super(options, storage)
+    // TODO for delegation use delegation expiration as idle timeout
+    super(options)
   }
 
-  private get crypto(): Pick<Crypto, "getRandomValues"> {
-    return this.options.crypto ?? globalThis.crypto
-  }
-
-  public static async create(options: DelegationSignerClientOptions): Promise<SignerClient> {
+  public static async create(
+    options: DelegationSignerClientOptions
+  ): Promise<DelegationSignerClient> {
     const storage = options.storage ?? new IdbStorage()
-    const baseIdentity = options.identity ?? (await getIdentity(STORAGE_KEY, storage))
-    const delegationChain = await getDelegationChain(STORAGE_KEY, storage)
-    const identity =
-      baseIdentity && delegationChain && isDelegationValid(delegationChain)
+    let baseIdentity = options.identity
+    let identity = new AnonymousIdentity()
+    if (this.shouldCheckIsUserConnected() && !baseIdentity) {
+      baseIdentity = await getIdentity(STORAGE_KEY, storage as SignerStorage)
+    }
+    if (!baseIdentity) {
+      const createdBaseIdentity = await (!options?.keyType || options?.keyType === ED25519_KEY_LABEL
+        ? Ed25519KeyIdentity.generate(crypto.getRandomValues(new Uint8Array(32)))
+        : ECDSAKeyIdentity.generate())
+      baseIdentity = createdBaseIdentity
+    }
+    if (this.shouldCheckIsUserConnected()) {
+      const delegationChain = await getDelegationChain(STORAGE_KEY, storage as SignerStorage)
+      const delegationValid = baseIdentity && delegationChain && isDelegationValid(delegationChain)
+      identity = delegationValid
         ? DelegationSignerClient.createIdentity(baseIdentity, delegationChain)
         : new AnonymousIdentity()
 
-    const connectedUser = await DelegationSignerClient.getConnectedUser(storage)
+      const signerClient = new DelegationSignerClient(
+        options,
+        identity,
+        baseIdentity,
+        options.targets,
+        options.maxTimeToLive
+      )
 
-    return new DelegationSignerClient(
+      if (delegationValid) {
+        signerClient.initExpirationManager(delegationChain)
+      }
+
+      const storageConnectedUser = await signerClient.getConnectedUserFromStorage()
+      await signerClient.setConnectedUser(storageConnectedUser)
+
+      return signerClient
+    }
+
+    const signerClient = new DelegationSignerClient(
       options,
-      storage,
-      options.keyType ?? "Ed25519",
       identity,
+      baseIdentity,
       options.targets,
-      connectedUser
+      options.maxTimeToLive
     )
+
+    return signerClient
   }
 
   private static createIdentity(
@@ -98,88 +131,109 @@ export class DelegationSignerClient extends SignerClient {
     return DelegationIdentity.fromDelegation(baseIdentity, delegationChain)
   }
 
-  public static async getConnectedUser(
-    storage: SignerStorage
-  ): Promise<{ owner: string } | undefined> {
-    const storageValue = await storage.get(STORAGE_CONNECTED_OWNER_KEY)
-    if (!storageValue) return undefined
-    return {
-      owner: storageValue as string,
-    }
-  }
-
-  public async login(options?: {
-    /**
-     * Expiration of the authentication in nanoseconds
-     * @default  BigInt(8) hours * BigInt(3_600_000_000_000) nanoseconds
-     */
-    maxTimeToLive?: bigint
-  }): Promise<{ signerResponse: DelegationChain; connectedAccount: string }> {
-    const baseIdentity = await this.getBaseIdentity()
-    const permissions = await this.options.signer.permissions()
-    const permission = permissions.find((x) => "icrc34_delegation" === x.scope.method)
-
-    if (!permission || permission.state === "ask_on_use" || permission.state === "denied") {
-      await this.options.signer.requestPermissions([
-        {
-          method: "icrc34_delegation",
-        },
-      ])
-    }
-    const delegationChain = await this.options.signer.delegation({
-      publicKey: baseIdentity.getPublicKey().toDer(),
-      maxTimeToLive: options?.maxTimeToLive,
-      targets: this.targets?.map((t) => Principal.from(t)),
+  public async login(): Promise<void> {
+    const params = this.options.derivationOrigin
+      ? {
+          icrc95DerivationOrigin: this.options.derivationOrigin,
+        }
+      : {}
+    const delegationChainResponse = await this.options.signer.sendRequest<
+      DelegationRequest,
+      DelegationResponse
+    >({
+      id: this.crypto.randomUUID(),
+      jsonrpc: "2.0",
+      method: "icrc34_delegation",
+      params: {
+        ...params,
+        publicKey: toBase64(this.baseIdentity.getPublicKey().toDer()),
+        targets: this.targets,
+        maxTimeToLive: this.maxTimeToLive === undefined ? undefined : String(this.maxTimeToLive),
+      },
     })
-    await setDelegationChain(STORAGE_KEY, delegationChain, this.storage)
-    this.identity = DelegationSignerClient.createIdentity(baseIdentity, delegationChain)
 
-    await this.setConnectedUser(this.identity.getPrincipal().toString())
+    if ("error" in delegationChainResponse) {
+      throw Error(delegationChainResponse.error.message)
+    }
+
+    const delegationChain = DelegationChain.fromDelegations(
+      delegationChainResponse.result.signerDelegation.map((delegation) => {
+        return {
+          delegation: new Delegation(
+            fromBase64(delegation.delegation.pubkey),
+            BigInt(delegation.delegation.expiration),
+            delegation.delegation.targets?.map((principal) => Principal.fromText(principal))
+          ),
+          signature: fromBase64(delegation.signature) as Signature,
+        }
+      }),
+      fromBase64(delegationChainResponse.result.publicKey)
+    )
+
+    if (
+      this.baseIdentity instanceof Ed25519KeyIdentity ||
+      this.baseIdentity instanceof ECDSAKeyIdentity
+    ) {
+      await setIdentity(STORAGE_KEY, this.baseIdentity, this.storage)
+    }
+
+    await setDelegationChain(STORAGE_KEY, delegationChain, this.storage)
+    this.identity = DelegationSignerClient.createIdentity(this.baseIdentity, delegationChain)
+
+    await this.setConnectedUserToStorage({ owner: this.identity.getPrincipal().toString() })
 
     if (!this.options?.idleOptions?.disableIdle && !this.idleManager) {
-      this.idleManager = IdleManager.create(this.options.idleOptions)
+      this.idleManager = new IdleManager(this.options.idleOptions)
       this.registerDefaultIdleCallback()
     }
 
-    return {
-      signerResponse: delegationChain,
-      connectedAccount: this.identity.getPrincipal().toString(),
+    return this.initExpirationManager(delegationChain)
+  }
+
+  private initExpirationManager(delegationChain: DelegationChain): void {
+    if (!this.expirationManager) {
+      const delegationExpirationInMillis =
+        Number(
+          delegationChain.delegations.reduce(
+            (acc, value) => {
+              const bigIntValue = BigInt(value.delegation.expiration) / NANOS_IN_MILLIS
+              return bigIntValue > acc ? bigIntValue : acc
+            },
+            BigInt(delegationChain.delegations[0].delegation.expiration) / NANOS_IN_MILLIS
+          )
+        ) - Date.now()
+
+      this.expirationManager = new TimeoutManager({ timeout: delegationExpirationInMillis })
+      this.expirationManager?.registerCallback(async () => {
+        await this.logout()
+      })
     }
   }
 
-  public async logout(options: { returnTo?: string } = {}): Promise<void> {
-    await removeIdentity(STORAGE_KEY, this.storage)
-    await removeDelegationChain(STORAGE_KEY, this.storage)
-    await this.storage.remove(STORAGE_CONNECTED_OWNER_KEY)
+  public async logout(options?: { returnTo?: string }): Promise<void> {
+    await Promise.all([
+      removeIdentity(STORAGE_KEY, this.storage),
+      removeDelegationChain(STORAGE_KEY, this.storage),
+    ])
     this.identity = new AnonymousIdentity()
-    this.connectedUser = undefined
-    this.idleManager?.exit()
-    this.idleManager = undefined
-    if (options.returnTo) {
-      try {
-        window.history.pushState({}, "", options.returnTo)
-      } catch (e) {
-        window.location.href = options.returnTo
-      }
-    }
+    return super.logout(options)
   }
 
-  private async getBaseIdentity() {
-    if (this.options.identity) {
-      return this.options.identity
-    }
-    const baseIdentity = await getIdentity(STORAGE_KEY, this.storage)
-    if (baseIdentity) {
-      return baseIdentity
-    }
-    return this.createBaseIdentity()
+  public getIdentity(): Identity | PartialIdentity {
+    return this.identity
   }
 
-  private async createBaseIdentity() {
-    const baseIdentity = await (this.keyType === "Ed25519"
-      ? Ed25519KeyIdentity.generate(this.crypto.getRandomValues(new Uint8Array(32)))
-      : ECDSAKeyIdentity.generate())
-    await setIdentity(STORAGE_KEY, baseIdentity, this.storage)
-    return baseIdentity
+  public async getDelegationType() {
+    if (!this.connectedUser) throw new Error("Not authorized")
+    const delegationChain = await getDelegationChain(STORAGE_KEY, this.storage)
+    if (!delegationChain) throw new Error("Not authorized")
+    return delegationChain.delegations[0].delegation.targets?.length
+      ? DelegationType.ACCOUNT
+      : DelegationType.RELYING_PARTY
+  }
+
+  public async getDelegation() {
+    const chain = await getDelegationChain(STORAGE_KEY, this.storage)
+    return chain?.delegations[0]
   }
 }

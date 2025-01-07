@@ -1,0 +1,101 @@
+---
+title: "Advanced Options"
+date: "2024-06-03"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+IdentityKitProvider also allows to set some advanced props listed below:
+
+## signerClientOptions
+
+```jsx
+import { IdentityKitProvider } from "@nfid/identitykit/react"
+
+export const YourApp = () => {
+  return (
+    <IdentityKitProvider signerClientOptions={{}}>
+      <ConnectWallet />
+    </IdentityKitProvider>
+  )
+}
+```
+
+### maxTimeToLive
+
+`bigint{:typescript}`
+
+Expiration of the delegation in nanoseconds, optional, 28_800_000_000_000 (8 hours) by default.
+
+### storage
+
+`AuthClientStorage | undefined{:typescript}`
+
+Optional storage with methods set, get and remove, IndexedDB by default.
+
+### keyType
+
+`"ECDSA" | "Ed25519" | undefined{:typescript}`
+
+If you are using a custom storage provider that does not support `CryptoKey` storage, you should use
+`Ed25519` as the key type, as it can serialize to a string. `Ed25519` will be used by default.
+
+### identity
+
+`identity: SignIdentity | PartialIdentity | undefined{:typescript}`
+
+Optional identity to use as base.
+
+### idleOptions
+
+Customize idle
+
+```jsx
+import { IdentityKitProvider } from "@nfid/identitykit/react"
+
+export const YourApp = () => {
+  return (
+    <IdentityKitProvider
+      signerClientOptions={{
+        idleOptions: {},
+      }}
+    >
+      <ConnectWallet />
+    </IdentityKitProvider>
+  )
+}
+```
+
+#### idleTimeout
+
+`number{:typescript}`
+
+Timeout to logout user due to inactivity in milliseconds, optional, 14_400_000 (4 hours) by default,
+maximum value is 2_147_483_647 (~24 days, max 32 bit integer), will be used in case of bigger
+provided value.
+
+#### disableIdle
+
+`boolean{:typescript}`
+
+Disable logout on idle timeout, enabled by default.
+
+## crypto
+
+`Pick<Crypto, "getRandomValues" | "randomUUID"> | undefined{:typescript}`
+
+Optional, used to generate random bytes, browser/node Crypto by default.
+
+## window
+
+`Window | undefined{:typescript}`
+
+Optional relying party window, used to listen for incoming message events, `globalThis.window` by
+default.
+
+## allowInternetIdentityPinAuthentication
+
+`boolean | undefined{:typescript}`
+
+If present, indicates whether or not the Identity Provider should allow the user to authenticate
+and/or register using a temporary key/PIN identity.

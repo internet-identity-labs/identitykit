@@ -1,0 +1,46 @@
+---
+title: "useAgent"
+date: "2024-07-09"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+import { Callout } from "nextra/components"
+
+# useAgent
+
+`(options?: HttpAgentOptions) => IdentityKitAgent | undefined{:typescript}`
+
+Hook to get identityKitAgent, which manages when to show approval pop-ups to make canister calls or
+not, it uses built-in signerAgent to show pop-ups and dfinity HttpAgent with identity from
+`identitykit` otherwise.
+
+## Return values
+
+`Agent|undefined{:typescript}`
+
+<Callout type="info" emoji="ℹ️">
+  Retrieved agent will be undefined until user is connected and agent is created under the hood
+</Callout>
+
+## Usage
+
+```typescript
+import { useAgent } from "@nfid/identitykit/react"
+const agent = useAgent()
+```
+
+Or with your custom options:
+
+```typescript
+import { useAgent } from "@nfid/identitykit/react"
+const agent = useAgent({ retryTimes: 1, host: "https://my-custom-host.ic0.app" })
+```
+
+<Callout type="warning" emoji="⚠️">
+  If no custom configuration is provided, the agent typically defaults to https://ic0.app or the
+  relevant boundary node based on the environment, if the environment is not recognized, it falls
+  back to https://icp-api.io, to change it as well as other agent settings provide options to hook
+</Callout>
+
+> [Read more about agents usage](../guides/executing-canister-calls#note-on-ux).

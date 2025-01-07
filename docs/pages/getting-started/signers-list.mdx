@@ -1,0 +1,32 @@
+---
+title: "Signers List"
+date: "2024-06-04"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+# Customizing the list of wallets you support
+
+By default, IdentityKit's `signers` is set to the order in which wallets adopted ICP wallet
+standards.
+
+- NFID Wallet (signerName: NFIDW)
+- Plug Wallet (signerName: Plug)
+- Internet Identity (signerName: InternetIdentity)
+- PrimeVault (signerName: PrimeVault)
+- Stoic (signerName: Stoic)
+- _Coming soon:_ Oisy Wallet (signerName: Oisy)
+
+To reorder your wallets list or to change default list, just add `signers={[your_signers]}{:jsx}` as
+a prop in your IdentityKitProvider:
+
+```jsx
+import { IdentityKitProvider } from "@nfid/identitykit/react"
+import { NFIDW, Plug, InternetIdentity, Stoic } from "@nfid/identitykit"
+
+export const App = () => (
+  <IdentityKitProvider signers={[NFIDW, Plug, InternetIdentity, Stoic]} {...etc}>
+    <YourApp />
+  </IdentityKitProvider>
+)
+```

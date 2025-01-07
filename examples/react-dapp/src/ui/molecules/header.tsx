@@ -1,32 +1,74 @@
 import { useTheme } from "next-themes"
-import { IconSvgMoon, IconSvgNFID, IconSvgNFIDWhite, IconSvgSun } from "../atoms/icons"
+import {
+  IconSvgMoon,
+  IconSvgSun,
+  IconLogo,
+  IconLogoWhite,
+  IconSvgDocsLight,
+  IconSvgDocsDark,
+} from "../atoms/icons"
 import { ConnectWalletButton } from "./connect-wallet-button"
+import { useEffect } from "react"
 
 export const Header = () => {
-  const { theme, setTheme } = useTheme()
+  const { resolvedTheme, setTheme } = useTheme()
+
+  useEffect(() => {
+    if (localStorage.getItem("signerId")) {
+      localStorage.clear()
+      window.location.reload()
+    }
+  }, [])
 
   return (
-    <div className="flex items-center justify-between h-[68px] mb-3">
-      <img className="dark:hidden" src={IconSvgNFID} alt="nfid" />
-      <img className="hidden dark:block" src={IconSvgNFIDWhite} alt="nfid" />
-      <div className="flex items-center gap-10">
-        <p className="text-sm font-bold">NFID IdentityKit Docs</p>
-        {theme === "light" ? (
+    <div className="mb-3">
+      <div className="flex items-center justify-between h-[68px]">
+        <div className="flex flex-col relative">
+          <img className="dark:hidden w-[130px] sm:w-[140px] md:w-auto" src={IconLogo} alt="nfid" />
           <img
-            className="w-5 transition-opacity cursor-pointer hover:opacity-50"
-            src={IconSvgSun}
-            alt="light"
-            onClick={() => setTheme("dark")}
+            className="hidden dark:block w-[130px] sm:w-[140px] md:w-auto"
+            src={IconLogoWhite}
+            alt="nfid"
           />
-        ) : (
+          <a
+            target="_blank"
+            href="https://www.npmjs.com/package/@nfid/identitykit"
+            className="absolute text-[10px] text-primary dark:text-teal-500 text-right right-0 bottom-0 mb-[-10px] me-[-10px]"
+          >
+            v1.0.7
+          </a>
+        </div>
+        <div className="flex items-center space-x-2 sm:space-x-4">
+          <a
+            target="_blank"
+            href="https://docs.identitykit.xyz/"
+            className="text-sm font-bold hidden sm:block"
+          >
+            Dev docs
+          </a>
           <img
-            className="w-5 transition-opacity cursor-pointer hover:opacity-50"
-            src={IconSvgMoon}
-            alt="dark"
-            onClick={() => setTheme("light")}
+            className="block sm:hidden cursor-pointer"
+            src={resolvedTheme === "light" ? IconSvgDocsLight : IconSvgDocsDark}
+            onClick={() => window.open("https://docs.identitykit.xyz/", "_blank")}
+            alt="docs"
           />
-        )}
-        <ConnectWalletButton />
+          {resolvedTheme === "light" ? (
+            <img
+              className="w-5 transition-opacity cursor-pointer hover:opacity-50"
+              src={IconSvgSun}
+              alt="light"
+              onClick={() => setTheme("dark")}
+            />
+          ) : (
+            <img
+              className="w-5 transition-opacity cursor-pointer hover:opacity-50"
+              src={IconSvgMoon}
+              alt="dark"
+              onClick={() => setTheme("light")}
+            />
+          )}
+          <ConnectWalletButton />
+        </div>
       </div>
     </div>
   )

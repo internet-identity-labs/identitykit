@@ -1,6 +1,6 @@
 import { BrowserContext, expect, Page } from "@playwright/test"
 import { Section } from "./section.ts"
-import { ProfileType } from "../page/demo.page.ts"
+import { ProfileType } from "../page/standards.page.ts"
 
 export class Icrc34DelegationSection extends Section {
   constructor(public readonly page: Page) {
@@ -27,7 +27,7 @@ export class Icrc34DelegationSection extends Section {
     checkMethod(isDisabledGlobalAccount)
     const isDisabledSessionAccount = await this.isDisabledSessionAccount(popup)
     expect(isDisabledSessionAccount).toBeFalsy()
-    account == ProfileType.Global ? await popup.click("#acc_1") : await popup.click("#acc_2")
+    await popup.click(account == ProfileType.Global ? "#acc_1" : "#acc_2")
     await popup.click("#approve")
     await popup.close()
   }
@@ -52,7 +52,9 @@ export class Icrc34DelegationSection extends Section {
       await page.waitForTimeout(1000)
       if (
         (await page
-          .locator(`#${this.section} #response-section div.cm-line > span:nth-child(2)`)
+          .locator(
+            `#${this.section} #response-section-${this.section} div.cm-line > span:nth-child(2)`
+          )
           .count()) > 0
       )
         done = true
@@ -62,9 +64,9 @@ export class Icrc34DelegationSection extends Section {
   async setRequestWithNoTargets(): Promise<void> {
     await this.page.evaluate(() => {
       const element = document.querySelector(
-        `#icrc34_delegation #request-section div.cm-line:nth-child(6) > span`
+        `#request-section-icrc34_delegation div.cm-line:nth-child(6) > span`
       )
-      if (element) element.textContent = ""
+      if (element) element.innerHTML = ""
     })
   }
 }

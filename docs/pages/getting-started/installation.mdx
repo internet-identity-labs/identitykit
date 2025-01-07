@@ -5,63 +5,160 @@ authors:
   - name: "Dan Ostrovsky"
 ---
 
+import { Callout } from "nextra/components"
+
 # Get up and running with IdentityKit
 
 ### Prerequisites
 
 - An ICP project with a frontend canister.
+- Node.js version >= 12.7.0
+
+#### If you use Typescript:
+
+- Typescript version >= 4.7
+- `tsconfig.json` module set to `node16` or `nodenext` or any other with moduleResolution set to
+  `node16` or `nodenext`
+
+```typescript
+{
+    "compilerOptions": {
+        "module": "node16",
+        // or
+        "moduleResolution": "node16"
+    }
+}
+```
 
 ### Install
 
-Install IdentityKit and its peer dependencies:
+Install IdentityKit:
 
 - `@nfid/identitykit` - A library to integrate compatible ICP wallets into your application.
-- `@nfid/identitykit/react` - A library containing react specific components for integrating
-  compatible ICP wallets into your application.
+
+React components can be imported from `@nfid/identitykit/react`
 
 ```sh npm2yarn
 npm i @nfid/identitykit
 ```
 
-> Note: IdentityKit is a React library.
+The bundle needs peer dependencies, be sure that following resources are available in your project
+as well:
+
+```sh npm2yarn
+npm i @dfinity/ledger-icp @dfinity/identity @dfinity/agent @dfinity/candid @dfinity/principal @dfinity/utils @dfinity/auth-client
+```
+
+> Note: IdentityKit is a React library and exports styles that need to be imported into your
+> project.
 
 ### Import
 
 ```typescript
-import { ConnectButton, ConnectModal, IdentityKitProvider, systemTheme } from "@nfid/identitykit"
+import "@nfid/identitykit/react/styles.css"
+
+import { IdentityKitProvider } from "@nfid/identitykit/react"
 ```
 
 ### Wrap provider
 
-Wrap your application with `IdentityKitProvider`. IdentityKit is in development mode by default,
-which exposes the development wallet as the only selectable wallet until production mode is set.
+Wrap your application with `IdentityKitProvider`, set `authType` to delegation, and add **your**
+backend canisters to the `targets` array.
 
-```typescript
+<Callout type="warning" emoji="⚠️">
+  Add only **your** backend canister IDs to the `targets` array.
+  <a href="/miscellaneous/target-canisters">
+    <strong>More about the Target Canisters.</strong>
+  </a>
+</Callout>
+
+```jsx
 const App = () => {
   return (
     <IdentityKitProvider
-      authOption="account"
-      modalMode="featured"
-      featuredWallet="nfidWallet"
-      theme={systemTheme()}
-    >
-      {/* Your App */}
+      authType={IdentityKitAuthType.DELEGATION}
+      signerClientOptions={{
+        targets=["canisterID1", "canisterID2",...] // **IMPORTANT**: these are *your* canisters, not ledger canisters
+      }}>
+      <YourApp />
     </IdentityKitProvider>
-  );
-};
+  )
+}
+```
+
+### Support on-chain wallets
+
+Add the following snippet to each of the canisters you added to `targets` in the step above.
+
+```rust
+use candid::{self, CandidType, Deserialize};
+
+#[derive(CandidType, Deserialize, Eq, PartialEq, Debug)]
+pub struct SupportedStandard {
+    pub url: String,
+    pub name: String,
+}
+
+#[query]
+fn icrc10_supported_standards() -> Vec<SupportedStandard> {
+    vec![
+        SupportedStandard {
+            url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-10/ICRC-10.md".to_string(),
+            name: "ICRC-10".to_string(),
+        },
+        SupportedStandard {
+            url: "https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md".to_string(),
+            name: "ICRC-28".to_string(),
+        },
+    ]
+}
+
+#[derive(Clone, Debug, CandidType, Deserialize)]
+pub struct Icrc28TrustedOriginsResponse {
+    pub trusted_origins: Vec<String>
+}
+
+// list every base URL that users will authenticate to your app from
+#[update]
+fn icrc28_trusted_origins() -> Icrc28TrustedOriginsResponse {
+    let trusted_origins = vec![
+        String::from("https://your-frontend-canister-id.icp0.io"),
+        String::from("https://your-frontend-canister-id.raw.icp0.io"),
+        String::from("https://your-frontend-canister-id.ic0.app"),
+        String::from("https://your-frontend-canister-id.raw.ic0.app"),
+        String::from("https://your-frontend-canister-id.icp0.icp-api.io"),
+        String::from("https://your-frontend-canister-id.icp-api.io"),
+        String::from("https://yourcustomdomain.com"),
+        String::from("https://yourothercustomdomain.com")
+    ];
+
+    return Icrc28TrustedOriginsResponse { trusted_origins }
+}
 ```
 
 ### Add the connect button
 
-Then, in your app, import and render the `ConnectButton` component.
+Then, in your app, import and render the `ConnectWallet` component.
 
 ```typescript
-import { ConnectButton } from '@nfid/identitykit';
+import { ConnectWallet } from "@nfid/identitykit/react"
 
 export const YourApp = () => {
-  return <ConnectButton />;
+  return <ConnectWallet />;
 };
 ```
 
 IdentityKit will now handle your user's wallet selection, display wallet information, and handle
 wallet switching.
+
+## Signer support
+
+Currently known support for the icrc34_delegation standard:
+
+| Signer            | icrc34_delegation support |
+| ----------------- | ------------------------- |
+| NFID Wallet       | Yes                       |
+| Plug              | Yes                       |
+| Oisy              | No                        |
+| Internet Identity | Yes                       |
+| Stoic             | Yes                       |

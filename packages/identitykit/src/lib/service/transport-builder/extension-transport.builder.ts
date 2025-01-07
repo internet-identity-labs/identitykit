@@ -1,5 +1,6 @@
 import { Transport } from "@slide-computer/signer"
+import { BrowserExtensionTransport } from "@slide-computer/signer-extension"
 
-export function getExtensionTransportBuilder(): Transport {
-  throw new Error("getExtensionTransport function not implemented.")
+export async function getExtensionTransportBuilder({ uuid }: { uuid: string }): Promise<Transport> {
+  return BrowserExtensionTransport.findTransport({ uuid })
 }

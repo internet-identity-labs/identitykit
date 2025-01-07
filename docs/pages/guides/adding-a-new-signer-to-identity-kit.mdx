@@ -31,12 +31,12 @@ Open the `packages/identitykit/src/lib/signers.ts` file in your preferred code e
 wallet configuration. Ensure that each field is correctly filled out:
 
 - id: A unique identifier for your wallet. Make sure it is unique to avoid conflicts.
+- description: The description shown when the wallet is in feature mode.
 - providerUrl: The URL to connect to your wallet. This URL should be compatible with
   [ICRC standards](https://github.com/dfinity/wg-identity-authentication/tree/main).
 - transportType: The method your wallet uses to communicate with the client's dApp. If your wallet
-  is an extension, use `TransportType.EXTENSION`. For web dApps, you can choose between
-  `TransportType.POPUP` and `TransportType.IFRAME`, each with its own advantages and disadvantages.
-- popupHeight and popupWidth: The dimensions of the sign-in window.
+  is an extension, use `TransportType.EXTENSION`. For web dApps, you can choose
+  `TransportType.NEW_TAB`.
 - label: The display name of your wallet.
 - icon: A base64-encoded SVG image representing your wallet.
 
@@ -45,14 +45,119 @@ Here is an example configuration:
 ```typescript
 const YourWalletSigner: SignerConfig = {
   id: "YourWalletSignerIdentifier",
+  description: "Your wallet description.",
   providerUrl: "https://your-wallet-rpc-url.com",
-  transportType: TransportType.POPUP,
-  popupHeight: 640,
-  popupWidth: 450,
+  transportType: TransportType.NEW_TAB,
   label: "Your Wallet Name",
   icon: "data:image/svg+xml;base64,PHN2ZyB3aWR0ac+Cg==",
 }
 ```
+
+#### 2.1. Extension Wallet Case
+
+If you are working with a non-extension wallet, this section may be skipped. The process for
+connecting an extension wallet to IdentityKit is more complex until the completion of
+[ICRC-94](https://github.com/dfinity/ICRC/issues/94). To facilitate communication between
+IdentityKit and your extension wallet, two classes must be added. The Plug transport layer is
+provided as an example, and a similar Channel should be created for your wallet.
+
+2.1.1. Add the Extension Wallet Channel
+
+```typescript
+import { type Channel, type JsonRequest, type JsonResponse } from "@slide-computer/signer"
+import { PlugTransportError } from "./plugTransport"
+
+export class PlugChannel implements Channel {
+  readonly #responseListeners = new Set<(response: JsonResponse) => void>()
+
+  get closed(): boolean {
+    return (
+      !("ic" in window) ||
+      typeof window.ic !== "object" ||
+      !window.ic ||
+      !("plug" in window.ic) ||
+      typeof window.ic.plug !== "object" ||
+      !window.ic.plug ||
+      !("request" in window.ic.plug) ||
+      typeof window.ic.plug.request !== "function"
+    )
+  }
+
+  addEventListener(
+    ...[event, listener]:
+      | [event: "close", listener: () => void]
+      | [event: "response", listener: (response: JsonResponse) => void]
+  ): () => void {
+    switch (event) {
+      case "close":
+        return () => {}
+      case "response":
+        this.#responseListeners.add(listener)
+        return () => {
+          this.#responseListeners.delete(listener)
+        }
+    }
+  }
+
+  async send(request: JsonRequest): Promise<void> {
+    if (this.closed) throw new PlugTransportError("Plug wallet cannot be found")
+
+    // @ts-ignore Call plug window method
+    const response = await window.ic.plug.request(request)
+
+    // One way messages, don't have a response
+    if (request.id === undefined) return
+
+    // Call listeners with response
+    this.#responseListeners.forEach((listener) => listener(response))
+  }
+
+  async close(): Promise<void> {}
+}
+```
+
+2.1.2. Add the Transport class as shown
+
+```typescript
+import { type Channel, type Transport } from "@slide-computer/signer"
+import { PlugChannel } from "./plugChannel"
+
+export class PlugTransportError extends Error {
+  constructor(message: string) {
+    super(message)
+    Object.setPrototypeOf(this, PlugTransportError.prototype)
+  }
+}
+
+export class PlugTransport implements Transport {
+  async establishChannel(): Promise<Channel> {
+    return new PlugChannel()
+  }
+}
+```
+
+2.1.3. Add your Wallet ID and initialize the Transport class in the switch clause in
+packages/identitykit/src/lib/service/transport-builder/extension-transport.builder.ts for the
+repository.
+
+```typescript
+import { Transport } from "@slide-computer/signer"
+import { PlugTransport } from "@slide-computer/signer-transport-plug"
+import { TransportBuilderRequest } from "./transport.builder"
+
+export function getExtensionTransportBuilder({ id }: TransportBuilderRequest): Transport {
+  switch (id) {
+    case "Plug":
+      return new PlugTransport()
+    case "YouExtensionWallet":
+      return new YourExtensionWalletTransport()
+    default:
+      throw Error("The extension wallet is not supported.")
+  }
+}
+```
+
+Submit these changes along with any other modifications in your pull request.
 
 ### 3. Create a pull request
 

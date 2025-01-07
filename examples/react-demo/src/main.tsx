@@ -1,12 +1,15 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
 import { ThemeProvider } from "next-themes"
+import { AppWrappedInIdentityKit } from "./app-in-identitykit-provider.tsx"
+
+import "@nfid/identitykit/react/styles.css"
+import "react-toastify/dist/ReactToastify.css"
 import "./index.css"
-import { AppWrappedInIdentityKit } from "./AppWrappedInIdentityKit.tsx"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ThemeProvider attribute="data-identity-kit-theme" enableSystem>
+    <ThemeProvider defaultTheme="system" attribute="data-identity-kit-theme" enableSystem>
       <AppWrappedInIdentityKit />
     </ThemeProvider>
   </React.StrictMode>

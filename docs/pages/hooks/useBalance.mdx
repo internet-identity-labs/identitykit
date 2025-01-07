@@ -1,0 +1,26 @@
+---
+title: "useBalance"
+date: "2024-07-09"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+import { Callout } from "nextra/components"
+
+# useBalance
+
+`() => ({ balance: number | undefined, fetchBalance: (() => Promise<void>) | undefined  }){:typescript}`
+
+Get balance of connected user and function to refetch it:
+
+## Usage
+
+```typescript
+import { useBalance } from "@nfid/identitykit/react"
+
+const { balance, fetchBalance } = useBalance()
+```
+
+<Callout type="info" emoji="ℹ️">
+  Both balance and fetchBalance will be undefined until successful connection.
+</Callout>

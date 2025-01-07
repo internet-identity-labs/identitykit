@@ -13,7 +13,7 @@ const TWITTER_LINK = "https://twitter.com/@IdentityMaxis"
 const theme = {
   useNextSeoProps() {
     return {
-      titleTemplate: "NFID IdentityKit Docs - %s",
+      titleTemplate: "NFID IdentityKit Docs | %s",
     }
   },
   logo: (
@@ -39,16 +39,39 @@ const theme = {
     toggleButton: true,
     defaultMenuCollapseLevel: 1,
   },
+  primaryHue: {
+    dark: 175,
+    light: 173,
+  },
+  primarySaturation: {
+    dark: 69,
+    light: 38,
+  },
+  banner: {
+    key: "1.0.7-release",
+    content: (
+      <a href="https://www.npmjs.com/package/@nfid/identitykit" target="_blank">
+        🎉 @nfid/identitykit@1.0.7 is released.
+      </a>
+    ),
+  },
   head: () => {
-    const { frontMatter } = useConfig()
+    const { frontMatter, title } = useConfig()
 
-    const ogTitle = frontMatter.title || "NFID IdentityKit Docs"
+    const ogTitle = frontMatter.title
+      ? `NFID IdentityKit Docs | ${frontMatter.title}`
+      : "NFID IdentityKit Docs"
     const ogDescription = frontMatter.description || "NFID IdentityKit Docs"
 
     const ogImage = frontMatter.image ? `https://docs.nfid.one${frontMatter.image}` : MetaImage.src
 
     return (
       <>
+        <title>
+          {title && title !== "Index"
+            ? `NFID IdentityKit Docs | ${title}`
+            : "NFID IdentityKit Docs"}
+        </title>
         <meta name="description" content={ogDescription} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@IdentityMaxis" />

@@ -50,7 +50,7 @@ class Icrc49CallCanisterMethodService extends InteractiveMethodService {
     )
     const delegation = DelegationIdentity.fromDelegation(sessionKey, chain)
 
-    const agent: Agent = new HttpAgent({
+    const agent: Agent = HttpAgent.createSync({
       host: IC_HOSTNAME,
       identity: delegation as unknown as Identity,
     })
@@ -76,7 +76,8 @@ class Icrc49CallCanisterMethodService extends InteractiveMethodService {
   }
 
   public async getСomponentData(
-    message: MessageEvent<RPCMessage>
+    message: MessageEvent<RPCMessage>,
+    isAskOnUse: boolean
   ): Promise<CallCanisterComponentData> {
     const icrc49Dto = message.data.params as unknown as Icrc49Dto
 
@@ -95,12 +96,12 @@ class Icrc49CallCanisterMethodService extends InteractiveMethodService {
     )
     const delegation = DelegationIdentity.fromDelegation(sessionKey, chain)
 
-    const agent: Agent = new HttpAgent({
+    const agent: HttpAgent = HttpAgent.createSync({
       host: IC_HOSTNAME,
       identity: delegation as unknown as Identity,
     })
 
-    const baseData = await super.getСomponentData(message)
+    const baseData = await super.getСomponentData(message, isAskOnUse)
     const consentMessage = await consentMessageService.getConsentMessage(
       icrc49Dto.canisterId,
       icrc49Dto.method,
@@ -108,13 +109,22 @@ class Icrc49CallCanisterMethodService extends InteractiveMethodService {
       agent
     )
 
-    const interfaceFactory = await interfaceFactoryService.getInterfaceFactory(
-      icrc49Dto.canisterId,
-      agent
-    )
-    const idl: IDL.ServiceClass = interfaceFactory({ IDL })
-    const func: IDL.FuncClass = idl._fields.find((x: unknown[]) => icrc49Dto.method === x[0])![1]
-    const argument = JSON.stringify(IDL.decode(func.argTypes, Buffer.from(icrc49Dto.arg, "base64")))
+    let argument
+    try {
+      const interfaceFactory = await interfaceFactoryService.getInterfaceFactory(
+        icrc49Dto.canisterId,
+        agent
+      )
+      const idl: IDL.ServiceClass = interfaceFactory({ IDL })
+      const func: IDL.FuncClass = idl._fields.find((x: unknown[]) => icrc49Dto.method === x[0])![1]
+      argument = JSON.stringify(IDL.decode(func.argTypes, Buffer.from(icrc49Dto.arg, "base64")))
+    } catch (e) {
+      console.warn(
+        "The candid service metadata has not been found, defaulting to the display of encoded data:",
+        e
+      )
+      argument = icrc49Dto.arg
+    }
 
     return {
       ...baseData,

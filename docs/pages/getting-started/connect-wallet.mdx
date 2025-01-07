@@ -1,0 +1,158 @@
+---
+title: "ConnectWallet"
+date: "2024-06-03"
+authors:
+  - name: "Dan Ostrovsky"
+---
+
+import { Callout } from "nextra/components"
+
+# Using and customizing the ConnectWallet
+
+This is the main component. It is responsible for rendering the connect/disconnect button.
+onConnectFailure, onConnectSuccess, and onDisconnect callbacks can be passed to
+`IdentityKitProvider`
+
+```jsx
+import { IdentityKitProvider, ConnectWallet } from "@nfid/identitykit/react"
+
+export const YourApp = () => {
+  return <IdentityKitProvider
+    onConnectFailure={(e: Error) => {}}
+    onConnectSuccess={() => {}}
+    onDisconnect={() => {}}
+  >
+    <ConnectWallet />
+  </IdentityKitProvider>;
+};
+```
+
+But `@nfid/identitykit` also exports all components that comprise `ConnectWallet` to provide as much
+customization as you'd like.
+
+```jsx
+import {
+  ConnectWalletButton,
+  ConnectedWalletButton,
+  ConnectWalletDropdownMenu,
+} from "@nfid/identitykit/react"
+
+export const YourApp = () => {
+  return (
+    <ConnectWallet
+      connectButtonComponent={ConnectWalletButton || YourCustomConnectButtonComponent}
+      connectedButtonComponent={ConnectedWalletButton || YourCustomConnectedButtonComponent}
+      dropdownMenuComponent={ConnectWalletDropdownMenu || YourCustomDropdownMenuComponent}
+    />
+  )
+}
+```
+
+> Note: Make sure your app is wrapped in the necessary providers.
+> [Read more](installation#wrap-provider).
+
+## Custom components
+
+The `ConnectWalletButton`, `ConnectedWalletButton` and `ConnectWalletDropdown` components expose
+several ways to customize their appearance:
+
+### ConnectWalletButton
+
+Props `ConnectWalletButtonProps = HTMLProps<HTMLButtonElement>{:typescript}`
+
+First, and very basic customization is `children`, pass them to set a custom `ConnectWalletButton`
+text. Default is "Connect wallet".
+
+```jsx
+<ConnectWalletButton>Sign in</ConnectWalletButton>
+```
+
+And of course `className`. For example to make button background red.
+
+```jsx
+<ConnectWalletButton className="bg-red">Sign in</ConnectWalletButton>
+```
+
+It's also possible to create your own custom button, or even attach an `onClick` prop to any element
+to open the signers modal on click:
+
+```jsx
+function ConnectWalletButton({ onClick, ...props }: ConnectWalletButtonProps) {
+  return (
+    <div onClick={onClick}>
+      <button>
+        Connect wallet
+      </button>
+      <img /> // for example add some image etc.
+    </div>
+  )
+}
+```
+
+### ConnectedWalletButton
+
+Props
+`ConnectedWalletButtonProps = HTMLProps<HTMLButtonElement> & { connectedAccount: string, icpBalance?: number }{:typescript}`
+
+Just like with the previous button, basic button props can be applied, and it's also possible to
+create your own custom button, which will receive next props along with default button props:
+
+- `connectedAccount` string containing address of connected account
+- `icpBalance` string containing connected account balance or `undefined{:jsx}` if balance is
+  fetching
+
+```jsx
+function CustomConnectedWalletButton({ connectedAccount, icpBalance, ...props }: ConnectedWalletButtonProps) {
+  return (
+    <ConnectedWalletButton {...props}>
+      {`Disconnect ${connectedAccount} ${icpBalance} ICP`}
+    </ConnectedWalletButton>
+  )
+}
+```
+
+<Callout type="info" emoji="ℹ️">
+  Note: ConnectedWalletButton is basically DropdownMenuButton with additional styles and manages
+  opening of dropdown under the hood, so in case you want to use your own existing component for
+  this purpose just wrap it with `ConnectWalletDropdownMenuButton` component
+</Callout>
+
+### ConnectWalletDropdownMenu
+
+Props
+`ConnectWalletDropdownMenuProps = { connectedAccount: string, icpBalance?: number, disconnect: () => Promise<void>}{:typescript}`
+
+Children will be passed by default, but `@nfid/identitykit` also exports:
+
+- ConnectWalletDropdownMenuButton
+- ConnectWalletDropdownMenuItems
+- ConnectWalletDropdownMenuItem
+- ConnectWalletDropdownMenuItemText
+- ConnectWalletDropdownMenuAddressItem
+- ConnectWalletDropdownMenuDisconnectItem
+
+It's possible to create your own `DropdownComponent` using these components, reorder menu items,
+change them or add new
+
+```jsx
+function DropdownMenu({ connectedAccount, icpBalance, disconnect }: ConnectWalletDropdownMenuProps) {
+  return (
+    <ConnectWalletDropdownMenu>
+      <ConnectedWalletButton connectedAccount={connectedAccount} icpBalance={icpBalance} />
+      // or to make your own component for connected state and trigger dropdown on click
+      <ConnectWalletDropdownMenuButton>
+        <YourCustomComponent>
+      </ConnectWalletDropdownMenuButton>
+      <ConnectWalletDropdownMenuItems>
+        <ConnectWalletDropdownMenuDisconnectItem onClick={disconnect} />
+        <ConnectWalletDropdownMenuItem>
+          <ConnectWalletDropdownMenuItemText>
+            Your custom menu item
+          </ConnectWalletDropdownMenuItemText>
+        </ConnectWalletDropdownMenuItem>
+        <ConnectWalletDropdownMenuAddressItem value={connectedAccount} />
+      </ConnectWalletDropdownMenuItems>
+    </ConnectWalletDropdownMenu>
+  )
+}
+```

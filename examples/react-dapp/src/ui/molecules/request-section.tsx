@@ -1,17 +1,20 @@
-import CodeMirror from "@uiw/react-codemirror"
-import { json } from "@codemirror/lang-json"
-import { Copy } from "../atoms/copy"
+import CodeMirror, { ReactCodeMirrorProps } from "@uiw/react-codemirror"
+import { langs } from "@uiw/codemirror-extensions-langs"
 import { E2ELogger } from "../atoms/e2e"
+import { useTheme } from "next-themes"
+import { Copy } from "../atoms"
 
 export interface RequestSectionProps {
   value: string
   setValue: (value: string) => void
+  id?: string
 }
 
-export const RequestSection: React.FC<RequestSectionProps> = ({ value, setValue }) => {
+export const RequestSection: React.FC<RequestSectionProps> = ({ value, setValue, id }) => {
+  const { resolvedTheme } = useTheme()
   return (
-    <div>
-      <p>
+    <div id={id}>
+      <p className="text-slate-500 dark:text-zinc-500 font-semibold mb-1">
         Request <span className="text-sm opacity-50">(editable)</span>
       </p>
       <div className="relative w-full overflow-hidden !font-mono rounded-xl">
@@ -20,12 +23,11 @@ export const RequestSection: React.FC<RequestSectionProps> = ({ value, setValue 
         </div>
         <E2ELogger value={value} id="request-section-e2e" />
         <CodeMirror
-          id="request-section"
           height="350px"
           value={value}
           onChange={setValue}
-          theme={"dark"}
-          extensions={[json()]}
+          theme={resolvedTheme as ReactCodeMirrorProps["theme"]}
+          extensions={[langs.json()]}
           basicSetup={{
             foldGutter: false,
             dropCursor: false,
