@@ -32,6 +32,7 @@ export class Icrc49CallCanisterSection extends Section {
   }
 
   async openPopup(context: BrowserContext) {
+    await this.callCanisterSubmitButton.waitFor({ state: "visible" })
     await this.callCanisterSubmitButton.click()
     await this.page.waitForTimeout(1000)
     this.popup = context.pages()[context.pages().length - 1]
