@@ -103,9 +103,11 @@ export const Provider = <T extends IdentityKitAuthType>({
     localStorageSigner,
     selectCustomSigner,
     setSelectedSignerToLocalStorage,
+    isSignerBeingSelected,
   } = useProceedSigner({
     signers: signersIncludingDiscovered,
     closeModal: () => setIsModalOpen(false),
+    onConnectFailure: reject,
     crypto,
     window,
     transportOptions: {
@@ -139,8 +141,8 @@ export const Provider = <T extends IdentityKitAuthType>({
     [localStorageSigner, identityKit.user]
   )
   const isUserConnecting = useMemo(
-    () => !!selectedSigner && !identityKit.user,
-    [selectedSigner, identityKit.user]
+    () => (selectedSigner ? !identityKit.user : isSignerBeingSelected),
+    [selectedSigner, identityKit.user, isSignerBeingSelected]
   )
 
   const connect = useCallback(
