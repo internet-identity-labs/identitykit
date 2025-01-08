@@ -10,6 +10,7 @@ export function useProceedSigner({
   crypto,
   window,
   transportOptions,
+  onConnectFailure,
 }: {
   signers: SignerConfig[]
   closeModal: () => unknown
@@ -24,6 +25,7 @@ export function useProceedSigner({
     | "identity"
     | "storage"
   >
+  onConnectFailure?: (e: Error) => unknown
 }) {
   // saved to local storage for next js (localStorage is not defined during server render)
   const [localStorageSigner, setLocalStorageSigner] = useState<string | undefined>(
@@ -32,6 +34,7 @@ export function useProceedSigner({
   const [selectedSigner, setSelectedSigner] = useState<
     { signer: Signer<Transport>; signerId?: string } | undefined
   >(undefined)
+  const [isSignerBeingSelected, setIsSignerBeingSelected] = useState(false)
 
   const selectSigner = useCallback(
     async (signerId?: string) => {
@@ -40,6 +43,9 @@ export function useProceedSigner({
         setLocalStorageSigner(undefined)
         return setSelectedSigner(undefined)
       }
+
+      setIsSignerBeingSelected(true)
+      closeModal()
 
       const signer = signers.find((s) => s.id === signerId)
       if (!signer) throw new Error(`Signer with id ${signerId} not found`)
@@ -54,7 +60,13 @@ export function useProceedSigner({
       })
 
       if (!transport.connection?.connected) {
-        await transport.connection?.connect()
+        try {
+          await transport.connection?.connect()
+        } catch (e) {
+          setIsSignerBeingSelected(false)
+          onConnectFailure?.(e as Error)
+          return
+        }
       }
 
       const createdSigner = new Signer({
@@ -64,7 +76,7 @@ export function useProceedSigner({
 
       setSelectedSigner({ signer: createdSigner, signerId })
 
-      closeModal()
+      setIsSignerBeingSelected(false)
 
       return signer
     },
@@ -115,5 +127,6 @@ export function useProceedSigner({
     selectedSigner: memoizedSelectedSigner,
     // signer id in localStorage (used on connected user page reload)
     localStorageSigner,
+    isSignerBeingSelected,
   }
 }
