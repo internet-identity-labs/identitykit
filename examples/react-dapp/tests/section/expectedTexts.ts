@@ -66,6 +66,22 @@ export class ExpectedTexts {
         arg: "RElETAABcQJtZQ==",
       },
     },
+    ConsentCaseCanisterCallResponse: {
+      contentMap: expect.anything(),
+      certificate: expect.anything(),
+    },
+    NoConsentCaseCanisterCallResponse: {
+      contentMap: expect.anything(),
+      certificate: expect.anything(),
+    },
+    CanisterCallIcrc2ApproveResponse: {
+      contentMap: expect.anything(),
+      certificate: expect.anything(),
+    },
+    CanisterCallIcrc1TransferResponse: {
+      contentMap: expect.anything(),
+      certificate: expect.anything(),
+    },
   }
 
   static readonly Mocked = {
@@ -156,10 +172,6 @@ export class ExpectedTexts {
       '["me"]',
       "Produce the following greeting text: > Hello, me!",
     ],
-    ConsentCaseCanisterCallResponse: {
-      contentMap: expect.anything(),
-      certificate: expect.anything(),
-    },
     NoConsentCaseCanisterCallRequest: [
       "Request from http://localhost:3001",
       "Canister ID",
@@ -169,10 +181,6 @@ export class ExpectedTexts {
       "Arguments",
       '["me"]',
     ],
-    NoConsentCaseCanisterCallResponse: {
-      contentMap: expect.anything(),
-      certificate: expect.anything(),
-    },
     CanisterCallIcrc2ApproveRequest: [
       "Request from http://localhost:3001",
       "Canister ID",
@@ -183,24 +191,15 @@ export class ExpectedTexts {
       '[{"fee":[],"memo":[],"from_subaccount":[],"created_at_time":[],"amount":"5000000000000000000000","expected_allowance":[],"expires_at":[],"spender":{"owner":{"__principal__":"gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe"},"subaccount":[]}}]',
       "# Authorize another address to withdraw from your account **The following address is allowed to withdraw from your account:** gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe **Your account:** 6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae **Requested withdrawal allowance:** 5000 ckPEPE ⚠ The allowance will be set to 5000 ckPEPE independently of any previous allowance. Until this transaction has been executed the spender can still exercise the previous allowance (if any) to it's full amount. **Expiration date:** No expiration. **Approval fee:** 1000 ckPEPE **Transaction fees to be paid by:** 6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae",
     ],
-    CanisterCallIcrc2ApproveResponse: {
-      contentMap: expect.anything(),
-      certificate: expect.anything(),
-    },
     CanisterCallIcrc1TransferRequest: [
       "Request from http://localhost:3001",
       "Canister ID",
-      "etik7-oiaaa-aaaar-qagia-cai",
+      "7tvr6-fqaaa-aaaan-qmira-cai",
       "Sender",
       "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
       "Arguments",
-      '[{"to":{"owner":{"__principal__":"6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae"},"subaccount":[]},"fee":[],"memo":[],"from_subaccount":[],"created_at_time":[],"amount":"1000000000000000000000"}]',
-      "# Approve the transfer of funds **Amount:** 1000 ckPEPE **From:** gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe **To:** 6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae **Fee:** 1000 ckPEPE",
+      '[{"to":{"owner":{"__principal__":"6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae"},"subaccount":[]},"fee":[],"memo":[],"from_subaccount":[],"created_at_time":[],"amount":"10000000000"}]',
     ],
-    CanisterCallIcrc1TransferResponse: {
-      contentMap: expect.anything(),
-      certificate: expect.anything(),
-    },
   }
 
   static readonly NFID = {
@@ -252,6 +251,18 @@ export class ExpectedTexts {
         },
       ],
     },
+    DelegationWithTargetsResponse: {
+      signerDelegation: [
+        {
+          delegation: {
+            expiration: expect.anything(),
+            pubkey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
+          },
+          signature: expect.anything(),
+        },
+      ],
+      publicKey: "MCowBQYDK2VwAyEALHdjGe0ciJb8Kmq4Xsc2/hn760QS+QgdJh7LUPc/wn0=",
+    },
     NoTargetsDelegationResponse: {
       signerDelegation: [
         {
@@ -266,21 +277,24 @@ export class ExpectedTexts {
     },
     ConsentCaseCanisterCall: [
       "Request from localhost:3001",
-      "Canister ID",
-      "do25a-dyaaa-aaaak-qifua-cai",
-      "Method",
-      "greet",
-      "Arg",
-      "RElETAABcQJtZQ==",
+      "Consent message",
+      "Produce the following greeting text: > Hello, me!",
+      "Transaction details",
     ],
     NoConsentCaseCanisterCall: [
       "Request from localhost:3001",
       "Canister ID",
       "do25a-dyaaa-aaaak-qifua-cai",
-      "Method",
-      "greet_no_consent",
-      "Arg",
-      "RElETAABcQJtZQ==",
+      "Arguments",
+      '["me"]',
+      "Proceed with caution. Unable to verify the safety of this approval. Please make sure you trust this dapp.",
     ],
+    CanisterCallIcrc2ApproveRequest: [
+      "Request from localhost:3001",
+      "5000 ckPEPE",
+      "Transaction details",
+      "Proceed with caution. This website can spend up to the spending cap until you revoke this permission.",
+    ],
+    CanisterCallIcrc1TransferRequest: ["Request from localhost:3001", "100 ALIEN", "0.00 USD"],
   }
 }

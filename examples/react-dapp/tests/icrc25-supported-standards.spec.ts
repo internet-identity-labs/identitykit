@@ -1,5 +1,5 @@
 import { expect, test as base } from "@playwright/test"
-import { Account, StandardsPage } from "./page/standards.page.ts"
+import { StandardsPage } from "./page/standards.page.ts"
 import { Icrc25SupportedStandardsSection } from "./section/icrc25-supported-standards.section.ts"
 import { ExpectedTexts } from "./section/expectedTexts.ts"
 
@@ -20,17 +20,13 @@ const test = base.extend<Fixtures>({
   },
 })
 
-test.describe("ICRC25 Supported standards", () => {
-  let accounts: Account[] = []
-
-  test.beforeEach(async () => {
-    accounts = await StandardsPage.getAccounts()
-  })
-  test("should check request and response has correct initial state", async ({
-    section,
-    demoPage,
-  }) => {
-    for (const account of accounts) {
+const accounts = await StandardsPage.getAccounts()
+for (const account of accounts) {
+  test.describe(`ICRC25 Supported standards for ${account.type} user`, () => {
+    test(`should check request and response has correct initial state for ${account.type} user`, async ({
+      section,
+      demoPage,
+    }) => {
       await demoPage.login(account)
 
       const initialRequest = await section.getRequestJson()
@@ -39,11 +35,12 @@ test.describe("ICRC25 Supported standards", () => {
       const initialResponse = await section.getResponseJson()
       expect(initialResponse).toStrictEqual({})
       await demoPage.logout()
-    }
-  })
+    })
 
-  test("should return list of supported standards", async ({ section, demoPage }) => {
-    for (const account of accounts) {
+    test(`should return list of supported standards for ${account.type} user`, async ({
+      section,
+      demoPage,
+    }) => {
       await demoPage.login(account)
       await section.clickSubmitButton()
       await section.waitForResponse()
@@ -51,6 +48,6 @@ test.describe("ICRC25 Supported standards", () => {
       const actualResponse = await section.getResponseJson()
       expect(actualResponse).toStrictEqual(ExpectedTexts.General.ListOfSupportedStandards)
       await demoPage.logout()
-    }
+    })
   })
-})
+}

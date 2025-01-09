@@ -1,6 +1,6 @@
 import { expect, test as base } from "@playwright/test"
 import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
-import { Account, AccountType, StandardsPage } from "./page/standards.page.ts"
+import { AccountType, StandardsPage } from "./page/standards.page.ts"
 import { ExpectedTexts } from "./section/expectedTexts.ts"
 
 type Fixtures = {
@@ -19,17 +19,14 @@ const test = base.extend<Fixtures>({
     await use(demoPage)
   },
 })
-test.describe("ICRC25 Request Permissions", () => {
-  let accounts: Account[] = []
 
-  test.beforeEach(async () => {
-    accounts = await StandardsPage.getAccounts()
-  })
-  test("should check request and response has correct initial state", async ({
-    section,
-    demoPage,
-  }) => {
-    for (const account of accounts) {
+const accounts = await StandardsPage.getAccounts()
+for (const account of accounts) {
+  test.describe(`ICRC25 Request Permissions for ${account.type} user`, () => {
+    test(`should check request and response has correct initial state for ${account.type} user`, async ({
+      section,
+      demoPage,
+    }) => {
       await demoPage.login(account)
       const initialRequest = await section.getRequestJson()
       expect(initialRequest).toStrictEqual(ExpectedTexts.General.InitialPermissionsRequestState)
@@ -37,35 +34,21 @@ test.describe("ICRC25 Request Permissions", () => {
       const initialResponse = await section.getResponseJson()
       expect(initialResponse).toStrictEqual({})
       await demoPage.logout()
-    }
-  })
+    })
 
-  test("should request full list of permissions on Mocked Wallet", async ({
-    section,
-    demoPage,
-  }) => {
-    const account = accounts[0]
-    await testFullPermissions(demoPage, section, account)
+    test(`should request full list of permissions for ${account.type} user`, async ({
+      section,
+      demoPage,
+    }) => {
+      await demoPage.login(account)
+      await section.approvePermissions(account)
+      const actualResponse = await section.getResponseJson()
+      expect(actualResponse).toStrictEqual(
+        account.type === AccountType.MockedSigner
+          ? ExpectedTexts.Mocked.GrantedPermissions
+          : ExpectedTexts.NFID.GrantedPermissions
+      )
+      await demoPage.logout()
+    })
   })
-
-  test("should request full list of permissions on NFID wallet", async ({ section, demoPage }) => {
-    const account = accounts[1]
-    await testFullPermissions(demoPage, section, account)
-  })
-})
-
-async function testFullPermissions(
-  demoPage: StandardsPage,
-  section: Icrc25RequestPermissionsSection,
-  account: Account
-) {
-  await demoPage.login(account)
-  await section.approvePermissions(account)
-  const actualResponse = await section.getResponseJson()
-  expect(actualResponse).toStrictEqual(
-    account.type === AccountType.MockedSigner
-      ? ExpectedTexts.Mocked.GrantedPermissions
-      : ExpectedTexts.NFID.GrantedPermissions
-  )
-  await demoPage.logout()
 }

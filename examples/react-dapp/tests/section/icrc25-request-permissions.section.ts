@@ -9,7 +9,6 @@ export class Icrc25RequestPermissionsSection extends Section {
 
   async approvePermissions(account: Account): Promise<Page> {
     const [popup] = await Promise.all([this.page.waitForEvent("popup"), this.submitButton.click()])
-
     if (account.type === AccountType.MockedSigner) await popup.click("#approve", { timeout: 20000 })
 
     await this.waitForResponse()

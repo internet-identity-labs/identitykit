@@ -27,7 +27,6 @@ const test = base.extend<Fixtures>({
     await demoPage.setAccount(10974, nfidPage)
     await context.pages()[0]!.bringToFront()
     await use(nfidPage)
-    await nfidPage.close()
   },
   requestPermissionSection: async ({ page }, use) => {
     const requestPermissionSection = new Icrc25RequestPermissionsSection(page)
@@ -36,26 +35,23 @@ const test = base.extend<Fixtures>({
 })
 
 const accounts = await StandardsPage.getAccounts()
-
 for (const account of accounts) {
   test.describe(`ICRC27 accounts for ${account.type} user`, () => {
     test(`should check request and response has correct initial state for ${account.type} user`, async ({
       section,
       demoPage,
     }) => {
-      for (const account of accounts) {
-        await demoPage.login(account)
+      await demoPage.login(account)
 
-        const initialRequest = await section.getRequestJson()
-        expect(initialRequest).toStrictEqual({ method: "icrc27_accounts" })
+      const initialRequest = await section.getRequestJson()
+      expect(initialRequest).toStrictEqual({ method: "icrc27_accounts" })
 
-        const initialResponse = await section.getResponseJson()
-        expect(initialResponse).toStrictEqual({})
-        await demoPage.logout()
-      }
+      const initialResponse = await section.getResponseJson()
+      expect(initialResponse).toStrictEqual({})
+      await demoPage.logout()
     })
 
-    test("should return list of accounts", async ({
+    test(`should return list of accounts for ${account.type} user`, async ({
       section,
       demoPage,
       requestPermissionSection,
@@ -66,7 +62,7 @@ for (const account of accounts) {
       await demoPage.login(account)
       await requestPermissionSection.approvePermissions(account)
 
-      if (account.type === AccountType.MockedSigner) await section.selectAccountsMocked()
+      if (account.type === AccountType.MockedSigner) await section.selectAccountsMocked(context)
       else await section.selectAccountsNFID(demoPage.page, context)
 
       await section.waitForResponse()
@@ -77,6 +73,7 @@ for (const account of accounts) {
           : ExpectedTexts.NFID.ListOfAccountsResponse
       )
       await demoPage.logout()
+      await nfidPage.close()
     })
   })
 }
