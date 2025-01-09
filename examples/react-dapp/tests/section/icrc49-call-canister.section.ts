@@ -121,6 +121,7 @@ export class Icrc49CallCanisterSection extends Section {
   }
 
   async setCallCanisterOwner(sender: string): Promise<void> {
+    await this.page.waitForTimeout(1000)
     const addressSelector = `#request-section-${this.section}-${this.selectedMethod} .cm-content .cm-line:nth-child(5) span`
     await this.page.waitForSelector(addressSelector, { state: "visible" })
     await this.page.fill(addressSelector, sender)
