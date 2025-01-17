@@ -6,7 +6,7 @@ export interface RPCBase {
 
 export interface RPCMessage extends RPCBase {
   method: string
-  params: unknown[]
+  params?: object | object[]
 }
 
 export interface RPCSuccessResponse extends RPCBase {
