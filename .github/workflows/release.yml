@@ -280,8 +280,8 @@ jobs:
 
         for CANISTER_NAME in "${CANISTERS[@]}"; do
           ci_echo_info "Deploying '${CANISTER_NAME}'"
-          ci_echo_debug "dfx canister deploy ${FORCE} --network ${NETWORK_NAME} ${CANISTER_NAME}" >&2
-          if ! result=$(dfx canister deploy ${FORCE} --network "${NETWORK_NAME}" "${CANISTER_NAME}"); then
+          ci_echo_debug "dfx deploy ${FORCE} --network ${NETWORK_NAME} ${CANISTER_NAME}" >&2
+          if ! result=$(dfx deploy ${FORCE} --network "${NETWORK_NAME}" "${CANISTER_NAME}"); then
             ci_echo_error "Install failed ${result}" >&2
             exit 1
           fi
