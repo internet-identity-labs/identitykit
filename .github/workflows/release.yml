@@ -115,6 +115,7 @@ jobs:
           npm run build-identitykit
 
       - name: Publish
+        working-directory: packages/identitykit
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           IL_GH_NPM_TOKEN: ${{ secrets.IL_GH_NPM_TOKEN }}
