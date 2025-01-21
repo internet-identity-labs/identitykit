@@ -14,7 +14,7 @@ export const CustomSignerInput = ({ onSubmit }: { onSubmit: (value: string) => u
       </div>
       <div className="ik-flex ik-items-center ik-gap-[12px] ik-relative">
         <input
-          className="ik-rounded-xl ik-border ik-border-gray-400 ik-px-[10px] ik-h-[48px] ik-flex-1 ik-flex-shrink ik-text-sm ik-text-black focus:ik-border-gray-400 ik-outline-none"
+          className="ik-rounded-xl ik-border ik-border-gray-400 ik-px-[10px] ik-h-[48px] ik-flex-1 ik-flex-shrink ik-text-sm ik-text-black dark:ik-text-white focus:ik-border-gray-400 ik-outline-none"
           placeholder="https://wallet.url"
           type="text"
           value={value}
