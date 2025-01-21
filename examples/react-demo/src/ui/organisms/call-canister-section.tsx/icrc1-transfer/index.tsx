@@ -86,7 +86,7 @@ export function Icrc1Transfer({ className }: { className?: string }) {
       request={{
         method: "icrc49_call_canister",
         params: {
-          canisterId: PEPE_LEDGER_CANISTER_ID,
+          canisterId: canister_id,
           sender: user?.principal.toString() || "",
           method: CallCanisterMethod.icrc1_transfer,
           arg: isFormValid ? toBase64(IDL.encode(transferIDL.argTypes, [actorArgs])) : "",
