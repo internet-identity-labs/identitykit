@@ -88,11 +88,19 @@ IdentityKit comes with its own playground to try things out locally.
 
 There are three applications included:
 
-1. `Dapp` (react-dapp) - Built for signer developers, this app provides a web-based interface to visually explore the API documentation for IdentityKit standards. It runs on port 3001. (dev: https://dev.standards.identitykit.xyz/, prod: https://dev.standards.identitykit.xyz/)
-2. `Demo` (react-demo) - This app is for application developers. It's a simple frontend app with IdentityKit integrated. It runs on port 3002 and lets you sign in with IdentityKit and make canister calls. (dev: https://dev.demo.identitykit.xyz/, prod: https://demo.identitykit.xyz/)
-3. `Signer` (react-signer) - This is a sample signer app that demonstrates the basics of signer functionality. It helps to understand what’s happening on the signer side. It runs on port 3003. (dev: https://icrc-25-example-signer-dev.nfid.one/, prod: https://icrc-25-example-signer.nfid.one)
+1. `Dapp` (react-dapp) - Built for signer developers, this app provides a web-based interface to
+   visually explore the API documentation for IdentityKit standards. It runs on port 3001. (dev:
+   https://dev.standards.identitykit.xyz/, prod: https://dev.standards.identitykit.xyz/)
+2. `Demo` (react-demo) - This app is for application developers. It's a simple frontend app with
+   IdentityKit integrated. It runs on port 3002 and lets you sign in with IdentityKit and make
+   canister calls. (dev: https://dev.demo.identitykit.xyz/, prod: https://demo.identitykit.xyz/)
+3. `Signer` (react-signer) - This is a sample signer app that demonstrates the basics of signer
+   functionality. It helps to understand what’s happening on the signer side. It runs on port 3003.
+   (dev: https://icrc-25-example-signer-dev.nfid.one/, prod:
+   https://icrc-25-example-signer.nfid.one)
 
 To get the playground up and running, use the following command:
+
 ```sh
 npm i && npm run playground
 ```
