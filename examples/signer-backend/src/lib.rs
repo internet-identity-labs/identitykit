@@ -3,6 +3,7 @@ use crate::types::{
     Icrc21ConsentMessageRequest, Icrc21DeviceSpec, Icrc21Error, Icrc21ErrorInfo,
     Icrc21LineDisplayPage, Icrc21SupportedStandard, Icrc28TrustedOriginsResponse
 };
+use candid::Principal;
 use ic_cdk::{query, update};
 use itertools::Itertools;
 use Icrc21DeviceSpec::GenericDisplay;
@@ -29,6 +30,22 @@ fn icrc28_trusted_origins() -> Icrc28TrustedOriginsResponse {
 #[query]
 fn greet_no_consent(name: String) -> String {
     format!("Hello, {}!", name)
+}
+
+#[update]
+async fn greet_update_call(name: String) -> String {
+    let canister_id = Principal::from_text("do25a-dyaaa-aaaak-qifua-cai").expect("Principal cannot be parsed.");
+
+    for _ in 0..25 {
+        let _ = ic_cdk::call::<(), ()>(canister_id, "wait", ()).await;
+    }
+
+    format!("Hello, {}!", name)
+}
+
+#[update]
+async fn wait() -> () {
+    ()
 }
 
 #[query]

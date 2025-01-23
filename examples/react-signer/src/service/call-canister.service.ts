@@ -136,7 +136,14 @@ class CallCanisterService {
     if (response.status === 202) {
       const pollStrategy = defaultStrategy()
       // Contains the certificate and the reply from the boundary node
-      const response = await pollForResponse(agent, cid, requestId, pollStrategy, blsVerify)
+      const response = await pollForResponse(
+        agent,
+        cid,
+        requestId,
+        pollStrategy,
+        undefined,
+        blsVerify
+      )
       certificate = response.certificate
     }
 

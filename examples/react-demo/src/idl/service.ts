@@ -47,6 +47,7 @@ export type Result = { Ok: Icrc21ConsentInfo } | { Err: Icrc21Error }
 export interface _SERVICE {
   greet: ActorMethod<[string], string>
   greet_no_consent: ActorMethod<[string], string>
+  greet_update_call: ActorMethod<[string], string>
   icrc21_canister_call_consent_message: ActorMethod<[Icrc21ConsentMessageRequest], Result>
 }
 export declare const idlFactory: IDL.InterfaceFactory

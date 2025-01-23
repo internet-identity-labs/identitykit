@@ -41,6 +41,7 @@ export const idlFactory = ({ IDL }: any) => {
   return IDL.Service({
     greet: IDL.Func([IDL.Text], [IDL.Text], ["query"]),
     greet_no_consent: IDL.Func([IDL.Text], [IDL.Text], ["query"]),
+    greet_update_call: IDL.Func([IDL.Text], [IDL.Text]),
     icrc21_canister_call_consent_message: IDL.Func([Icrc21ConsentMessageRequest], [Result], []),
   })
 }

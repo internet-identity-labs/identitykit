@@ -160,5 +160,7 @@ service : {
 
     icrc28_trusted_origins : () -> (icrc28_trusted_origins_response);
     greet_no_consent : (text) -> (text) query;
+    greet_update_call : (text) -> (text);
+    wait : () -> ();
     greet : (text) -> (text) query;
 }
