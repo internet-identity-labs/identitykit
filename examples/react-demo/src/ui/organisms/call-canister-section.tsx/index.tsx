@@ -14,9 +14,11 @@ import {
   CallCanisterMethodType,
 } from "./constants"
 import { ICP_API_HOST } from "../../../constants"
+import { UpdateCall } from "./update-call"
 
 const MethodComponent = {
   [CallCanisterMethod.greet_no_consent]: ToTarget,
+  [CallCanisterMethod.greet_update_call]: UpdateCall,
   [CallCanisterMethod.transfer]: Ledger,
   [CallCanisterMethod.icrc2_approve]: Icrc2Approve,
   [CallCanisterMethod.icrc2_transfer_from]: Icrc2Transfer,
