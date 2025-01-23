@@ -5,6 +5,22 @@ decentralized application (dApp). With intuitive, responsive, and customizable c
 developers can easily select which ICP-compatible wallets to support in their apps for
 authentication, signatures, and transfers.
 
+## 📚 Table of Contents
+- [✨ Features](#-features)
+- [🛠 Prerequisites](#-prerequisites)
+- [📦 Installation](#-installation)
+  - [🔗 Peer Dependencies](#-peer-dependencies)
+- [🚀 Usage](#-usage)
+  - [🎨 Import Styles](#-import-styles)
+  - [🧩 Wrap Your Application with `IdentityKitProvider`](#-wrap-your-application-with-identitykitprovider)
+  - [🔗 Add the Connect Button](#-add-the-connect-button)
+- [🔬 Playground](#-playground)
+- [📄 License](#-license)
+- [🤝 Contributing](#-contributing)
+- [💬 Support](#-support)
+- [📘 Documentation](#-documentation)
+- [🎉 Try it out](#-try-it-out)
+
 ## ✨ Features
 
 - **Easy Integration:** Quickly add wallet connection functionality to your dApp.
@@ -84,13 +100,13 @@ and manage wallet switching.
 
 ## 🔬 Playground
 
-IdentityKit comes with its own playground to try things out locally.
+IdentityKit comes with its own playground where you can try things out locally.
 
 There are three applications included:
 
-1. `Dapp` (react-dapp) - Built for signer developers, this app provides a web-based interface to
+1. `dApp` (react-dapp) - Built for signer developers, this app provides a web-based interface to
    visually explore the API documentation for IdentityKit standards. It runs on port 3001. (dev:
-   https://dev.standards.identitykit.xyz/, prod: https://dev.standards.identitykit.xyz/)
+   https://dev.standards.identitykit.xyz/, prod: https://standards.identitykit.xyz/)
 2. `Demo` (react-demo) - This app is for application developers. It's a simple frontend app with
    IdentityKit integrated. It runs on port 3002 and lets you sign in with IdentityKit and make
    canister calls. (dev: https://dev.demo.identitykit.xyz/, prod: https://demo.identitykit.xyz/)
@@ -123,7 +139,7 @@ If you encounter any issues or have questions, feel free to reach out to the tea
 
 For full documentation, visit [docs.identitykit.xyz](https://docs.identitykit.xyz).
 
-### 🎉 Try it out
+## 🎉 Try it out
 
 Here is a short list of live IdentityKit implementations:
 
