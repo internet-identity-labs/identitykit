@@ -6,6 +6,7 @@ developers can easily select which ICP-compatible wallets to support in their ap
 authentication, signatures, and transfers.
 
 ## 📚 Table of Contents
+
 - [✨ Features](#-features)
 - [🛠 Prerequisites](#-prerequisites)
 - [📦 Installation](#-installation)
