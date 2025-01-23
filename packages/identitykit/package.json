@@ -58,8 +58,8 @@
   "scripts": {
     "dev": "npm run build-dev --watch",
     "build": "npm run build-prod",
-    "build-prod": "rm -rf ./dist && rollup -c rollup.config.prod.js --bundleConfigAsCjs",
-    "build-dev": "rm -rf ./dist && rollup -c rollup.config.dev.js --bundleConfigAsCjs",
+    "build-prod": "rollup -c rollup.config.prod.js --bundleConfigAsCjs",
+    "build-dev": "rollup -c rollup.config.dev.js --bundleConfigAsCjs",
     "post:build": "node ./scripts/frankBuild.js",
     "test": "jest --passWithNoTests",
     "lint:check": "eslint . --ext ts,tsx --max-warnings 0",
