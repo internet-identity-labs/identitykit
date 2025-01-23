@@ -78,7 +78,7 @@ const App = () => {
     <IdentityKitProvider
       authType={IdentityKitAuthType.DELEGATION}
       signerClientOptions={{
-        targets=["canisterID1", "canisterID2",...] // **IMPORTANT**: these are *your* canisters, not ledger canisters
+        targets: ["canisterID1", "canisterID2",...] // **IMPORTANT**: these are *your* canisters, not ledger canisters
       }}>
       <YourApp />
     </IdentityKitProvider>
