@@ -5,6 +5,7 @@ import {
   IdentityKitAccountsSignerClientOptions,
   IdentityKitDelegationSignerClientOptions,
   IdentityKitDelegationSignerClient,
+  InternetIdentity,
 } from "../../../lib"
 import { Signer } from "@slide-computer/signer"
 import { Principal } from "@dfinity/principal"
@@ -23,7 +24,10 @@ export function useCreateIdentityKit<
   realConnectDisabled,
   ...props
 }: {
-  selectedSigner?: Signer
+  selectedSigner?: {
+    signer: Signer
+    signerId?: string
+  }
   clearSigner: () => Promise<unknown>
   authType: T
   signerClientOptions?: T extends typeof IdentityKitAuthType.DELEGATION
@@ -48,10 +52,11 @@ export function useCreateIdentityKit<
     setIk(null)
     setUser(undefined)
     setIcpBalance(undefined)
-    await selectedSigner?.transport.connection?.disconnect()
+    await selectedSigner?.signer.transport.connection?.disconnect()
     await clearSigner()
     props.onDisconnect?.()
-  }, [ik?.signerClient, clearSigner, props.onDisconnect])
+    if (selectedSigner?.signerId === InternetIdentity.id) window.location.reload()
+  }, [ik?.signerClient, clearSigner, props.onDisconnect, selectedSigner])
 
   // create disconnect func
   const disconnect = useCallback(async () => {
@@ -73,7 +78,7 @@ export function useCreateIdentityKit<
         signerClientOptions: {
           ...signerClientOptions,
           crypto,
-          signer: selectedSigner,
+          signer: selectedSigner.signer,
           onLogout: onDisconnect,
         },
       }).then(async (instance) => {
@@ -84,6 +89,7 @@ export function useCreateIdentityKit<
               setUser(instance.signerClient.connectedUser)
               onConnectSuccess?.()
             } catch (e) {
+              await selectedSigner.signer.transport.connection?.disconnect()
               await clearSigner()
               onConnectFailure?.(e as Error)
             }
