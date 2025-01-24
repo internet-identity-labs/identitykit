@@ -75,9 +75,9 @@ jobs:
             exit 1
           fi
 
-          ci_echo_debug "Getting value from packages\identitykit\package.json" >&2
-          if ! VERSION=$(cat packages\identitykit\package.json | jq -er ".version"); then
-            ci_echo_error "Can't found version data from packages\identitykit\package.json" >&2
+          ci_echo_debug "Getting value from ./packages/identitykit/package.json" >&2
+          if ! VERSION=$(cat "${{ github.workspace }}/packages/identitykit/package.json" | jq -er ".version"); then
+            ci_echo_error "Can't found version data from ./packages/identitykit/package.json" >&2
             exit 1
           fi
 
@@ -186,9 +186,9 @@ jobs:
           exit 1
         fi
 
-        ci_echo_debug "Getting value from packages\identitykit\package.json" >&2
-        if ! VERSION=$(cat packages\identitykit\package.json | jq -er ".version"); then
-          ci_echo_error "Can't found version data from packages\identitykit\package.json" >&2
+        ci_echo_debug "Getting value from ./packages/identitykit/package.json" >&2
+        if ! VERSION=$(cat "${{ github.workspace }}/packages/identitykit/package.json" | jq -er ".version"); then
+          ci_echo_error "Can't found version data from ./packages/identitykit/package.json" >&2
           exit 1
         fi
 
