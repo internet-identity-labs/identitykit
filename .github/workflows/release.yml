@@ -199,11 +199,6 @@ jobs:
 
         ci_echo_success "${GITHUB_REF_TYPE} : ${GITHUB_REF_NAME}"
 
-        - name: Setup DFX
-        uses: dfinity/setup-dfx@main
-        with:
-          dfx-version: 0.24.1
-
     - name: Cache Node Modules
       id: cache-node-modules
       uses: actions/cache@v4
