@@ -16,6 +16,8 @@ import { IdentityKitTheme } from "../../constants"
 import { ThemeProvider } from "./theme-provider"
 import { Context } from "../../contexts"
 import { BrowserExtensionTransport } from "@slide-computer/signer-extension"
+import { Transport } from "@slide-computer/signer"
+import { TransportBuilder } from "../../../../lib/service"
 
 interface ProviderProps<T extends IdentityKitAuthType = typeof IdentityKitAuthType.ACCOUNTS>
   extends PropsWithChildren {
@@ -54,6 +56,8 @@ export const Provider = <T extends IdentityKitAuthType>({
   const toggleModal = () => {
     setIsModalOpen((prev) => !prev)
   }
+  const [transports, setTransports] = useState<Array<{ value: Transport; signerId: string }>>()
+  const [transportsLoading, setTransportsLoading] = useState(false)
 
   const { maxTimeToLive, keyType, storage, identity } =
     signerClientOptions as IdentityKitDelegationSignerClientOptions
@@ -72,6 +76,37 @@ export const Provider = <T extends IdentityKitAuthType>({
       featuredSigner: selectedFeaturedSigner,
     }
   }, [props.signers, props.featuredSigner, signerClientOptions])
+
+  useEffect(() => {
+    if (signers.length && !transports && !transportsLoading) {
+      setTransportsLoading(true)
+      Promise.all(
+        signers.map(async (signer) => {
+          const transport = await TransportBuilder.build({
+            maxTimeToLive,
+            derivationOrigin: signerClientOptions.derivationOrigin,
+            allowInternetIdentityPinAuthentication,
+            keyType,
+            storage,
+            identity,
+            id: signer.id,
+            transportType: signer.transportType,
+            url: signer.providerUrl,
+            crypto,
+            window,
+          })
+          return {
+            value: transport,
+            signerId: signer.id,
+          }
+        })
+      )
+        .then(setTransports)
+        .finally(() => {
+          setTransportsLoading(false)
+        })
+    }
+  }, [signers, transports, transportsLoading])
 
   const [discoveredSigners, setDiscoveredSigners] = useState<SignerConfig[]>([])
   useEffect(() => {
@@ -110,14 +145,7 @@ export const Provider = <T extends IdentityKitAuthType>({
     onConnectFailure: reject,
     crypto,
     window,
-    transportOptions: {
-      maxTimeToLive,
-      derivationOrigin: signerClientOptions.derivationOrigin,
-      allowInternetIdentityPinAuthentication,
-      keyType,
-      storage,
-      identity,
-    },
+    transports,
   })
 
   const onConnectSuccess = useCallback(() => {
@@ -137,8 +165,8 @@ export const Provider = <T extends IdentityKitAuthType>({
   })
 
   const isInitializing = useMemo(
-    () => !!localStorageSigner && !identityKit.user,
-    [localStorageSigner, identityKit.user]
+    () => !transports || (!!localStorageSigner && !identityKit.user),
+    [localStorageSigner, identityKit.user, transports]
   )
   const isUserConnecting = useMemo(
     () => (selectedSigner ? !identityKit.user : isSignerBeingSelected),
@@ -147,21 +175,29 @@ export const Provider = <T extends IdentityKitAuthType>({
 
   const connect = useCallback(
     async (signerIdOrUrl?: string) => {
-      if (isInitializing) throw new Error("Identitykit is not initialized yet")
-      if (!signerIdOrUrl) setIsModalOpen(true)
-      else {
-        if (signers.find((s) => s.id === signerIdOrUrl)) await selectSigner(signerIdOrUrl)
+      try {
+        if (isInitializing) throw new Error("Identitykit is not initialized yet")
+        if (!signerIdOrUrl) setIsModalOpen(true)
         else {
-          if (!validateUrl(signerIdOrUrl))
-            throw new Error("Provided value is not valid signer id or url")
-          await selectCustomSigner(signerIdOrUrl)
+          if (signers.find((s) => s.id === signerIdOrUrl)) await selectSigner(signerIdOrUrl)
+          else {
+            if (!validateUrl(signerIdOrUrl))
+              throw new Error("Provided value is not valid signer id or url")
+            await selectCustomSigner(signerIdOrUrl)
+          }
+        }
+      } catch (e) {
+        if (props.onConnectFailure) {
+          props.onConnectFailure(e as Error)
+        } else {
+          throw e
         }
       }
       return createPromise()
         .then(() => {
           props.onConnectSuccess?.()
         })
-        .catch((e) => {
+        .catch(async (e) => {
           if (props.onConnectFailure) {
             props.onConnectFailure(e)
           } else {
@@ -169,14 +205,14 @@ export const Provider = <T extends IdentityKitAuthType>({
           }
         })
     },
-    [isInitializing, signers]
+    [isInitializing, signers, selectedSigner]
   )
 
   return (
     <Context.Provider
       value={{
         signers: signersIncludingDiscovered,
-        selectedSigner,
+        selectedSigner: selectedSigner?.signer,
         isModalOpen,
         featuredSigner,
         user: identityKit.user,
