@@ -34,9 +34,9 @@ fn greet_no_consent(name: String) -> String {
 
 #[update]
 async fn greet_update_call(name: String) -> String {
-    let canister_id = Principal::from_text("do25a-dyaaa-aaaak-qifua-cai").expect("Principal cannot be parsed.");
+    let canister_id = ic_cdk::id();
 
-    for _ in 0..25 {
+    for _ in 0..150 {
         let _ = ic_cdk::call::<(), ()>(canister_id, "wait", ()).await;
     }
 
