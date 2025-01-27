@@ -1,30 +1,21 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Signer, Transport } from "@slide-computer/signer"
 import { TransportBuilder } from "../../../lib/service"
 import { TransportType, SignerConfig } from "../../../lib/types"
-import { TransportBuilderRequest } from "../../../lib/service/transport-builder/transport.builder"
 
 export function useProceedSigner({
   signers,
+  transports,
   closeModal,
   crypto,
   window,
-  transportOptions,
   onConnectFailure,
 }: {
   signers: SignerConfig[]
+  transports?: Array<{ value: Transport; signerId: string }>
   closeModal: () => unknown
   crypto?: Pick<Crypto, "getRandomValues" | "randomUUID">
   window?: Window
-  transportOptions: Pick<
-    TransportBuilderRequest,
-    | "maxTimeToLive"
-    | "derivationOrigin"
-    | "allowInternetIdentityPinAuthentication"
-    | "keyType"
-    | "identity"
-    | "storage"
-  >
   onConnectFailure?: (e: Error) => unknown
 }) {
   // saved to local storage for next js (localStorage is not defined during server render)
@@ -44,43 +35,38 @@ export function useProceedSigner({
         return setSelectedSigner(undefined)
       }
 
-      setIsSignerBeingSelected(true)
-      closeModal()
+      try {
+        setIsSignerBeingSelected(true)
+        closeModal()
 
-      const signer = signers.find((s) => s.id === signerId)
-      if (!signer) throw new Error(`Signer with id ${signerId} not found`)
+        const signer = signers.find((s) => s.id === signerId)
+        if (!signer) throw new Error(`Signer with id ${signerId} not found`)
 
-      const transport = await TransportBuilder.build({
-        ...transportOptions,
-        id: signer.id,
-        transportType: signer.transportType,
-        url: signer.providerUrl,
-        crypto,
-        window,
-      })
+        const transport = transports?.find((t) => t.signerId === signerId)?.value
 
-      if (!transport.connection?.connected) {
-        try {
+        if (!transport) throw new Error("Transport was not found")
+
+        if (!transport.connection?.connected) {
           await transport.connection?.connect()
-        } catch (e) {
-          setIsSignerBeingSelected(false)
-          onConnectFailure?.(e as Error)
-          return
         }
+
+        const createdSigner = new Signer({
+          crypto,
+          transport,
+        })
+
+        setSelectedSigner({ signer: createdSigner, signerId })
+
+        setIsSignerBeingSelected(false)
+
+        return signer
+      } catch (e) {
+        setIsSignerBeingSelected(false)
+        onConnectFailure?.(e as Error)
+        return
       }
-
-      const createdSigner = new Signer({
-        crypto,
-        transport,
-      })
-
-      setSelectedSigner({ signer: createdSigner, signerId })
-
-      setIsSignerBeingSelected(false)
-
-      return signer
     },
-    [signers, crypto, closeModal]
+    [signers, crypto, closeModal, transports, localStorageSigner]
   )
 
   const selectCustomSigner = useCallback(
@@ -104,18 +90,16 @@ export function useProceedSigner({
   useEffect(() => {
     // for next.js, where localStorage is not available during ssr
     const lsSigner = localStorage.getItem("signerId")
-    if (!selectedSigner && lsSigner) {
+    if (!selectedSigner && lsSigner && transports) {
       selectSigner(lsSigner)
     }
-  }, [selectedSigner, selectSigner])
+  }, [selectedSigner, selectSigner, transports])
 
   const setSelectedSignerToLocalStorage = useCallback(() => {
     if (selectedSigner && selectedSigner.signerId) {
       localStorage.setItem("signerId", selectedSigner.signerId)
     }
   }, [selectedSigner])
-
-  const memoizedSelectedSigner = useMemo(() => selectedSigner?.signer, [selectedSigner])
 
   return {
     selectSigner,
@@ -124,7 +108,7 @@ export function useProceedSigner({
     clearSigner: () => selectSigner(),
     selectCustomSigner,
     // selected signer is local storage signer by default (in case authenticated user)
-    selectedSigner: memoizedSelectedSigner,
+    selectedSigner,
     // signer id in localStorage (used on connected user page reload)
     localStorageSigner,
     isSignerBeingSelected,
