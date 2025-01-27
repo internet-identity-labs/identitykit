@@ -12,25 +12,25 @@ type Fixtures = {
 }
 
 const test = base.extend<Fixtures>({
-  section: async ({ page }, use) => {
+  section: async ({ page }, apply) => {
     const section = new Icrc25AccountsSection(page)
-    await use(section)
+    await apply(section)
   },
-  demoPage: async ({ page }, use) => {
+  demoPage: async ({ page }, apply) => {
     const demoPage = new StandardsPage(page)
     await demoPage.goto()
-    await use(demoPage)
+    await apply(demoPage)
   },
-  nfidPage: async ({ context, demoPage }, use) => {
+  nfidPage: async ({ context, demoPage }, apply) => {
     const nfidPage = await context.newPage()
     await nfidPage.goto("https://dev.nfid.one/")
     await demoPage.setAccount(10974, nfidPage)
     await context.pages()[0]!.bringToFront()
-    await use(nfidPage)
+    await apply(nfidPage)
   },
-  requestPermissionSection: async ({ page }, use) => {
+  requestPermissionSection: async ({ page }, apply) => {
     const requestPermissionSection = new Icrc25RequestPermissionsSection(page)
-    await use(requestPermissionSection)
+    await apply(requestPermissionSection)
   },
 })
 
