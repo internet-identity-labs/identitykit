@@ -109,7 +109,7 @@ function component(commonPlugins, folder) {
 const manualGeneratePackageJson = () => ({
   name: "manual-generate-package-json",
   buildEnd() {
-    const targetPath = path.resolve("dist/package.json")
+    const targetPath = path.resolve("package.json")
     const updatedPackageJson = {
       ...packageJson,
       exports: packageJson.exportsProd,
