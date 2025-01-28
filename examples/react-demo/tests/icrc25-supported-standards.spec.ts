@@ -1,11 +1,11 @@
-import { expect } from "@playwright/test"
-import { test as base } from "@playwright/test"
-import { DemoPage } from "./page/demo.page"
-import { Icrc25SupportedStandardsSection } from "./section/icrc25-supported-standards.section"
+import { expect, test as base } from "@playwright/test"
+import { StandardsPage } from "./page/standards.page.ts"
+import { Icrc25SupportedStandardsSection } from "./section/icrc25-supported-standards.section.ts"
+import { ExpectedTexts } from "./section/expectedTexts.ts"
 
 type Fixtures = {
   section: Icrc25SupportedStandardsSection
-  demoPage: DemoPage
+  demoPage: StandardsPage
 }
 
 const test = base.extend<Fixtures>({
@@ -13,56 +13,41 @@ const test = base.extend<Fixtures>({
     const section = new Icrc25SupportedStandardsSection(page)
     await apply(section)
   },
-  demoPage: [
-    async ({ page }, apply) => {
-      const demoPage = new DemoPage(page)
-      await demoPage.goto()
-      await demoPage.login()
-      await apply(demoPage)
-    },
-    { auto: true },
-  ],
+  demoPage: async ({ page }, apply) => {
+    const demoPage = new StandardsPage(page)
+    await demoPage.goto()
+    await apply(demoPage)
+  },
 })
 
-test.skip("should check request and response has correct initial state", async ({ section }) => {
-  const request = {
-    method: "icrc25_supported_standards",
-  }
+const accounts = await StandardsPage.getAccounts()
+for (const account of accounts) {
+  test.describe(`ICRC25 Supported standards for ${account.type} user`, () => {
+    test(`should check request and response has correct initial state for ${account.type} user`, async ({
+      section,
+      demoPage,
+    }) => {
+      await demoPage.login(account)
 
-  const initialRequest = await section.getRequestJson()
-  expect(initialRequest).toStrictEqual(request)
+      const initialRequest = await section.getRequestJson()
+      expect(initialRequest).toStrictEqual({ method: "icrc25_supported_standards" })
 
-  const initialResponse = await section.getResponseJson()
-  expect(initialResponse).toStrictEqual({})
-})
+      const initialResponse = await section.getResponseJson()
+      expect(initialResponse).toStrictEqual({})
+      await demoPage.logout()
+    })
 
-test.skip("should return list of supported standards", async ({ section }) => {
-  const response = [
-    {
-      name: "ICRC-25",
-      url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-25/ICRC-25.md",
-    },
-    {
-      name: "ICRC-27",
-      url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-27/ICRC-27.md",
-    },
-    {
-      name: "ICRC-29",
-      url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-29/ICRC-29.md",
-    },
-    {
-      name: "ICRC-34",
-      url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-34/ICRC-34.md",
-    },
-    {
-      name: "ICRC-49",
-      url: "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-49/ICRC-49.md",
-    },
-  ]
+    test(`should return list of supported standards for ${account.type} user`, async ({
+      section,
+      demoPage,
+    }) => {
+      await demoPage.login(account)
+      await section.clickSubmitButton()
+      await section.waitForResponse()
 
-  await section.clickSubmitButton()
-  await section.waitForResponse()
-
-  const actualResponse = await section.getResponseJson()
-  expect(actualResponse).toStrictEqual(response)
-})
+      const actualResponse = await section.getResponseJson()
+      expect(actualResponse).toStrictEqual(ExpectedTexts.General.ListOfSupportedStandards)
+      await demoPage.logout()
+    })
+  })
+}
