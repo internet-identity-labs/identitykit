@@ -11,24 +11,24 @@ type Fixtures = {
 }
 
 const test = base.extend<Fixtures>({
-  section: async ({ page }, use) => {
+  section: async ({ page }, apply) => {
     const section = new Icrc34DelegationSection(page)
-    await use(section)
+    await apply(section)
   },
   demoPage: [
-    async ({ page }, use) => {
+    async ({ page }, apply) => {
       const demoPage = new DemoPage(page)
       await demoPage.goto()
       await demoPage.login()
-      await use(demoPage)
+      await apply(demoPage)
     },
     { auto: true },
   ],
   requestPermissionSection: [
-    async ({ page }, use) => {
+    async ({ page }, apply) => {
       const requestPermissionSection = new Icrc25RequestPermissionsSection(page)
       await requestPermissionSection.approvePermissions()
-      await use(requestPermissionSection)
+      await apply(requestPermissionSection)
     },
     { auto: true },
   ],

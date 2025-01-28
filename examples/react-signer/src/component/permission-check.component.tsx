@@ -1,13 +1,12 @@
-import { useState, useCallback } from "react"
+import React, { useState, useCallback } from "react"
 import { ComponentData } from "../service/method/interactive/interactive-method.service"
 import { RequestPermissions } from "./request-permissions.component"
 
-interface PermissionCheckRequest {
+type PermissionCheckRequest = React.PropsWithChildren<{
   methodName: string
   componentData: ComponentData
   timeout: ReturnType<typeof setTimeout>
-  children: JSX.Element
-}
+}>
 
 export const PermissionCheck: React.FC<PermissionCheckRequest> = ({
   methodName,
