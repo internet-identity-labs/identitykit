@@ -1,8 +1,8 @@
 import Image from "next/image"
 import { GitHubLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons"
 
-import LogoLight from "./public/img/logo-light.png"
-import LogoDark from "./public/img/logo-dark.png"
+import LogoLight from "./public/img/logo-light.svg"
+import LogoDark from "./public/img/logo-dark.svg"
 import MetaImage from "./public/img/meta1200x630.png"
 
 import { useConfig } from "nextra-theme-docs"
