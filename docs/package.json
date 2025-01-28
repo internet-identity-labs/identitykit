@@ -31,7 +31,7 @@
     "mdast-util-to-markdown": "^2.1.2",
     "mdast-util-to-string": "^4.0.0",
     "micromark-extension-mdxjs": "^3.0.0",
-    "next": "14.2.13",
+    "next": "14.2.21",
     "nextra": "^3.0.2",
     "nextra-theme-blog": "^3.0.2",
     "nextra-theme-docs": "^3.0.2",
