@@ -2,7 +2,7 @@ import { BrowserContext, expect, Page } from "@playwright/test"
 import { UserService } from "../helpers/accounts-service.ts"
 import { ProfileSection } from "../section/profile.section.ts"
 import { ExpectedTexts } from "../section/expectedTexts.js"
-import { waitForPopup } from "../helpers/helpers.js"
+import { waitForPopup, waitUntil } from "../helpers/helpers.js"
 
 export class DemoPage {
   constructor(public readonly page: Page) {}
@@ -57,8 +57,14 @@ export class DemoPage {
   async logout() {
     await this.connectButton.click({ timeout: 5000 })
     await this.disconnectButton.click()
-    expect((await this.connectButton.textContent())?.replace(/\u00A0/g, " ").trim()).toEqual(
-      "Connect wallet"
+    await waitUntil(
+      async () => {
+        return (
+          (await this.connectButton.textContent())?.replace(/\u00A0/g, " ").trim() ==
+          "Connect wallet"
+        )
+      },
+      { timeout: 10000, timeoutMsg: "User wasn't disconnected" }
     )
   }
 

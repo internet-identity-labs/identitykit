@@ -103,7 +103,7 @@ export class CallCanisterSection {
     timeout = timeout ? timeout : 10000
     await waitUntil(
       async () => {
-        const value = await this.callCanisterResponseSection.textContent()
+        const value = await this.callCanisterResponseSection.textContent({ timeout: 0 })
         return value != ""
       },
       {

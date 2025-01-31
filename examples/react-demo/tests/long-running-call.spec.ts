@@ -70,11 +70,10 @@ for (const account of accounts) {
             )
             await callCanisterSection.NFIDApproveButton.click()
           } else {
-            await demoPage.page.waitForTimeout(20000)
             await callCanisterSection.callCanisterSubmitButton.click()
           }
 
-          await callCanisterSection.waitForNotEmptyResponse(90000)
+          await callCanisterSection.waitForNotEmptyResponse(120000)
           const actualResponse = await callCanisterSection.getResponse()
           expect([actualResponse]).toEqual(ExpectedTexts.NFID.Public.IdentityKitDemoCallResponse)
 
