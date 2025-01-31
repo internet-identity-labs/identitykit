@@ -26,10 +26,10 @@ export const SelectWalletList = ({
           <div
             key={`signer_${signer.id}`}
             className={clsx(
-              "ik-shadow-[0px_2px_10px_rgba(0,0,0,0.03)] ik-rounded-[13px]",
+              "ik-border ik-shadow-[0px_2px_10px_rgba(0,0,0,0.03)] ik-rounded-[13px]",
               featuredSigner?.id === signer.id
-                ? "ik-gradient-border"
-                : "ik-border ik-border-black/5 dark:ik-border-white/5"
+                ? "ik-border-teal-600"
+                : "ik-border-black/5 dark:ik-border-white/5"
             )}
           >
             <div

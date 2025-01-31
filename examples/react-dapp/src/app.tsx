@@ -27,7 +27,7 @@ const environment = import.meta.env.VITE_ENVIRONMENT
 function App() {
   const { resolvedTheme } = useTheme()
   const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
-  const signers = [nfidw, Plug, InternetIdentity, Stoic, OISY].concat(
+  const signers = [nfidw, Plug, InternetIdentity, OISY, Stoic].concat(
     environment === "dev"
       ? [
           {

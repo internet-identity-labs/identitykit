@@ -6,7 +6,6 @@ import {
   NFIDW,
   Plug,
   InternetIdentity,
-  Stoic,
 } from "../../../../lib"
 import { useCreateIdentityKit, useCreatePromise, useProceedSigner } from "../../hooks"
 import { validateUrl } from "../../utils"
@@ -64,9 +63,7 @@ export const Provider = <T extends IdentityKitAuthType>({
 
   const { signers, featuredSigner } = useMemo(() => {
     const signersList =
-      !props.signers || !props.signers.length
-        ? [NFIDW, Plug, InternetIdentity, Stoic]
-        : props.signers
+      !props.signers || !props.signers.length ? [NFIDW, Plug, InternetIdentity] : props.signers
 
     const selectedFeaturedSigner =
       props.featuredSigner === false ? undefined : (props.featuredSigner ?? signersList[0])
@@ -108,27 +105,56 @@ export const Provider = <T extends IdentityKitAuthType>({
     }
   }, [signers, transports, transportsLoading])
 
-  const [discoveredSigners, setDiscoveredSigners] = useState<SignerConfig[]>([])
+  const [discoveredSigners, setDiscoveredSigners] = useState<
+    Array<{
+      transport: { value: Transport; signerId: string }
+      config: SignerConfig
+    }>
+  >([])
   useEffect(() => {
     if (!discoverExtensionSigners) {
       return
     }
-    BrowserExtensionTransport.discover().then((providerDetails) => {
+    BrowserExtensionTransport.discover().then(async (providerDetails) => {
       setDiscoveredSigners(
-        providerDetails.map((providerDetail) => ({
-          id: providerDetail.uuid,
-          providerUrl: "",
-          label: providerDetail.name,
-          transportType: TransportType.EXTENSION,
-          icon: providerDetail.icon,
-        }))
+        await Promise.all(
+          providerDetails.map(async (providerDetail) => ({
+            config: {
+              id: providerDetail.uuid,
+              providerUrl: "",
+              label: providerDetail.name,
+              transportType: TransportType.EXTENSION,
+              icon: providerDetail.icon,
+            },
+            transport: {
+              signerId: providerDetail.uuid,
+              value: await TransportBuilder.build({
+                maxTimeToLive,
+                derivationOrigin: signerClientOptions.derivationOrigin,
+                allowInternetIdentityPinAuthentication,
+                keyType,
+                storage,
+                identity,
+                id: providerDetail.uuid,
+                transportType: TransportType.EXTENSION,
+                url: "",
+                crypto,
+                window,
+              }),
+            },
+          }))
+        )
       )
     })
   }, [discoverExtensionSigners])
 
   const signersIncludingDiscovered = useMemo(
-    () => [...signers, ...discoveredSigners],
+    () => [...signers, ...discoveredSigners.map(({ config }) => config)],
     [signers, discoveredSigners]
+  )
+  const transportsIncludingDiscovered = useMemo(
+    () => [...(transports ?? []), ...discoveredSigners.map(({ transport }) => transport)],
+    [transports, discoveredSigners]
   )
 
   const {
@@ -145,7 +171,7 @@ export const Provider = <T extends IdentityKitAuthType>({
     onConnectFailure: reject,
     crypto,
     window,
-    transports,
+    transports: transportsIncludingDiscovered,
   })
 
   const onConnectSuccess = useCallback(() => {
