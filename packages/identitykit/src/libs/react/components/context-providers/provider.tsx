@@ -6,7 +6,7 @@ import {
   NFIDW,
   Plug,
   InternetIdentity,
-  Stoic,
+  OISY,
 } from "../../../../lib"
 import { useCreateIdentityKit, useCreatePromise, useProceedSigner } from "../../hooks"
 import { validateUrl } from "../../utils"
@@ -65,7 +65,7 @@ export const Provider = <T extends IdentityKitAuthType>({
   const { signers, featuredSigner } = useMemo(() => {
     const signersList =
       !props.signers || !props.signers.length
-        ? [NFIDW, Plug, InternetIdentity, Stoic]
+        ? [NFIDW, Plug, InternetIdentity, OISY]
         : props.signers
 
     const selectedFeaturedSigner =
