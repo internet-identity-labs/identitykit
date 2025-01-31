@@ -10,7 +10,7 @@ export default defineConfig({
     timeout: 2000,
   },
   use: {
-    headless: false,
+    headless: true,
     viewport: { width: 1440, height: 960 },
     actionTimeout: 0,
     ignoreHTTPSErrors: true,
