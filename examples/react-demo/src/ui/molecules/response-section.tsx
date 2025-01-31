@@ -7,9 +7,10 @@ import clsx from "clsx"
 export interface ResponseSectionProps {
   value: string
   className?: string
+  id?: string
 }
 
-export const ResponseSection: React.FC<ResponseSectionProps> = ({ value, className }) => {
+export const ResponseSection: React.FC<ResponseSectionProps> = ({ value, className, id }) => {
   const { resolvedTheme } = useTheme()
   return (
     <div>
@@ -22,6 +23,7 @@ export const ResponseSection: React.FC<ResponseSectionProps> = ({ value, classNa
         </div>
         <E2ELogger value={value} id="response-section-e2e" />
         <CodeMirror
+          id={id}
           height="350px"
           value={value}
           editable={false}
