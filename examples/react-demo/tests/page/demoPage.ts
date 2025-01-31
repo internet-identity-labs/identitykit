@@ -2,6 +2,7 @@ import { BrowserContext, expect, Page } from "@playwright/test"
 import { UserService } from "../helpers/accounts-service.ts"
 import { ProfileSection } from "../section/profile.section.ts"
 import { ExpectedTexts } from "../section/expectedTexts.js"
+import { waitForPopup } from "../helpers/helpers.js"
 
 export class DemoPage {
   constructor(public readonly page: Page) {}
@@ -29,14 +30,14 @@ export class DemoPage {
   ) {
     await profileSection.selectLoginMethod(method).click()
     await this.connectButton.click({ timeout: 5000 })
-    await this.page.locator(account.locator).click({ timeout: 5000 })
-    await this.page.waitForTimeout(2000)
-    let popup = await context.pages()[context.pages().length - 1]
+    await waitForPopup(context, async () =>
+      this.page.locator(account.locator).click({ timeout: 5000 })
+    )
+    const popup = await context.pages()[context.pages().length - 1]
     await popup.bringToFront()
     await popup.locator(`#profile_${accountProfile}`).click()
     await popup.locator('//button[.//text()="Connect"]').click()
     await popup.locator('//button[.//text()="Continue to app"]').click()
-    console.log(accountProfile)
     expect(JSON.parse(<string>await profileSection.getProfileInfo())).toMatchObject(
       method === "Delegation"
         ? accountProfile === "public"

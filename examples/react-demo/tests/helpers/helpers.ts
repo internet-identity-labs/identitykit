@@ -1,7 +1,7 @@
 import { fileURLToPath } from "url"
 import path from "path"
 import fs from "fs"
-import { Page } from "@playwright/test"
+import { BrowserContext, Page } from "@playwright/test"
 import { TestUser } from "../types.ts"
 
 const __filename = fileURLToPath(import.meta.url)
@@ -60,4 +60,15 @@ export async function waitUntil(
     }
     checkCondition()
   })
+}
+
+export async function waitForPopup(context: BrowserContext, action: () => void) {
+  const currentPages = context.pages().length
+  await action()
+  await waitUntil(
+    async () => {
+      return currentPages < context.pages().length
+    },
+    { interval: 500, timeout: 10000, timeoutMsg: "A new tab wasn't opened" }
+  )
 }

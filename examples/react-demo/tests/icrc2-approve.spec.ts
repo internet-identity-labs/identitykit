@@ -42,11 +42,12 @@ for (const account of accounts) {
       test.describe(`"ICRC2-approve" methods for ${account.type} user`, () => {
         test(`User makes icrc2_approve call canister via ${DemoPage.loginMethods[method]} login method`, async ({
           demoPage,
-          nfidPage: Page,
           callCanisterSection,
+          nfidPage,
           profileSection,
           context,
         }) => {
+          await nfidPage.title()
           await demoPage.login(
             context,
             account,

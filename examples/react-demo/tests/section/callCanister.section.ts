@@ -1,6 +1,6 @@
 import { BrowserContext, expect, Locator, Page } from "@playwright/test"
 import { RequestParametersBuilder } from "../helpers/requestParametersBuilder.ts"
-import { waitUntil } from "../helpers/helpers.js"
+import { waitForPopup, waitUntil } from "../helpers/helpers.js"
 
 export class CallCanisterSection {
   constructor(public readonly page: Page) {}
@@ -103,7 +103,7 @@ export class CallCanisterSection {
     timeout = timeout ? timeout : 10000
     await waitUntil(
       async () => {
-        let value = await this.callCanisterResponseSection.textContent()
+        const value = await this.callCanisterResponseSection.textContent()
         return value != ""
       },
       {
@@ -138,8 +138,7 @@ export class CallCanisterSection {
   }
 
   async clickSubmitButtonAndGetPopup(context: BrowserContext) {
-    await this.callCanisterSubmitButton.click()
-    await this.page.waitForTimeout(2000)
+    await waitForPopup(context, async () => await this.callCanisterSubmitButton.click())
     this.popup = context.pages()[context.pages().length - 1]
     await this.popup.bringToFront()
   }

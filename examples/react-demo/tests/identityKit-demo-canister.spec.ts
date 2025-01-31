@@ -42,11 +42,12 @@ for (const account of accounts) {
       test.describe(`"Canister query call to IdentityKit Demo canister for ${account.type} user`, () => {
         test(`User makes canister query call to IdentityKit demo canister via ${DemoPage.loginMethods[method]} login method`, async ({
           demoPage,
-          nfidPage: Page,
+          nfidPage,
           callCanisterSection,
           profileSection,
           context,
         }) => {
+          await nfidPage.title()
           await demoPage.login(
             context,
             account,
@@ -62,8 +63,6 @@ for (const account of accounts) {
             ExpectedTexts.General.Public.Initial_IdentityKitDemoCall_RequestState
           )
 
-          console.log(DemoPage.loginMethods[method])
-          console.log("asd")
           if (DemoPage.loginMethods[method] == "Accounts") {
             await callCanisterSection.clickSubmitButtonAndGetPopup(context)
             await callCanisterSection.checkNFIDPopupText(

@@ -36,15 +36,20 @@ export class RequestParametersBuilder {
     const selfAddress = this.page.locator(
       `//div[@id="icrc1_transfer"]//div[@id="request-section"]//div[contains(text(), '"sender"')]/span`
     )
-    principal != "themselves"
-      ? (this.toPrincipal = principal)
-      : (this.toPrincipal = (await selfAddress.innerText()).replace(/"/g, ""))
+    if (principal != "themselves") this.toPrincipal = principal
+    else this.toPrincipal = (await selfAddress.innerText()).replace(/"/g, "")
     return this
   }
 
   async apply() {
-    this.tokenID ? await this.canisterID_field.fill(this.tokenID) : undefined
-    this.amount ? await this.amount_field.fill(this.amount) : undefined
-    this.toPrincipal ? await this.toPrincipal_field.fill(this.toPrincipal) : undefined
+    if (this.tokenID) {
+      await this.canisterID_field.fill(this.tokenID)
+    }
+    if (this.amount) {
+      await this.amount_field.fill(this.amount)
+    }
+    if (this.toPrincipal) {
+      await this.toPrincipal_field.fill(this.toPrincipal)
+    }
   }
 }

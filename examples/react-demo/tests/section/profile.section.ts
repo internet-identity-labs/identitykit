@@ -19,7 +19,7 @@ export class ProfileSection {
   async getProfileInfo(): Promise<null | string> {
     await waitUntil(
       async () => {
-        let text = await this.profileResponseSection.locator("div:nth-child(3)").textContent()
+        const text = await this.profileResponseSection.locator("div:nth-child(3)").textContent()
         return text !== null && text.trim() !== ""
       },
       { timeout: 10000, timeoutMsg: "Empty Profile Info" }
@@ -28,7 +28,6 @@ export class ProfileSection {
   }
 
   selectLoginMethod(method: string): Locator {
-    console.log(method)
     return method == "Delegation" ? this.delegationMethodTabButton : this.accountMethodTabButton
   }
 }

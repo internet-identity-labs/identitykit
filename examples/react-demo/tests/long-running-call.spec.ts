@@ -42,11 +42,12 @@ for (const account of accounts) {
       test.describe(`"Canister long running update call to IdentityKit Demo canister for ${account.type} user`, () => {
         test(`User makes long running update call request via ${DemoPage.loginMethods[method]} login method`, async ({
           demoPage,
-          nfidPage: Page,
+          nfidPage,
           callCanisterSection,
           profileSection,
           context,
         }) => {
+          await nfidPage.title()
           await demoPage.login(
             context,
             account,

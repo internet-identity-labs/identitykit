@@ -42,11 +42,12 @@ for (const account of accounts) {
       test.describe(`"ICP-transfer" methods for ${account.type} user`, () => {
         test(`User makes icp_transfer call canister via ${DemoPage.loginMethods[method]} login method with ${accountProfile} profile`, async ({
           demoPage,
-          nfidPage: Page,
+          nfidPage,
           callCanisterSection,
           profileSection,
           context,
         }) => {
+          await nfidPage.title()
           await demoPage.login(
             context,
             account,
