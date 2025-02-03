@@ -93,6 +93,13 @@ Optional, used to generate random bytes, browser/node Crypto by default.
 Optional relying party window, used to listen for incoming message events, `globalThis.window` by
 default.
 
+## windowOpenerFeatures
+
+`string | undefined{:typescript}`
+
+Optional string containing a comma-separated list of window features in the form `name=value` for
+signers that open in the window. For example: `left=100,top=100,width=320,height=320{:typescript}`.
+
 ## allowInternetIdentityPinAuthentication
 
 `boolean | undefined{:typescript}`
