@@ -35,6 +35,7 @@ interface ProviderProps<T extends IdentityKitAuthType = typeof IdentityKitAuthTy
   crypto?: Pick<Crypto, "getRandomValues" | "randomUUID">
   window?: Window
   allowInternetIdentityPinAuthentication?: boolean
+  windowOpenerFeatures?: string
 }
 
 globalThis.global = globalThis
@@ -48,6 +49,7 @@ export const Provider = <T extends IdentityKitAuthType>({
   realConnectDisabled,
   allowInternetIdentityPinAuthentication,
   discoverExtensionSigners = true,
+  windowOpenerFeatures,
   ...props
 }: ProviderProps<T>) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -91,6 +93,7 @@ export const Provider = <T extends IdentityKitAuthType>({
             url: signer.providerUrl,
             crypto,
             window,
+            windowOpenerFeatures,
           })
           return {
             value: transport,
@@ -171,6 +174,7 @@ export const Provider = <T extends IdentityKitAuthType>({
     onConnectFailure: reject,
     crypto,
     window,
+    windowOpenerFeatures,
     transports: transportsIncludingDiscovered,
   })
 
