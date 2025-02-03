@@ -10,7 +10,7 @@ export class DemoPage {
 
   constructor(public readonly page: Page) {
     this.connectButton = this.page.locator("#connect")
-    this.disconnectButton = this.page.locator(".disconnect")
+    this.disconnectButton = this.page.locator(".ik-disconnect")
   }
 
   static getAccounts(): Account[] {
