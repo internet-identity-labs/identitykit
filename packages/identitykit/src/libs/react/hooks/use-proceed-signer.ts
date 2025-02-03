@@ -9,6 +9,7 @@ export function useProceedSigner({
   closeModal,
   crypto,
   window,
+  windowOpenerFeatures,
   onConnectFailure,
 }: {
   signers: SignerConfig[]
@@ -16,6 +17,7 @@ export function useProceedSigner({
   closeModal: () => unknown
   crypto?: Pick<Crypto, "getRandomValues" | "randomUUID">
   window?: Window
+  windowOpenerFeatures?: string
   onConnectFailure?: (e: Error) => unknown
 }) {
   // saved to local storage for next js (localStorage is not defined during server render)
@@ -76,6 +78,7 @@ export function useProceedSigner({
         url,
         crypto,
         window,
+        windowOpenerFeatures,
       })
 
       const createdSigner = new Signer({ crypto, transport })
@@ -83,7 +86,7 @@ export function useProceedSigner({
       setSelectedSigner({ signer: createdSigner })
       closeModal()
     },
-    [crypto, window, closeModal]
+    [crypto, window, closeModal, windowOpenerFeatures]
   )
 
   // default selected signer from local storage
