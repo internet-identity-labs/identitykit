@@ -13,6 +13,10 @@ export class DemoPage {
     this.disconnectButton = this.page.locator(".ik-disconnect")
   }
 
+  get changeThemeButton() {
+    return this.page.locator("#changeTheme")
+  }
+
   static getAccounts(): Account[] {
     return [
       // new Account("#signer_MockedSigner", AccountType.MockedSigner),
@@ -33,8 +37,9 @@ export class DemoPage {
   ) {
     await profileSection.selectLoginMethod(method).click()
     await this.connectButton.click({ timeout: 5000 })
-    await waitForPopup(context, async () =>
-      this.page.locator(account.locator).click({ timeout: 5000 })
+    await waitForPopup(
+      context,
+      async () => await this.page.locator(account.locator).click({ timeout: 5000 })
     )
     const popup = context.pages()[context.pages().length - 1]
     await popup!.bringToFront()
@@ -50,6 +55,7 @@ export class DemoPage {
           ? ExpectedTexts.General.Public.AccountsTabResponse
           : ExpectedTexts.General.Anonymous.AccountsTabResponse
     )
+    await this.connectButton.waitFor({ state: "visible", timeout: 10000 })
   }
 
   async setAccount(anchor: number, page: Page) {
@@ -81,7 +87,7 @@ export class DemoPage {
 
   static profileType = {
     Public: "public",
-    // Anonymous: "legacy_0",
+    Anonymous: "legacy_0",
   }
 }
 

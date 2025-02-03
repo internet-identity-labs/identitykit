@@ -58,8 +58,15 @@ for (const account of accounts) {
             DemoPage.loginMethods[method]
           )
 
+          await callCanisterSection.verifyThemeChanging()
+
+          await context.pages()[context.pages().length - 1]!.reload()
+          await context.pages()[context.pages().length - 1]!.waitForLoadState("load")
+
+          if (DemoPage.profileType[accountProfile] == "legacy_0") return
+
           await callCanisterSection.setSelectedMethod(
-            callCanisterSection.availableMethods.long_running_update_call
+            callCanisterSection.availableMethods.long_running_update_call!
           )
           await callCanisterSection.checkRequestResponse(
             ExpectedTexts.General.Public.Initial_LongRunningUpdateCall_RequestState

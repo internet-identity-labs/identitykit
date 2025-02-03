@@ -27,17 +27,17 @@ export class RequestParametersBuilder {
     return this
   }
 
-  setTokenID(token) {
+  setTokenID(token: string) {
     this.tokenID = token
     return this
   }
 
-  async setToPrincipal(principal) {
+  async setToPrincipal(principal: string) {
     const selfAddress = this.page.locator(
-      `//div[@id="icrc1_transfer"]//div[@id="request-section"]//div[contains(text(), '"sender"')]/span`
+      `//div[@id="${this.method()}"]//div[@id="request-section"]//div[contains(., 'sender')]/span`
     )
     if (principal != "themselves") this.toPrincipal = principal
-    else this.toPrincipal = (await selfAddress.innerText()).replace(/"/g, "")
+    else this.toPrincipal = (await selfAddress.innerText({ timeout: 10000 })).replace(/"/g, "")
     return this
   }
 

@@ -58,8 +58,15 @@ for (const account of accounts) {
             DemoPage.loginMethods[method]
           )
 
+          await callCanisterSection.verifyThemeChanging()
+
+          await context.pages()[context.pages().length - 1]!.reload()
+          await context.pages()[context.pages().length - 1]!.waitForLoadState("load")
+
+          if (DemoPage.profileType[accountProfile] == "legacy_0") return
+
           await callCanisterSection.setSelectedMethod(
-            callCanisterSection.availableMethods.icrc2_approve
+            callCanisterSection.availableMethods.icrc2_approve!
           )
           await callCanisterSection.checkRequestResponse(
             ExpectedTexts.General.Public.Initial_ICRC2Approve_RequestState
