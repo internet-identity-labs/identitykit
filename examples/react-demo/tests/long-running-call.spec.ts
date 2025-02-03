@@ -1,7 +1,7 @@
 import { expect, Page, test as base } from "@playwright/test"
-import { DemoPage } from "./page/demoPage.ts"
-import { ProfileSection } from "./section/profile.section.ts"
-import { CallCanisterSection } from "./section/callCanister.section.ts"
+import { DemoPage } from "./page/demoPage.js"
+import { ProfileSection } from "./section/profile.section.js"
+import { CallCanisterSection } from "./section/callCanister.section.js"
 import { ExpectedTexts } from "./section/expectedTexts.js"
 
 type Fixtures = {
@@ -29,15 +29,17 @@ const test = base.extend<Fixtures>({
     const nfidPage = await context.newPage()
     await nfidPage.goto("https://dev.nfid.one/")
     await demoPage.setAccount(10974, nfidPage)
-    await context.pages()[0].bringToFront()
+    await context.pages()[0]!.bringToFront()
     await apply(nfidPage)
   },
 })
 
-const loginMethods = Object.keys(DemoPage.loginMethods)
+const loginMethods = Object.keys(DemoPage.loginMethods) as (keyof typeof DemoPage.loginMethods)[]
 const accounts = DemoPage.getAccounts()
 for (const account of accounts) {
-  for (const accountProfile of Object.keys(DemoPage.ProfileType)) {
+  for (const accountProfile of Object.keys(
+    DemoPage.profileType
+  ) as (keyof typeof DemoPage.profileType)[]) {
     for (const method of loginMethods) {
       test.describe(`"Canister long running update call to IdentityKit Demo canister for ${account.type} user`, () => {
         test(`User makes long running update call request via ${DemoPage.loginMethods[method]} login method`, async ({
@@ -51,7 +53,7 @@ for (const account of accounts) {
           await demoPage.login(
             context,
             account,
-            DemoPage.ProfileType[accountProfile],
+            DemoPage.profileType[accountProfile],
             profileSection,
             DemoPage.loginMethods[method]
           )

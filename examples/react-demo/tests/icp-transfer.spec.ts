@@ -1,7 +1,7 @@
 import { expect, Page, test as base } from "@playwright/test"
-import { DemoPage } from "./page/demoPage.ts"
-import { ProfileSection } from "./section/profile.section.ts"
-import { CallCanisterSection } from "./section/callCanister.section.ts"
+import { DemoPage } from "./page/demoPage.js"
+import { ProfileSection } from "./section/profile.section.js"
+import { CallCanisterSection } from "./section/callCanister.section.js"
 import { ExpectedTexts } from "./section/expectedTexts.js"
 
 type Fixtures = {
@@ -29,15 +29,17 @@ const test = base.extend<Fixtures>({
     const nfidPage = await context.newPage()
     await nfidPage.goto("https://dev.nfid.one/")
     await demoPage.setAccount(10974, nfidPage)
-    await context.pages()[0].bringToFront()
+    await context.pages()[0]!.bringToFront()
     await apply(nfidPage)
   },
 })
 
-const loginMethods = Object.keys(DemoPage.loginMethods)
+const loginMethods = Object.keys(DemoPage.loginMethods) as (keyof typeof DemoPage.loginMethods)[]
 const accounts = DemoPage.getAccounts()
 for (const account of accounts) {
-  for (const accountProfile of Object.keys(DemoPage.ProfileType)) {
+  for (const accountProfile of Object.keys(
+    DemoPage.profileType
+  ) as (keyof typeof DemoPage.profileType)[]) {
     for (const method of loginMethods) {
       test.describe(`"ICP-transfer" methods for ${account.type} user`, () => {
         test(`User makes icp_transfer call canister via ${DemoPage.loginMethods[method]} login method with ${accountProfile} profile`, async ({
@@ -51,7 +53,7 @@ for (const account of accounts) {
           await demoPage.login(
             context,
             account,
-            DemoPage.ProfileType[accountProfile],
+            DemoPage.profileType[accountProfile],
             profileSection,
             DemoPage.loginMethods[method]
           )
@@ -60,7 +62,7 @@ for (const account of accounts) {
             callCanisterSection.availableMethods.icp_transfer
           )
           await callCanisterSection.checkRequestResponse(
-            DemoPage.ProfileType[accountProfile] == "public"
+            DemoPage.profileType[accountProfile] == "public"
               ? ExpectedTexts.General.Public.Initial_ICPTransfer_RequestState
               : ExpectedTexts.General.Anonymous.Initial_ICPTransfer_RequestState
           )
@@ -71,7 +73,7 @@ for (const account of accounts) {
               .setToPrincipal("themselves")
           ).apply()
 
-          if (DemoPage.ProfileType[accountProfile] == "public") {
+          if (DemoPage.profileType[accountProfile] == "public") {
             await callCanisterSection.clickSubmitButtonAndGetPopup(context)
             await callCanisterSection.checkNFIDPopupText(
               ExpectedTexts.NFID.Public.ICPTransferRPCText
@@ -83,7 +85,7 @@ for (const account of accounts) {
           await callCanisterSection.waitForNotEmptyResponse()
           const actualResponse = await callCanisterSection.getResponseJson()
           expect(actualResponse).toMatchObject(
-            DemoPage.ProfileType[accountProfile] == "public"
+            DemoPage.profileType[accountProfile] == "public"
               ? ExpectedTexts.NFID.Public.ICPTransferResponse
               : ExpectedTexts.NFID.Anonymous.ICPTransferResponse
           )

@@ -8,7 +8,7 @@ export type DisconnectItemProps = ItemProps
 export function DisconnectItem(props: DisconnectItemProps) {
   return (
     <Item {...props} className={clsx("ik-component", props.className)}>
-      <ItemText id={"disconnect"}>Disconnect</ItemText>
+      <ItemText className="ik-disconnect">Disconnect</ItemText>
       <LogoutIcon />
     </Item>
   )

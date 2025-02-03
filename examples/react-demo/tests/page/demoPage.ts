@@ -1,14 +1,17 @@
 import { BrowserContext, expect, Page } from "@playwright/test"
-import { UserService } from "../helpers/accounts-service.ts"
-import { ProfileSection } from "../section/profile.section.ts"
+import { UserService } from "../helpers/accounts-service.js"
+import { ProfileSection } from "../section/profile.section.js"
 import { ExpectedTexts } from "../section/expectedTexts.js"
 import { waitForPopup, waitUntil } from "../helpers/helpers.js"
 
 export class DemoPage {
-  constructor(public readonly page: Page) {}
+  private connectButton
+  private disconnectButton
 
-  private connectButton = this.page.locator("#connect")
-  private disconnectButton = this.page.locator("#disconnect")
+  constructor(public readonly page: Page) {
+    this.connectButton = this.page.locator("#connect")
+    this.disconnectButton = this.page.locator(".disconnect")
+  }
 
   static getAccounts(): Account[] {
     return [
@@ -33,11 +36,11 @@ export class DemoPage {
     await waitForPopup(context, async () =>
       this.page.locator(account.locator).click({ timeout: 5000 })
     )
-    const popup = await context.pages()[context.pages().length - 1]
-    await popup.bringToFront()
-    await popup.locator(`#profile_${accountProfile}`).click()
-    await popup.locator('//button[.//text()="Connect"]').click()
-    await popup.locator('//button[.//text()="Continue to app"]').click()
+    const popup = context.pages()[context.pages().length - 1]
+    await popup!.bringToFront()
+    await popup!.locator(`#profile_${accountProfile}`).click()
+    await popup!.locator('//button[.//text()="Connect"]').click()
+    await popup!.locator('//button[.//text()="Continue to app"]').click()
     expect(JSON.parse(<string>await profileSection.getProfileInfo())).toMatchObject(
       method === "Delegation"
         ? accountProfile === "public"
@@ -68,15 +71,18 @@ export class DemoPage {
     )
   }
 
-  static loginMethods = {
+  static loginMethods: {
+    readonly delegation: "Delegation"
+    readonly accounts: "Accounts"
+  } = {
     delegation: "Delegation",
     accounts: "Accounts",
   } as const
 
-  static ProfileType = {
+  static profileType = {
     Public: "public",
     // Anonymous: "legacy_0",
-  } as const
+  }
 }
 
 export class Account {
