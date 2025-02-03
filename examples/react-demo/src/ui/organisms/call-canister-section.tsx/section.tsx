@@ -81,12 +81,18 @@ export function Section({
 
   return (
     <div className={className}>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-[25px] my-[25px]">
-        <RequestSection value={request} setValue={setRequest} />
-        <ResponseSection value={response} />
+      <div
+        className="grid grid-cols-1 md:grid-cols-2 gap-[25px] my-[25px]"
+        id={props.request.params.method}
+      >
+        <RequestSection value={request} setValue={setRequest} id={"request-section"} />
+        <ResponseSection id={"response-section"} value={response} />
       </div>
       {form ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-[25px]">
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 gap-[25px]"
+          id={`${props.request.params.method}_args`}
+        >
           {form}
           <CodeSection value={codeSnippet} />
         </div>
