@@ -5,7 +5,7 @@ import { ExpectedTexts } from "../section/expectedTexts.js"
 import { waitForPopup, waitUntil } from "../helpers/helpers.js"
 
 export class DemoPage {
-  private connectButton
+  connectButton
   private disconnectButton
 
   constructor(public readonly page: Page) {
@@ -15,6 +15,10 @@ export class DemoPage {
 
   get changeThemeButton() {
     return this.page.locator("#changeTheme")
+  }
+
+  get userBalance() {
+    return this.page.locator("#connect div small")
   }
 
   static getAccounts(): Account[] {

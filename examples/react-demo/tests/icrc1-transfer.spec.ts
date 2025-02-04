@@ -42,7 +42,7 @@ for (const account of accounts) {
   ) as (keyof typeof DemoPage.profileType)[]) {
     for (const method of loginMethods) {
       test.describe(`"ICRC1-transfer" methods for ${account.type} user`, () => {
-        test(`User makes icrc1_transfer call canister via ${DemoPage.loginMethods[method]} login method`, async ({
+        test(`User makes icrc1_transfer call canister via ${DemoPage.loginMethods[method]} login method with ${DemoPage.profileType[accountProfile]} profile`, async ({
           demoPage,
           nfidPage,
           callCanisterSection,
@@ -63,8 +63,6 @@ for (const account of accounts) {
           await context.pages()[context.pages().length - 1]!.reload()
           await context.pages()[context.pages().length - 1]!.waitForLoadState("load")
 
-          if (DemoPage.profileType[accountProfile] == "legacy_0") return
-
           await callCanisterSection.setSelectedMethod(
             callCanisterSection.availableMethods.icrc1_transfer!
           )
@@ -74,6 +72,13 @@ for (const account of accounts) {
               : ExpectedTexts.General.Anonymous.Initial_ICRC1Transfer_RequestState
           )
 
+          if (DemoPage.profileType[accountProfile] == "legacy_0") return
+
+          const userInitialBalance = parseFloat(
+            (await demoPage.userBalance.textContent())!.replace(" ICP", "")
+          )
+
+          const amountToSend = "10000"
           await (
             await callCanisterSection.requestBuilder
               .setTokenID("ryjl3-tyaaa-aaaaa-aaaba-cai") //ICP token
@@ -90,6 +95,13 @@ for (const account of accounts) {
           await callCanisterSection.waitForResponse()
           const actualResponse = await callCanisterSection.getResponseJson()
           expect(actualResponse).toMatchObject(ExpectedTexts.NFID.Public.ICRC1TransferResponse)
+
+          if (DemoPage.loginMethods[method] == "Delegation") {
+            await callCanisterSection.verifyBalanceChanged(
+              userInitialBalance,
+              parseFloat(amountToSend) / 100000000
+            )
+          }
 
           await demoPage.logout()
         })

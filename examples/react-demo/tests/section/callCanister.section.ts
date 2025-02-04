@@ -165,4 +165,43 @@ export class CallCanisterSection extends DemoPage {
       .locator("#themeColor")
       .evaluate((it) => getComputedStyle(it).getPropertyValue("background-color"))
   }
+
+  async verifyBalanceChanged(initialBalance: number, changeAmount: number) {
+    const expectedBalance = Math.round((initialBalance - changeAmount) * 100000000) / 100000000
+
+    await waitUntil(
+      async () => {
+        await this.page.reload()
+        await this.page.waitForLoadState("load")
+
+        await waitUntil(
+          async () => {
+            await waitUntil(
+              async () => {
+                return (
+                  (await this.userBalance.allInnerTexts()).join(" ").replace(/\s+/g, " ").trim() !==
+                  "Connect wallet"
+                )
+              },
+              { timeout: 5000, timeoutMsg: "User was logged out after page reload" }
+            )
+
+            return (await this.userBalance.innerText()) !== ""
+          },
+          { timeout: 5000, timeoutMsg: "Balance wasn't displayed" }
+        )
+
+        const currentBalance = parseFloat(
+          (await this.userBalance.textContent())!.replace(" ICP", "")
+        )
+        return expectedBalance - currentBalance >= 0
+      },
+      {
+        interval: 2000,
+        timeout: 120000,
+        timeoutMsg: `Balance wasn't changed. Expected ${expectedBalance} ICP, 
+      but was ${await this.userBalance.innerText()}`,
+      }
+    )
+  }
 }

@@ -42,7 +42,7 @@ for (const account of accounts) {
   ) as (keyof typeof DemoPage.profileType)[]) {
     for (const method of loginMethods) {
       test.describe(`"Canister long running update call to IdentityKit Demo canister for ${account.type} user`, () => {
-        test(`User makes long running update call request via ${DemoPage.loginMethods[method]} login method`, async ({
+        test(`User makes long running update call request via ${DemoPage.loginMethods[method]} login method with ${DemoPage.profileType[accountProfile]} profile`, async ({
           demoPage,
           nfidPage,
           callCanisterSection,
@@ -63,14 +63,16 @@ for (const account of accounts) {
           await context.pages()[context.pages().length - 1]!.reload()
           await context.pages()[context.pages().length - 1]!.waitForLoadState("load")
 
-          if (DemoPage.profileType[accountProfile] == "legacy_0") return
-
           await callCanisterSection.setSelectedMethod(
             callCanisterSection.availableMethods.long_running_update_call!
           )
           await callCanisterSection.checkRequestResponse(
-            ExpectedTexts.General.Public.Initial_LongRunningUpdateCall_RequestState
+            DemoPage.profileType[accountProfile] == "public"
+              ? ExpectedTexts.General.Public.Initial_LongRunningUpdateCall_RequestState
+              : ExpectedTexts.General.Anonymous.Initial_LongRunningUpdateCall_RequestState
           )
+
+          if (DemoPage.profileType[accountProfile] == "legacy_0") return
 
           if (DemoPage.loginMethods[method] == "Accounts") {
             await callCanisterSection.clickSubmitButtonAndGetPopup(context)
