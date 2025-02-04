@@ -17,6 +17,7 @@ export type TransportBuilderRequest = {
   crypto?: Pick<Crypto, "randomUUID">
   window?: Window
   allowInternetIdentityPinAuthentication?: boolean
+  windowOpenerFeatures?: string
 } & Pick<AuthClientCreateOptions, "identity" | "keyType" | "storage">
 
 export class TransportBuilder {
@@ -24,11 +25,12 @@ export class TransportBuilder {
     TransportType,
     (request: TransportBuilderRequest) => Promise<Transport>
   > = {
-    [TransportType.NEW_TAB]: ({ url, crypto, window }) =>
+    [TransportType.NEW_TAB]: ({ url, crypto, window, windowOpenerFeatures }) =>
       getPopupTransportBuilder({
         url,
         crypto,
         window,
+        windowOpenerFeatures,
       }),
     [TransportType.EXTENSION]: ({ id }) => {
       if (!id) {

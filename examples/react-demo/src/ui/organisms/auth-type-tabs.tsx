@@ -42,7 +42,9 @@ export function AuthTypeTabs({
                 : "border-transparent text-zinc-500 hover:text-dark dark:hover:text-white hover:border-primary"
             )}
           >
-            <div className="inline-block py-2 rounded-t-lg">Delegation</div>
+            <div className="inline-block py-2 rounded-t-lg" id={"delegationMethodTab"}>
+              Delegation
+            </div>
           </li>
           <li
             onClick={() => {
@@ -55,7 +57,9 @@ export function AuthTypeTabs({
                 : "border-transparent text-zinc-500 hover:text-dark dark:hover:text-white hover:border-primary"
             )}
           >
-            <div className="inline-block py-2 rounded-t-lg">Account</div>
+            <div id={"accountMethodTab"} className="inline-block py-2 rounded-t-lg">
+              Account
+            </div>
           </li>
         </ul>
       </div>
@@ -67,7 +71,7 @@ export function AuthTypeTabs({
               ecosystem, for example to store assets, participate in defi, or engage in a variety of
               other activity.
             </p>
-            <ResponseSection value={JSON.stringify(accounts, null, 2)} />
+            <ResponseSection value={JSON.stringify(accounts, null, 2)} id={"profile"} />
             <CodeSection
               className="mt-[25px]"
               value={getUsageExample(IdentityKitAuthType.ACCOUNTS)}
@@ -79,7 +83,7 @@ export function AuthTypeTabs({
               Delegations are accounts that have been pre-approved to execute transactions on the
               user's behalf, resulting in the removal of wallet approval prompts.
             </small>
-            <ResponseSection value={JSON.stringify(identity, null, 2)} />
+            <ResponseSection value={JSON.stringify(identity, null, 2)} id={"profile"} />
             <CodeSection
               className="mt-[25px]"
               value={getUsageExample(IdentityKitAuthType.DELEGATION)}

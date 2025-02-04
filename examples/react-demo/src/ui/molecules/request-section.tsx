@@ -7,9 +7,10 @@ import { Copy } from "../atoms"
 export interface RequestSectionProps {
   value: string
   setValue: (value: string) => void
+  id?: string
 }
 
-export const RequestSection: React.FC<RequestSectionProps> = ({ value, setValue }) => {
+export const RequestSection: React.FC<RequestSectionProps> = ({ value, setValue, id }) => {
   const { resolvedTheme } = useTheme()
   return (
     <div>
@@ -20,6 +21,7 @@ export const RequestSection: React.FC<RequestSectionProps> = ({ value, setValue 
         </div>
         <E2ELogger value={value} id="request-section-e2e" />
         <CodeMirror
+          id={id}
           height="350px"
           value={value}
           onChange={setValue}
