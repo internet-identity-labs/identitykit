@@ -110,7 +110,8 @@ There are three applications included:
    https://mquaw-4yaaa-aaaap-abwlq-cai.icp0.io, prod: https://vehwg-aiaaa-aaaag-aciuq-cai.icp0.io)
 2. `Demo` (react-demo) - This app is for application developers. It's a simple frontend app with
    IdentityKit integrated. It runs on port 3002 and lets you sign in with IdentityKit and make
-   canister calls. (dev: https://rawyr-oqaaa-aaaal-ajlxa-cai.icp0.io, prod: https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io)
+   canister calls. (dev: https://rawyr-oqaaa-aaaal-ajlxa-cai.icp0.io, prod:
+   https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io)
 3. `Signer` (react-signer) - This is a sample signer app that demonstrates the basics of signer
    functionality. It helps to understand what’s happening on the signer side. It runs on port 3003.
    (dev: https://uimp7-mqaaa-aaaag-qc5ka-cai.icp0.io, prod:
@@ -145,5 +146,5 @@ For full documentation, visit [identitykit docs](https://2juva-miaaa-aaaag-ald5a
 Here is a short list of live IdentityKit implementations:
 
 - [Demo App](https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io)
-- [ICRC Standards Implementation](https://vehwg-aiaaa-aaaag-aciuq-cai.icp0.io) (view low-level ICRC standards
-  implementations)
+- [ICRC Standards Implementation](https://vehwg-aiaaa-aaaag-aciuq-cai.icp0.io) (view low-level ICRC
+  standards implementations)
