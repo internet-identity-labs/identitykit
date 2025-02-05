@@ -3,7 +3,6 @@ use crate::types::{
     Icrc21ConsentMessageRequest, Icrc21DeviceSpec, Icrc21Error, Icrc21ErrorInfo,
     Icrc21LineDisplayPage, Icrc21SupportedStandard, Icrc28TrustedOriginsResponse
 };
-use candid::Principal;
 use ic_cdk::{query, update};
 use itertools::Itertools;
 use Icrc21DeviceSpec::GenericDisplay;
@@ -14,14 +13,12 @@ mod types;
 #[update]
 fn icrc28_trusted_origins() -> Icrc28TrustedOriginsResponse {
     let trusted_origins = vec![
-        String::from("https://standards.identitykit.xyz"),
-        String::from("https://dev.standards.identitykit.xyz"),
-        String::from("https://demo.identitykit.xyz"),
-        String::from("https://dev.demo.identitykit.xyz"),
         String::from("http://localhost:3001"),
         String::from("http://localhost:3002"),
-        String::from("https://nfid.one"),
-        String::from("https://dev.nfid.one"),
+        String::from("https://rawyr-oqaaa-aaaal-ajlxa-cai.icp0.io"),
+        String::from("https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io"),
+        String::from("https://mquaw-4yaaa-aaaap-abwlq-cai.icp0.io"),
+        String::from("https://vehwg-aiaaa-aaaag-aciuq-cai.icp0.io"),
     ];
 
     return Icrc28TrustedOriginsResponse { trusted_origins }

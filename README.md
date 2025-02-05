@@ -107,14 +107,15 @@ There are three applications included:
 
 1. `dApp` (react-dapp) - Built for signer developers, this app provides a web-based interface to
    visually explore the API documentation for IdentityKit standards. It runs on port 3001. (dev:
-   https://dev.standards.identitykit.xyz/, prod: https://standards.identitykit.xyz/)
+   https://mquaw-4yaaa-aaaap-abwlq-cai.icp0.io, prod: https://vehwg-aiaaa-aaaag-aciuq-cai.icp0.io)
 2. `Demo` (react-demo) - This app is for application developers. It's a simple frontend app with
    IdentityKit integrated. It runs on port 3002 and lets you sign in with IdentityKit and make
-   canister calls. (dev: https://dev.demo.identitykit.xyz/, prod: https://demo.identitykit.xyz/)
+   canister calls. (dev: https://rawyr-oqaaa-aaaal-ajlxa-cai.icp0.io, prod:
+   https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io)
 3. `Signer` (react-signer) - This is a sample signer app that demonstrates the basics of signer
    functionality. It helps to understand what’s happening on the signer side. It runs on port 3003.
-   (dev: https://icrc-25-example-signer-dev.nfid.one/, prod:
-   https://icrc-25-example-signer.nfid.one)
+   (dev: https://uimp7-mqaaa-aaaag-qc5ka-cai.icp0.io, prod:
+   https://vdgqs-nqaaa-aaaag-aciua-cai.icp0.io)
 
 To get the playground up and running, use the following command:
 
@@ -138,12 +139,12 @@ If you encounter any issues or have questions, feel free to reach out to the tea
 
 ## 📘 Documentation
 
-For full documentation, visit [docs.identitykit.xyz](https://docs.identitykit.xyz).
+For full documentation, visit [identitykit docs](https://2juva-miaaa-aaaag-ald5a-cai.icp0.io).
 
 ## 🎉 Try it out
 
 Here is a short list of live IdentityKit implementations:
 
-- [Demo App](https://demo.identitykit.xyz)
-- [ICRC Standards Implementation](https://standards.identitykit.xyz) (view low-level ICRC standards
-  implementations)
+- [Demo App](https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io)
+- [ICRC Standards Implementation](https://vehwg-aiaaa-aaaag-aciuq-cai.icp0.io) (view low-level ICRC
+  standards implementations)

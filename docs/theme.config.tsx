@@ -63,7 +63,9 @@ const theme = {
       : "NFID IdentityKit Docs"
     const ogDescription = frontMatter.description || "NFID IdentityKit Docs"
 
-    const ogImage = frontMatter.image ? `https://docs.nfid.one${frontMatter.image}` : MetaImage.src
+    const ogImage = frontMatter.image
+      ? `https://2juva-miaaa-aaaag-ald5a-cai.icp0.io${frontMatter.image}`
+      : MetaImage.src
 
     return (
       <>
