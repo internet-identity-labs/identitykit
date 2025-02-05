@@ -1,8 +1,8 @@
 import { expect, Page, test as base } from "@playwright/test"
-import { AccountType, StandardsPage } from "./page/standards.page.ts"
-import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
-import { Icrc49CallCanisterSection } from "./section/icrc49-call-canister.section.ts"
-import { ExpectedTexts } from "./section/expectedTexts.ts"
+import { AccountType, StandardsPage } from "./page/standards.page.js"
+import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.js"
+import { Icrc49CallCanisterSection } from "./section/icrc49-call-canister.section.js"
+import { ExpectedTexts } from "./section/expectedTexts.js"
 import { Icrc25AccountsSection } from "./section/icrc27-accounts.section.js"
 
 type Fixtures = {
@@ -35,7 +35,7 @@ const test = base.extend<Fixtures>({
     const nfidPage = await context.newPage()
     await nfidPage.goto("https://dev.nfid.one/")
     await demoPage.setAccount(10974, nfidPage)
-    await context.pages()[0].bringToFront()
+    await context.pages()[0]!.bringToFront()
     await apply(nfidPage)
     await nfidPage.close()
   },
@@ -91,16 +91,12 @@ for (const account of accounts) {
         expect(texts).toEqual(ExpectedTexts.Mocked.NoConsentCaseCanisterCallRequest)
         await section.mockedApproveButton.click()
       } else {
-        await icrc25AccountsSection.selectAccountsNFID(demoPage.page, context)
+        await icrc25AccountsSection.selectAccountsNFID(context)
         await section.setCallCanisterOwner(
           '"7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae"'
         )
         await section.openPopup(context)
-        await section.checkPopupTextNFID(
-          demoPage.page,
-          context,
-          ExpectedTexts.NFID.NoConsentCaseCanisterCall
-        )
+        await section.checkPopupTextNFID(ExpectedTexts.NFID.NoConsentCaseCanisterCall)
         await section.nfidApproveButton.click()
       }
 
@@ -129,16 +125,12 @@ for (const account of accounts) {
         expect(texts).toEqual(ExpectedTexts.Mocked.ConsentCaseCanisterCallRequest)
         await section.mockedApproveButton.click()
       } else {
-        await icrc25AccountsSection.selectAccountsNFID(demoPage.page, context)
+        await icrc25AccountsSection.selectAccountsNFID(context)
         await section.setCallCanisterOwner(
           '"7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae"'
         )
         await section.openPopup(context)
-        await section.checkPopupTextNFID(
-          demoPage.page,
-          context,
-          ExpectedTexts.NFID.ConsentCaseCanisterCall
-        )
+        await section.checkPopupTextNFID(ExpectedTexts.NFID.ConsentCaseCanisterCall)
         await section.nfidApproveButton.click()
       }
 
@@ -169,16 +161,12 @@ for (const account of accounts) {
         expect(texts).toEqual(ExpectedTexts.Mocked.CanisterCallIcrc2ApproveRequest)
         await section.mockedApproveButton.click()
       } else {
-        await icrc25AccountsSection.selectAccountsNFID(demoPage.page, context)
+        await icrc25AccountsSection.selectAccountsNFID(context)
         await section.setCallCanisterOwner(
           '"7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae"'
         )
         await section.openPopup(context)
-        await section.checkPopupTextNFID(
-          demoPage.page,
-          context,
-          ExpectedTexts.NFID.CanisterCallIcrc2ApproveRequest
-        )
+        await section.checkPopupTextNFID(ExpectedTexts.NFID.CanisterCallIcrc2ApproveRequest)
         await section.nfidApproveButton.click()
       }
 
@@ -208,16 +196,12 @@ for (const account of accounts) {
         expect(texts).toEqual(ExpectedTexts.Mocked.CanisterCallIcrc1TransferRequest)
         await section.mockedApproveButton.click()
       } else {
-        await icrc25AccountsSection.selectAccountsNFID(demoPage.page, context)
+        await icrc25AccountsSection.selectAccountsNFID(context)
         await section.setCallCanisterOwner(
           '"7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae"'
         )
         await section.openPopup(context)
-        await section.checkPopupTextNFID(
-          demoPage.page,
-          context,
-          ExpectedTexts.NFID.CanisterCallIcrc1TransferRequest
-        )
+        await section.checkPopupTextNFID(ExpectedTexts.NFID.CanisterCallIcrc1TransferRequest)
         await section.nfidApproveButton.click()
       }
 

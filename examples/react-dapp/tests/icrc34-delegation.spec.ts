@@ -1,8 +1,8 @@
 import { expect, Page, test as base } from "@playwright/test"
-import { AccountType, ProfileType, StandardsPage } from "./page/standards.page.ts"
-import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
-import { Icrc34DelegationSection } from "./section/icrc34-delegation.section.ts"
-import { ExpectedTexts } from "./section/expectedTexts.ts"
+import { AccountType, ProfileType, StandardsPage } from "./page/standards.page.js"
+import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.js"
+import { Icrc34DelegationSection } from "./section/icrc34-delegation.section.js"
+import { ExpectedTexts } from "./section/expectedTexts.js"
 
 type Fixtures = {
   section: Icrc34DelegationSection
@@ -29,7 +29,7 @@ const test = base.extend<Fixtures>({
     const nfidPage = await context.newPage()
     await nfidPage.goto("https://dev.nfid.one/")
     await demoPage.setAccount(10974, nfidPage)
-    await context.pages()[0].bringToFront()
+    await context.pages()[0]!.bringToFront()
     await apply(nfidPage)
   },
 })

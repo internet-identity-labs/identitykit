@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test"
-import { UserService } from "../helpers/accounts-service.ts"
+import { UserService } from "../helpers/accounts-service.js"
 
 export class StandardsPage {
   private readonly connectButton: Locator

@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test"
-import { Section } from "./section.ts"
+import { Section } from "./section.js"
 
 export class Icrc25SupportedStandardsSection extends Section {
   constructor(public readonly page: Page) {
