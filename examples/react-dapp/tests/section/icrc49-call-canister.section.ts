@@ -70,10 +70,11 @@ export class Icrc49CallCanisterSection extends Section {
   async loginAndApprovePermissions(
     demoPage: StandardsPage,
     requestPermissionSection: Icrc25RequestPermissionsSection,
-    account: Account
+    account: Account,
+    context: BrowserContext
   ) {
     await demoPage.login(account)
-    await requestPermissionSection.approvePermissions(account)
+    await requestPermissionSection.approvePermissions(context, account)
   }
 
   async checkRequestResponse(section: Icrc49CallCanisterSection, expectedRequest: RequestState) {

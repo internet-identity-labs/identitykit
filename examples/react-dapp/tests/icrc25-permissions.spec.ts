@@ -65,9 +65,10 @@ for (const account of accounts) {
       section,
       requestPermissionSection,
       standardsPage,
+      context,
     }) => {
       await standardsPage.login(account)
-      await requestPermissionSection.approvePermissions(account)
+      await requestPermissionSection.approvePermissions(context, account)
       await section.clickSubmitButton()
       await section.waitForResponse()
       const responseJson = await section.getResponseJson()

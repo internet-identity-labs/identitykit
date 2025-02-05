@@ -49,9 +49,10 @@ for (const account of accounts) {
       demoPage,
       requestPermissionSection,
       nfidPage,
+      context,
     }) => {
       await nfidPage.title()
-      await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
+      await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account, context)
       await section.checkRequestResponse(
         section,
         ExpectedTexts.General.NoConsentCaseInitialCanisterCallState
@@ -64,9 +65,10 @@ for (const account of accounts) {
       demoPage,
       requestPermissionSection,
       nfidPage,
+      context,
     }) => {
       await nfidPage.title()
-      await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
+      await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account, context)
       await section.setSelectedMethod(section.availableMethods.selectConsentTab)
       await section.checkRequestResponse(
         section,
@@ -84,7 +86,7 @@ for (const account of accounts) {
       nfidPage,
     }) => {
       await nfidPage.title()
-      await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
+      await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account, context)
       if (account.type === AccountType.MockedSigner) {
         await section.openPopup(context)
         const texts = await section.getMockedPopupText()
@@ -116,7 +118,7 @@ for (const account of accounts) {
       nfidPage,
     }) => {
       await nfidPage.title()
-      await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
+      await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account, context)
       await section.setSelectedMethod(section.availableMethods.selectConsentTab)
 
       if (account.type === AccountType.MockedSigner) {
@@ -150,7 +152,7 @@ for (const account of accounts) {
       nfidPage,
     }) => {
       await nfidPage.title()
-      await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
+      await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account, context)
 
       await section.setSelectedMethod(section.availableMethods.selectIcrc2ApprovalTab)
 
@@ -186,7 +188,7 @@ for (const account of accounts) {
       nfidPage,
     }) => {
       await nfidPage.title()
-      await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account)
+      await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account, context)
       await section.setSelectedMethod(section.availableMethods.selectIcrc1TransferTab)
 
       if (account.type === AccountType.MockedSigner) {

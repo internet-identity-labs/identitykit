@@ -60,7 +60,7 @@ for (const account of accounts) {
     }) => {
       await nfidPage.title()
       await demoPage.login(account)
-      await requestPermissionSection.approvePermissions(account)
+      await requestPermissionSection.approvePermissions(context, account)
 
       if (account.type === AccountType.MockedSigner) await section.selectAccountsMocked(context)
       else await section.selectAccountsNFID(context)

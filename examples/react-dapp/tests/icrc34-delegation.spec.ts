@@ -60,7 +60,7 @@ for (const account of accounts) {
     }) => {
       await nfidPage.title()
       await demoPage.login(account)
-      await requestPermissionSection.approvePermissions(account)
+      await requestPermissionSection.approvePermissions(context, account)
 
       if (account.type === AccountType.MockedSigner) {
         await section.selectProfileMocked(ProfileType.Global, context, (isGlobalDisabled) =>
@@ -87,7 +87,7 @@ for (const account of accounts) {
       context,
     }) => {
       await demoPage.login(account)
-      await requestPermissionSection.approvePermissions(account)
+      await requestPermissionSection.approvePermissions(context, account)
       await section.setRequestWithNoTargets()
 
       if (account.type === AccountType.MockedSigner) {

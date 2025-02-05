@@ -12,12 +12,7 @@ export default defineConfig({
   use: {
     headless: true,
     launchOptions: {
-      args: [
-        "--disable-popup-blocking",
-        "--disable-features=SameSiteByDefaultCookies",
-        "--no-sandbox",
-        "--disable-dev-shm-usage",
-      ],
+      args: ["--disable-popup-blocking"],
     },
     viewport: { width: 1440, height: 960 },
     actionTimeout: 0,
