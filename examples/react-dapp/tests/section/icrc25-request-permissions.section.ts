@@ -14,7 +14,11 @@ export class Icrc25RequestPermissionsSection extends Section {
     await popup!.bringToFront()
     if (account.type === AccountType.MockedSigner)
       await popup!.click("#approve", { timeout: 20000 })
+    try {
+      await popup!.waitForEvent("close")
+    } catch (e) {
+      /* empty */
+    }
     await this.waitForResponse()
-    await popup!.waitForEvent("close", { timeout: 20000 })
   }
 }

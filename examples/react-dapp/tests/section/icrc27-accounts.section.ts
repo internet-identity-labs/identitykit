@@ -14,7 +14,11 @@ export class Icrc25AccountsSection extends Section {
     await popup!.click("#acc_0")
     await popup!.click("#acc_1")
     await popup!.click("#approve")
-    await popup!.waitForEvent("close")
+    try {
+      await popup!.waitForEvent("close")
+    } catch (e) {
+      /* empty */
+    }
   }
 
   async selectAccountsNFID(context: BrowserContext): Promise<void> {
@@ -23,6 +27,10 @@ export class Icrc25AccountsSection extends Section {
     await popup!.bringToFront()
     await popup!.click("//button[.//text()='Connect']")
     await popup!.click("//button[.//text()='Continue to app']")
-    await popup!.waitForEvent("close")
+    try {
+      await popup!.waitForEvent("close")
+    } catch (e) {
+      /* empty */
+    }
   }
 }
