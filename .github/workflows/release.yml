@@ -6,25 +6,25 @@ on:
   workflow_dispatch:
     inputs:
       network_name:
-        description: 'Choose applicable network'
+        description: "Choose applicable network"
         required: true
-        default: 'dev'
+        default: "dev"
         type: choice
-        options: 
+        options:
           - dev
       release_npm:
-        description: 'Run the NPM package release part'
+        description: "Run the NPM package release part"
         required: true
-        default: 'false'
+        default: "false"
         type: choice
-        options: 
+        options:
           - false
           - true
       force_deploy:
-        description: 'Force deploy'
-        default: 'false'
+        description: "Force deploy"
+        default: "false"
         type: choice
-        options: 
+        options:
           - false
           - true
       confirmation:
@@ -32,8 +32,12 @@ on:
         type: string
 
 env:
-  NETWORK_NAME: ${{ github.event.inputs.network_name || ( contains(github.event_name, 'release') && 'ic' || 'dev' ) }}
-  FORCE_DEPLOY: ${{ github.event.inputs.force_deploy || ( contains(github.event_name, 'release') && 'true' || 'false' ) }}
+  NETWORK_NAME:
+    ${{ github.event.inputs.network_name || ( contains(github.event_name, 'release') && 'ic' ||
+    'dev' ) }}
+  FORCE_DEPLOY:
+    ${{ github.event.inputs.force_deploy || ( contains(github.event_name, 'release') && 'true' ||
+    'false' ) }}
   CI_DEBUG: true
   RELEASE_TAG_REGEX: '^(0|[1-9][0-9]*)(\.(0|[1-9][0-9]*))?(\.(0|[1-9][0-9]*))?(-([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?(\+([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?$'
 
@@ -41,7 +45,9 @@ jobs:
   npm-publish:
     name: Build and Publish the NPM
     if: ${{ github.event.inputs.release_npm == 'true' || contains(github.event_name, 'release') }}
-    environment: ${{ github.event.inputs.network_name || ( contains(github.event_name, 'release') && 'ic' || 'dev' ) }}
+    environment:
+      ${{ github.event.inputs.network_name || ( contains(github.event_name, 'release') && 'ic' ||
+      'dev' ) }}
     runs-on: ubuntu-latest
 
     steps:
@@ -60,12 +66,12 @@ jobs:
         if: ${{ env.NETWORK_NAME == 'ic' }}
         run: |
           source "${{ github.workspace }}/ci_libs/CI_LIBS.sh"
-  
+
           if [ "${GITHUB_REF_TYPE}" != 'tag' ]; then
             ci_echo_error "Releasing to IC not from tag not allowed." >&2
             exit 1
           fi
-  
+
           # https://semver.org/
           if ! [[ "${GITHUB_REF_NAME}" =~ ${RELEASE_TAG_REGEX} ]]; then
             ci_echo_error "${GITHUB_REF_TYPE} : '${GITHUB_REF_NAME}' - is not SemVer correct (https://semver.org/)" >&2
@@ -141,8 +147,12 @@ jobs:
   playground-deploy:
     name: Build and Deploy Playground
     # needs: npm-publish
-    if: ${{ (github.event_name != 'release' && (!failure() || !cancelled())) || (github.event_name == 'release' && success()) }}
-    environment: ${{ github.event.inputs.network_name || ( contains(github.event_name, 'release') && 'ic' || 'dev' ) }}
+    if:
+      ${{ (github.event_name != 'release' && (!failure() || !cancelled())) || (github.event_name ==
+      'release' && success()) }}
+    environment:
+      ${{ github.event.inputs.network_name || ( contains(github.event_name, 'release') && 'ic' ||
+      'dev' ) }}
     runs-on:
       group: dfx-runner
     defaults:
@@ -150,125 +160,133 @@ jobs:
         shell: bash
 
     steps:
-    - name: INPUT => Checks force_deploy
-      if: (github.event.inputs.force_deploy == 'true') && (github.event.inputs.confirmation != 'Yes')
-      run: |
-        echo "[ERROR] You have try to force release without or with wrong confirmation phrase" >&2
-        exit 1
-
-    - name: Checkout repo
-      uses: actions/checkout@v4
-
-    - name: Checkout CI repo
-      uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.PAT }}
-        repository: internet-identity-labs/ci_libs
-        ref: main
-        path: ci_libs
-
-    - name: INPUT => Checks branch and network_name
-      if: ${{ env.NETWORK_NAME == 'ic' }}
-      run: |
-        source "${{ github.workspace }}/ci_libs/CI_LIBS.sh"
-
-        if [ "${GITHUB_REF_TYPE}" != 'tag' ]; then
-          ci_echo_error "Releasing to IC not from tag not allowed." >&2
+      - name: INPUT => Checks force_deploy
+        if:
+          (github.event.inputs.force_deploy == 'true') && (github.event.inputs.confirmation !=
+          'Yes')
+        run: |
+          echo "[ERROR] You have try to force release without or with wrong confirmation phrase" >&2
           exit 1
-        fi
 
-        # https://semver.org/
-        if ! [[ "${GITHUB_REF_NAME}" =~ ${RELEASE_TAG_REGEX} ]]; then
-          ci_echo_error "${GITHUB_REF_TYPE} : '${GITHUB_REF_NAME}' - is not SemVer correct (https://semver.org/)" >&2
-          exit 1
-        fi
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-        ci_echo_debug "Getting value from ./packages/identitykit/package.json" >&2
-        if ! VERSION=$(cat "${{ github.workspace }}/packages/identitykit/package.json" | jq -er ".version"); then
-          ci_echo_error "Can't found version data from ./packages/identitykit/package.json" >&2
-          exit 1
-        fi
+      - name: Checkout CI repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
+          repository: internet-identity-labs/ci_libs
+          ref: main
+          path: ci_libs
 
-        if ! [[ "${VERSION}" == ${GITHUB_REF_NAME} ]] && ! [ -n "${VERSION}" ]; then
-          ci_echo_error "package.json version '${VERSION}' not equal tag '${GITHUB_REF_NAME}'" >&2
-          exit 1
-        fi
+      - name: INPUT => Checks branch and network_name
+        if: ${{ env.NETWORK_NAME == 'ic' }}
+        run: |
+          source "${{ github.workspace }}/ci_libs/CI_LIBS.sh"
 
-        ci_echo_success "${GITHUB_REF_TYPE} : ${GITHUB_REF_NAME}"
+          if [ "${GITHUB_REF_TYPE}" != 'tag' ]; then
+            ci_echo_error "Releasing to IC not from tag not allowed." >&2
+            exit 1
+          fi
 
-    - name: Cache Node Modules
-      id: cache-node-modules
-      uses: actions/cache@v4
-      with:
-        path: |
-          **/node_modules
-          **/.eslintcache
-        key: playground-npm
+          # https://semver.org/
+          if ! [[ "${GITHUB_REF_NAME}" =~ ${RELEASE_TAG_REGEX} ]]; then
+            ci_echo_error "${GITHUB_REF_TYPE} : '${GITHUB_REF_NAME}' - is not SemVer correct (https://semver.org/)" >&2
+            exit 1
+          fi
 
-    - name: Versions
-      run: |
-        source ${{ github.workspace }}/ci_libs/CI_LIBS.sh
+          ci_echo_debug "Getting value from ./packages/identitykit/package.json" >&2
+          if ! VERSION=$(cat "${{ github.workspace }}/packages/identitykit/package.json" | jq -er ".version"); then
+            ci_echo_error "Can't found version data from ./packages/identitykit/package.json" >&2
+            exit 1
+          fi
 
-        ci_versions
+          if ! [[ "${VERSION}" == ${GITHUB_REF_NAME} ]] && ! [ -n "${VERSION}" ]; then
+            ci_echo_error "package.json version '${VERSION}' not equal tag '${GITHUB_REF_NAME}'" >&2
+            exit 1
+          fi
 
-    - name: PRE-BUILD => Populate env vars
-      run: |
-        source "${{ github.workspace }}/ci_libs/CI_LIBS.sh"
+          ci_echo_success "${GITHUB_REF_TYPE} : ${GITHUB_REF_NAME}"
 
-        CANISTER_BRANCH="${GITHUB_REF_NAME////-}"
+      - name: Cache Node Modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/node_modules
+            **/.eslintcache
+          key: playground-npm
 
-        ci_echo_debug "Populating env variables" >&2
-        echo "CANISTER_BRANCH=${CANISTER_BRANCH}" >> $GITHUB_ENV
-        echo "ID_NAME=dfx-identity"  >> $GITHUB_ENV
+      - name: Versions
+        run: |
+          source ${{ github.workspace }}/ci_libs/CI_LIBS.sh
 
-    - name: PRE-BUILD => Print Vars
-      run: |
-        source "${{ github.workspace }}/ci_libs/CI_LIBS.sh"
-        ci_echo_info "NETWORK_NAME=${NETWORK_NAME}" >&2
-        ci_echo_info "CANISTER_BRANCH=${CANISTER_BRANCH}" >&2
-        ci_echo_info "ID_NAME=${ID_NAME}" >&2
+          ci_versions
 
-    - name: PRE-BUILD => Write identity
-      env:
-        IDENTITY: ${{ secrets.DFX_IDENTITY }}
-      run: |
-        source ${{ github.workspace }}/ci_libs/CI_LIBS.sh
+      - name: PRE-BUILD => Populate env vars
+        run: |
+          source "${{ github.workspace }}/ci_libs/CI_LIBS.sh"
 
-        ID_PATH="$HOME/.config/dfx/identity/${ID_NAME}"
-        mkdir -p "${ID_PATH}"
-        echo "${IDENTITY}" | base64 -d > "${ID_PATH}/identity.pem"
-        dfx identity use "${ID_NAME}"      
+          CANISTER_BRANCH="${GITHUB_REF_NAME////-}"
 
-    - name: PRE-BUILD => DFX status.
-      run: |
-        dfx --version
+          ci_echo_debug "Populating env variables" >&2
+          echo "CANISTER_BRANCH=${CANISTER_BRANCH}" >> $GITHUB_ENV
+          echo "ID_NAME=dfx-identity"  >> $GITHUB_ENV
 
-    - name: Build
-      run: |
-        source "${{ github.workspace }}/ci_libs/CI_LIBS.sh"
+      - name: PRE-BUILD => Print Vars
+        run: |
+          source "${{ github.workspace }}/ci_libs/CI_LIBS.sh"
+          ci_echo_info "NETWORK_NAME=${NETWORK_NAME}" >&2
+          ci_echo_info "CANISTER_BRANCH=${CANISTER_BRANCH}" >&2
+          ci_echo_info "ID_NAME=${ID_NAME}" >&2
 
-        ci_echo_debug "npm i --frozen-lockfile" >&2
-        npm i --frozen-lockfile
+      - name: PRE-BUILD => Write identity
+        env:
+          IDENTITY: ${{ secrets.DFX_IDENTITY }}
+        run: |
+          source ${{ github.workspace }}/ci_libs/CI_LIBS.sh
 
-        ci_echo_debug "npm run build-playground:'${NETWORK_NAME}'" >&2
-        npm run build-playground:"${NETWORK_NAME}"
+          ID_PATH="$HOME/.config/dfx/identity/${ID_NAME}"
+          mkdir -p "${ID_PATH}"
+          echo "${IDENTITY}" | base64 -d > "${ID_PATH}/identity.pem"
+          dfx identity use "${ID_NAME}"
 
-    - name: DEPLOY => Deploy canisters.
-      run: |
-        source "${{ github.workspace }}/ci_libs/CI_LIBS.sh"
+      - name: PRE-BUILD => DFX status.
+        run: |
+          dfx --version
 
-        if [ "${NETWORK_NAME}" == 'ic' ]; then
-          CI_DEBUG="true"
-        fi
+      - name: Build
+        run: |
+          source "${{ github.workspace }}/ci_libs/CI_LIBS.sh"
 
-        if [ "${FORCE_DEPLOY}" == 'true' ]; then
-          FORCE="--yes"
-        fi
+          ci_echo_debug "npm i --frozen-lockfile" >&2
+          npm i --frozen-lockfile
 
-        dfx identity use "${ID_NAME}"
+          ci_echo_debug "npm run build-playground:'${NETWORK_NAME}'" >&2
+          npm run build-playground:"${NETWORK_NAME}"
 
-        # List of canisters to deploy
-        CANISTERS=("signer" "demo" "dapp" "signer-backend")
+          ci_echo_debug "npm run build-docs" >&2
+          npm run build-docs
+
+          ci_echo_debug "create folder containing build of landing, docs, demo and standards" >&2
+          mkdir deploy && rsync -a docs/out/ deploy/docs && rsync -a examples/react-dapp/dist/ deploy/standards && rsync -a examples/react-demo/dist/ deploy/demo && rsync -a landing/dist/ deploy
+
+      - name: DEPLOY => Deploy canisters.
+        run: |
+          source "${{ github.workspace }}/ci_libs/CI_LIBS.sh"
+
+          if [ "${NETWORK_NAME}" == 'ic' ]; then
+            CI_DEBUG="true"
+          fi
+
+          if [ "${FORCE_DEPLOY}" == 'true' ]; then
+            FORCE="--yes"
+          fi
+
+          dfx identity use "${ID_NAME}"
+
+          # List of canisters to deploy
+        CANISTERS=("signer" "identitykit" "signer-backend")
 
         for CANISTER_NAME in "${CANISTERS[@]}"; do
           ci_echo_info "Deploying '${CANISTER_NAME}'"

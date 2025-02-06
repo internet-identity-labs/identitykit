@@ -41,7 +41,7 @@ export const Header = () => {
         <div className="flex items-center space-x-2 sm:space-x-4">
           <a
             target="_blank"
-            href="https://2juva-miaaa-aaaag-ald5a-cai.icp0.io"
+            href="https://vehwg-aiaaa-aaaag-aciuq-cai.icp0.io/docs"
             className="text-sm font-bold hidden sm:block"
           >
             Dev docs
@@ -49,7 +49,9 @@ export const Header = () => {
           <img
             className="block sm:hidden cursor-pointer"
             src={resolvedTheme === "light" ? IconSvgDocsLight : IconSvgDocsDark}
-            onClick={() => window.open("https://2juva-miaaa-aaaag-ald5a-cai.icp0.io", "_blank")}
+            onClick={() =>
+              window.open("https://vehwg-aiaaa-aaaag-aciuq-cai.icp0.io/docs", "_blank")
+            }
             alt="docs"
           />
           {resolvedTheme === "light" ? (

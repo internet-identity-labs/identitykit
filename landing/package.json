@@ -1,0 +1,23 @@
+{
+  "name": "@nfid/landing",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --force --host",
+    "build": "tsc && vite build",
+    "build:preview": "vite preview",
+    "lint:check": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --fix --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "format:write": "prettier --write '**/*.{ts,tsx,md,mdx,css}'",
+    "lint-staged": "lint-staged --no-stash"
+  },
+  "lint-staged": {
+    "src/*.{js,jsx,ts,tsx} !(src/idl/*.ts)": [
+      "npm run lint:fix"
+    ],
+    "**/*.{js,jsx,ts,tsx,md,json}": [
+      "npm run format:write"
+    ]
+  }
+}
