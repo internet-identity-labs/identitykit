@@ -17,7 +17,6 @@ export class Icrc25AccountsSection extends Section {
     await waitUntil(async () => {
       return !context.pages().includes(popup!)
     })
-    await this.page.waitForTimeout(2000)
   }
 
   async selectAccountsNFID(context: BrowserContext): Promise<void> {
@@ -29,6 +28,5 @@ export class Icrc25AccountsSection extends Section {
     await waitUntil(async () => {
       return !context.pages().includes(popup!)
     })
-    await this.page.waitForTimeout(2000)
   }
 }
