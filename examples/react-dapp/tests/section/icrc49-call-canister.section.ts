@@ -34,7 +34,7 @@ export class Icrc49CallCanisterSection extends Section {
   }
 
   async openPopup(context: BrowserContext) {
-    await this.callCanisterSubmitButton.waitFor({ state: "visible" })
+    await this.callCanisterSubmitButton.waitFor({ state: "visible", timeout: 10000 })
     await waitForPopup(context, async () => await this.callCanisterSubmitButton.click())
     this.popup = context.pages()[context.pages().length - 1]
     await this.popup!.bringToFront()
@@ -43,7 +43,7 @@ export class Icrc49CallCanisterSection extends Section {
   async setSelectedMethod(method: Method) {
     this.selectedMethod = method.name
     await this.selectMethodButton.click()
-    await method.locator().click()
+    await method.locator().click({ timeout: 10000 })
   }
 
   async getRequestJson(): Promise<string> {
@@ -55,7 +55,7 @@ export class Icrc49CallCanisterSection extends Section {
 
   async getResponseJson(): Promise<string> {
     const json = await this.callCanisterResponseSection.textContent({
-      timeout: 10000,
+      timeout: 15000,
     })
     return json ? JSON.parse(json) : {}
   }
@@ -104,7 +104,7 @@ export class Icrc49CallCanisterSection extends Section {
     const header = await popup
       .locator(".items-center.mt-10.text-sm.text-center a")
       .locator("..")
-      .textContent({ timeout: 20000 })
+      .textContent()
 
     const bodyTexts = await popup
       .locator("div.flex.flex-col.flex-1.h-full p:visible")
@@ -120,7 +120,7 @@ export class Icrc49CallCanisterSection extends Section {
 
   async setCallCanisterOwner(sender: string): Promise<void> {
     const addressSelector = `#request-section-${this.section}-${this.selectedMethod} .cm-content .cm-line:nth-child(5) span`
-    await this.page.waitForSelector(addressSelector, { state: "visible" })
+    await this.page.waitForSelector(addressSelector, { state: "visible", timeout: 20000 })
     await this.page.evaluate(
       ({ selector, sender }: { selector: string; sender: string }) => {
         const element = document.querySelector(selector)

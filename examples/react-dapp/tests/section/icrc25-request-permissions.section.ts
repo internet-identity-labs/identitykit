@@ -14,8 +14,11 @@ export class Icrc25RequestPermissionsSection extends Section {
     await popup!.bringToFront()
     if (account.type === AccountType.MockedSigner)
       await popup!.click("#approve", { timeout: 20000 })
-    await waitUntil(async () => {
-      return !context.pages().includes(popup!)
-    })
+    await waitUntil(
+      async () => {
+        return !context.pages().includes(popup!)
+      },
+      { timeout: 15000, timeoutMsg: "Popup wasn't closed" }
+    )
   }
 }

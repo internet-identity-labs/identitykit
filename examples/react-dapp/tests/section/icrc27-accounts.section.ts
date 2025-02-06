@@ -14,19 +14,25 @@ export class Icrc25AccountsSection extends Section {
     await popup!.click("#acc_0")
     await popup!.click("#acc_1")
     await popup!.click("#approve")
-    await waitUntil(async () => {
-      return !context.pages().includes(popup!)
-    })
+    await waitUntil(
+      async () => {
+        return !context.pages().includes(popup!)
+      },
+      { timeout: 15000, timeoutMsg: "Popup wasn't closed" }
+    )
   }
 
   async selectAccountsNFID(context: BrowserContext): Promise<void> {
     await waitForPopup(context, async () => await this.submitButton.click())
     const popup = context.pages()[context.pages().length - 1]
     await popup!.bringToFront()
-    await popup!.click("//button[.//text()='Connect']")
-    await popup!.click("//button[.//text()='Continue to app']")
-    await waitUntil(async () => {
-      return !context.pages().includes(popup!)
-    })
+    await popup!.click("//button[.//text()='Connect']", { timeout: 10000 })
+    await popup!.click("//button[.//text()='Continue to app']", { timeout: 10000 })
+    await waitUntil(
+      async () => {
+        return !context.pages().includes(popup!)
+      },
+      { timeout: 15000, timeoutMsg: "Popup wasn't closed" }
+    )
   }
 }

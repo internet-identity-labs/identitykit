@@ -99,7 +99,7 @@ for (const account of accounts) {
         )
         await section.openPopup(context)
         await section.checkPopupTextNFID(ExpectedTexts.NFID.NoConsentCaseCanisterCall)
-        await section.nfidApproveButton.click()
+        await section.nfidApproveButton.click({ timeout: 10000 })
       }
 
       await section.waitForResponse()
@@ -133,7 +133,7 @@ for (const account of accounts) {
         )
         await section.openPopup(context)
         await section.checkPopupTextNFID(ExpectedTexts.NFID.ConsentCaseCanisterCall)
-        await section.nfidApproveButton.click()
+        await section.nfidApproveButton.click({ timeout: 10000 })
       }
 
       await section.waitForResponse()
@@ -169,7 +169,7 @@ for (const account of accounts) {
         )
         await section.openPopup(context)
         await section.checkPopupTextNFID(ExpectedTexts.NFID.CanisterCallIcrc2ApproveRequest)
-        await section.nfidApproveButton.click()
+        await section.nfidApproveButton.click({ timeout: 10000 })
       }
 
       await section.waitForResponse()
@@ -204,7 +204,7 @@ for (const account of accounts) {
         )
         await section.openPopup(context)
         await section.checkPopupTextNFID(ExpectedTexts.NFID.CanisterCallIcrc1TransferRequest)
-        await section.nfidApproveButton.click()
+        await section.nfidApproveButton.click({ timeout: 10000 })
       }
 
       await section.waitForResponse()
