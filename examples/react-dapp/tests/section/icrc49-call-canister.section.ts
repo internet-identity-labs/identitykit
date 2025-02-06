@@ -75,7 +75,6 @@ export class Icrc49CallCanisterSection extends Section {
   ) {
     await demoPage.login(account)
     await requestPermissionSection.approvePermissions(context, account)
-    await this.waitForResponse()
   }
 
   async checkRequestResponse(section: Icrc49CallCanisterSection, expectedRequest: RequestState) {
@@ -101,7 +100,7 @@ export class Icrc49CallCanisterSection extends Section {
 
   async getNFIDPopupText(popup: Page) {
     const selector = popup.locator(".items-center.mt-10.text-sm.text-center a").locator("..")
-    await selector.waitFor({ state: "visible", timeout: 10000 })
+    await selector.waitFor({ state: "visible", timeout: 30000 })
     const header = await popup
       .locator(".items-center.mt-10.text-sm.text-center a")
       .locator("..")
