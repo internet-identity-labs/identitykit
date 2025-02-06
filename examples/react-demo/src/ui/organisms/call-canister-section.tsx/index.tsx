@@ -54,7 +54,7 @@ export function CallCanisterSection() {
         label="Request examples"
         options={CALL_CANISTER_METHODS.filter(
           (k) =>
-            import.meta.env.VITE_ENVIRONMENT === "dev" ||
+            import.meta.env.VITE_ENVIRONMENT !== "ic" ||
             k !== CallCanisterMethod.icrc2_transfer_from
         ).map((k) => ({
           label: CallCanisterMethodTitle[k],

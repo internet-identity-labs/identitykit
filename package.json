@@ -8,6 +8,7 @@
   "scripts": {
     "build": "echo '💀 DONT REMOVE THIS 💀'",
     "build-ci": "turbo build",
+    "build-landing": "cd ./landing && npm run build",
     "build-identitykit": "cd ./packages/identitykit && npm run build-prod",
     "build-identitykit:dev": "cd ./packages/identitykit && npm run build-dev",
     "build-docs": "turbo build --force --filter='@nfid/docs'",

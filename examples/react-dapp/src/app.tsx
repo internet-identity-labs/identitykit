@@ -1,4 +1,3 @@
-import { Header } from "./ui/molecules"
 import { ToastContainer } from "react-toastify"
 import { IdentityKitProvider, IdentityKitTheme } from "@nfid/identitykit/react"
 import {
@@ -11,6 +10,7 @@ import {
   OISY,
 } from "@nfid/identitykit"
 import { useTheme } from "next-themes"
+import { Header } from "./ui/molecules"
 import {
   Icrc25PermissionsSection,
   Icrc25RequestPermissionsSection,
@@ -28,7 +28,7 @@ function App() {
   const { resolvedTheme } = useTheme()
   const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
   const signers = [nfidw, Plug, InternetIdentity, OISY, Stoic].concat(
-    environment === "dev"
+    environment !== "ic"
       ? [
           {
             ...MockedSigner,

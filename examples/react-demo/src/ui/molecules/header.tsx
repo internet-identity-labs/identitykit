@@ -21,12 +21,18 @@ export const Header = () => {
     <div className="mb-3">
       <div className="flex items-center justify-between h-[68px]">
         <div className="flex flex-col relative">
-          <img className="dark:hidden w-[130px] sm:w-[140px] md:w-auto" src={IconLogo} alt="nfid" />
-          <img
-            className="hidden dark:block w-[130px] sm:w-[140px] md:w-auto"
-            src={IconLogoWhite}
-            alt="nfid"
-          />
+          <a href="https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io" target="_blank">
+            <img
+              className="dark:hidden w-[130px] sm:w-[140px] md:w-auto"
+              src={IconLogo}
+              alt="nfid"
+            />
+            <img
+              className="hidden dark:block w-[130px] sm:w-[140px] md:w-auto"
+              src={IconLogoWhite}
+              alt="nfid"
+            />
+          </a>
           <a
             target="_blank"
             href="https://www.npmjs.com/package/@nfid/identitykit"
@@ -38,7 +44,7 @@ export const Header = () => {
         <div className="flex items-center space-x-2 sm:space-x-4">
           <a
             target="_blank"
-            href="https://2juva-miaaa-aaaag-ald5a-cai.icp0.io"
+            href="https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io/docs"
             className="text-sm font-bold hidden sm:block"
           >
             Dev docs
@@ -46,7 +52,9 @@ export const Header = () => {
           <img
             className="block sm:hidden cursor-pointer"
             src={resolvedTheme === "light" ? IconSvgDocsLight : IconSvgDocsDark}
-            onClick={() => window.open("https://2juva-miaaa-aaaag-ald5a-cai.icp0.io", "_blank")}
+            onClick={() =>
+              window.open("https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io/docs", "_blank")
+            }
             alt="docs"
           />
           {resolvedTheme === "light" ? (

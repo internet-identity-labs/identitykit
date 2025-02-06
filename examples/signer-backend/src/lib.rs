@@ -16,9 +16,9 @@ fn icrc28_trusted_origins() -> Icrc28TrustedOriginsResponse {
         String::from("http://localhost:3001"),
         String::from("http://localhost:3002"),
         String::from("https://rawyr-oqaaa-aaaal-ajlxa-cai.icp0.io"),
-        String::from("https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io"),
+        String::from("https://rawyr-oqaaa-aaaal-ajlxa-cai.icp0.io"),
         String::from("https://mquaw-4yaaa-aaaap-abwlq-cai.icp0.io"),
-        String::from("https://vehwg-aiaaa-aaaag-aciuq-cai.icp0.io"),
+        String::from("https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io"),
     ];
 
     return Icrc28TrustedOriginsResponse { trusted_origins }
