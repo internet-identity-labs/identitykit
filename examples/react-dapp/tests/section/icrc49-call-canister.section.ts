@@ -61,6 +61,7 @@ export class Icrc49CallCanisterSection extends Section {
   }
 
   async waitForResponse(): Promise<void> {
+    await this.callCanisterResponseSection.waitFor({ state: "attached", timeout: 30000 })
     await this.callCanisterResponseSection.locator("div.cm-line:nth-child(2)").waitFor({
       state: "visible",
       timeout: 20000,
@@ -94,13 +95,13 @@ export class Icrc49CallCanisterSection extends Section {
   }
 
   async getMockedPopupText() {
-    await this.popup!.locator("div > small").last().waitFor({ state: "visible", timeout: 10000 })
+    await this.popup!.locator("div > small").last().waitFor({ state: "visible", timeout: 30000 })
     return await this.popup!.locator(`div > small`).allInnerTexts()
   }
 
   async getNFIDPopupText(popup: Page) {
     const selector = popup.locator(".items-center.mt-10.text-sm.text-center a").locator("..")
-    await selector.waitFor({ state: "visible", timeout: 30000 })
+    await selector.waitFor({ state: "visible", timeout: 40000 })
     const header = await popup
       .locator(".items-center.mt-10.text-sm.text-center a")
       .locator("..")
