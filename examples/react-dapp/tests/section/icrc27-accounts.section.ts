@@ -1,6 +1,6 @@
 import { BrowserContext, Page } from "@playwright/test"
 import { Section } from "./section.js"
-import { waitForPopup } from "../helpers/helpers.js"
+import { waitForPopup, waitUntil } from "../helpers/helpers.js"
 
 export class Icrc25AccountsSection extends Section {
   constructor(public readonly page: Page) {
@@ -14,11 +14,9 @@ export class Icrc25AccountsSection extends Section {
     await popup!.click("#acc_0")
     await popup!.click("#acc_1")
     await popup!.click("#approve")
-    try {
-      await popup!.waitForEvent("close")
-    } catch (e) {
-      /* empty */
-    }
+    await waitUntil(async () => {
+      return !context.pages().includes(popup!)
+    })
   }
 
   async selectAccountsNFID(context: BrowserContext): Promise<void> {
@@ -27,10 +25,8 @@ export class Icrc25AccountsSection extends Section {
     await popup!.bringToFront()
     await popup!.click("//button[.//text()='Connect']")
     await popup!.click("//button[.//text()='Continue to app']")
-    try {
-      await popup!.waitForEvent("close")
-    } catch (e) {
-      /* empty */
-    }
+    await waitUntil(async () => {
+      return !context.pages().includes(popup!)
+    })
   }
 }

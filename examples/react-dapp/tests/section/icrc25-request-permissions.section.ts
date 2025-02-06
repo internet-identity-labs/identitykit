@@ -1,7 +1,7 @@
 import { BrowserContext, Page } from "@playwright/test"
 import { Section } from "./section.js"
 import { Account, AccountType } from "../page/standards.page.js"
-import { waitForPopup } from "../helpers/helpers.js"
+import { waitForPopup, waitUntil } from "../helpers/helpers.js"
 
 export class Icrc25RequestPermissionsSection extends Section {
   constructor(public readonly page: Page) {
@@ -14,11 +14,9 @@ export class Icrc25RequestPermissionsSection extends Section {
     await popup!.bringToFront()
     if (account.type === AccountType.MockedSigner)
       await popup!.click("#approve", { timeout: 20000 })
-    try {
-      await popup!.waitForEvent("close")
-    } catch (e) {
-      /* empty */
-    }
+    await waitUntil(async () => {
+      return !context.pages().includes(popup!)
+    })
     await this.waitForResponse()
   }
 }
