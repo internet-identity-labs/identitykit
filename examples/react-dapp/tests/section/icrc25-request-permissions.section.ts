@@ -17,6 +17,7 @@ export class Icrc25RequestPermissionsSection extends Section {
     await waitUntil(async () => {
       return !context.pages().includes(popup!)
     })
+    await this.page.waitForTimeout(2000)
     await this.waitForResponse()
   }
 }
