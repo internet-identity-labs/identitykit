@@ -1,7 +1,7 @@
 import { expect, test as base } from "@playwright/test"
-import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
-import { AccountType, StandardsPage } from "./page/standards.page.ts"
-import { ExpectedTexts } from "./section/expectedTexts.ts"
+import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.js"
+import { AccountType, StandardsPage } from "./page/standards.page.js"
+import { ExpectedTexts } from "./section/expectedTexts.js"
 
 type Fixtures = {
   section: Icrc25RequestPermissionsSection
@@ -39,9 +39,10 @@ for (const account of accounts) {
     test(`should request full list of permissions for ${account.type} user`, async ({
       section,
       demoPage,
+      context,
     }) => {
       await demoPage.login(account)
-      await section.approvePermissions(account)
+      await section.approvePermissions(context, account)
       const actualResponse = await section.getResponseJson()
       expect(actualResponse).toStrictEqual(
         account.type === AccountType.MockedSigner

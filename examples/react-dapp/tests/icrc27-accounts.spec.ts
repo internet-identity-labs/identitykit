@@ -1,8 +1,8 @@
 import { expect, Page, test as base } from "@playwright/test"
-import { AccountType, StandardsPage } from "./page/standards.page.ts"
-import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
-import { Icrc25AccountsSection } from "./section/icrc27-accounts.section.ts"
-import { ExpectedTexts } from "./section/expectedTexts.ts"
+import { AccountType, StandardsPage } from "./page/standards.page.js"
+import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.js"
+import { Icrc25AccountsSection } from "./section/icrc27-accounts.section.js"
+import { ExpectedTexts } from "./section/expectedTexts.js"
 
 type Fixtures = {
   section: Icrc25AccountsSection
@@ -60,10 +60,10 @@ for (const account of accounts) {
     }) => {
       await nfidPage.title()
       await demoPage.login(account)
-      await requestPermissionSection.approvePermissions(account)
+      await requestPermissionSection.approvePermissions(context, account)
 
       if (account.type === AccountType.MockedSigner) await section.selectAccountsMocked(context)
-      else await section.selectAccountsNFID(demoPage.page, context)
+      else await section.selectAccountsNFID(context)
 
       await section.waitForResponse()
       const actualResponse = await section.getResponseJson()

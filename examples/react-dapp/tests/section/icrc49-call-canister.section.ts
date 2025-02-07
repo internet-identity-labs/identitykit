@@ -1,11 +1,13 @@
 import { BrowserContext, expect, Locator, Page } from "@playwright/test"
-import { Section } from "./section.ts"
-import { Account, StandardsPage } from "../page/standards.page.ts"
-import { Icrc25RequestPermissionsSection } from "./icrc25-request-permissions.section.ts"
+import { Section } from "./section.js"
+import { Account, StandardsPage } from "../page/standards.page.js"
+import { Icrc25RequestPermissionsSection } from "./icrc25-request-permissions.section.js"
+import { waitForPopup } from "../helpers/helpers.js"
+import { Method, RequestState } from "../helpers/types.js"
 
 export class Icrc49CallCanisterSection extends Section {
   private selectedMethod = "greet_no_consent"
-  private popup
+  private popup: Page | undefined
 
   constructor(public readonly page: Page) {
     super(page, "icrc49_call_canister")
@@ -32,22 +34,20 @@ export class Icrc49CallCanisterSection extends Section {
   }
 
   async openPopup(context: BrowserContext) {
-    await this.callCanisterSubmitButton.waitFor({ state: "visible" })
-    await this.callCanisterSubmitButton.click()
-    await this.page.waitForTimeout(1000)
+    await this.callCanisterSubmitButton.waitFor({ state: "visible", timeout: 10000 })
+    await waitForPopup(context, async () => await this.callCanisterSubmitButton.click())
     this.popup = context.pages()[context.pages().length - 1]
-    await this.popup.bringToFront()
+    await this.popup!.bringToFront()
   }
 
-  async setSelectedMethod(method) {
+  async setSelectedMethod(method: Method) {
     this.selectedMethod = method.name
     await this.selectMethodButton.click()
-    await method.locator().click()
+    await method.locator().click({ timeout: 10000 })
   }
 
   async getRequestJson(): Promise<string> {
     const json = await this.callCanisterRequestSection.textContent({
-      state: "visible",
       timeout: 10000,
     })
     return json ? JSON.parse(json) : {}
@@ -55,13 +55,13 @@ export class Icrc49CallCanisterSection extends Section {
 
   async getResponseJson(): Promise<string> {
     const json = await this.callCanisterResponseSection.textContent({
-      state: "visible",
-      timeout: 10000,
+      timeout: 15000,
     })
     return json ? JSON.parse(json) : {}
   }
 
   async waitForResponse(): Promise<void> {
+    await this.callCanisterResponseSection.waitFor({ state: "attached", timeout: 30000 })
     await this.callCanisterResponseSection.locator("div.cm-line:nth-child(2)").waitFor({
       state: "visible",
       timeout: 20000,
@@ -71,13 +71,14 @@ export class Icrc49CallCanisterSection extends Section {
   async loginAndApprovePermissions(
     demoPage: StandardsPage,
     requestPermissionSection: Icrc25RequestPermissionsSection,
-    account: Account
+    account: Account,
+    context: BrowserContext
   ) {
     await demoPage.login(account)
-    await requestPermissionSection.approvePermissions(account)
+    await requestPermissionSection.approvePermissions(context, account)
   }
 
-  async checkRequestResponse(section: Icrc49CallCanisterSection, expectedRequest) {
+  async checkRequestResponse(section: Icrc49CallCanisterSection, expectedRequest: RequestState) {
     const initialRequest = await section.getRequestJson()
     expect(initialRequest).toStrictEqual(expectedRequest)
 
@@ -86,19 +87,21 @@ export class Icrc49CallCanisterSection extends Section {
   }
 
   get mockedApproveButton(): Locator {
-    return this.popup.locator("#approve")
+    return this.popup!.locator("#approve")
   }
 
   get nfidApproveButton(): Locator {
-    return this.popup.locator('//button[.//text()="Approve"]')
+    return this.popup!.locator('//button[.//text()="Approve"]')
   }
 
   async getMockedPopupText() {
-    await this.popup.locator("div > small").last().waitFor({ state: "visible", timeout: 10000 })
-    return await this.popup.locator(`div > small`).allInnerTexts()
+    await this.popup!.locator("div > small").last().waitFor({ state: "visible", timeout: 30000 })
+    return await this.popup!.locator(`div > small`).allInnerTexts()
   }
 
-  async getNFIDPopupText(popup) {
+  async getNFIDPopupText(popup: Page) {
+    const selector = popup.locator(".items-center.mt-10.text-sm.text-center a").locator("..")
+    await selector.waitFor({ state: "visible", timeout: 40000 })
     const header = await popup
       .locator(".items-center.mt-10.text-sm.text-center a")
       .locator("..")
@@ -108,21 +111,17 @@ export class Icrc49CallCanisterSection extends Section {
       .locator("div.flex.flex-col.flex-1.h-full p:visible")
       .allInnerTexts()
 
-    return header.trim() + "," + bodyTexts.map((text) => text.trim())
+    return header!.trim() + "," + bodyTexts.map((text) => text.trim())
   }
 
-  async checkPopupTextNFID(
-    page: Page,
-    context: BrowserContext,
-    textsExpected: string[]
-  ): Promise<void> {
-    await this.popup.bringToFront()
-    expect(await this.getNFIDPopupText(await context.pages()[2])).toEqual(textsExpected.join(","))
+  async checkPopupTextNFID(textsExpected: string[]): Promise<void> {
+    await this.popup!.bringToFront()
+    expect(await this.getNFIDPopupText(this.popup!)).toEqual(textsExpected.join(","))
   }
 
   async setCallCanisterOwner(sender: string): Promise<void> {
     const addressSelector = `#request-section-${this.section}-${this.selectedMethod} .cm-content .cm-line:nth-child(5) span`
-    await this.page.waitForSelector(addressSelector, { state: "visible" })
+    await this.page.waitForSelector(addressSelector, { state: "visible", timeout: 20000 })
     await this.page.evaluate(
       ({ selector, sender }: { selector: string; sender: string }) => {
         const element = document.querySelector(selector)

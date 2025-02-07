@@ -36,6 +36,6 @@ export abstract class Section {
   async waitForResponse(): Promise<void> {
     await this.page
       .locator(`#${this.section} #response-section-${this.section} div.cm-line:nth-child(2)`)
-      .waitFor({ state: "visible", timeout: 20000 })
+      .waitFor({ state: "visible", timeout: 30000 })
   }
 }

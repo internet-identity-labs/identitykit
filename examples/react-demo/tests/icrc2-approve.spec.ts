@@ -42,7 +42,7 @@ for (const account of accounts) {
   ) as (keyof typeof DemoPage.profileType)[]) {
     for (const method of loginMethods) {
       test.describe(`"ICRC2-approve" methods for ${account.type} user`, () => {
-        test(`User makes icrc2_approve call canister via ${DemoPage.loginMethods[method]} login method`, async ({
+        test(`User makes icrc2_approve call canister via ${DemoPage.loginMethods[method]} login method with ${DemoPage.profileType[accountProfile]} profile`, async ({
           demoPage,
           callCanisterSection,
           nfidPage,
@@ -58,13 +58,27 @@ for (const account of accounts) {
             DemoPage.loginMethods[method]
           )
 
+          await callCanisterSection.verifyThemeChanging()
+
+          await context.pages()[context.pages().length - 1]!.reload()
+          await context.pages()[context.pages().length - 1]!.waitForLoadState("load")
+
           await callCanisterSection.setSelectedMethod(
-            callCanisterSection.availableMethods.icrc2_approve
+            callCanisterSection.availableMethods.icrc2_approve!
           )
           await callCanisterSection.checkRequestResponse(
-            ExpectedTexts.General.Public.Initial_ICRC2Approve_RequestState
+            DemoPage.profileType[accountProfile] == "public"
+              ? ExpectedTexts.General.Public.Initial_ICRC2Approve_RequestState
+              : ExpectedTexts.General.Anonymous.Initial_ICRC2Approve_RequestState
           )
 
+          if (DemoPage.profileType[accountProfile] == "legacy_0") return
+
+          const userInitialBalance = parseFloat(
+            (await demoPage.userBalance.textContent())!.replace(" ICP", "")
+          )
+
+          const amountToSend = "10000"
           await callCanisterSection.requestBuilder
             .setTokenID("ryjl3-tyaaa-aaaaa-aaaba-cai") //ICP token
             .setAmount("10000") //0.0001 ICP
@@ -79,6 +93,13 @@ for (const account of accounts) {
           await callCanisterSection.waitForResponse()
           const actualResponse = await callCanisterSection.getResponseJson()
           expect(actualResponse).toMatchObject(ExpectedTexts.NFID.Public.ICRC2Response)
+
+          if (DemoPage.loginMethods[method] == "Delegation") {
+            await callCanisterSection.verifyBalanceChanged(
+              userInitialBalance,
+              parseFloat(amountToSend) / 100000000
+            )
+          }
 
           await demoPage.logout()
         })

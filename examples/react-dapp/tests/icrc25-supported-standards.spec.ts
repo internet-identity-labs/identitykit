@@ -1,7 +1,7 @@
 import { expect, test as base } from "@playwright/test"
-import { StandardsPage } from "./page/standards.page.ts"
-import { Icrc25SupportedStandardsSection } from "./section/icrc25-supported-standards.section.ts"
-import { ExpectedTexts } from "./section/expectedTexts.ts"
+import { StandardsPage } from "./page/standards.page.js"
+import { Icrc25SupportedStandardsSection } from "./section/icrc25-supported-standards.section.js"
+import { ExpectedTexts } from "./section/expectedTexts.js"
 
 type Fixtures = {
   section: Icrc25SupportedStandardsSection

@@ -94,6 +94,33 @@ export class ExpectedTexts {
           arg: "RElETAZte2wB4KmzAnhuAGwB1vaOgAF4bgNsBvvKAQDG/LYCAbqJ5cIEeKLelOsGAoLz85EMBNijjKgNAQEFIOryWM4M9NaQ7WNXeb3wjbfURB8JbLIb5aI3/N+SxHRgECcAAAAAAAAAAAAAAAAAAAAAAOH1BQAAAAA=",
         },
       },
+      Initial_ICRC1Transfer_RequestState: {
+        method: "icrc49_call_canister",
+        params: {
+          canisterId: "etik7-oiaaa-aaaar-qagia-cai",
+          sender: "pyoac-sn7yx-gvu25-p2ni3-tja44-xvrrw-vzwmg-yxfsv-o3ykq-nhu4a-qqe",
+          method: "icrc1_transfer",
+          arg: "RElETAZte24AbAKzsNrDA2ithsqDBQFufW54bAb7ygECxvy2AgO6ieXCBAGi3pTrBgGC8/ORDATYo4yoDX0BBQEdXdZAg85gOc3s6DkTiv7FBn9RDHSPT6rgmlsBGgIAAAAAAICAgPXduOvktWw=",
+        },
+      },
+      Initial_IdentityKitDemoCall_RequestState: {
+        method: "icrc49_call_canister",
+        params: {
+          canisterId: "do25a-dyaaa-aaaak-qifua-cai",
+          sender: "pyoac-sn7yx-gvu25-p2ni3-tja44-xvrrw-vzwmg-yxfsv-o3ykq-nhu4a-qqe",
+          method: "greet_no_consent",
+          arg: "RElETAABcQJtZQ==",
+        },
+      },
+      Initial_LongRunningUpdateCall_RequestState: {
+        method: "icrc49_call_canister",
+        params: {
+          canisterId: "do25a-dyaaa-aaaak-qifua-cai",
+          sender: "pyoac-sn7yx-gvu25-p2ni3-tja44-xvrrw-vzwmg-yxfsv-o3ykq-nhu4a-qqe",
+          method: "greet_update_call",
+          arg: "RElETAABcQJtZQ==",
+        },
+      },
       DelegationTabResponse: {
         _inner: expect.anything(),
         _delegation: {
@@ -119,15 +146,6 @@ export class ExpectedTexts {
           },
         },
       ],
-      Initial_ICRC1Transfer_RequestState: {
-        method: "icrc49_call_canister",
-        params: {
-          canisterId: "etik7-oiaaa-aaaar-qagia-cai",
-          sender: "pyoac-sn7yx-gvu25-p2ni3-tja44-xvrrw-vzwmg-yxfsv-o3ykq-nhu4a-qqe",
-          method: "icrc1_transfer",
-          arg: "RElETAZte24AbAKzsNrDA2ithsqDBQFufW54bAb7ygECxvy2AgO6ieXCBAGi3pTrBgGC8/ORDATYo4yoDX0BBQEdXdZAg85gOc3s6DkTiv7FBn9RDHSPT6rgmlsBGgIAAAAAAICAgPXduOvktWw=",
-        },
-      },
     },
   }
 
