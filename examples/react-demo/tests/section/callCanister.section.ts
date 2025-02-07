@@ -1,9 +1,17 @@
 import { BrowserContext, expect, Locator, Page } from "@playwright/test"
-import { RequestParametersBuilder } from "../helpers/requestParametersBuilder.ts"
+import { RequestParametersBuilder } from "../helpers/requestParametersBuilder.js"
 import { waitForPopup, waitUntil } from "../helpers/helpers.js"
+import { Method, RequestState } from "../helpers/types.js"
+import { DemoPage } from "../page/demoPage.js"
 
-export class CallCanisterSection {
-  constructor(public readonly page: Page) {}
+export class CallCanisterSection extends DemoPage {
+  private popup: Page | undefined
+  requestBuilder: RequestParametersBuilder
+
+  constructor(public readonly page: Page) {
+    super(page)
+    this.requestBuilder = new RequestParametersBuilder(this.page, () => this.selectedMethod)
+  }
 
   private _selectedMethod = "icrc2_approve"
   get selectedMethod(): string {
@@ -13,9 +21,6 @@ export class CallCanisterSection {
   set selectedMethod(value: string) {
     this._selectedMethod = value
   }
-
-  requestBuilder = new RequestParametersBuilder(this.page, () => this.selectedMethod)
-  private popup
 
   get selectMethodButton(): Locator {
     return this.page.locator("#select-request")
@@ -34,10 +39,10 @@ export class CallCanisterSection {
   }
 
   get NFIDApproveButton(): Locator {
-    return this.popup.locator('//button[.//text()="Approve"]')
+    return this.popup!.locator('//button[.//text()="Approve"]')
   }
 
-  availableMethods = {
+  availableMethods: { [key: string]: Method } = {
     icrc2_approve: {
       name: "icrc2_approve",
       locator: (): Locator => this.page.locator("#option_ICRC-2approve"),
@@ -66,15 +71,14 @@ export class CallCanisterSection {
     },
   } as const
 
-  async setSelectedMethod(method) {
+  async setSelectedMethod(method: Method) {
     this.selectedMethod = method.name
-    await this.selectMethodButton.click()
-    await method.locator().click()
+    await this.selectMethodButton.click({ timeout: 20000 })
+    await method.locator().click({ timeout: 5000 })
   }
 
   async getRequestJson(): Promise<string> {
     const json = await this.callCanisterRequestSection.textContent({
-      state: "visible",
       timeout: 10000,
     })
     return json ? JSON.parse(json) : {}
@@ -82,7 +86,6 @@ export class CallCanisterSection {
 
   async getResponse(): Promise<string | null> {
     return await this.callCanisterResponseSection.textContent({
-      state: "visible",
       timeout: 10000,
     })
   }
@@ -114,7 +117,7 @@ export class CallCanisterSection {
     )
   }
 
-  async checkRequestResponse(expectedRequest) {
+  async checkRequestResponse(expectedRequest: RequestState) {
     const initialRequest = await this.getRequestJson()
     expect(initialRequest).toStrictEqual(expectedRequest)
 
@@ -122,24 +125,83 @@ export class CallCanisterSection {
     expect(initialResponse).toStrictEqual({})
   }
 
-  async checkNFIDPopupText(expectedText): Promise<void> {
-    await this.popup.bringToFront()
-    const header = await this.popup
-      .locator(".items-center.mt-10.text-sm.text-center a")
+  async checkNFIDPopupText(expectedText: RequestState): Promise<void> {
+    await this.popup!.bringToFront()
+    const header = await this.popup!.locator(".items-center.mt-10.text-sm.text-center a")
       .locator("..")
       .textContent()
-    const bodyTexts = await this.popup
-      .locator("div.flex.flex-col.flex-1.h-full p:visible")
-      .allInnerTexts()
+    const bodyTexts = await this.popup!.locator(
+      "div.flex.flex-col.flex-1.h-full p:visible"
+    ).allInnerTexts()
 
-    expect(header.trim() + "," + bodyTexts.map((text) => text.trim())).toEqual(
-      expectedText.join(",")
-    )
+    if (Array.isArray(expectedText)) {
+      expect(header!.trim() + "," + bodyTexts.map((text: string) => text.trim()).join(",")).toEqual(
+        expectedText.join(",")
+      )
+    } else {
+      throw new Error("Invalid type of expectedText. Expected string[]")
+    }
   }
 
   async clickSubmitButtonAndGetPopup(context: BrowserContext) {
     await waitForPopup(context, async () => await this.callCanisterSubmitButton.click())
     this.popup = context.pages()[context.pages().length - 1]
-    await this.popup.bringToFront()
+    await this.popup!.bringToFront()
+  }
+
+  async verifyThemeChanging() {
+    const themeColor = await this.getCurrentThemeColor()
+    await this.changeThemeButton.click()
+    const newThemeColor = await this.getCurrentThemeColor()
+    await this.changeThemeButton.click()
+    const previousThemeColor = await this.getCurrentThemeColor()
+    expect(themeColor).toEqual("rgb(255, 255, 255)")
+    expect(newThemeColor).toEqual("rgb(20, 21, 24)")
+    expect(previousThemeColor).toEqual("rgb(255, 255, 255)")
+  }
+
+  async getCurrentThemeColor(): Promise<string> {
+    return this.page
+      .locator("#themeColor")
+      .evaluate((it) => getComputedStyle(it).getPropertyValue("background-color"))
+  }
+
+  async verifyBalanceChanged(initialBalance: number, changeAmount: number) {
+    const expectedBalance = Math.round((initialBalance - changeAmount) * 100000000) / 100000000
+
+    await waitUntil(
+      async () => {
+        await this.page.reload()
+        await this.page.waitForLoadState("load")
+
+        await waitUntil(
+          async () => {
+            await waitUntil(
+              async () => {
+                return (
+                  (await this.userBalance.allInnerTexts()).join(" ").replace(/\s+/g, " ").trim() !==
+                  "Connect wallet"
+                )
+              },
+              { timeout: 5000, timeoutMsg: "User was logged out after page reload" }
+            )
+
+            return (await this.userBalance.innerText()) !== ""
+          },
+          { timeout: 5000, timeoutMsg: "Balance wasn't displayed" }
+        )
+
+        const currentBalance = parseFloat(
+          (await this.userBalance.textContent())!.replace(" ICP", "")
+        )
+        return expectedBalance - currentBalance >= 0
+      },
+      {
+        interval: 2000,
+        timeout: 120000,
+        timeoutMsg: `Balance wasn't changed. Expected ${expectedBalance} ICP, 
+      but was ${await this.userBalance.innerText()}`,
+      }
+    )
   }
 }

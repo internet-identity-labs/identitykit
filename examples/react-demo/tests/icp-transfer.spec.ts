@@ -42,7 +42,7 @@ for (const account of accounts) {
   ) as (keyof typeof DemoPage.profileType)[]) {
     for (const method of loginMethods) {
       test.describe(`"ICP-transfer" methods for ${account.type} user`, () => {
-        test(`User makes icp_transfer call canister via ${DemoPage.loginMethods[method]} login method with ${accountProfile} profile`, async ({
+        test(`User makes icp_transfer call canister via ${DemoPage.loginMethods[method]} login method with ${DemoPage.profileType[accountProfile]} profile`, async ({
           demoPage,
           nfidPage,
           callCanisterSection,
@@ -58,8 +58,13 @@ for (const account of accounts) {
             DemoPage.loginMethods[method]
           )
 
+          await callCanisterSection.verifyThemeChanging()
+
+          await context.pages()[context.pages().length - 1]!.reload()
+          await context.pages()[context.pages().length - 1]!.waitForLoadState("load")
+
           await callCanisterSection.setSelectedMethod(
-            callCanisterSection.availableMethods.icp_transfer
+            callCanisterSection.availableMethods.icp_transfer!
           )
           await callCanisterSection.checkRequestResponse(
             DemoPage.profileType[accountProfile] == "public"
@@ -67,9 +72,16 @@ for (const account of accounts) {
               : ExpectedTexts.General.Anonymous.Initial_ICPTransfer_RequestState
           )
 
+          if (DemoPage.profileType[accountProfile] == "legacy_0") return
+
+          const userInitialBalance = parseFloat(
+            (await demoPage.userBalance.textContent())!.replace(" ICP", "")
+          )
+
+          const amountToSend = "10000"
           await (
             await callCanisterSection.requestBuilder
-              .setAmount("10000") //0.0001 ICP
+              .setAmount(amountToSend) //0.0001 ICP
               .setToPrincipal("themselves")
           ).apply()
 
@@ -90,6 +102,12 @@ for (const account of accounts) {
               : ExpectedTexts.NFID.Anonymous.ICPTransferResponse
           )
 
+          if (DemoPage.loginMethods[method] == "Delegation") {
+            await callCanisterSection.verifyBalanceChanged(
+              userInitialBalance,
+              parseFloat(amountToSend) / 100000000
+            )
+          }
           await demoPage.logout()
         })
       })

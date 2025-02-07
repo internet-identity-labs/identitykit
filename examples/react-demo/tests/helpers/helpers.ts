@@ -2,7 +2,7 @@ import { fileURLToPath } from "url"
 import path from "path"
 import fs from "fs"
 import { BrowserContext, Page } from "@playwright/test"
-import { TestUser } from "../types.ts"
+import { TestUser } from "../types.js"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -62,7 +62,7 @@ export async function waitUntil(
   })
 }
 
-export async function waitForPopup(context: BrowserContext, action: () => void) {
+export async function waitForPopup(context: BrowserContext, action: () => Promise<void>) {
   const currentPages = context.pages().length
   await action()
   await waitUntil(

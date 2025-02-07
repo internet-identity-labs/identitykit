@@ -1,31 +1,33 @@
 import { BrowserContext, expect, Locator, Page } from "@playwright/test"
-import { Section } from "./section.ts"
-import { ProfileType } from "../page/standards.page.ts"
+import { Section } from "./section.js"
+import { ProfileType } from "../page/standards.page.js"
+import { waitForPopup } from "../helpers/helpers.js"
 
 export class Icrc34DelegationSection extends Section {
-  private popup
+  private popup: Page | undefined
 
   constructor(public readonly page: Page) {
     super(page, "icrc34_delegation")
   }
 
   popupNFID = {
-    anonymousProfile: (): Locator => this.popup.locator("#profile_legacy_0"),
-    connectButton: (): Locator => this.popup.locator("//button[.//text()='Connect']"),
-    continueButton: (): Locator => this.popup.locator("//button[.//text()='Continue to app']"),
+    anonymousProfile: (): Locator => this.popup!.locator("#profile_legacy_0"),
+    connectButton: (): Locator => this.popup!.locator("//button[.//text()='Connect']"),
+    continueButton: (): Locator => this.popup!.locator("//button[.//text()='Continue to app']"),
   }
 
   popupMocked = {
-    globalProfile: (): Locator => this.popup.locator("#acc_1"),
-    anonymousProfile: (): Locator => this.popup.locator("#acc_2"),
-    approveButton: (): Locator => this.popup.locator("#approve"),
+    globalProfile: (): Locator => this.popup!.locator("#acc_1"),
+    anonymousProfile: (): Locator => this.popup!.locator("#acc_2"),
+    approveButton: (): Locator => this.popup!.locator("#approve"),
   }
 
   async openPopup(context: BrowserContext): Promise<Page> {
+    await waitForPopup(context, async () => await this.submitButton.click())
     this.popup = context.pages()[context.pages().length - 1]
-    await this.popup.bringToFront()
+    await this.popup!.bringToFront()
 
-    return this.popup
+    return this.popup!
   }
 
   async isDisabledGlobalAccount(popup: Page): Promise<boolean> {
@@ -39,9 +41,8 @@ export class Icrc34DelegationSection extends Section {
   async selectProfileMocked(
     account: ProfileType,
     context: BrowserContext,
-    checkGlobalAcc: (value) => void
+    checkGlobalAcc: (value: boolean) => void
   ): Promise<void> {
-    await this.submitButton.click()
     const popup = await this.openPopup(context)
     const isDisabledGlobalAccount = await this.isDisabledGlobalAccount(popup)
     checkGlobalAcc(isDisabledGlobalAccount)
@@ -56,10 +57,9 @@ export class Icrc34DelegationSection extends Section {
   }
 
   async selectProfileNFID(page: Page, profileType: string, context: BrowserContext): Promise<void> {
-    await this.submitButton.click()
-    await page.waitForTimeout(1000)
+    await waitForPopup(context, async () => await this.submitButton.click())
     this.popup = context.pages()[context.pages().length - 1]
-    await this.popup.bringToFront()
+    await this.popup!.bringToFront()
     if (profileType == "anonymous") {
       await this.popupNFID.anonymousProfile().click()
     }

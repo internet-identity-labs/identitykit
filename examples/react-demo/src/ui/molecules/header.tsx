@@ -57,6 +57,7 @@ export const Header = () => {
           />
           {resolvedTheme === "light" ? (
             <img
+              id={"changeTheme"}
               className="w-5 transition-opacity cursor-pointer hover:opacity-50"
               src={IconSvgSun}
               alt="light"
@@ -64,6 +65,7 @@ export const Header = () => {
             />
           ) : (
             <img
+              id={"changeTheme"}
               className="w-5 transition-opacity cursor-pointer hover:opacity-50"
               src={IconSvgMoon}
               alt="dark"

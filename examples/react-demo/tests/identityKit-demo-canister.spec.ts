@@ -42,7 +42,7 @@ for (const account of accounts) {
   ) as (keyof typeof DemoPage.profileType)[]) {
     for (const method of loginMethods) {
       test.describe(`"Canister query call to IdentityKit Demo canister for ${account.type} user`, () => {
-        test(`User makes canister query call to IdentityKit demo canister via ${DemoPage.loginMethods[method]} login method`, async ({
+        test(`User makes canister query call to IdentityKit demo canister via ${DemoPage.loginMethods[method]} login method with ${DemoPage.profileType[accountProfile]} profile`, async ({
           demoPage,
           nfidPage,
           callCanisterSection,
@@ -58,12 +58,21 @@ for (const account of accounts) {
             DemoPage.loginMethods[method]
           )
 
+          await callCanisterSection.verifyThemeChanging()
+
+          await context.pages()[context.pages().length - 1]!.reload()
+          await context.pages()[context.pages().length - 1]!.waitForLoadState("load")
+
           await callCanisterSection.setSelectedMethod(
-            callCanisterSection.availableMethods.call_to_identityKit_demo_canister
+            callCanisterSection.availableMethods.call_to_identityKit_demo_canister!
           )
           await callCanisterSection.checkRequestResponse(
-            ExpectedTexts.General.Public.Initial_IdentityKitDemoCall_RequestState
+            DemoPage.profileType[accountProfile] == "public"
+              ? ExpectedTexts.General.Public.Initial_IdentityKitDemoCall_RequestState
+              : ExpectedTexts.General.Anonymous.Initial_IdentityKitDemoCall_RequestState
           )
+
+          if (DemoPage.profileType[accountProfile] == "legacy_0") return
 
           if (DemoPage.loginMethods[method] == "Accounts") {
             await callCanisterSection.clickSubmitButtonAndGetPopup(context)

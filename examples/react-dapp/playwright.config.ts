@@ -2,7 +2,7 @@ import { defineConfig } from "@playwright/test"
 
 export default defineConfig({
   testDir: "./tests",
-  timeout: 60000,
+  timeout: 120000,
   fullyParallel: true,
   workers: 2,
   retries: 1,
@@ -11,6 +11,9 @@ export default defineConfig({
   },
   use: {
     headless: true,
+    launchOptions: {
+      args: ["--disable-popup-blocking"],
+    },
     viewport: { width: 1440, height: 960 },
     actionTimeout: 0,
     ignoreHTTPSErrors: true,

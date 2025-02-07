@@ -1,9 +1,9 @@
 import { expect } from "@playwright/test"
 import { test as base } from "./helpers/hooks.js"
-import { AccountType, StandardsPage } from "./page/standards.page.ts"
-import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.ts"
-import { Icrc25PermissionsSection } from "./section/icrc25-permissions.section.ts"
-import { ExpectedTexts } from "./section/expectedTexts.ts"
+import { AccountType, StandardsPage } from "./page/standards.page.js"
+import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.js"
+import { Icrc25PermissionsSection } from "./section/icrc25-permissions.section.js"
+import { ExpectedTexts } from "./section/expectedTexts.js"
 
 type Fixtures = {
   section: Icrc25PermissionsSection
@@ -65,9 +65,10 @@ for (const account of accounts) {
       section,
       requestPermissionSection,
       standardsPage,
+      context,
     }) => {
       await standardsPage.login(account)
-      await requestPermissionSection.approvePermissions(account)
+      await requestPermissionSection.approvePermissions(context, account)
       await section.clickSubmitButton()
       await section.waitForResponse()
       const responseJson = await section.getResponseJson()

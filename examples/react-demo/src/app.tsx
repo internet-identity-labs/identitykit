@@ -13,7 +13,10 @@ function App({
   const { disconnect } = useAuth()
 
   return (
-    <div className="h-full min-h-screen bg-white dark:bg-dark px-[30px] pb-[25px]">
+    <div
+      id={"themeColor"}
+      className="h-full min-h-screen bg-white dark:bg-dark px-[30px] pb-[25px]"
+    >
       <ToastContainer />
       <Header />
       <h3 className="text-xl mt-[25px] mb-[20px]">
