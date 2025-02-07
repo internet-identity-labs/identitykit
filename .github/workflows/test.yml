@@ -10,6 +10,7 @@ on:
       - "examples/react-dapp/**"
       - "examples/react-signer/**"
       - "packages/identitykit/**"
+      - "landing/**"
       - "docker-for-e2e/**"
   pull_request:
     types:

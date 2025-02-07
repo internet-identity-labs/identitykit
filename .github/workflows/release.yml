@@ -250,8 +250,17 @@ jobs:
         ci_echo_debug "npm i --frozen-lockfile" >&2
         npm i --frozen-lockfile
 
+        ci_echo_debug "npm run build-landing" >&2
+        npm run build-landing
+
+        ci_echo_debug "npm run build-docs" >&2
+        npm run build-docs
+
         ci_echo_debug "npm run build-playground:'${NETWORK_NAME}'" >&2
         npm run build-playground:"${NETWORK_NAME}"
+
+        ci_echo_debug "create folder containing build of landing, docs, demo and standards" >&2
+        mkdir deploy && rsync -a docs/out/ deploy/docs && rsync -a examples/react-dapp/dist/ deploy/standards && rsync -a examples/react-demo/dist/ deploy/demo && rsync -a landing/dist/ deploy
 
     - name: DEPLOY => Deploy canisters.
       run: |
@@ -268,7 +277,7 @@ jobs:
         dfx identity use "${ID_NAME}"
 
         # List of canisters to deploy
-        CANISTERS=("signer" "demo" "dapp" "signer-backend")
+        CANISTERS=("signer" "identitykit" "signer-backend")
 
         for CANISTER_NAME in "${CANISTERS[@]}"; do
           ci_echo_info "Deploying '${CANISTER_NAME}'"

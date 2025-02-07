@@ -3,19 +3,12 @@
     "dev": "uimp7-mqaaa-aaaag-qc5ka-cai",
     "ic": "vdgqs-nqaaa-aaaag-aciua-cai"
   },
-  "demo": {
-    "dev": "rawyr-oqaaa-aaaal-ajlxa-cai",
-    "ic": "qzjsg-qiaaa-aaaam-acupa-cai"
-  },
-  "dapp": {
-    "dev": "mquaw-4yaaa-aaaap-abwlq-cai",
-    "ic": "vehwg-aiaaa-aaaag-aciuq-cai"
-  },
   "signer-backend": {
     "dev": "do25a-dyaaa-aaaak-qifua-cai",
     "ic": "2wdkf-viaaa-aaaam-ackqq-cai"
   },
-  "docs": {
-    "ic": "2juva-miaaa-aaaag-ald5a-cai"
+  "identitykit": {
+    "dev": "rawyr-oqaaa-aaaal-ajlxa-cai",
+    "ic": "qzjsg-qiaaa-aaaam-acupa-cai"
   }
 }

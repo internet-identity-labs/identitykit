@@ -1,7 +1,7 @@
-import { Header, AuthTypeTabs, CallCanisterSection } from "./ui"
 import { ToastContainer } from "react-toastify"
 import { IdentityKitAuthType } from "@nfid/identitykit"
 import { useAuth } from "@nfid/identitykit/react"
+import { Header, AuthTypeTabs, CallCanisterSection } from "./ui"
 
 function App({
   setAuthType,

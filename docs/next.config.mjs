@@ -8,7 +8,9 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  output: 'export'
+  output: 'export',
+  // eslint-disable-next-line turbo/no-undeclared-env-vars
+  basePath: process.env.NODE_ENV !== 'production' ? '' : '/docs'
 }
 
 const withNextra = nextra({

@@ -1,0 +1,77 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+h1 {
+  font-family: "Poppins", serif;
+  font-weight: 700;
+}
+
+.gradient-text-dark {
+  background: linear-gradient(90deg, #edfffd 0%, #00c4b3 100%);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.gradient-text-light {
+  background: linear-gradient(90deg, #051d1b 0%, #8bffdc 100%);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.green-bg {
+  background-repeat: no-repeat;
+}
+
+.purple-bg {
+  background-color: #0d040b;
+  background-image: linear-gradient(#0d040b, #57264f);
+}
+
+@media only screen and (min-width: 1050px) {
+  .green-bg {
+    top: 300px;
+    background-size: 2050px;
+    background-position: center 250px;
+  }
+}
+
+@media only screen and (max-width: 1050px) {
+  .green-bg {
+    background-size: 1400px;
+    background-position: center 400px;
+  }
+}
+
+@media only screen and (max-width: 764px) {
+  .green-bg {
+    background-size: 1200px;
+    background-position: center 250px;
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .green-bg {
+    background-size: 1100px;
+    background-position: center 450px;
+  }
+}
+
+@layer base {
+  html,
+  body {
+    @apply bg-white text-black transition-colors duration-300 dark:bg-[#0E0F10] dark:text-[#EDFFFD];
+  }
+}
+
+.bottom-img {
+  transform: scale(1.3);
+}
+
+@media only screen and (min-width: 640px) {
+  .bottom-img {
+    transform: none;
+  }
+}
