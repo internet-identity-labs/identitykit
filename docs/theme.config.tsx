@@ -3,7 +3,6 @@ import { GitHubLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons"
 
 import LogoLight from "./public/img/logo-light.svg"
 import LogoDark from "./public/img/logo-dark.svg"
-import MetaImage from "./public/img/meta1200x630.png"
 
 import { useConfig } from "nextra-theme-docs"
 
@@ -56,31 +55,42 @@ const theme = {
     ),
   },
   head: () => {
-    const { frontMatter, title } = useConfig()
-
-    const ogTitle = frontMatter.title
-      ? `NFID IdentityKit Docs | ${frontMatter.title}`
-      : "NFID IdentityKit Docs"
-    const ogDescription = frontMatter.description || "NFID IdentityKit Docs"
-
-    const ogImage = frontMatter.image
-      ? `https://2juva-miaaa-aaaag-ald5a-cai.icp0.io${frontMatter.image}`
-      : MetaImage.src
+    const { title } = useConfig()
 
     return (
       <>
         <title>
           {title && title !== "Index"
-            ? `NFID IdentityKit Docs | ${title}`
-            : "NFID IdentityKit Docs"}
+            ? `NFID IdentityKit | Docs | ${title}`
+            : "NFID IdentityKit | Docs"}
         </title>
-        <meta name="description" content={ogDescription} />
+        <meta name="descriptiom" content="The complete guide to NFID IdentityKit" />
+        <meta name="keywords" content="ICP, identity, wallet, dApp, react, blockchain, crypto" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/favicon.png" type="image/png" />
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <meta property="og:title" content="NFID IdentityKit | Docs" />
+        <meta property="og:description" content="The complete guide to NFID IdentityKit" />
+        <meta property="og:site_name" content="NFID IdentityKit | Docs" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io/docs" />
+        <meta
+          property="og:image"
+          content="https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io/nfid-identitykit-og.png"
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="NFID IdentityKit" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@IdentityMaxis" />
-        <meta name="twitter:image" content={ogImage} />
-        <meta property="og:title" content={ogTitle} />
-        <meta property="og:description" content={ogDescription} />
-        <meta property="og:image" content={ogImage} />
+        <meta name="twitter:title" content="NFID IdentityKit | Docs" />
+        <meta name="twitter:description" content="The complete guide to NFID IdentityKit" />
+        <meta name="twitter:site" content="@NFIDIdentityKit" />
+        <meta
+          name="twitter:image"
+          content="https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io/img/nfid-identitykit-og.png"
+        />
+        <meta name="twitter:image:alt" content="NFID IdentityKit" />
       </>
     )
   },

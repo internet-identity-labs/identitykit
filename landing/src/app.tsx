@@ -116,6 +116,7 @@ function App() {
                 Read the docs
               </Button>
               <Button
+                type="outline"
                 onClick={() => {
                   window.open("/demo", "_blank")
                 }}
