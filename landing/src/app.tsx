@@ -85,16 +85,8 @@ function App() {
                 }}
               />
               <img
-                className="absolute top-[14px] right-[14px] cursor-pointer"
+                className="absolute top-[14px] right-[14px] pointer-events-none"
                 alt="copy"
-                onClick={() => {
-                  if (copied) return
-                  setCopied(true)
-                  setTimeout(() => {
-                    setCopied(false)
-                  }, 1000)
-                  navigator.clipboard.writeText("npm install @nfid/identitykit@latest")
-                }}
                 src={
                   copied
                     ? isLightTheme
@@ -129,8 +121,19 @@ function App() {
         </Container>
         <Container className="max-w-full flex justify-center">
           <img
-            className="hidden sm:block mt-[-100px] relative sm:max-h-[680px] md:max-h-[900px] lg:max-h-[940px] xl:max-h-[970px]"
-            src={isLightTheme ? MainImgLight : MainImgDark}
+            className={clsx(
+              "hidden mt-[-100px] relative sm:max-h-[680px] md:max-h-[900px] lg:max-h-[940px] xl:max-h-[970px]",
+              { "sm:block": isLightTheme }
+            )}
+            src={MainImgLight}
+            alt="Signers modal"
+          />
+          <img
+            className={clsx(
+              "hidden mt-[-100px] relative sm:max-h-[680px] md:max-h-[900px] lg:max-h-[940px] xl:max-h-[970px]",
+              { "sm:block": !isLightTheme }
+            )}
+            src={MainImgDark}
             alt="Signers modal"
           />
           <img
