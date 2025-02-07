@@ -1,12 +1,11 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "extends": [
-    "//"
-  ],
+  "extends": ["//"],
   "tasks": {
     "build": {
       "env": [
         "VITE_MOCKED_SIGNER_PROVIDER_URL",
+        "VITE_LANDING_URL",
         "VITE_MOCKED_NFID_SIGNER_PROVIDER_URL",
         "VITE_TARGET_CANISTER",
         "VITE_ENVIRONMENT"

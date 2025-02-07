@@ -109,7 +109,7 @@ function App() {
             <div className="flex flex-col sm:flex-row w-full justify-center">
               <Button
                 onClick={() => {
-                  window.open("https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io/docs", "_blank")
+                  window.open("/docs", "_blank")
                 }}
                 className="w-full sm:w-[220px] mb-[30px] sm:mb-0 sm:mr-[20px]"
               >
@@ -117,7 +117,7 @@ function App() {
               </Button>
               <Button
                 onClick={() => {
-                  window.open("https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io/demo", "_blank")
+                  window.open("/demo", "_blank")
                 }}
                 className="w-full sm:w-[220px]"
               >

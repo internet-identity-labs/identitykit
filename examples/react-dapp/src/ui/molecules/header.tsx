@@ -24,7 +24,7 @@ export const Header = () => {
     <div className="mb-3">
       <div className="flex items-center justify-between h-[68px]">
         <div className="flex flex-col relative">
-          <a href="https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io" target="_blank">
+          <a href={import.meta.env.VITE_LANDING_URL} target="_blank">
             <img
               className="dark:hidden w-[130px] sm:w-[140px] md:w-auto"
               src={IconLogo}
@@ -47,7 +47,7 @@ export const Header = () => {
         <div className="flex items-center space-x-2 sm:space-x-4">
           <a
             target="_blank"
-            href="https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io/docs"
+            href={`${import.meta.env.VITE_LANDING_URL}/docs`}
             className="text-sm font-bold hidden sm:block"
           >
             Dev docs
@@ -55,9 +55,7 @@ export const Header = () => {
           <img
             className="block sm:hidden cursor-pointer"
             src={resolvedTheme === "light" ? IconSvgDocsLight : IconSvgDocsDark}
-            onClick={() =>
-              window.open("https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io/docs", "_blank")
-            }
+            onClick={() => window.open(`${import.meta.env.VITE_LANDING_URL}/docs`, "_blank")}
             alt="docs"
           />
           {resolvedTheme === "light" ? (
