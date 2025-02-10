@@ -260,7 +260,7 @@ jobs:
         npm run build-playground:"${NETWORK_NAME}"
 
         ci_echo_debug "create folder containing build of landing, docs, demo and standards" >&2
-        mkdir deploy && rsync -a docs/out/ deploy/docs && rsync -a examples/react-dapp/dist/ deploy/standards && rsync -a examples/react-demo/dist/ deploy/demo && rsync -a landing/dist/ deploy
+        mkdir deploy && rsync -a docs/out/ deploy/docs && rsync -a examples/react-dapp/dist/ deploy/standards && rsync -a examples/react-demo/dist/ deploy/demo && rsync -a landing/dist/ deploy && rsync -a public/ deploy
 
     - name: DEPLOY => Deploy canisters.
       run: |
