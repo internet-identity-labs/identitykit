@@ -8,6 +8,7 @@ import {
   HttpAgent,
   LookupResultFound,
   ReadStateResponse,
+  IC_ROOT_KEY,
 } from "@dfinity/agent"
 import { GenericError } from "./exception-handler.service"
 
@@ -73,7 +74,9 @@ class InterfaceFactoryService {
     const certificate = await Certificate.create({
       certificate: responseCandid.certificate,
       canisterId: canister,
-      rootKey: agent.rootKey,
+      rootKey:
+        agent.rootKey ??
+        new Uint8Array(IC_ROOT_KEY.match(/[\da-f]{2}/gi)!.map((h) => parseInt(h, 16))).buffer,
     })
     const dataCandid = certificate.lookup(pathCandid)
     const candidFileMabye = new TextDecoder().decode(
