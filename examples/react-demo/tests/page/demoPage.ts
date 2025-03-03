@@ -49,7 +49,6 @@ export class DemoPage {
     await popup!.bringToFront()
     await popup!.locator(`#profile_${accountProfile}`).click()
     await popup!.locator('//button[.//text()="Connect"]').click()
-    await popup!.locator('//button[.//text()="Continue to app"]').click()
     expect(JSON.parse(<string>await profileSection.getProfileInfo())).toMatchObject(
       method === "Delegation"
         ? accountProfile === "public"
