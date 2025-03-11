@@ -21,17 +21,17 @@ export const YourApp = () => {
 }
 ```
 
-### maxTimeToLive  
+### maxTimeToLive
 
-`bigint{:typescript}`  
+`bigint{:typescript}`
 
-Defines the delegation's expiration duration in nanoseconds. 
-This parameter is optional and defaults to **30 minutes** (`1_800_000_000_000` nanoseconds). 
-It can be set to any valid `BigInt` value, depending on system requirements.  
+Defines the delegation's expiration duration in nanoseconds. This parameter is optional and defaults
+to **30 minutes** (`1_800_000_000_000` nanoseconds). It can be set to any valid `BigInt` value,
+depending on system requirements.
 
-- **Minimum recommended:** 5 minutes (`300_000_000_000` nanoseconds)  
-- **Maximum recommended:** 6 months (`15_552_000_000_000_000` nanoseconds)  
- 
+- **Minimum recommended:** 5 minutes (`300_000_000_000` nanoseconds)
+- **Maximum recommended:** 6 months (`15_552_000_000_000_000` nanoseconds)
+
 ### storage
 
 `AuthClientStorage | undefined{:typescript}`
