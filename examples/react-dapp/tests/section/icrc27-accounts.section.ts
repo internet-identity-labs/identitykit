@@ -27,7 +27,6 @@ export class Icrc25AccountsSection extends Section {
     const popup = context.pages()[context.pages().length - 1]
     await popup!.bringToFront()
     await popup!.click("//button[.//text()='Connect']", { timeout: 40000 })
-    await popup!.click("//button[.//text()='Continue to app']", { timeout: 30000 })
     await waitUntil(
       async () => {
         return !context.pages().includes(popup!)

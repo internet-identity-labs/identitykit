@@ -7,6 +7,8 @@ import { targetService } from "../../target.service"
 import { GenericError } from "../../exception-handler.service"
 import { derivationOriginService } from "../../derivation-origin.service"
 
+const ENCODE_CHUNK_SIZE = 100000
+
 export interface DelegationComponentData extends ComponentData {
   accounts: Account[]
   isPublicAccountsAllowed: boolean
@@ -163,7 +165,17 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
       return globalThis.Buffer.from(bytes).toString("base64")
     }
     if (typeof globalThis.btoa !== "undefined") {
-      return btoa(String.fromCharCode(...new Uint8Array(bytes)))
+      return btoa(
+        Array.from({ length: Math.ceil(bytes.byteLength / ENCODE_CHUNK_SIZE) })
+          .map((_, index) =>
+            String.fromCharCode(
+              ...new Uint8Array(
+                bytes.slice(index * ENCODE_CHUNK_SIZE, (index + 1) * ENCODE_CHUNK_SIZE)
+              )
+            )
+          )
+          .join("")
+      )
     }
     throw Error("Could not encode base64 string")
   }

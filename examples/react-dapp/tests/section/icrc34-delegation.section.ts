@@ -13,7 +13,6 @@ export class Icrc34DelegationSection extends Section {
   popupNFID = {
     anonymousProfile: (): Locator => this.popup!.locator("#profile_legacy_0"),
     connectButton: (): Locator => this.popup!.locator("//button[.//text()='Connect']"),
-    continueButton: (): Locator => this.popup!.locator("//button[.//text()='Continue to app']"),
   }
 
   popupMocked = {
@@ -64,7 +63,6 @@ export class Icrc34DelegationSection extends Section {
       await this.popupNFID.anonymousProfile().click()
     }
     await this.popupNFID.connectButton().click()
-    await this.popupNFID.continueButton().click()
   }
 
   async setRequestWithNoTargets(): Promise<void> {
