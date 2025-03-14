@@ -12,5 +12,4 @@ export enum TransportType {
   EXTENSION,
   INTERNET_IDENTITY,
   STOIC,
-  PLUG,
 }

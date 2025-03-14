@@ -4,7 +4,6 @@ import {
   IdentityKitAccountsSignerClientOptions,
   IdentityKitDelegationSignerClientOptions,
   NFIDW,
-  Plug,
   InternetIdentity,
 } from "../../../../lib"
 import { useCreateIdentityKit, useCreatePromise, useProceedSigner } from "../../hooks"
@@ -65,7 +64,7 @@ export const Provider = <T extends IdentityKitAuthType>({
 
   const { signers, featuredSigner } = useMemo(() => {
     const signersList =
-      !props.signers || !props.signers.length ? [NFIDW, Plug, InternetIdentity] : props.signers
+      !props.signers || !props.signers.length ? [NFIDW, InternetIdentity] : props.signers
 
     const selectedFeaturedSigner =
       props.featuredSigner === false ? undefined : (props.featuredSigner ?? signersList[0])
