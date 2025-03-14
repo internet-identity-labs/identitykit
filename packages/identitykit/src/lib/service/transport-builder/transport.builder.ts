@@ -6,7 +6,6 @@ import { getAuthClientTransportBuilder } from "./auth-client-transport.builder"
 import { getStoicTransportBuilder } from "./stoic-transport.builder"
 import { DEFAULT_MAX_TIME_TO_LIVE } from "../../constants"
 import { AuthClientCreateOptions } from "@dfinity/auth-client"
-import { getPlugTransportBuilder } from "./plug-transport.builder"
 
 export type TransportBuilderRequest = {
   id?: string
@@ -60,7 +59,6 @@ export class TransportBuilder {
           identityProvider: url,
         },
       }),
-    [TransportType.PLUG]: () => getPlugTransportBuilder(),
     [TransportType.STOIC]: ({ maxTimeToLive }) => getStoicTransportBuilder({ maxTimeToLive }),
   }
 
