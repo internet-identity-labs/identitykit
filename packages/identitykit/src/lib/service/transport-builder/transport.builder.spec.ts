@@ -2,17 +2,14 @@ import { Transport } from "@slide-computer/signer"
 import { TransportType } from "../../types"
 import { getPopupTransportBuilder } from "./new-tab-transport.builder"
 import { TransportBuilder, TransportBuilderRequest } from "./transport.builder"
-import { getPlugTransportBuilder } from "./plug-transport.builder"
 
 jest.mock("./new-tab-transport.builder")
-jest.mock("./plug-transport.builder")
 
 describe("TransportBuilder", () => {
   const mockTransport: Transport = {} as Transport
 
   beforeEach(() => {
     ;(getPopupTransportBuilder as jest.Mock).mockReturnValue(mockTransport)
-    ;(getPlugTransportBuilder as jest.Mock).mockReturnValue(mockTransport)
   })
 
   afterEach(() => {
@@ -32,18 +29,6 @@ describe("TransportBuilder", () => {
       crypto: undefined,
       window: undefined,
     })
-    expect(result).toBe(mockTransport)
-  })
-
-  it("should build a PLUG transport", async () => {
-    const request: TransportBuilderRequest = {
-      transportType: TransportType.PLUG,
-      url: "https://example.com",
-    }
-
-    const result = await TransportBuilder.build(request)
-
-    expect(getPlugTransportBuilder).toHaveBeenCalledWith()
     expect(result).toBe(mockTransport)
   })
 })

@@ -3,7 +3,6 @@ import { IdentityKitProvider, IdentityKitTheme } from "@nfid/identitykit/react"
 import {
   MockedSigner,
   NFIDW,
-  Plug,
   InternetIdentity,
   IdentityKitSignerConfig,
   Stoic,
@@ -27,7 +26,7 @@ const environment = import.meta.env.VITE_ENVIRONMENT
 function App() {
   const { resolvedTheme } = useTheme()
   const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
-  const signers = [nfidw, Plug, InternetIdentity, OISY, Stoic].concat(
+  const signers = [nfidw, InternetIdentity, OISY, Stoic].concat(
     environment !== "ic"
       ? [
           {
