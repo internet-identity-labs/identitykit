@@ -30,10 +30,10 @@ To reorder your wallets list or to change default list, just add
 
 ```jsx
 import { IdentityKitProvider } from "@nfid/identitykit/react"
-import { NFIDW, Plug, InternetIdentity, Stoic, OISY } from "@nfid/identitykit"
+import { NFIDW, InternetIdentity, Stoic, OISY } from "@nfid/identitykit"
 
 export const App = () => (
-  <IdentityKitProvider signers={[NFIDW, Plug, InternetIdentity, Stoic, OISY]}>
+  <IdentityKitProvider signers={[NFIDW, InternetIdentity, Stoic, OISY]}>
     <YourApp />
   </IdentityKitProvider>
 )
