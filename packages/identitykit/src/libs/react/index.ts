@@ -33,4 +33,5 @@ export {
   useIdentity,
   useDelegationType,
   useIdentityKit,
+  useSignerConfig,
 } from "./hooks"
