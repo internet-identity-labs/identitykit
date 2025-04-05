@@ -1,0 +1,55 @@
+---
+title: "useSignerConfig"
+date: "2025-04-05"
+authors:
+  - name: "Long Tran"
+---
+
+import { Callout } from "nextra/components"
+
+# useSignerConfig
+
+`() => SignerConfig | undefined{:typescript}`
+
+Returns the configuration of the currently selected signer. This includes details such as the signer's ID, provider URL, label, and other properties defined in the `SignerConfig` type. Will be undefined until a signer is selected.
+
+## Usage
+
+```typescript
+import { useSignerConfig } from "@nfid/identitykit/react"
+
+const signerConfig = useSignerConfig()
+
+// Example: Access signer configuration properties
+if (signerConfig) {
+  console.log(signerConfig.id)        // e.g., "NFIDW"
+  console.log(signerConfig.label)     // e.g., "NFID Wallet"
+  console.log(signerConfig.providerUrl)  // e.g., "https://nfid.one/rpc"
+}
+```
+
+## Return Type
+
+The hook returns a `SignerConfig` object with the following properties:
+
+```typescript
+type SignerConfig = {
+  id: string            // Unique identifier for the signer
+  providerUrl: string   // URL of the provider associated with the signer
+  label: string         // Human-readable name displayed to users
+  transportType: TransportType  // Method used by the signer (NEW_TAB, EXTENSION, etc.)
+  icon?: string         // Base64-encoded icon image for the signer (optional)
+  description?: string  // Human-readable description of the signer (optional)
+}
+```
+
+## Common Use Cases
+
+- Getting the current signer's display name to show in the UI
+- Accessing the signer's icon for display purposes
+- Determining which type of wallet is currently connected
+- Retrieving the signer's unique ID to store user preferences
+
+<Callout type="warning" emoji="⚠️">
+  This hook will throw a `ContextNotInitializedError` if used outside of an `IdentityKitProvider`.
+</Callout>
