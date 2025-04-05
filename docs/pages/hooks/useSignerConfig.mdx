@@ -11,7 +11,9 @@ import { Callout } from "nextra/components"
 
 `() => SignerConfig | undefined{:typescript}`
 
-Returns the configuration of the currently selected signer. This includes details such as the signer's ID, provider URL, label, and other properties defined in the `SignerConfig` type. Will be undefined until a signer is selected.
+Returns the configuration of the currently selected signer. This includes details such as the
+signer's ID, provider URL, label, and other properties defined in the `SignerConfig` type. Will be
+undefined until a signer is selected.
 
 ## Usage
 
@@ -22,9 +24,9 @@ const signerConfig = useSignerConfig()
 
 // Example: Access signer configuration properties
 if (signerConfig) {
-  console.log(signerConfig.id)        // e.g., "NFIDW"
-  console.log(signerConfig.label)     // e.g., "NFID Wallet"
-  console.log(signerConfig.providerUrl)  // e.g., "https://nfid.one/rpc"
+  console.log(signerConfig.id) // e.g., "NFIDW"
+  console.log(signerConfig.label) // e.g., "NFID Wallet"
+  console.log(signerConfig.providerUrl) // e.g., "https://nfid.one/rpc"
 }
 ```
 
@@ -34,12 +36,12 @@ The hook returns a `SignerConfig` object with the following properties:
 
 ```typescript
 type SignerConfig = {
-  id: string            // Unique identifier for the signer
-  providerUrl: string   // URL of the provider associated with the signer
-  label: string         // Human-readable name displayed to users
-  transportType: TransportType  // Method used by the signer (NEW_TAB, EXTENSION, etc.)
-  icon?: string         // Base64-encoded icon image for the signer (optional)
-  description?: string  // Human-readable description of the signer (optional)
+  id: string // Unique identifier for the signer
+  providerUrl: string // URL of the provider associated with the signer
+  label: string // Human-readable name displayed to users
+  transportType: TransportType // Method used by the signer (NEW_TAB, EXTENSION, etc.)
+  icon?: string // Base64-encoded icon image for the signer (optional)
+  description?: string // Human-readable description of the signer (optional)
 }
 ```
 
