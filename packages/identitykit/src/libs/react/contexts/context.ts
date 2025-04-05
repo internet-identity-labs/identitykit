@@ -10,6 +10,7 @@ interface Context {
   signers: SignerConfig[]
   featuredSigner?: SignerConfig
   selectedSigner?: Signer
+  selectedSignerConfig?: SignerConfig
   isModalOpen: boolean
   user?: {
     principal: Principal

@@ -25,7 +25,12 @@ export function useProceedSigner({
     (typeof window !== "undefined" && localStorage.getItem("signerId")) || ""
   )
   const [selectedSigner, setSelectedSigner] = useState<
-    { signer: Signer<Transport>; signerId?: string } | undefined
+    | {
+        signer: Signer<Transport>
+        signerConfig: SignerConfig
+        signerId?: string
+      }
+    | undefined
   >(undefined)
   const [isSignerBeingSelected, setIsSignerBeingSelected] = useState(false)
 
@@ -57,7 +62,7 @@ export function useProceedSigner({
           transport,
         })
 
-        setSelectedSigner({ signer: createdSigner, signerId })
+        setSelectedSigner({ signer: createdSigner, signerConfig: signer, signerId })
 
         setIsSignerBeingSelected(false)
 
@@ -80,10 +85,16 @@ export function useProceedSigner({
         window,
         windowOpenerFeatures,
       })
+      const signerConfig = {
+        id: url,
+        label: url,
+        transportType: TransportType.NEW_TAB,
+        providerUrl: url,
+      }
 
       const createdSigner = new Signer({ crypto, transport })
 
-      setSelectedSigner({ signer: createdSigner })
+      setSelectedSigner({ signer: createdSigner, signerConfig })
       closeModal()
     },
     [crypto, window, closeModal, windowOpenerFeatures]
