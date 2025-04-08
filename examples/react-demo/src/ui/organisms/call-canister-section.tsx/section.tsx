@@ -1,4 +1,4 @@
-import { useAgent, useSigner, useAuth } from "@nfid/identitykit/react"
+import { useAgent, useAuth } from "@nfid/identitykit/react"
 import React, { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import { Actor } from "@dfinity/agent"
@@ -46,13 +46,10 @@ export function Section({
   }, [props.request])
 
   const { user } = useAuth()
-  const signer = useSigner()
 
   const agent = useAgent({ host: ICP_API_HOST })
 
   const handleSubmit = async () => {
-    if (!signer) return
-
     setIsLoading(true)
     setResponse(JSON.stringify(undefined))
 

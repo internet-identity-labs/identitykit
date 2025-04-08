@@ -1,6 +1,6 @@
 import { Section as BaseSection } from "../section"
 import { CallCanisterRequest } from "@slide-computer/signer"
-import { useSigner } from "@nfid/identitykit/react"
+import { useSigner } from "../../../../../../packages/identitykit/src/libs/react/hooks"
 import { CALL_CANISTER_METHODS, CallCanisterMethodType } from "./constants"
 
 type SectionRequest = Omit<CallCanisterRequest, "jsonrpc">

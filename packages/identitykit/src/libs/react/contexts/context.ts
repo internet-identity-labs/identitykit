@@ -9,7 +9,10 @@ import { SubAccount } from "@dfinity/ledger-icp"
 interface Context {
   signers: SignerConfig[]
   featuredSigner?: SignerConfig
-  selectedSigner?: Signer
+  selectedSigner?: {
+    value: Signer
+    id?: string
+  }
   isModalOpen: boolean
   user?: {
     principal: Principal

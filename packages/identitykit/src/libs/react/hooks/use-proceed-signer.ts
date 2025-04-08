@@ -25,7 +25,7 @@ export function useProceedSigner({
     (typeof window !== "undefined" && localStorage.getItem("signerId")) || ""
   )
   const [selectedSigner, setSelectedSigner] = useState<
-    { signer: Signer<Transport>; signerId?: string } | undefined
+    { value: Signer<Transport>; id?: string } | undefined
   >(undefined)
   const [isSignerBeingSelected, setIsSignerBeingSelected] = useState(false)
 
@@ -41,8 +41,8 @@ export function useProceedSigner({
         setIsSignerBeingSelected(true)
         closeModal()
 
-        const signer = signers.find((s) => s.id === signerId)
-        if (!signer) throw new Error(`Signer with id ${signerId} not found`)
+        const signerConfig = signers.find((s) => s.id === signerId)
+        if (!signerConfig) throw new Error(`Signer with id ${signerId} not found`)
 
         const transport = transports?.find((t) => t.signerId === signerId)?.value
 
@@ -57,11 +57,9 @@ export function useProceedSigner({
           transport,
         })
 
-        setSelectedSigner({ signer: createdSigner, signerId })
+        setSelectedSigner({ value: createdSigner, id: signerId })
 
         setIsSignerBeingSelected(false)
-
-        return signer
       } catch (e) {
         setIsSignerBeingSelected(false)
         onConnectFailure?.(e as Error)
@@ -81,9 +79,9 @@ export function useProceedSigner({
         windowOpenerFeatures,
       })
 
-      const createdSigner = new Signer({ crypto, transport })
+      const signer = new Signer({ crypto, transport })
 
-      setSelectedSigner({ signer: createdSigner })
+      setSelectedSigner({ value: signer, id: url })
       closeModal()
     },
     [crypto, window, closeModal, windowOpenerFeatures]
@@ -99,8 +97,8 @@ export function useProceedSigner({
   }, [selectedSigner, selectSigner, transports])
 
   const setSelectedSignerToLocalStorage = useCallback(() => {
-    if (selectedSigner && selectedSigner.signerId) {
-      localStorage.setItem("signerId", selectedSigner.signerId)
+    if (selectedSigner && selectedSigner?.id) {
+      localStorage.setItem("signerId", selectedSigner?.id)
     }
   }, [selectedSigner])
 

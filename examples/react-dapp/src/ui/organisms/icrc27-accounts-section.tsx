@@ -1,4 +1,4 @@
-import { useSigner } from "@nfid/identitykit/react"
+import { useSigner } from "../../../../../packages/identitykit/src/libs/react/hooks"
 import { MethodBadge } from "../atoms"
 import { Section } from "./section"
 import { AccountsRequest, AccountsResponse } from "@slide-computer/signer"

@@ -27,7 +27,7 @@ export {
   useIsInitializing,
   useAuth,
   useBalance,
-  useSigner,
+  useSignerConfig as useSigner,
   useAgent,
   useAccounts,
   useIdentity,

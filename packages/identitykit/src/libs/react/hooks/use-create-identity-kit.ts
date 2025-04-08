@@ -25,8 +25,8 @@ export function useCreateIdentityKit<
   ...props
 }: {
   selectedSigner?: {
-    signer: Signer
-    signerId?: string
+    value: Signer
+    id?: string
   }
   clearSigner: () => Promise<unknown>
   authType: T
@@ -52,10 +52,10 @@ export function useCreateIdentityKit<
     setIk(null)
     setUser(undefined)
     setIcpBalance(undefined)
-    await selectedSigner?.signer.transport.connection?.disconnect()
+    await selectedSigner?.value.transport.connection?.disconnect()
     await clearSigner()
     props.onDisconnect?.()
-    if (selectedSigner?.signerId === InternetIdentity.id) window.location.reload()
+    if (selectedSigner?.id === InternetIdentity.id) window.location.reload()
   }, [ik?.signerClient, clearSigner, props.onDisconnect, selectedSigner])
 
   // create disconnect func
@@ -78,7 +78,7 @@ export function useCreateIdentityKit<
         signerClientOptions: {
           ...signerClientOptions,
           crypto,
-          signer: selectedSigner.signer,
+          signer: selectedSigner.value,
           onLogout: onDisconnect,
         },
       }).then(async (instance) => {
@@ -89,7 +89,7 @@ export function useCreateIdentityKit<
               setUser(instance.signerClient.connectedUser)
               onConnectSuccess?.()
             } catch (e) {
-              await selectedSigner.signer.transport.connection?.disconnect()
+              await selectedSigner.value.transport.connection?.disconnect()
               await clearSigner()
               onConnectFailure?.(e as Error)
             }

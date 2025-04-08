@@ -241,7 +241,7 @@ export const Provider = <T extends IdentityKitAuthType>({
     <Context.Provider
       value={{
         signers: signersIncludingDiscovered,
-        selectedSigner: selectedSigner?.signer,
+        selectedSigner,
         isModalOpen,
         featuredSigner,
         user: identityKit.user,

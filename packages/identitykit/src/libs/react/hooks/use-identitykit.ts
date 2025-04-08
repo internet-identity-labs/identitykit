@@ -58,7 +58,7 @@ export function useIdentityKit(): {
   const accounts = useAccounts()
 
   return {
-    signer: selectedSigner,
+    signer: selectedSigner?.value,
     user,
     icpBalance,
     authType,

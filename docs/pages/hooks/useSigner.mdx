@@ -9,7 +9,16 @@ import { Callout } from "nextra/components"
 
 # useSigner
 
-`() => Signer<Transport> | undefined{:typescript}`
+```typescript
+() => {
+  id: string // Unique identifier for the signer
+  providerUrl: string // URL of the provider associated with the signer
+  label: string // Human-readable name displayed to users
+  transportType: TransportType // Method used by the signer (NEW_TAB, EXTENSION, etc.)
+  icon?: string // Base64-encoded icon image for the signer (optional)
+  description?: string // Human-readable description of the signer (optional)
+} | undefined
+```
 
 Selected signer, undefined until selection:
 
