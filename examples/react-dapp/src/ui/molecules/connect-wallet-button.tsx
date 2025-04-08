@@ -1,4 +1,5 @@
-import { useSigner, useAuth } from "@nfid/identitykit/react"
+import { useAuth } from "@nfid/identitykit/react"
+import { useSigner } from "../../../../../packages/identitykit/src/libs/react/hooks"
 import clsx from "clsx"
 
 export function ConnectWalletButton() {

@@ -1,4 +1,4 @@
-import { useSigner } from "@nfid/identitykit/react"
+import { useSigner } from "../../../../../packages/identitykit/src/libs/react/hooks"
 import { useMemo, useState } from "react"
 import { toast } from "react-toastify"
 import { Button } from "../atoms"
