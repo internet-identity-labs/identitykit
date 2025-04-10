@@ -28,7 +28,7 @@
     "lint-staged": "turbo lint-staged"
   },
   "devDependencies": {
-    "@dfinity/auth-client": "^2.3.0",
+    "@dfinity/auth-client": "^2.4.0",
     "@nfid/eslint-config": "*",
     "@nfid/typescript-config": "*",
     "@testing-library/dom": "^10.4.0",
