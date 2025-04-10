@@ -118,12 +118,12 @@
     "ts-jest": "^29.2.5"
   },
   "peerDependencies": {
-    "@dfinity/auth-client": ">=2.3.0",
+    "@dfinity/auth-client": ">=2.4.0",
     "@dfinity/ledger-icp": ">=2.4.0",
-    "@dfinity/identity": ">=2.3.0",
-    "@dfinity/agent": ">=2.3.0",
-    "@dfinity/candid": ">=2.3.0",
-    "@dfinity/principal": ">=2.3.0",
+    "@dfinity/identity": ">=2.4.0",
+    "@dfinity/agent": ">=2.4.0",
+    "@dfinity/candid": ">=2.4.0",
+    "@dfinity/principal": ">=2.4.0",
     "react": ">=18.3.1",
     "react-dom": ">=18.3.1"
   },
