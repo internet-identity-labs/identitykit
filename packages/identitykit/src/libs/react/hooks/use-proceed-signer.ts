@@ -48,7 +48,7 @@ export function useProceedSigner({
 
         if (!transport) throw new Error("Transport was not found")
 
-        if (!transport.connection?.connected) {
+        if (!transport.connection?.connected && !localStorageSigner) {
           await transport.connection?.connect()
         }
 
