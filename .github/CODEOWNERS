@@ -2,17 +2,4 @@
 # Each line is a file pattern followed by one or more owners.
 
 # identitykit repository owner
-* @olekid
-
-# documentation owners
-docs/* @dostro @olekid @dmitriiIdentityLabs
-
-# @nfid/identitykit SDK owners
-packages/identitykit/* @olekid @dmitriiIdentityLabs
-
-# identitykit examples owners
-examples/* @olekid @dmitriiIdentityLabs
-
-# pipelines owner
-.github/* @DaniilIdentity @dmitriiIdentityLabs
-docker-for-e2e/* @DaniilIdentity
+* @slimHmac
