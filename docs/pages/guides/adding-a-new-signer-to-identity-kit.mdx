@@ -5,6 +5,8 @@ authors:
   - name: "Dmytro Sheremet"
 ---
 
+import { Callout } from "nextra/components"
+
 # Adding a New Signer to IdentityKit
 
 To add your wallet as a signer to IdentityKit, follow these four steps:
@@ -50,6 +52,21 @@ const YourWalletSigner: SignerConfig = {
   transportType: TransportType.NEW_TAB,
   label: "Your Wallet Name",
   icon: "data:image/svg+xml;base64,PHN2ZyB3aWR0ac+Cg==",
+}
+```
+
+<Callout type="info" emoji="ℹ️">
+  Note: by default IdentityKit uses `IdentityKitAuthType.DELEGATION` for all signers that support
+  icrc34_delegation, if you add new signer that does not support it - please make you've added
+  custom authType for this signer in ``packages/identitykit/src/lib/identity-kit.ts``
+</Callout>
+
+```typescript
+export const IdentityKitCustomSignerAuthType = {
+  [OISY.id]: IdentityKitAuthType.ACCOUNTS,
+  [InternetIdentity.id]: IdentityKitAuthType.DELEGATION,
+  [Stoic.id]: IdentityKitAuthType.DELEGATION,
+  [new_signer_id]: IdentityKitAuthType,
 }
 ```
 
