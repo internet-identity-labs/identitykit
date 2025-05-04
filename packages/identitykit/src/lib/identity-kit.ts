@@ -6,11 +6,19 @@ import {
   DelegationSignerClientOptions,
   SignerClient,
 } from "./signer-client"
+import { InternetIdentity, OISY, Stoic } from "./signers"
 
 export const IdentityKitAuthType = {
   DELEGATION: "DELEGATION",
   ACCOUNTS: "ACCOUNTS",
 } as const
+
+// here listed only specific signers which does not support specific auth type
+export const IdentityKitCustomSignerAuthType = {
+  [OISY.id]: IdentityKitAuthType.ACCOUNTS,
+  [InternetIdentity.id]: IdentityKitAuthType.DELEGATION,
+  [Stoic.id]: IdentityKitAuthType.DELEGATION,
+}
 
 type ObjectValuesType<T> = T[keyof T]
 

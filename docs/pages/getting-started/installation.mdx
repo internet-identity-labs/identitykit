@@ -62,8 +62,8 @@ import { IdentityKitProvider } from "@nfid/identitykit/react"
 
 ### Wrap provider
 
-Wrap your application with `IdentityKitProvider`, set `authType` to delegation, and add **your**
-backend canisters to the `targets` array.
+Wrap your application with `IdentityKitProvider`, set `authType` to `IdentityKitAuthType.DELEGATION`
+and add **your** backend canisters to the`targets` array.
 
 <Callout type="warning" emoji="⚠️">
   Add only **your** backend canister IDs to the `targets` array.
@@ -162,3 +162,12 @@ Currently known support for the icrc34_delegation standard:
 | OISY              | No                        |
 | Internet Identity | Yes                       |
 | Stoic             | Yes                       |
+
+### Signer authType
+
+By default all signers coming from identitykit will use `IdentityKitAuthType.DELEGATION` if they
+support it, otherwise `IdentityKitAuthType.ACCOUNTS` will be used.
+[Read more](/guides/authenticating-accounts).
+
+Read more about how to change [authType](/getting-started/advanced-options) for all signers or for
+specific one.

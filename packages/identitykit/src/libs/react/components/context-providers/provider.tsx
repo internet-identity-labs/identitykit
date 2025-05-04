@@ -1,12 +1,16 @@
 import { useState, useCallback, PropsWithChildren, useMemo, useEffect } from "react"
 import {
   IdentityKitAuthType,
-  IdentityKitAccountsSignerClientOptions,
   IdentityKitDelegationSignerClientOptions,
   NFIDW,
   InternetIdentity,
 } from "../../../../lib"
-import { useCreateIdentityKit, useCreatePromise, useProceedSigner } from "../../hooks"
+import {
+  useCreateIdentityKit,
+  useCreatePromise,
+  useProceedAuthType,
+  useProceedSigner,
+} from "../../hooks"
 import { validateUrl } from "../../utils"
 import { SignerConfig, TransportType } from "../../../../lib/types"
 import { ConnectWalletModal } from "../connect-wallet"
@@ -17,16 +21,16 @@ import { BrowserExtensionTransport } from "@slide-computer/signer-extension"
 import { Transport } from "@slide-computer/signer"
 import { TransportBuilder } from "../../../../lib/service"
 
-interface ProviderProps<T extends IdentityKitAuthType = typeof IdentityKitAuthType.ACCOUNTS>
-  extends PropsWithChildren {
-  authType?: T
+interface ProviderProps extends PropsWithChildren {
+  authType?: IdentityKitAuthType | Record<string, IdentityKitAuthType>
   signers?: SignerConfig[]
   featuredSigner?: SignerConfig | false
   discoverExtensionSigners?: boolean
   theme?: IdentityKitTheme
-  signerClientOptions?: T extends typeof IdentityKitAuthType.DELEGATION
-    ? Omit<IdentityKitDelegationSignerClientOptions, "signer" | "crypto" | "agent">
-    : Omit<IdentityKitAccountsSignerClientOptions, "signer" | "crypto" | "agent">
+  signerClientOptions?: Omit<
+    IdentityKitDelegationSignerClientOptions,
+    "signer" | "crypto" | "agent"
+  >
   onConnectFailure?: (e: Error) => unknown
   onConnectSuccess?: () => unknown
   onDisconnect?: () => unknown
@@ -39,18 +43,18 @@ interface ProviderProps<T extends IdentityKitAuthType = typeof IdentityKitAuthTy
 
 globalThis.global = globalThis
 
-export const Provider = <T extends IdentityKitAuthType>({
+export const Provider = ({
   children,
   signerClientOptions = {},
   crypto = globalThis.crypto,
   window = globalThis.window,
-  authType = IdentityKitAuthType.DELEGATION as T,
+  authType = {},
   realConnectDisabled,
   allowInternetIdentityPinAuthentication,
   discoverExtensionSigners = true,
   windowOpenerFeatures,
   ...props
-}: ProviderProps<T>) => {
+}: ProviderProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { createPromise, resolve, reject } = useCreatePromise<void>()
   const toggleModal = () => {
@@ -182,11 +186,16 @@ export const Provider = <T extends IdentityKitAuthType>({
     resolve()
   }, [setSelectedSignerToLocalStorage, resolve])
 
+  const finalAuthType = useProceedAuthType({
+    customAuthType: authType,
+    selectedSignerId: selectedSigner?.id,
+  })
+
   const identityKit = useCreateIdentityKit({
     selectedSigner,
     clearSigner,
     signerClientOptions: { ...signerClientOptions, crypto },
-    authType,
+    authType: finalAuthType,
     onConnectSuccess,
     onConnectFailure: reject,
     onDisconnect: props.onDisconnect,
@@ -246,7 +255,7 @@ export const Provider = <T extends IdentityKitAuthType>({
         featuredSigner,
         user: identityKit.user,
         icpBalance: identityKit.icpBalance,
-        authType,
+        authType: finalAuthType,
         signerClient: identityKit.signerClient,
         isInitializing,
         isUserConnecting,
