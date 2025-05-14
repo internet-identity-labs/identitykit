@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useTheme } from "next-themes"
 import { IdentityKitProvider, IdentityKitTheme } from "@nfid/identitykit/react"
 import { toast } from "react-toastify"
@@ -41,11 +41,6 @@ const signers = [nfidw, InternetIdentity, OISY, Stoic].concat(
 export function AppWrappedInIdentityKit() {
   const [authType, setAuthType] = useState<IdentityKitAuthType>(IdentityKitAuthType.DELEGATION)
   const { resolvedTheme } = useTheme()
-
-  useEffect(() => {
-    const localStorageAuthType = localStorage.getItem("authType")
-    if (localStorageAuthType) setAuthType(localStorageAuthType as IdentityKitAuthType)
-  }, [])
 
   return (
     <IdentityKitProvider
