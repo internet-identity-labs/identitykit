@@ -25,7 +25,7 @@ IdentityKitProvider also allows to set some important advanced props listed belo
 
 import { IdentityKitProvider } from "@nfid/identitykit/react"
 
-// authType can be set for all signers at once (OISY has priotiry to use IdentityKitAuthType.ACCOUNTS)
+// authType can be set for all signers at once (the list above takes priority over this)
 export const YourApp = () => {
   return (
     <IdentityKitProvider authType={IdentityKitAuthType.DELEGATION}>
@@ -38,7 +38,8 @@ export const YourApp = () => {
 export const YourApp = () => {
   return (
     <IdentityKitProvider authType={{
-      [signerId]: IdentityKitAuthType.DELEGATION
+      [signerId_1]: IdentityKitAuthType.DELEGATION,
+      [signerId_2]: IdentityKitAuthType.ACCOUNTS
     }}>
       <ConnectWallet />
     </IdentityKitProvider>

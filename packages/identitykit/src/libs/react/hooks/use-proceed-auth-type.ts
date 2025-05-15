@@ -11,7 +11,7 @@ export function useProceedAuthType({
   if (typeof customAuthType === "object") {
     return (
       {
-        // OISY does not support icrc34_delegation, so custom auth type is applied
+        // some signers does not support icrc34_delegation, other icrc27_accounts, so custom auth types are applied
         ...IdentityKitCustomSignerAuthType,
         ...(customAuthType as Record<string, IdentityKitAuthType>),
       }[selectedSignerId] ?? IdentityKitAuthType.DELEGATION
