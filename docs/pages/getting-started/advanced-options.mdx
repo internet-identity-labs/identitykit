@@ -5,7 +5,52 @@ authors:
   - name: "Dan Ostrovsky"
 ---
 
-IdentityKitProvider also allows to set some advanced props listed below:
+import { Callout } from "nextra/components"
+
+IdentityKitProvider also allows to set some important advanced props listed below:
+
+## authType
+
+`IdentityKitAuthType | {[signerId:string]: IdentityKitAuthType} {:typescript}`
+
+```jsx
+// By default authType is set to
+{
+  [NFIDW.id]: IdentityKitAuthType.DELEGATION,
+  [Plug.id]: IdentityKitAuthType.DELEGATION,
+  [OISY.id]: IdentityKitAuthType.ACCOUNTS, // does not support icrc34_delegation
+  [InternetIdentity.id]: IdentityKitAuthType.DELEGATION, // does not support icrc27_accounts
+  [Stoic.id]: IdentityKitAuthType.DELEGATION // does not support icrc27_accounts
+}
+
+import { IdentityKitProvider } from "@nfid/identitykit/react"
+
+// authType can be set for all signers at once (the list above takes priority over this)
+export const YourApp = () => {
+  return (
+    <IdentityKitProvider authType={IdentityKitAuthType.DELEGATION}>
+      <ConnectWallet />
+    </IdentityKitProvider>
+  )
+}
+
+// or custom for specific signer
+export const YourApp = () => {
+  return (
+    <IdentityKitProvider authType={{
+      [signerId_1]: IdentityKitAuthType.DELEGATION,
+      [signerId_2]: IdentityKitAuthType.ACCOUNTS
+    }}>
+      <ConnectWallet />
+    </IdentityKitProvider>
+  )
+}
+```
+
+<Callout type="info" emoji="ℹ️">
+  Note: authType will not be automatically switched if it doesnt support authType that was manually
+  set
+</Callout>
 
 ## signerClientOptions
 

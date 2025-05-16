@@ -25,7 +25,7 @@ export function useProceedSigner({
     (typeof window !== "undefined" && localStorage.getItem("signerId")) || ""
   )
   const [selectedSigner, setSelectedSigner] = useState<
-    { value: Signer<Transport>; id?: string } | undefined
+    { value: Signer<Transport>; id: string } | undefined
   >(undefined)
   const [isSignerBeingSelected, setIsSignerBeingSelected] = useState(false)
 
