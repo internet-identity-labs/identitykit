@@ -143,8 +143,7 @@ jobs:
     # needs: npm-publish
     if: ${{ (github.event_name != 'release' && (!failure() || !cancelled())) || (github.event_name == 'release' && success()) }}
     environment: ${{ github.event.inputs.network_name || ( contains(github.event_name, 'release') && 'ic' || 'dev' ) }}
-    runs-on:
-      group: dfx-runner
+    runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
@@ -195,6 +194,17 @@ jobs:
         fi
 
         ci_echo_success "${GITHUB_REF_TYPE} : ${GITHUB_REF_NAME}"
+    
+    - name: Setup DFX
+      uses: dfinity/setup-dfx@main
+      with:
+        dfx-version: 0.24.1
+
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: "22"
+        cache: "npm"
 
     - name: Cache Node Modules
       id: cache-node-modules
