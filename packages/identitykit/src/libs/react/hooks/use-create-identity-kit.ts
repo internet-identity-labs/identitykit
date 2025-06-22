@@ -111,7 +111,7 @@ export function useCreateIdentityKit<
         setIk(instance as IdentityKit)
       })
     }
-  }, [selectedSigner, realConnectDisabled])
+  }, [selectedSigner, realConnectDisabled, authType])
 
   // fetch balance when user connected
   useEffect(() => {
