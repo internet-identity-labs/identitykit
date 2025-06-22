@@ -4,13 +4,10 @@ import {
   IdentityKit,
   IdentityKitAccountsSignerClientOptions,
   IdentityKitDelegationSignerClientOptions,
-  IdentityKitDelegationSignerClient,
-  InternetIdentity,
 } from "../../../lib"
 import { Signer } from "@slide-computer/signer"
 import { Principal } from "@dfinity/principal"
 import { SubAccount } from "@dfinity/ledger-icp"
-import { AnonymousIdentity } from "@dfinity/agent"
 
 export function useCreateIdentityKit<
   T extends IdentityKitAuthType = typeof IdentityKitAuthType.ACCOUNTS,
@@ -49,13 +46,12 @@ export function useCreateIdentityKit<
   const [icpBalance, setIcpBalance] = useState<undefined | number>()
 
   const onDisconnect = useCallback(async () => {
+    await selectedSigner?.value.transport.connection?.disconnect()
     setIk(null)
     setUser(undefined)
     setIcpBalance(undefined)
-    await selectedSigner?.value.transport.connection?.disconnect()
     await clearSigner()
     props.onDisconnect?.()
-    if (selectedSigner?.id === InternetIdentity.id) window.location.reload()
   }, [ik?.signerClient, clearSigner, props.onDisconnect, selectedSigner])
 
   // create disconnect func
@@ -94,15 +90,6 @@ export function useCreateIdentityKit<
               onConnectFailure?.(e as Error)
             }
           } else {
-            if (
-              (
-                instance.signerClient as IdentityKitDelegationSignerClient
-              ).getIdentity?.() instanceof AnonymousIdentity
-            ) {
-              await instance.signerClient.logout()
-              await disconnect()
-              return
-            }
             setUser(instance.signerClient.connectedUser)
           }
         } else {
