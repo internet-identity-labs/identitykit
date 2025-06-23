@@ -47,10 +47,10 @@ const theme = {
     light: 38,
   },
   banner: {
-    key: "1.0.13-release",
+    key: "1.0.14-release",
     content: (
       <a href="https://www.npmjs.com/package/@nfid/identitykit" target="_blank">
-        🎉 @nfid/identitykit@1.0.13 is released.
+        🎉 @nfid/identitykit@1.0.14 is released.
       </a>
     ),
   },
