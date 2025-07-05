@@ -39,6 +39,7 @@ interface ProviderProps extends PropsWithChildren {
   window?: Window
   allowInternetIdentityPinAuthentication?: boolean
   windowOpenerFeatures?: string
+  discoveredSignersIdsToExclude?: string[]
 }
 
 globalThis.global = globalThis
@@ -53,6 +54,7 @@ export const Provider = ({
   allowInternetIdentityPinAuthentication,
   discoverExtensionSigners = true,
   windowOpenerFeatures,
+  discoveredSignersIdsToExclude = [],
   ...props
 }: ProviderProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -124,31 +126,33 @@ export const Provider = ({
     BrowserExtensionTransport.discover().then(async (providerDetails) => {
       setDiscoveredSigners(
         await Promise.all(
-          providerDetails.map(async (providerDetail) => ({
-            config: {
-              id: providerDetail.uuid,
-              providerUrl: "",
-              label: providerDetail.name,
-              transportType: TransportType.EXTENSION,
-              icon: providerDetail.icon,
-            },
-            transport: {
-              signerId: providerDetail.uuid,
-              value: await TransportBuilder.build({
-                maxTimeToLive,
-                derivationOrigin: signerClientOptions.derivationOrigin,
-                allowInternetIdentityPinAuthentication,
-                keyType,
-                storage,
-                identity,
+          providerDetails
+            .filter((pD) => !discoveredSignersIdsToExclude.includes(pD.uuid))
+            .map(async (providerDetail) => ({
+              config: {
                 id: providerDetail.uuid,
+                providerUrl: "",
+                label: providerDetail.name,
                 transportType: TransportType.EXTENSION,
-                url: "",
-                crypto,
-                window,
-              }),
-            },
-          }))
+                icon: providerDetail.icon,
+              },
+              transport: {
+                signerId: providerDetail.uuid,
+                value: await TransportBuilder.build({
+                  maxTimeToLive,
+                  derivationOrigin: signerClientOptions.derivationOrigin,
+                  allowInternetIdentityPinAuthentication,
+                  keyType,
+                  storage,
+                  identity,
+                  id: providerDetail.uuid,
+                  transportType: TransportType.EXTENSION,
+                  url: "",
+                  crypto,
+                  window,
+                }),
+              },
+            }))
         )
       )
     })
