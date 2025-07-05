@@ -45,6 +45,7 @@ export class TransportBuilder {
       storage,
       allowInternetIdentityPinAuthentication,
       url,
+      windowOpenerFeatures,
     }) =>
       getAuthClientTransportBuilder({
         authClientCreateOptions: {
@@ -57,6 +58,7 @@ export class TransportBuilder {
           derivationOrigin,
           allowPinAuthentication: allowInternetIdentityPinAuthentication,
           identityProvider: url,
+          windowOpenerFeatures,
         },
       }),
     [TransportType.STOIC]: ({ maxTimeToLive }) => getStoicTransportBuilder({ maxTimeToLive }),
