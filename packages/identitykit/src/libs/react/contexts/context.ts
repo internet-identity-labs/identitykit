@@ -8,6 +8,7 @@ import { SubAccount } from "@dfinity/ledger-icp"
 
 interface Context {
   signers: SignerConfig[]
+  discoveredSigners: SignerConfig[]
   featuredSigner?: SignerConfig
   selectedSigner?: {
     value: Signer

@@ -254,6 +254,7 @@ export const Provider = ({
     <Context.Provider
       value={{
         signers: signersIncludingDiscovered,
+        discoveredSigners: discoveredSigners.map(({ config }) => config),
         selectedSigner,
         isModalOpen,
         featuredSigner,
