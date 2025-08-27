@@ -26,7 +26,7 @@ describe("getPopupTransportBuilder", () => {
     expect(PostMessageTransport).toHaveBeenCalledWith({
       url: mockUrl,
       detectNonClickEstablishment: false,
-      disconnectTimeout: 10_000
+      disconnectTimeout: 10_000,
     })
   })
 })
