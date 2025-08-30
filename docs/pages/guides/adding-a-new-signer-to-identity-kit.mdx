@@ -70,25 +70,6 @@ export const IdentityKitCustomSignerAuthType = {
 }
 ```
 
-#### 2.1. Extension Wallet Case
-
-By default, IdentityKit will automatically attempt to discover installed signer extensions
-  that have implemented the [ICRC-94
-  standard](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_94_multi_injected_provider_discovery.md)
-  and will add the detected ones to the signers list (for example, PrimeVault)
-
-  To disable automatic extension signers discovery set `discoverExtensionSigners` to `false:{jsx}`:
-
-```jsx
-import { IdentityKitProvider } from "@nfid/identitykit/react"
-
-export const App = () => (
-  <IdentityKitProvider discoverExtensionSigners={false}>
-    <YourApp />
-  </IdentityKitProvider>
-)
-```
-
 ### 3. Create a pull request
 
 After adding your wallet configuration, commit your changes and push them to the repository. Then,
@@ -103,3 +84,9 @@ into the main branch, and the new version of the
 ---
 
 By following these steps, you will successfully add your wallet as a signer to IdentityKit.
+
+<Callout type="info" emoji="💡">
+  If you want your extension wallet to be automatically discovered by IdentityKit, it needs to
+  implement the [ICRC-94
+  standard](https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_94_multi_injected_provider_discovery.md).
+</Callout>
