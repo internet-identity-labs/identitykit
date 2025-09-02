@@ -12,6 +12,7 @@ on:
         type: choice
         options: 
           - dev
+          - ic
       release_npm:
         description: 'Run the NPM package release part'
         required: true
