@@ -14,4 +14,6 @@ export default {
   miscellaneous: {
     title: "Miscellaneous",
   },
+  blog: { unlisted: true },
+  legal: { unlisted: true },
 }
