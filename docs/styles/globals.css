@@ -24,13 +24,8 @@ body {
 }
 .nextra-toc-footer,
 .nextra-sidebar-footer {
-  background: #ffffff;
   box-shadow: none !important;
   border: none !important;
-}
-
-.dark .nextra-sidebar-footer {
-  background: #141518;
 }
 
 :root {
