@@ -19,12 +19,11 @@ body {
 
 .nextra-sidebar-footer {
   background: #ffffff;
-  box-shadow: none;
+  box-shadow: none !important;
 }
 
 .dark .nextra-sidebar-footer {
   background: #141518;
-  box-shadow: none;
 }
 
 :root {
@@ -41,13 +40,10 @@ body {
   border-color: var(--nextra-border-color);
 }
 
-/* Footer styling */
 footer {
-  background: #27272a !important;
-  border-top: 1px solid var(--nextra-border-color);
+  background: #ffffff !important;
 }
 
 .dark footer {
-  background: #f7f9f6 !important;
-  border-top: 1px solid var(--nextra-border-color);
+  background: #141518 !important;
 }
