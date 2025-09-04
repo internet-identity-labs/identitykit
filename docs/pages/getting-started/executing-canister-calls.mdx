@@ -10,7 +10,8 @@ import { Callout } from "nextra/components"
 # Executing canister calls
 
 Your application will likely execute calls to your own canisters
-([targets](installation#wrap-provider)) and others (non-targets i.e. ledger canisters).
+([targets](/getting-started/installation#wrap-provider)) and others (non-targets i.e. ledger
+canisters).
 
 The following guide teaches you how to set up actors to each depending on how the user
 authenticated, whether the canister is a target, and if the method being called requires a user to
@@ -20,7 +21,7 @@ execute.
 
 ### 1. Connect Wallet
 
-Follow the [installation](installation) guide to connect a wallet address.
+Follow the [installation](/getting-started/installation) guide to connect a wallet address.
 
 ### 2. Import idlFactories
 
@@ -36,7 +37,7 @@ import { idlFactory as nonTargetIdlFactory } from "/path/to/nontarget/did.js"
 
 ### 3. Set up agents
 
-IdentityKit comes bundled with a [hook](../hooks/useAgent) to get the agent for making authenticated
+IdentityKit comes bundled with a [hook](/hooks/useAgent) to get the agent for making authenticated
 calls to target and non target canisters, and manages whether or not to show approval pop-ups. You
 should also set up an unauthenticatedAgent for calls the user doesn't need to execute themselves.
 
