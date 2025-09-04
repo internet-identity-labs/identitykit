@@ -101,7 +101,7 @@ const theme = {
     )
   },
   footer: {
-    text: () => <span>© {new Date().getFullYear()} Internet Identity Labs.</span>,
+    content: <span>© {new Date().getFullYear()} Internet Identity Labs.</span>,
   },
 }
 
