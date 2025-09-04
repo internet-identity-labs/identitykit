@@ -54,8 +54,8 @@ const theme = {
       </a>
     ),
   },
-  footerEditLink: false,
-  footerChatLink: false,
+  editlink: null,
+  feedback: null,
   head: () => {
     const { title } = useConfig()
 
