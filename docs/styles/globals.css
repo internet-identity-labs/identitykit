@@ -5,10 +5,51 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
 
 body {
-  background: "#fff";
+  background: #ffffff;
+  color: #000000;
   font-family: "Inter", sans-serif;
 }
 
 .dark body {
   background: #141518;
+  color: #ffffff;
+}
+
+.nextra-nav-container-blur {
+  box-shadow: none;
+}
+
+.nextra-sidebar-footer {
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.dark .nextra-sidebar-footer {
+  background: #141518;
+  box-shadow: none;
+}
+
+:root {
+  --nextra-border-color: #e5e7eb;
+}
+
+.dark {
+  --nextra-border-color: #3f3f46;
+}
+
+.nextra-nav-container,
+.nextra-sidebar,
+.nextra-content {
+  border-color: var(--nextra-border-color);
+}
+
+/* Footer styling */
+footer {
+  background: #27272a !important;
+  border-top: 1px solid var(--nextra-border-color);
+}
+
+.dark footer {
+  background: #f7f9f6 !important;
+  border-top: 1px solid var(--nextra-border-color);
 }
