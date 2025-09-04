@@ -38,13 +38,23 @@ const theme = {
     toggleButton: true,
     defaultMenuCollapseLevel: 1,
   },
-  primaryHue: {
-    dark: 175,
-    light: 173,
+  color: {
+    hue: {
+      dark: 173,
+      light: 175,
+    },
+    saturation: {
+      dark: 80,
+      light: 69,
+    },
+    lightness: {
+      dark: 40,
+      light: 26,
+    },
   },
-  primarySaturation: {
-    dark: 69,
-    light: 38,
+  backgroundColor: {
+    dark: "20,21,24",
+    light: "255,255,255",
   },
   banner: {
     key: "1.0.15-release",
