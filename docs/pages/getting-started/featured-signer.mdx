@@ -5,10 +5,21 @@ authors:
   - name: "Dan Ostrovsky"
 ---
 
+import Image from "next/image"
+import { useTheme } from "nextra-theme-docs"
+
+function ThemedImage({ lightSrc, darkSrc, alt, width = 600, height = 400 }) { const { theme } =
+useTheme() return ( <Image src={theme === "dark" ? darkSrc : lightSrc} alt={alt} width={width}
+height={height} /> ) }
+
 By default, IdentityKit's `featuredSigner` is set to `NFIDW` in case `signers` prop includes `NFIDW`
 or was not provided (and looks like this):
 
-![NFID Featured Signer](../../../docs/public/img/featured-mode.png)
+<ThemedImage
+  lightSrc="/img/featured-mode.png"
+  darkSrc="/img/featured-mode-dark.png"
+  alt="NFID IdentityKit featured mode"
+/>
 
 ```jsx
 import { IdentityKitProvider } from "@nfid/identitykit/react"
@@ -29,7 +40,11 @@ Available options for `featuredSigner`:
 
 With `false{:typescript}` value provided modal will look like this:
 
-![NFID No featured signer](../../../docs/public/img/compact-mode.png)
+<ThemedImage
+  lightSrc="/img/compact-mode.png"
+  darkSrc="/img/compact-mode-dark.png"
+  alt="NFID IdentityKit compact mode"
+/>
 
 ```jsx
 import { IdentityKitProvider } from "@nfid/identitykit/react"
