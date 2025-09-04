@@ -14,6 +14,21 @@ export default {
   miscellaneous: {
     title: "Miscellaneous",
   },
-  blog: { unlisted: true },
-  legal: { unlisted: true },
+  blog: {
+    type: "menu",
+    items: {
+      "standardizing-icp-wallet-and-identity-interaction-overview": {
+        title: "Blog Page",
+        unlisted: true,
+      },
+    },
+  },
+
+  legal: {
+    type: "menu",
+    items: {
+      privacy: { title: "Privacy Policy", unlisted: true },
+      terms: { title: "Terms of Use", unlisted: true },
+    },
+  },
 }
