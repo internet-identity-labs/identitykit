@@ -4,6 +4,13 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
 
+html {
+  border-color: #e5e7eb !important;
+}
+html.dark {
+  border-color: #3f3f46 !important;
+}
+
 body {
   color: #000000;
   font-family: "Inter", sans-serif;
@@ -14,7 +21,7 @@ body {
 }
 
 .nextra-nav-container-blur {
-  box-shadow: none;
+  box-shadow: none !important;
 }
 
 .nextra-sidebar-footer {
@@ -27,11 +34,11 @@ body {
 }
 
 :root {
-  --nextra-border-color: #e5e7eb;
+  --nextra-border-color: #e5e7eb !important;
 }
 
 .dark {
-  --nextra-border-color: #3f3f46;
+  --nextra-border-color: #3f3f46 !important;
 }
 
 .nextra-nav-container,
