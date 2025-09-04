@@ -5,13 +5,20 @@ interface Props {
   lightSrc: string
   darkSrc: string
   alt: string
-  width?: number
-  height?: number
+  className?: string
 }
 
-export default function ThemedImage({ lightSrc, darkSrc, alt, width = 600, height = 400 }: Props) {
-  const { theme } = useTheme()
+export default function ThemedImage({ lightSrc, darkSrc, alt, className }: Props) {
+  const { resolvedTheme } = useTheme()
+
   return (
-    <Image src={theme === "dark" ? darkSrc : lightSrc} alt={alt} width={width} height={height} />
+    <div style={{ position: "relative", width: "100%", aspectRatio: "3/2" }} className={className}>
+      <Image
+        src={resolvedTheme === "dark" ? darkSrc : lightSrc}
+        alt={alt}
+        fill
+        style={{ objectFit: "contain" }}
+      />
+    </div>
   )
 }
