@@ -103,15 +103,12 @@ and manage wallet switching.
 
 IdentityKit comes with its own playground where you can try things out locally.
 
-There are three applications included:
+There are two applications included:
 
-1. `dApp` (react-dapp) - Built for signer developers, this app provides a web-based interface to
-   visually explore the API documentation for IdentityKit standards. It runs on port 3001. Check it
-   out at https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io/standards
-2. `Demo` (react-demo) - This app is for application developers. It's a simple frontend app with
+1. `Demo` (react-demo) - This app is for application developers. It's a simple frontend app with
    IdentityKit integrated. It runs on port 3002 and lets you sign in with IdentityKit and make
    canister calls. Check it out at https://qzjsg-qiaaa-aaaam-acupa-cai.icp0.io/demo
-3. `Signer` (react-signer) - This is a sample signer app that demonstrates the basics of signer
+2. `Signer` (react-signer) - This is a sample signer app that demonstrates the basics of signer
    functionality. It helps to understand what’s happening on the signer side. It runs on port 3003.
 
 To get the playground up and running, use the following command:
