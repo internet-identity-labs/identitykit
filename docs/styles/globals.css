@@ -10,7 +10,6 @@ html {
 html.dark {
   border-color: #3f3f46 !important;
 }
-
 body {
   color: #000000;
   font-family: "Inter", sans-serif;
@@ -23,10 +22,11 @@ body {
 .nextra-nav-container-blur {
   box-shadow: none !important;
 }
-
+.nextra-toc-footer,
 .nextra-sidebar-footer {
   background: #ffffff;
   box-shadow: none !important;
+  border: none !important;
 }
 
 .dark .nextra-sidebar-footer {
@@ -37,7 +37,7 @@ body {
   --nextra-border-color: #e5e7eb !important;
 }
 
-.dark {
+:root.dark {
   --nextra-border-color: #3f3f46 !important;
 }
 
