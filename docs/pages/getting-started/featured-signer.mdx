@@ -5,12 +5,7 @@ authors:
   - name: "Dan Ostrovsky"
 ---
 
-import Image from "next/image"
-import { useTheme } from "nextra-theme-docs"
-
-function ThemedImage({ lightSrc, darkSrc, alt, width = 600, height = 400 }) { const { theme } =
-useTheme() return ( <Image src={theme === "dark" ? darkSrc : lightSrc} alt={alt} width={width}
-height={height} /> ) }
+import ThemedImage from "../../components/ThemedImage"
 
 By default, IdentityKit's `featuredSigner` is set to `NFIDW` in case `signers` prop includes `NFIDW`
 or was not provided (and looks like this):
