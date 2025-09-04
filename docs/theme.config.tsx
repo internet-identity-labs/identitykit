@@ -55,7 +55,7 @@ const theme = {
     ),
   },
   editLink: {
-    text: null,
+    component: null,
   },
   feedback: {
     content: null,
@@ -101,7 +101,7 @@ const theme = {
     )
   },
   footer: {
-    text: <span>© {new Date().getFullYear()} Internet Identity Labs.</span>,
+    text: () => <span>© {new Date().getFullYear()} Internet Identity Labs.</span>,
   },
 }
 
