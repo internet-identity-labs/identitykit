@@ -54,8 +54,12 @@ const theme = {
       </a>
     ),
   },
-  editlink: null,
-  feedback: null,
+  editLink: {
+    text: null,
+  },
+  feedback: {
+    content: null,
+  },
   head: () => {
     const { title } = useConfig()
 
@@ -97,14 +101,8 @@ const theme = {
     )
   },
   footer: {
-    text: (
-      <span>
-        © {new Date().getFullYear() + " "}
-        Internet Identity Labs.
-      </span>
-    ),
+    text: <span>© {new Date().getFullYear()} Internet Identity Labs.</span>,
   },
-  // ... other theme options
 }
 
 export default theme
