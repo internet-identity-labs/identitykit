@@ -6,15 +6,15 @@ authors:
 ---
 
 import ThemedImage from "../../components/ThemedImage"
+import lightFeatured from "../../../public/img/featured-mode.png"
+import darkFeatured from "../../../public/img/featured-mode-dark.png"
+import lightCompact from "../../../public/img/compact-mode.png"
+import darkCompact from "../../../public/img/compact-mode-dark.png"
 
 By default, IdentityKit's `featuredSigner` is set to `NFIDW` in case `signers` prop includes `NFIDW`
 or was not provided (and looks like this):
 
-<ThemedImage
-  lightSrc="../../../docs/public/img/featured-mode.png"
-  darkSrc="../../../docs/public/img/eatured-mode-dark.png"
-  alt="NFID IdentityKit featured mode"
-/>
+<ThemedImage lightSrc={lightFeatured} darkSrc={darkFeatured} alt="NFID IdentityKit featured mode" />
 
 ```jsx
 import { IdentityKitProvider } from "@nfid/identitykit/react"
@@ -35,11 +35,7 @@ Available options for `featuredSigner`:
 
 With `false{:typescript}` value provided modal will look like this:
 
-<ThemedImage
-  lightSrc="../../../docs/public/img/compact-mode.png"
-  darkSrc="../../../docs/public/img/compact-mode-dark.png"
-  alt="NFID IdentityKit compact mode"
-/>
+<ThemedImage lightSrc={lightCompact} darkSrc={darkCompact} alt="NFID IdentityKit compact mode" />
 
 ```jsx
 import { IdentityKitProvider } from "@nfid/identitykit/react"
