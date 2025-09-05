@@ -20,7 +20,7 @@ export const Header = () => {
   return (
     <div className="mb-3">
       <div className="flex items-center justify-between h-[68px]">
-        <div className="flex flex-col relative">
+        <div className="relative flex flex-col">
           <a href={import.meta.env.VITE_LANDING_URL} target="_blank">
             <img
               className="dark:hidden w-[130px] sm:w-[140px] md:w-auto"
@@ -38,19 +38,19 @@ export const Header = () => {
             href="https://www.npmjs.com/package/@nfid/identitykit"
             className="absolute text-[10px] text-primary dark:text-teal-500 text-right right-0 bottom-0 mb-[-10px] me-[-10px]"
           >
-            v1.0.14
+            v1.0.15
           </a>
         </div>
         <div className="flex items-center space-x-2 sm:space-x-4">
           <a
             target="_blank"
             href={`${import.meta.env.VITE_LANDING_URL}/docs`}
-            className="text-sm font-bold hidden sm:block"
+            className="hidden text-sm font-bold sm:block"
           >
             Dev docs
           </a>
           <img
-            className="block sm:hidden cursor-pointer"
+            className="block cursor-pointer sm:hidden"
             src={resolvedTheme === "light" ? IconSvgDocsLight : IconSvgDocsDark}
             onClick={() => window.open(`${import.meta.env.VITE_LANDING_URL}/docs`, "_blank")}
             alt="docs"
@@ -85,12 +85,12 @@ export const Header = () => {
             connectedButtonComponent={(props) => {
               return (
                 <ConnectedWalletButton {...props} className="min-w-[100px] sm:min-w-[140px]">
-                  <small className="mr-2 hidden md:block">
+                  <small className="hidden mr-2 md:block">
                     {props.connectedAccount.substring(0, 5)}...
                     {props.connectedAccount.substring(props.connectedAccount.length - 5)}
                   </small>
                   <div className="bg-white px-[5px] rounded-md">
-                    <small className="text-black font-normal text-xs">
+                    <small className="text-xs font-normal text-black">
                       {props.icpBalance !== undefined && `${formatIcp(props.icpBalance)} ICP`}
                     </small>
                   </div>

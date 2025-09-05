@@ -38,21 +38,37 @@ const theme = {
     toggleButton: true,
     defaultMenuCollapseLevel: 1,
   },
-  primaryHue: {
-    dark: 175,
-    light: 173,
+  color: {
+    hue: {
+      dark: 173,
+      light: 175,
+    },
+    saturation: {
+      dark: 80,
+      light: 69,
+    },
+    lightness: {
+      dark: 40,
+      light: 26,
+    },
   },
-  primarySaturation: {
-    dark: 69,
-    light: 38,
+  backgroundColor: {
+    dark: "20,21,24",
+    light: "255,255,255",
   },
   banner: {
-    key: "1.0.14-release",
+    key: "1.0.15-release",
     content: (
       <a href="https://www.npmjs.com/package/@nfid/identitykit" target="_blank">
-        🎉 @nfid/identitykit@1.0.14 is released.
+        🎉 @nfid/identitykit@1.0.15 is released.
       </a>
     ),
+  },
+  editLink: {
+    component: null,
+  },
+  feedback: {
+    content: null,
   },
   head: () => {
     const { title } = useConfig()
@@ -95,14 +111,8 @@ const theme = {
     )
   },
   footer: {
-    text: (
-      <span>
-        © {new Date().getFullYear() + " "}
-        Internet Identity Labs.
-      </span>
-    ),
+    content: <span>© {new Date().getFullYear()} Internet Identity Labs.</span>,
   },
-  // ... other theme options
 }
 
 export default theme
