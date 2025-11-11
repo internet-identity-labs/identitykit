@@ -48,6 +48,7 @@ export function AppWrappedInIdentityKit() {
       featuredSigner={nfidw}
       theme={resolvedTheme as IdentityKitTheme}
       authType={authType}
+      excludeExtensionSignersBy={[{ name: "Plug Wallet" }]}
       signerClientOptions={{
         targets: [targetCanister],
       }}

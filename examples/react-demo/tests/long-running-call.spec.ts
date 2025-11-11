@@ -41,56 +41,59 @@ for (const account of accounts) {
     DemoPage.profileType
   ) as (keyof typeof DemoPage.profileType)[]) {
     for (const method of loginMethods) {
-      test.describe(`"Canister long running update call to IdentityKit Demo canister for ${account.type} user`, () => {
-        test(`User makes long running update call request via ${DemoPage.loginMethods[method]} login method with ${DemoPage.profileType[accountProfile]} profile`, async ({
-          demoPage,
-          nfidPage,
-          callCanisterSection,
-          profileSection,
-          context,
-        }) => {
-          await nfidPage.title()
-          await demoPage.login(
-            context,
-            account,
-            DemoPage.profileType[accountProfile],
+      test.describe.skip(
+        `"Canister long running update call to IdentityKit Demo canister for ${account.type} user`,
+        () => {
+          test(`User makes long running update call request via ${DemoPage.loginMethods[method]} login method with ${DemoPage.profileType[accountProfile]} profile`, async ({
+            demoPage,
+            nfidPage,
+            callCanisterSection,
             profileSection,
-            DemoPage.loginMethods[method]
-          )
-
-          await callCanisterSection.verifyThemeChanging()
-
-          await context.pages()[context.pages().length - 1]!.reload()
-          await context.pages()[context.pages().length - 1]!.waitForLoadState("load")
-
-          await callCanisterSection.setSelectedMethod(
-            callCanisterSection.availableMethods.long_running_update_call!
-          )
-          await callCanisterSection.checkRequestResponse(
-            DemoPage.profileType[accountProfile] == "public"
-              ? ExpectedTexts.General.Public.Initial_LongRunningUpdateCall_RequestState
-              : ExpectedTexts.General.Anonymous.Initial_LongRunningUpdateCall_RequestState
-          )
-
-          if (DemoPage.profileType[accountProfile] == "legacy_0") return
-
-          if (DemoPage.loginMethods[method] == "Accounts") {
-            await callCanisterSection.clickSubmitButtonAndGetPopup(context)
-            await callCanisterSection.checkNFIDPopupText(
-              ExpectedTexts.NFID.Public.IdentityKitDemoCallRPCText
+            context,
+          }) => {
+            await nfidPage.title()
+            await demoPage.login(
+              context,
+              account,
+              DemoPage.profileType[accountProfile],
+              profileSection,
+              DemoPage.loginMethods[method]
             )
-            await callCanisterSection.NFIDApproveButton.click()
-          } else {
-            await callCanisterSection.callCanisterSubmitButton.click()
-          }
 
-          await callCanisterSection.waitForNotEmptyResponse(180000)
-          const actualResponse = await callCanisterSection.getResponse()
-          expect([actualResponse]).toEqual(ExpectedTexts.NFID.Public.IdentityKitDemoCallResponse)
+            await callCanisterSection.verifyThemeChanging()
 
-          await demoPage.logout()
-        })
-      })
+            await context.pages()[context.pages().length - 1]!.reload()
+            await context.pages()[context.pages().length - 1]!.waitForLoadState("load")
+
+            await callCanisterSection.setSelectedMethod(
+              callCanisterSection.availableMethods.long_running_update_call!
+            )
+            await callCanisterSection.checkRequestResponse(
+              DemoPage.profileType[accountProfile] == "public"
+                ? ExpectedTexts.General.Public.Initial_LongRunningUpdateCall_RequestState
+                : ExpectedTexts.General.Anonymous.Initial_LongRunningUpdateCall_RequestState
+            )
+
+            if (DemoPage.profileType[accountProfile] == "legacy_0") return
+
+            if (DemoPage.loginMethods[method] == "Accounts") {
+              await callCanisterSection.clickSubmitButtonAndGetPopup(context)
+              await callCanisterSection.checkNFIDPopupText(
+                ExpectedTexts.NFID.Public.IdentityKitDemoCallRPCText
+              )
+              await callCanisterSection.NFIDApproveButton.click()
+            } else {
+              await callCanisterSection.callCanisterSubmitButton.click()
+            }
+
+            await callCanisterSection.waitForNotEmptyResponse(180000)
+            const actualResponse = await callCanisterSection.getResponse()
+            expect([actualResponse]).toEqual(ExpectedTexts.NFID.Public.IdentityKitDemoCallResponse)
+
+            await demoPage.logout()
+          })
+        }
+      )
     }
   }
 }

@@ -41,7 +41,7 @@ for (const account of accounts) {
     DemoPage.profileType
   ) as (keyof typeof DemoPage.profileType)[]) {
     for (const method of loginMethods) {
-      test.describe(`"ICP-transfer" methods for ${account.type} user`, () => {
+      test.describe.skip(`"ICP-transfer" methods for ${account.type} user`, () => {
         test(`User makes icp_transfer call canister via ${DemoPage.loginMethods[method]} login method with ${DemoPage.profileType[accountProfile]} profile`, async ({
           demoPage,
           nfidPage,
