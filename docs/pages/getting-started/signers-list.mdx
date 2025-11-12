@@ -62,3 +62,22 @@ export const App = () => (
   </IdentityKitProvider>
 )
 ```
+
+To exclude specific discovered extension signers while keeping automatic discovery enabled, use
+`excludeExtensionSignersBy` with an array of objects. Each object must specify either a `uuid` or a
+`name` property:
+
+```jsx
+import { IdentityKitProvider } from "@nfid/identitykit/react"
+
+export const App = () => (
+  <IdentityKitProvider
+    excludeExtensionSignersBy={[{ uuid: "signer-uuid-1" }, { name: "OneVault" }]}
+  >
+    <YourApp />
+  </IdentityKitProvider>
+)
+```
+
+You can exclude signers by `uuid` or by `name`. A signer will be excluded if either the UUID or name
+matches any entry in the exclusion list.

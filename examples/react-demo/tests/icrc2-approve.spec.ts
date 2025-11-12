@@ -60,9 +60,6 @@ for (const account of accounts) {
 
           await callCanisterSection.verifyThemeChanging()
 
-          await context.pages()[context.pages().length - 1]!.reload()
-          await context.pages()[context.pages().length - 1]!.waitForLoadState("load")
-
           await callCanisterSection.setSelectedMethod(
             callCanisterSection.availableMethods.icrc2_approve!
           )

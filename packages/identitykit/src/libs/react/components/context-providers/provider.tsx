@@ -39,6 +39,7 @@ interface ProviderProps extends PropsWithChildren {
   window?: Window
   allowInternetIdentityPinAuthentication?: boolean
   windowOpenerFeatures?: string
+  excludeExtensionSignersBy?: ({ name: string } | { uuid: string })[]
 }
 
 globalThis.global = globalThis
@@ -53,6 +54,7 @@ export const Provider = ({
   allowInternetIdentityPinAuthentication,
   discoverExtensionSigners = true,
   windowOpenerFeatures,
+  excludeExtensionSignersBy = [],
   ...props
 }: ProviderProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -117,6 +119,7 @@ export const Provider = ({
       config: SignerConfig
     }>
   >([])
+
   useEffect(() => {
     if (!discoverExtensionSigners) {
       return
@@ -124,31 +127,40 @@ export const Provider = ({
     BrowserExtensionTransport.discover().then(async (providerDetails) => {
       setDiscoveredSigners(
         await Promise.all(
-          providerDetails.map(async (providerDetail) => ({
-            config: {
-              id: providerDetail.uuid,
-              providerUrl: "",
-              label: providerDetail.name,
-              transportType: TransportType.EXTENSION,
-              icon: providerDetail.icon,
-            },
-            transport: {
-              signerId: providerDetail.uuid,
-              value: await TransportBuilder.build({
-                maxTimeToLive,
-                derivationOrigin: signerClientOptions.derivationOrigin,
-                allowInternetIdentityPinAuthentication,
-                keyType,
-                storage,
-                identity,
-                id: providerDetail.uuid,
+          providerDetails
+            .filter(
+              (provider) =>
+                !excludeExtensionSignersBy.some(
+                  (exclude) =>
+                    ("uuid" in exclude && exclude.uuid === provider.uuid) ||
+                    ("name" in exclude && exclude.name === provider.name)
+                )
+            )
+            .map(async (provider) => ({
+              config: {
+                id: provider.uuid,
+                providerUrl: "",
+                label: provider.name,
                 transportType: TransportType.EXTENSION,
-                url: "",
-                crypto,
-                window,
-              }),
-            },
-          }))
+                icon: provider.icon,
+              },
+              transport: {
+                signerId: provider.uuid,
+                value: await TransportBuilder.build({
+                  maxTimeToLive,
+                  derivationOrigin: signerClientOptions.derivationOrigin,
+                  allowInternetIdentityPinAuthentication,
+                  keyType,
+                  storage,
+                  identity,
+                  id: provider.uuid,
+                  transportType: TransportType.EXTENSION,
+                  url: "",
+                  crypto,
+                  window,
+                }),
+              },
+            }))
         )
       )
     })
