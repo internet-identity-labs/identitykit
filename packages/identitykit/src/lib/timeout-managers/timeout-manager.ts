@@ -58,10 +58,8 @@ export class TimeoutManager {
    * Resets the timeouts during cleanup
    */
   _resetTimer(): void {
-    const exit = this.exit.bind(this)
     window.clearTimeout(this.timeoutID)
     this.timeoutID = window.setTimeout(() => {
-      exit()
       this.callbacks.forEach((cb) => cb())
     }, this.timeout)
   }
