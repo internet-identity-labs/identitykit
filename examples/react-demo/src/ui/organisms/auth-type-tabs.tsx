@@ -25,7 +25,8 @@ export function AuthTypeTabs({
   const accounts = useAccounts()
   const identity = useIdentity()
 
-  const isAccounts = authType === IdentityKitAuthType.ACCOUNTS || !!accounts
+  const isAccounts =
+    accounts !== undefined || (identity === undefined && authType === IdentityKitAuthType.ACCOUNTS)
 
   return (
     <>
