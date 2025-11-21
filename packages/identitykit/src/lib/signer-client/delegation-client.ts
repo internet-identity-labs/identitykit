@@ -102,10 +102,12 @@ export class DelegationSignerClient extends SignerClient {
 
       if (delegationValid) {
         signerClient.initExpirationManager(delegationChain)
+        const storageConnectedUser = await signerClient.getConnectedUserFromStorage()
+        await signerClient.setConnectedUser(storageConnectedUser)
+      } else {
+        await signerClient.setConnectedUserToStorage(undefined)
+        await signerClient.setConnectedUser(undefined)
       }
-
-      const storageConnectedUser = await signerClient.getConnectedUserFromStorage()
-      await signerClient.setConnectedUser(storageConnectedUser)
 
       return signerClient
     }
