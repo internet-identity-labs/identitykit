@@ -46,10 +46,10 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Checkout CI repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           token: ${{ secrets.PAT }}
           repository: internet-identity-labs/ci_libs
@@ -86,7 +86,7 @@ jobs:
           ci_echo_success "${GITHUB_REF_TYPE} : ${GITHUB_REF_NAME}"
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "22"
 
@@ -156,10 +156,10 @@ jobs:
         exit 1
 
     - name: Checkout repo
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Checkout CI repo
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         token: ${{ secrets.PAT }}
         repository: internet-identity-labs/ci_libs
@@ -201,7 +201,7 @@ jobs:
         dfx-version: 0.24.1
 
     - name: Setup Node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version: "22"
         cache: "npm"
