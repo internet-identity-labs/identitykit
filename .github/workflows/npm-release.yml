@@ -19,8 +19,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     permissions:
+      id-token: write
       packages: write
-      contents: write
+      contents: read
     steps:
       - name: INPUT => Checks Publishing
         if: (github.event.inputs.registry == 'npm') && (github.event.inputs.confirmation != 'Yes')
@@ -46,12 +47,7 @@ jobs:
         if: ${{ github.event.inputs.registry == 'npm' }}
         working-directory: packages/identitykit
         run: | 
-          echo "registry=https://registry.npmjs.org/" > ~/.npmrc
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
-          
           npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.IL_GH_NPM_TOKEN }}
 
       - name: 📦 Publish package on GPR
         if: ${{ github.event.inputs.registry == 'github-packages' }}
