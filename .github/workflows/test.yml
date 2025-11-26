@@ -28,10 +28,10 @@ jobs:
 
     steps:
       - name: Checkout repo.
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
 
@@ -64,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo.
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Docker build
         run: |
