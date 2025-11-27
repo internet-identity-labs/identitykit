@@ -64,6 +64,7 @@ class InterfaceFactoryService {
     ]
     let responseCandid: ReadStateResponse
     try {
+      // @ts-expect-error - Uint8Array array is compatible with ArrayBuffer array in runtime
       responseCandid = await agent.readState(canister, { paths: [pathCandid] })
     } catch (error) {
       throw new GenericError(
@@ -78,6 +79,7 @@ class InterfaceFactoryService {
         agent.rootKey ??
         new Uint8Array(IC_ROOT_KEY.match(/[\da-f]{2}/gi)!.map((h) => parseInt(h, 16))).buffer,
     })
+    // @ts-expect-error - Uint8Array array is compatible with ArrayBuffer array in runtime
     const dataCandid = certificate.lookup(pathCandid)
     const candidFileMabye = new TextDecoder().decode(
       (dataCandid as LookupResultFound).value as ArrayBuffer

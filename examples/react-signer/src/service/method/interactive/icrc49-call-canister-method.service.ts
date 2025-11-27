@@ -117,6 +117,7 @@ class Icrc49CallCanisterMethodService extends InteractiveMethodService {
       )
       const idl: IDL.ServiceClass = interfaceFactory({ IDL })
       const func: IDL.FuncClass = idl._fields.find((x: unknown[]) => icrc49Dto.method === x[0])![1]
+      // @ts-expect-error - Buffer is compatible with ArrayBuffer in runtime
       argument = JSON.stringify(IDL.decode(func.argTypes, Buffer.from(icrc49Dto.arg, "base64")))
     } catch (e) {
       console.warn(
