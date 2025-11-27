@@ -22,7 +22,7 @@
     "@uiw/codemirror-extensions-langs": "^4.25.3",
     "@uiw/codemirror-theme-basic": "^4.25.3",
     "@uiw/react-codemirror": "^4.25.3",
-    "@slide-computer/signer": "3.16.0",
+    "@slide-computer/signer": "3.20.0",
     "clsx": "^2.1.1",
     "ictool": "^1.1.1",
     "react-toastify": "^11.0.5",
