@@ -1,34 +1,33 @@
 version: 2
 updates:
   # This section configures Dependabot to update npm dependencies.
-  - package-ecosystem: "npm"  # We're managing dependencies installed with npm. 
-    target-branch: "main"  # Updates will be created on the "main" branch.
-    directory: "/"  # Search for dependencies in the entire project.
+  - package-ecosystem: "npm"
+    target-branch: "main"
+    directory: "/"
     schedule:
-      interval: "weekly"  # Check for updates every week.
-    open-pull-requests-limit: 1  # Only create a maximum of 1 pull request at a time.
-    versioning-strategy: increase  # Always update to the latest recommended version.
+      interval: "weekly"
+    open-pull-requests-limit: 1
+    versioning-strategy: increase
     commit-message:
-      prefix: "[npm]"  # Pull request titles will start with "[npm]".
+      prefix: "[yarn]"
     assignees:
-      - "olekid"  # Assign pull requests to "olekid".
+      - "dmytroidentitylabs"
     groups:
-      dependencies:  # Group all dependency updates under "dependencies".
-        patterns:  # Look for updates in any file or directory.
-          - "*"  # Wildcard (*) matches everything.
+      dependencies:
+        patterns:
+          - "*"
 
   # This section configures Dependabot to update GitHub Actions dependencies.
-  - package-ecosystem: "github-actions"  # We're managing workflow dependencies.
-    directory: "/"  # Search for dependencies in the entire project (.github/workflows folder).
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
-      interval: "weekly"  # Check for updates every week.
-    open-pull-requests-limit: 1  # Only create a maximum of 1 pull request at a time.
-    # versioning-strategy: increase Always update to the latest recommended version.
+      interval: "weekly"
+    open-pull-requests-limit: 1
     commit-message:
-      prefix: "[github-actions]"  # Pull request titles will start with "[github-actions]".
+      prefix: "[github-actions]"
     assignees:
-      - "DaniilIdentity"  # Assign pull requests to "DaniilIdentity".
+      - "dmytroidentitylabs"
     groups:
-      dependencies:  # Group all dependency updates under "dependencies".
-        patterns:  # Look for updates in any file or directory.
-          - "*"  # Wildcard (*) matches everything.
+      dependencies:
+        patterns:
+          - "*"
