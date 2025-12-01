@@ -41,6 +41,7 @@ class CallCanisterService {
         request.canisterId,
         request.calledMethodName,
         request.agent,
+        // @ts-expect-error - Buffer is compatible with ArrayBuffer in runtime
         Buffer.from(request.parameters, "base64")
       )
       const certificate: string = Buffer.from(response.certificate).toString("base64")
@@ -91,6 +92,7 @@ class CallCanisterService {
       })
       const path = [new TextEncoder().encode("request_status"), requestId]
       const status = new TextDecoder().decode(
+        // @ts-expect-error - Uint8Array is compatible with ArrayBuffer in runtime
         lookupResultToBuffer(certificate.lookup([...path, "status"]))
       )
 
@@ -100,11 +102,14 @@ class CallCanisterService {
         case "rejected": {
           // Find rejection details in the certificate
           const rejectCode = new Uint8Array(
+            // @ts-expect-error - Uint8Array is compatible with ArrayBuffer in runtime
             lookupResultToBuffer(certificate.lookup([...path, "reject_code"]))!
           )[0]
           const rejectMessage = new TextDecoder().decode(
+            // @ts-expect-error - Uint8Array is compatible with ArrayBuffer in runtime
             lookupResultToBuffer(certificate.lookup([...path, "reject_message"]))!
           )
+          // @ts-expect-error - Uint8Array is compatible with ArrayBuffer in runtime
           const error_code_buf = lookupResultToBuffer(certificate.lookup([...path, "error_code"]))
           const error_code = error_code_buf ? new TextDecoder().decode(error_code_buf) : undefined
           throw new UpdateCallRejectedError(
