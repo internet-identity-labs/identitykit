@@ -43,6 +43,9 @@ jobs:
     if: ${{ github.event.inputs.release_npm == 'true' || contains(github.event_name, 'release') }}
     environment: ${{ github.event.inputs.network_name || ( contains(github.event_name, 'release') && 'ic' || 'dev' ) }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
 
     steps:
       - name: Checkout repo
@@ -89,6 +92,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: "22"
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Cache Node Modules
         id: cache-node-modules
@@ -118,25 +122,24 @@ jobs:
       - name: Publish
         working-directory: packages/identitykit
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          IL_GH_NPM_TOKEN: ${{ secrets.IL_GH_NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
 
         run: |
           source "${{ github.workspace }}/ci_libs/CI_LIBS.sh"
 
-          ci_echo_debug "Preparing .npmrc" >&2
           if [ "${NETWORK_NAME}" == 'ic' ]; then
-            echo "registry=https://registry.npmjs.org/" > ~/.npmrc
-            echo "//registry.npmjs.org/:_authToken=${IL_GH_NPM_TOKEN}" >> ~/.npmrc
+            ci_echo_debug "Publishing to npm registry with provenance" >&2
+            npm publish --provenance --access public
           else
+            ci_echo_debug "Preparing .npmrc for GitHub Packages" >&2
             echo "registry=https://npm.pkg.github.com/" > ~/.npmrc
             echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
 
             npm pkg set 'name'='@internet-identity-labs/identitykit'
-          fi
 
-          ci_echo_debug "npm publish --access public" >&2
-          npm publish --access public
+            ci_echo_debug "npm publish --access public" >&2
+            npm publish --access public
+          fi
 
   playground-deploy:
     name: Build and Deploy Playground

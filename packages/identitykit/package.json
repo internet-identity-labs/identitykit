@@ -1,6 +1,6 @@
 {
   "name": "@nfid/identitykit",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "A React library for adding wallet connections to dApps.",
   "keywords": [
     "ICP",
