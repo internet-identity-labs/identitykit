@@ -36,13 +36,16 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 22
-          registry-url: 'https://registry.npmjs.org'
 
       - name: 🤖 Install
         run: npm i --frozen-lockfile
 
       - name: 🤖 Build
         run: npm run build-identitykit
+
+      - name: 🔧 Update npm for publishing
+        if: ${{ github.event.inputs.registry == 'npm' }}
+        run: npm install -g npm@latest
 
       - name: 📦 Publish package on NPM
         if: ${{ github.event.inputs.registry == 'npm' }}
