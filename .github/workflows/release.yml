@@ -92,7 +92,6 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: "22"
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Cache Node Modules
         id: cache-node-modules
@@ -119,6 +118,13 @@ jobs:
           ci_echo_debug "npm run build-identitykit" >&2
           npm run build-identitykit
 
+      - name: Update npm for publishing
+        if: ${{ env.NETWORK_NAME == 'ic' }}
+        run: |
+          source "${{ github.workspace }}/ci_libs/CI_LIBS.sh"
+          ci_echo_debug "Updating npm to latest for OIDC support" >&2
+          npm install -g npm@latest
+
       - name: Publish
         working-directory: packages/identitykit
         env:
@@ -128,7 +134,7 @@ jobs:
           source "${{ github.workspace }}/ci_libs/CI_LIBS.sh"
 
           if [ "${NETWORK_NAME}" == 'ic' ]; then
-            ci_echo_debug "Publishing to npm registry with provenance" >&2
+            ci_echo_debug "Publishing to npm registry with provenance using Trusted Publishing" >&2
             npm publish --provenance --access public
           else
             ci_echo_debug "Preparing .npmrc for GitHub Packages" >&2
