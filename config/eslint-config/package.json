@@ -9,13 +9,13 @@
   ],
   "devDependencies": {
     "@vercel/style-guide": "^6.0.0",
-    "eslint-config-turbo": "^2.6.1",
+    "eslint-config-turbo": "^2.8.14",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-only-warn": "^1.1.0",
+    "eslint-plugin-only-warn": "^1.2.1",
     "@typescript-eslint/parser": "^8.48.0",
-    "@typescript-eslint/eslint-plugin": "^8.48.0",
-    "eslint-plugin-unused-imports": "^4.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "eslint-plugin-unused-imports": "^4.4.1",
     "typescript": "^5.9.3",
-    "eslint": "^8.57.1"
+    "eslint": "^10.0.3"
   }
 }
