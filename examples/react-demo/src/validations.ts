@@ -1,6 +1,7 @@
 import * as yup from "yup"
 import { Principal } from "@dfinity/principal"
 import { SubAccount } from "@dfinity/ledger-icp"
+import { IDL } from "@dfinity/candid"
 
 export const subAccountValidation = () =>
   yup
@@ -38,7 +39,15 @@ export const principalValidation = () =>
   })
 
 export const numberValidation = () =>
-  yup.string().test("principal", "should be positive number", (value) => {
+  yup.string().test("number", "must be a whole number greater than 0", (value) => {
     if (!value) return true
-    return /^(0|[1-9]\d*)(e[+-]?\d+)?$/.test(value)
+    try {
+      var number = BigInt(value)
+      if (number <= 0) return false
+
+      IDL.encode([IDL.Nat], [number])
+      return true
+    } catch (e) {
+      return false
+    }
   })

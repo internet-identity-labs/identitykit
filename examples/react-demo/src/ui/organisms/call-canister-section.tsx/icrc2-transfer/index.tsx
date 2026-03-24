@@ -41,7 +41,7 @@ const initialValues = {
   to_principal: MOCKED_SIGNER_SECOND_ACCOUNT,
   to_subaccount: "",
   spender_subaccount: "",
-  amount: (1e21).toString(), // 1000 PEPE tokens
+  amount: "1000000000000000000000", // 1000 PEPE tokens
   fee: "",
   memo: "",
   created_at_time: "",
@@ -85,7 +85,7 @@ export function Icrc2Transfer({ className }: { className?: string }) {
     fee: fee ? [fee] : [],
     spender_subaccount: isFormValid && spender_subaccount ? [JSON.parse(spender_subaccount)] : [],
     created_at_time: isFormValid && created_at_time ? [BigInt(created_at_time)] : [],
-    amount: Number(amount),
+    amount: isFormValid ? BigInt(amount) : BigInt(0),
   }
 
   const service = pepeIDL({ IDL })

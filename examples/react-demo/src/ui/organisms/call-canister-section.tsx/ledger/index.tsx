@@ -64,12 +64,12 @@ export function Ledger({ className }: { className?: string }) {
           }).toHex()
         )
       : "",
-    fee: { e8s: BigInt(fee) },
-    memo: BigInt(memo),
+    fee: { e8s: isFormValid ? BigInt(fee) : BigInt(0) },
+    memo: isFormValid ? BigInt(memo) : BigInt(0),
     from_subaccount: isFormValid && from_subaccount ? [JSON.parse(from_subaccount)] : [],
     created_at_time:
       isFormValid && created_at_time ? [{ timestamp_nanos: BigInt(created_at_time) }] : [],
-    amount: { e8s: BigInt(amount) },
+    amount: { e8s: isFormValid ? BigInt(amount) : BigInt(0) },
   }
 
   const service = ledgerIDL({ IDL })
