@@ -42,7 +42,7 @@ export const numberValidation = () =>
   yup.string().test("number", "must be a whole number greater than 0", (value) => {
     if (!value) return true
     try {
-      var number = BigInt(value)
+      const number = BigInt(value)
       if (number <= 0) return false
 
       IDL.encode([IDL.Nat], [number])
