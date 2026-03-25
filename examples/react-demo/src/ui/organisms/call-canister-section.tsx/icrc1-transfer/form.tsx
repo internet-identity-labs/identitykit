@@ -41,7 +41,7 @@ export function Form({
         <Label>amount</Label>
         <Input
           name="amount"
-          type="number"
+          inputMode="numeric"
           invalid={!!errors.amount}
           value={values.amount}
           onChange={onChange}
@@ -82,7 +82,7 @@ export function Form({
         <Label>fee</Label>
         <Input
           name="fee"
-          type="number"
+          inputMode="numeric"
           invalid={!!errors.fee}
           value={values.fee}
           onChange={onChange}
@@ -93,7 +93,7 @@ export function Form({
         <Label>memo</Label>
         <Input
           name="memo"
-          type="number"
+          inputMode="numeric"
           invalid={!!errors.memo}
           value={values.memo}
           onChange={onChange}
@@ -103,7 +103,7 @@ export function Form({
       <FormGroup className="mb-0" error={errors.created_at_time}>
         <Label>created_at_time</Label>
         <Input
-          type="number"
+          inputMode="numeric"
           name="created_at_time"
           invalid={!!errors.created_at_time}
           value={values.created_at_time}

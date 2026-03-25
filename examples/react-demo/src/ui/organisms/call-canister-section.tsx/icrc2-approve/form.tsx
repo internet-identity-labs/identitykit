@@ -73,7 +73,7 @@ export function Form({
         <Label>amount</Label>
         <Input
           name="amount"
-          type="number"
+          inputMode="numeric"
           invalid={!!errors.amount}
           value={values.amount}
           onChange={onChange}
@@ -84,7 +84,7 @@ export function Form({
         <Label>fee</Label>
         <Input
           name="fee"
-          type="number"
+          inputMode="numeric"
           invalid={!!errors.fee}
           value={values.fee}
           onChange={onChange}
@@ -95,7 +95,7 @@ export function Form({
         <Label>expected_allowance</Label>
         <Input
           name="expected_allowance"
-          type="number"
+          inputMode="numeric"
           invalid={!!errors.expected_allowance}
           value={values.expected_allowance}
           onChange={onChange}
@@ -106,7 +106,7 @@ export function Form({
         <Label>memo</Label>
         <Input
           name="memo"
-          type="number"
+          inputMode="numeric"
           invalid={!!errors.memo}
           value={values.memo}
           onChange={onChange}
@@ -116,7 +116,7 @@ export function Form({
       <FormGroup error={errors.created_at_time}>
         <Label>created_at_time</Label>
         <Input
-          type="number"
+          inputMode="numeric"
           name="created_at_time"
           invalid={!!errors.created_at_time}
           value={values.created_at_time}
@@ -127,7 +127,7 @@ export function Form({
       <FormGroup className="mb-0" error={errors.expires_at}>
         <Label>expires_at</Label>
         <Input
-          type="number"
+          inputMode="numeric"
           name="expires_at"
           invalid={!!errors.expires_at}
           value={values.expires_at}

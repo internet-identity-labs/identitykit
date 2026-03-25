@@ -36,7 +36,7 @@ const initialValues = {
   spender_principal: MOCKED_SIGNER_MAIN_ACCOUNT,
   fee: "",
   memo: "",
-  amount: (5000 * 10 ** 18).toString(),
+  amount: "5000000000000000000000",
   created_at_time: "",
   expected_allowance: "",
   expires_at: "",
@@ -77,7 +77,7 @@ export function Icrc2Approve({ className }: { className?: string }) {
     from_subaccount: isFormValid && from_subaccount ? [JSON.parse(from_subaccount)] : [],
     created_at_time: isFormValid && created_at_time ? [BigInt(created_at_time)] : [],
     expires_at: isFormValid && expires_at ? [BigInt(expires_at)] : [],
-    amount: Number(amount),
+    amount: isFormValid ? BigInt(amount) : BigInt(0),
     expected_allowance: expected_allowance ? [Number(expected_allowance)] : [],
   }
 
