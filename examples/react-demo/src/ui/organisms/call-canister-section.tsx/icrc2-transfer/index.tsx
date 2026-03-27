@@ -81,8 +81,8 @@ export function Icrc2Transfer({ className }: { className?: string }) {
       owner: isFormValid ? Principal.fromText(to_principal) : "",
       subaccount: isFormValid && to_subaccount ? [JSON.parse(to_subaccount)] : [],
     },
-    memo: memo ? [[memo]] : [],
-    fee: fee ? [fee] : [],
+    memo: isFormValid && memo ? [[Number(memo)]] : [],
+    fee: isFormValid && fee ? [BigInt(fee)] : [],
     spender_subaccount: isFormValid && spender_subaccount ? [JSON.parse(spender_subaccount)] : [],
     created_at_time: isFormValid && created_at_time ? [BigInt(created_at_time)] : [],
     amount: isFormValid ? BigInt(amount) : BigInt(0),
@@ -133,8 +133,8 @@ const icrc2_transfer_from_args = {
   from: myAcc,
   to: toAcc,
   amount: BigInt(${actorArgs.amount}),
-  fee: ${JSON.stringify(actorArgs.fee)},
-  memo: ${JSON.stringify(actorArgs.memo)},
+  fee: ${isFormValid && fee ? `[BigInt(${fee})]` : "[]"},
+  memo: ${isFormValid && memo ? `[[${Number(memo)}]]` : "[]"},
   created_at_time: ${created_at_time ? `[BigInt(${created_at_time})]` : "[]"},
 }
 
