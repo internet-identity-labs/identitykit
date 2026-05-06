@@ -138,6 +138,7 @@ jobs:
         run: |
           source "${{ github.workspace }}/ci_libs/CI_LIBS.sh"
           ci_echo_debug "Updating npm to latest for OIDC support" >&2
+          npm install -g npm@~11.11.0
           npm install -g npm@latest
 
       - name: Publish
