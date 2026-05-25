@@ -25,14 +25,27 @@ export class Agent implements DfinityAgent {
 
   public async call(...params: Parameters<DfinityAgent["call"]>): ReturnType<DfinityAgent["call"]> {
     const delegationTargets = this.delegation?.targets
-    const strategy =
+    const useAgent =
       this.delegation &&
       (!delegationTargets?.length ||
         delegationTargets?.find((t) => t.compareTo(Principal.from(params[0])) === "eq"))
-        ? this.agentStrategy
-        : this.signerAgentStrategy
+    const strategy = useAgent ? this.agentStrategy : this.signerAgentStrategy
 
-    return strategy.call(...params)
+    console.log("[IK-AGENT] call:", {
+      canisterId: params[0]?.toString(),
+      useDirectAgent: !!useAgent,
+      hasDelegation: !!this.delegation,
+      delegationTargets: delegationTargets?.map((t) => t.toText()),
+    })
+
+    try {
+      const result = await strategy.call(...params)
+      console.log("[IK-AGENT] call succeeded")
+      return result
+    } catch (e: any) {
+      console.error("[IK-AGENT] call FAILED:", e.message, e)
+      throw e
+    }
   }
 
   public async query(

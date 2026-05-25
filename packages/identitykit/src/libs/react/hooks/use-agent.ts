@@ -29,6 +29,14 @@ export function useAgent(
       identity,
       ...agentOptions,
     })
+    console.log("[IK-USE-AGENT] creating SignerAgent:", {
+      authType,
+      isAccountsAuth,
+      account: user.principal.toText(),
+      hasDelegation: !!delegation,
+      delegationTargets: delegation?.delegation?.targets?.map((t: any) => t.toText()),
+    })
+
     const signerAgent = await SignerAgent.create({
       signer: selectedSigner,
       account: user.principal,
