@@ -199,6 +199,7 @@ export class ExpectedTexts {
       "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe",
       "Arguments",
       '[{"to":{"owner":{"__principal__":"6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae"},"subaccount":[]},"fee":[],"memo":[],"from_subaccount":[],"created_at_time":[],"amount":"100000000"}]',
+      "# Send NFID Wallet You are approving a transfer of funds from your account. **From:** `gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe` **Amount:** `1 NFIDW` **To:** `6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae` **Fees:** `0.0001 NFIDW` Charged for processing the transfer.",
     ],
   }
 
