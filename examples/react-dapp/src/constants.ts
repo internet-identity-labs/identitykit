@@ -1,6 +1,7 @@
 export const LEDGER_CANISTER_ID = "ryjl3-tyaaa-aaaaa-aaaba-cai"
 export const PEPE_LEDGER_CANISTER_ID = "etik7-oiaaa-aaaar-qagia-cai"
 export const ALIEN_LEDGER_CANISTER_ID = "7tvr6-fqaaa-aaaan-qmira-cai"
+export const NFIDW_LEDGER_CANISTER_ID = "mih44-vaaaa-aaaaq-aaekq-cai"
 
 export const MOCKED_SIGNER_MAIN_ACCOUNT =
   "gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe"
