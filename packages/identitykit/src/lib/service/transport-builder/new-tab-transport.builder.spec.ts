@@ -1,18 +1,23 @@
-import { PostMessageTransport, PostMessageTransportOptions } from "@slide-computer/signer-web"
-import { getPopupTransportBuilder } from "./new-tab-transport.builder"
+import { jest } from "@jest/globals"
 
-jest.mock("@slide-computer/signer-web", () => ({
+jest.unstable_mockModule("@slide-computer/signer-web", () => ({
   PostMessageTransport: jest.fn(),
 }))
 
-jest.mock("../../../libs/react/utils", () => ({
-  url: "http://example.com",
-}))
+jest.unstable_mockModule(
+  new URL("../../../libs/react/utils/index.ts", import.meta.url).pathname,
+  () => ({
+    url: "http://example.com",
+  })
+)
+
+const { PostMessageTransport } = await import("@slide-computer/signer-web")
+const { getPopupTransportBuilder } = await import("./new-tab-transport.builder")
 
 describe("getPopupTransportBuilder", () => {
   const mockUrl = "http://example.com"
 
-  const request: PostMessageTransportOptions = {
+  const request = {
     url: mockUrl,
   }
 

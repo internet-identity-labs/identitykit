@@ -6,8 +6,8 @@ import {
   IdentityKitDelegationSignerClientOptions,
 } from "../../../lib"
 import { Signer } from "@slide-computer/signer"
-import { Principal } from "@dfinity/principal"
-import { SubAccount } from "@dfinity/ledger-icp"
+import { Principal } from "@icp-sdk/core/principal"
+import { SubAccount } from "@icp-sdk/canisters/ledger/icp"
 
 export function useCreateIdentityKit<
   T extends IdentityKitAuthType = typeof IdentityKitAuthType.ACCOUNTS,

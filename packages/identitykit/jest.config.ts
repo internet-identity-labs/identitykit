@@ -1,14 +1,13 @@
 import type { Config } from "@jest/types"
 
 const config: Config.InitialOptions = {
-  preset: "ts-jest",
+  extensionsToTreatAsEsm: [".ts", ".tsx"],
   testEnvironment: "jsdom",
   testPathIgnorePatterns: ["dist/"],
   transform: {
-    "^.+\\.tsx?$": "ts-jest",
-    "^.+\\.svg$": "jest-transform-stub",
+    "^.+\\.tsx?$": "babel-jest",
   },
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+  moduleFileExtensions: ["ts", "tsx", "js", "mjs", "jsx", "json", "node"],
   setupFilesAfterEnv: ["<rootDir>/jest-setup.ts"],
 }
 

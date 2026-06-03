@@ -4,21 +4,30 @@ import {
   CallRequest,
   Cbor,
   Certificate,
+  defaultStrategy,
+  LookupResult,
   lookupResultToBuffer,
-  UpdateCallRejectedError,
+  pollForResponse,
+  v4ResponseBody,
   v2ResponseBody,
-  v3ResponseBody,
-} from "@dfinity/agent"
-import { Principal } from "@dfinity/principal"
-import { DelegationIdentity } from "@dfinity/identity"
+  isV4ResponseBody,
+} from "@icp-sdk/core/agent"
+import { uint8FromBufLike } from "@icp-sdk/core/candid"
+import { DelegationIdentity } from "@icp-sdk/core/identity"
+import { Principal } from "@icp-sdk/core/principal"
 import { GenericError } from "./exception-handler.service"
-import { defaultStrategy, pollForResponse } from "@dfinity/agent/lib/cjs/polling"
-import { bufFromBufLike } from "@dfinity/candid"
-import { AgentError } from "@dfinity/agent/lib/cjs/errors"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ;(BigInt.prototype as any).toJSON = function () {
   return this.toString()
+}
+
+// Local shim: UpdateCallRejectedError removed from @icp-sdk/core
+class UpdateCallRejectedError extends Error {
+  constructor(rejectMessage: string) {
+    super(rejectMessage)
+    this.name = "UpdateCallRejectedError"
+  }
 }
 
 export interface CallCanisterRequest {
@@ -41,8 +50,7 @@ class CallCanisterService {
         request.canisterId,
         request.calledMethodName,
         request.agent,
-        // @ts-expect-error - Buffer is compatible with ArrayBuffer in runtime
-        Buffer.from(request.parameters, "base64")
+        new Uint8Array(Buffer.from(request.parameters, "base64"))
       )
       const certificate: string = Buffer.from(response.certificate).toString("base64")
       const cborContentMap = Cbor.encode(response.contentMap)
@@ -67,12 +75,11 @@ class CallCanisterService {
     canisterId: string,
     methodName: string,
     agent: Agent,
-    arg: ArrayBuffer
+    arg: Uint8Array
   ): Promise<{ certificate: Uint8Array; contentMap: CallRequest | undefined }> {
     const cid = Principal.from(canisterId)
 
-    if (agent.rootKey == null)
-      throw new AgentError("Agent root key not initialized before making call")
+    if (agent.rootKey == null) throw new Error("Agent root key not initialized before making call")
 
     const { requestId, response, requestDetails } = await agent.call(cid, {
       methodName,
@@ -81,81 +88,61 @@ class CallCanisterService {
     })
 
     let certificate: Certificate | undefined
+    let rawCertificate: Uint8Array | undefined
 
-    if (response.body && (response.body as v3ResponseBody).certificate) {
-      const cert = (response.body as v3ResponseBody).certificate
+    if (response.body && isV4ResponseBody(response.body)) {
+      const cert = (response.body as v4ResponseBody).certificate
+      rawCertificate = uint8FromBufLike(cert)
       certificate = await Certificate.create({
-        certificate: bufFromBufLike(cert),
+        certificate: rawCertificate,
         rootKey: agent.rootKey,
-        canisterId: Principal.from(canisterId),
+        principal: { canisterId: Principal.from(canisterId) },
         blsVerify,
       })
       const path = [new TextEncoder().encode("request_status"), requestId]
-      const status = new TextDecoder().decode(
-        // @ts-expect-error - Uint8Array is compatible with ArrayBuffer in runtime
-        lookupResultToBuffer(certificate.lookup([...path, "status"]))
+
+      const statusBuffer = lookupResultToBuffer(
+        certificate.lookup_path([...path, "status"]) as LookupResult
       )
+      if (!statusBuffer) {
+        throw new Error("Status buffer not found")
+      }
+      const status = new TextDecoder().decode(statusBuffer)
 
       switch (status) {
         case "replied":
           break
         case "rejected": {
-          // Find rejection details in the certificate
-          const rejectCode = new Uint8Array(
-            // @ts-expect-error - Uint8Array is compatible with ArrayBuffer in runtime
-            lookupResultToBuffer(certificate.lookup([...path, "reject_code"]))!
-          )[0]
-          const rejectMessage = new TextDecoder().decode(
-            // @ts-expect-error - Uint8Array is compatible with ArrayBuffer in runtime
-            lookupResultToBuffer(certificate.lookup([...path, "reject_message"]))!
+          const rejectMessageBuffer = lookupResultToBuffer(
+            certificate.lookup_path([...path, "reject_message"]) as LookupResult
           )
-          // @ts-expect-error - Uint8Array is compatible with ArrayBuffer in runtime
-          const error_code_buf = lookupResultToBuffer(certificate.lookup([...path, "error_code"]))
-          const error_code = error_code_buf ? new TextDecoder().decode(error_code_buf) : undefined
-          throw new UpdateCallRejectedError(
-            cid,
-            methodName,
-            requestId,
-            response,
-            rejectCode,
-            rejectMessage,
-            error_code
-          )
+          const rejectMessage = rejectMessageBuffer
+            ? new TextDecoder().decode(rejectMessageBuffer)
+            : "Unknown rejection"
+
+          throw new UpdateCallRejectedError(rejectMessage)
         }
       }
     } else if (response.body && "reject_message" in response.body) {
-      // handle v2 response errors by throwing an UpdateCallRejectedError object
-      const { reject_code, reject_message, error_code } = response.body as v2ResponseBody
-      throw new UpdateCallRejectedError(
-        cid,
-        methodName,
-        requestId,
-        response,
-        reject_code,
-        reject_message,
-        error_code
-      )
+      const { reject_message } = response.body as v2ResponseBody
+      throw new UpdateCallRejectedError(reject_message)
     }
 
     // Fall back to polling if we receive an Accepted response code
     if (response.status === 202) {
-      const pollStrategy = defaultStrategy()
-      // Contains the certificate and the reply from the boundary node
-      const response = await pollForResponse(
-        agent,
-        cid,
-        requestId,
-        pollStrategy,
-        undefined,
-        blsVerify
-      )
-      certificate = response.certificate
+      const pollResponse = await pollForResponse(agent, cid, requestId, {
+        strategy: defaultStrategy(),
+      })
+      rawCertificate = pollResponse.rawCertificate
+    }
+
+    if (!rawCertificate) {
+      throw new Error("No certificate in response")
     }
 
     return {
       contentMap: requestDetails,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      certificate: new Uint8Array(Cbor.encode((certificate as any).cert)),
+      certificate: rawCertificate,
     }
   }
 }

@@ -1,5 +1,5 @@
-import { AnonymousIdentity, type Identity, type SignIdentity } from "@dfinity/agent"
-import { Principal } from "@dfinity/principal"
+import { AnonymousIdentity, type Identity, type SignIdentity } from "@icp-sdk/core/agent"
+import { Principal } from "@icp-sdk/core/principal"
 import {
   DelegationChain,
   DelegationIdentity,
@@ -9,7 +9,7 @@ import {
   PartialDelegationIdentity,
   PartialIdentity,
   Delegation,
-} from "@dfinity/identity"
+} from "@icp-sdk/core/identity"
 import {
   IdbStorage,
   SignerStorage,
@@ -22,7 +22,7 @@ import {
 } from "@slide-computer/signer-storage"
 import { STORAGE_KEY, SignerClient, SignerClientOptions } from "./client"
 import { DelegationRequest, DelegationResponse, fromBase64, toBase64 } from "@slide-computer/signer"
-import { type Signature } from "@dfinity/agent"
+import { type Signature } from "@icp-sdk/core/agent"
 import { DEFAULT_MAX_TIME_TO_LIVE } from "../constants"
 import { IdleManager } from "../timeout-managers/idle-manager"
 import { TimeoutManager } from "../timeout-managers/timeout-manager"

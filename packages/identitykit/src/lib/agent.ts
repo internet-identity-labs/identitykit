@@ -1,15 +1,34 @@
-import { Agent as DfinityAgent, HttpAgent, Identity } from "@dfinity/agent"
+import { Agent as DfinityAgent, HttpAgent, Identity, pollForResponse } from "@icp-sdk/core/agent"
 import { Signer } from "@slide-computer/signer"
 import { SignerAgent } from "@slide-computer/signer-agent"
-import { PartialIdentity } from "@dfinity/identity"
-import { Principal } from "@dfinity/principal"
-import { Delegation } from "@dfinity/identity"
+import { PartialIdentity } from "@icp-sdk/core/identity"
+import { Principal } from "@icp-sdk/core/principal"
+import { Delegation } from "@icp-sdk/core/identity"
 
 export type AgentOptions = {
   delegation?: Delegation
   signerAgent: SignerAgent<Signer>
   agent: HttpAgent
   identity?: Identity | PartialIdentity
+}
+
+function withUpdateMethod(signerAgent: SignerAgent<Signer>): DfinityAgent {
+  const agent = signerAgent as unknown as DfinityAgent
+  agent.update = async (canisterId, fields, pollingOptions) => {
+    const submitResponse = await signerAgent.call(canisterId, fields)
+    const pollResult = await pollForResponse(
+      signerAgent as unknown as DfinityAgent,
+      Principal.from(canisterId),
+      submitResponse.requestId,
+      pollingOptions
+    )
+    return {
+      ...pollResult,
+      requestDetails: submitResponse.requestDetails,
+      callResponse: submitResponse.response,
+    }
+  }
+  return agent
 }
 
 export class Agent implements DfinityAgent {
@@ -20,7 +39,7 @@ export class Agent implements DfinityAgent {
   ) {}
 
   static async create({ delegation, signerAgent, agent }: AgentOptions) {
-    return new Agent(signerAgent, agent, delegation)
+    return new Agent(withUpdateMethod(signerAgent), agent, delegation)
   }
 
   public async call(...params: Parameters<DfinityAgent["call"]>): ReturnType<DfinityAgent["call"]> {
@@ -63,6 +82,21 @@ export class Agent implements DfinityAgent {
 
   async status(): ReturnType<DfinityAgent["status"]> {
     return this.agentStrategy.status()
+  }
+
+  public async update(
+    ...params: Parameters<DfinityAgent["update"]>
+  ): ReturnType<DfinityAgent["update"]> {
+    const [canisterId, fields, pollingOptions] = params
+    const delegationTargets = this.delegation?.targets
+    const strategy =
+      this.delegation &&
+      (!delegationTargets?.length ||
+        delegationTargets?.find((t) => t.compareTo(Principal.from(canisterId)) === "eq"))
+        ? this.agentStrategy
+        : this.signerAgentStrategy
+
+    return strategy.update(canisterId, fields, pollingOptions)
   }
 
   async readState(

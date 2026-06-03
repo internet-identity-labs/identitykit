@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@codemirror/lang-json": "^6.0.2",
-    "@dfinity/ledger-icp": "^2.6.13",
+    "@icp-sdk/canisters": "^3.6.0",
     "@nfid/identitykit": "*",
     "@radix-ui/themes": "^3.2.1",
     "@uiw/codemirror-extensions-langs": "^4.25.3",

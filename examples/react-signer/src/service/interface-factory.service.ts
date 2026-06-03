@@ -1,15 +1,15 @@
-import { IDL } from "@dfinity/candid"
-import { Principal } from "@dfinity/principal"
+import { IDL } from "@icp-sdk/core/candid"
+import { Principal } from "@icp-sdk/core/principal"
 import {
   Actor,
   ActorMethod,
   ActorSubclass,
   Certificate,
   HttpAgent,
-  LookupResultFound,
+  LookupPathResultFound,
   ReadStateResponse,
   IC_ROOT_KEY,
-} from "@dfinity/agent"
+} from "@icp-sdk/core/agent"
 import { GenericError } from "./exception-handler.service"
 
 const CANDID_UI_CANISTER = "a4gq6-oaaaa-aaaab-qaa4q-cai"
@@ -58,13 +58,12 @@ class InterfaceFactoryService {
     const encoder = new TextEncoder()
     const pathCandid = [
       encoder.encode("canister"),
-      canister.toUint8Array().buffer,
+      canister.toUint8Array(),
       encoder.encode("metadata"),
       encoder.encode("candid:service"),
     ]
     let responseCandid: ReadStateResponse
     try {
-      // @ts-expect-error - Uint8Array array is compatible with ArrayBuffer array in runtime
       responseCandid = await agent.readState(canister, { paths: [pathCandid] })
     } catch (error) {
       throw new GenericError(
@@ -74,16 +73,13 @@ class InterfaceFactoryService {
 
     const certificate = await Certificate.create({
       certificate: responseCandid.certificate,
-      canisterId: canister,
+      principal: { canisterId: canister },
       rootKey:
         agent.rootKey ??
-        new Uint8Array(IC_ROOT_KEY.match(/[\da-f]{2}/gi)!.map((h) => parseInt(h, 16))).buffer,
+        new Uint8Array(IC_ROOT_KEY.match(/[\da-f]{2}/gi)!.map((h) => parseInt(h, 16))),
     })
-    // @ts-expect-error - Uint8Array array is compatible with ArrayBuffer array in runtime
-    const dataCandid = certificate.lookup(pathCandid)
-    const candidFileMabye = new TextDecoder().decode(
-      (dataCandid as LookupResultFound).value as ArrayBuffer
-    )
+    const dataCandid = certificate.lookup_path(pathCandid)
+    const candidFileMabye = new TextDecoder().decode((dataCandid as LookupPathResultFound).value)
 
     if (!candidFileMabye) {
       throw new GenericError("Empty candid file has been received.")

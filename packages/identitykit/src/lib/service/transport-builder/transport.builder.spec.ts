@@ -1,9 +1,16 @@
-import { Transport } from "@slide-computer/signer"
+import { jest } from "@jest/globals"
+import type { Transport } from "@slide-computer/signer"
 import { TransportType } from "../../types"
-import { getPopupTransportBuilder } from "./new-tab-transport.builder"
-import { TransportBuilder, TransportBuilderRequest } from "./transport.builder"
 
-jest.mock("./new-tab-transport.builder")
+jest.unstable_mockModule(
+  new URL("./new-tab-transport.builder.ts", import.meta.url).pathname,
+  () => ({
+    getPopupTransportBuilder: jest.fn(),
+  })
+)
+
+const { getPopupTransportBuilder } = await import("./new-tab-transport.builder")
+const { TransportBuilder } = await import("./transport.builder")
 
 describe("TransportBuilder", () => {
   const mockTransport: Transport = {} as Transport
@@ -17,7 +24,7 @@ describe("TransportBuilder", () => {
   })
 
   it("should build a NEW_TAB transport", async () => {
-    const request: TransportBuilderRequest = {
+    const request = {
       transportType: TransportType.NEW_TAB,
       url: "https://example.com",
     }

@@ -6,9 +6,9 @@ import { e8s, LEDGER_CANISTER_ID } from "../../../../constants"
 import { useFormik } from "formik"
 import { Form, FormValues } from "./form"
 import { toBase64 } from "@nfid/identitykit"
-import { fromHexString, IDL } from "@dfinity/candid"
-import { AccountIdentifier, SubAccount } from "@dfinity/ledger-icp"
-import { Principal } from "@dfinity/principal"
+import { IDL } from "@icp-sdk/core/candid"
+import { AccountIdentifier, SubAccount } from "@icp-sdk/canisters/ledger/icp"
+import { Principal } from "@icp-sdk/core/principal"
 
 import * as yup from "yup"
 import {
@@ -55,15 +55,13 @@ export function Ledger({ className }: { className?: string }) {
 
   const actorArgs = {
     to: isFormValid
-      ? fromHexString(
-          AccountIdentifier.fromPrincipal({
-            principal: Principal.fromText(to_principal),
-            subAccount: to_subaccount
-              ? (SubAccount.fromBytes(new Uint8Array(JSON.parse(to_subaccount))) as SubAccount)
-              : undefined,
-          }).toHex()
-        )
-      : "",
+      ? AccountIdentifier.fromPrincipal({
+          principal: Principal.fromText(to_principal),
+          subAccount: to_subaccount
+            ? (SubAccount.fromBytes(new Uint8Array(JSON.parse(to_subaccount))) as SubAccount)
+            : undefined,
+        }).toUint8Array()
+      : new Uint8Array(),
     fee: { e8s: isFormValid ? BigInt(fee) : BigInt(0) },
     memo: isFormValid ? BigInt(memo) : BigInt(0),
     from_subaccount: isFormValid && from_subaccount ? [JSON.parse(from_subaccount)] : [],

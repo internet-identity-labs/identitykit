@@ -1,6 +1,6 @@
 import { Section } from "../section"
 import { idlFactory as pepeIDL } from "../../../../idl/token-pepe-ledger"
-import { Principal } from "@dfinity/principal"
+import { Principal } from "@icp-sdk/core/principal"
 import { useAuth } from "@nfid/identitykit/react"
 import { CallCanisterMethod } from "../constants"
 import * as yup from "yup"
@@ -16,7 +16,7 @@ import {
 } from "../../../../constants"
 import { useFormik } from "formik"
 import { Form, FormValues } from "./form"
-import { IDL } from "@dfinity/candid"
+import { IDL } from "@icp-sdk/core/candid"
 import { toBase64 } from "@nfid/identitykit"
 
 const schema = yup

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import { IdentityKitAuthType } from "../../../lib/identity-kit"
 import { AccountsSignerClient } from "../../../lib/signer-client"
-import { Principal } from "@dfinity/principal"
-import { SubAccount } from "@dfinity/ledger-icp"
+import { Principal } from "@icp-sdk/core/principal"
+import { SubAccount } from "@icp-sdk/canisters/ledger/icp"
 import { useAuthType, useSignerClient, useUser } from "./context-selectors"
 
 export function useAccounts() {

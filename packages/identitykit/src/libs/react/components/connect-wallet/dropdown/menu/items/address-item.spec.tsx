@@ -1,10 +1,12 @@
+import { jest } from "@jest/globals"
 import { render, screen } from "@testing-library/react"
-import { AddressItem } from "./address-item"
-import { Provider } from "../../../../context-providers"
 
-jest.mock("./item", () => ({
+jest.unstable_mockModule(new URL("./item.tsx", import.meta.url).pathname, () => ({
   Item: jest.fn(({ children }) => <div data-testid="item">{children}</div>),
 }))
+
+const { AddressItem } = await import("./address-item")
+const { Provider } = await import("../../../../context-providers")
 
 describe.skip("AddressItem", () => {
   const value = "0x1234567890abcdef1234567890abcdef12345678"

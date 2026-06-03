@@ -5,7 +5,7 @@ import { getExtensionTransportBuilder } from "./extension-transport.builder"
 import { getAuthClientTransportBuilder } from "./auth-client-transport.builder"
 import { getStoicTransportBuilder } from "./stoic-transport.builder"
 import { DEFAULT_MAX_TIME_TO_LIVE } from "../../constants"
-import { AuthClientCreateOptions } from "@dfinity/auth-client"
+import { AuthClientCreateOptions } from "@icp-sdk/auth/client"
 
 export type TransportBuilderRequest = {
   id?: string
@@ -17,7 +17,7 @@ export type TransportBuilderRequest = {
   window?: Window
   allowInternetIdentityPinAuthentication?: boolean
   windowOpenerFeatures?: string
-} & Pick<AuthClientCreateOptions, "identity" | "keyType" | "storage">
+} & Partial<Pick<AuthClientCreateOptions, "identity" | "keyType" | "storage">>
 
 export class TransportBuilder {
   private static builders: Record<

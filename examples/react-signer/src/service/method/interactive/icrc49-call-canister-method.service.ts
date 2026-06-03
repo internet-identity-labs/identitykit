@@ -2,11 +2,11 @@ import { RPCMessage, RPCSuccessResponse } from "../../../type"
 import { ComponentData, InteractiveMethodService } from "./interactive-method.service"
 import { accountService } from "../../account.service"
 import { callCanisterService } from "../../call-canister.service"
-import { DelegationChain, DelegationIdentity, Ed25519KeyIdentity } from "@dfinity/identity"
+import { DelegationChain, DelegationIdentity, Ed25519KeyIdentity } from "@icp-sdk/core/identity"
 import { consentMessageService } from "../../consent-message.service"
-import { Agent, HttpAgent, Identity } from "@dfinity/agent"
+import { Agent, HttpAgent, Identity } from "@icp-sdk/core/agent"
 import { interfaceFactoryService } from "../../interface-factory.service"
-import { IDL } from "@dfinity/candid"
+import { IDL } from "@icp-sdk/core/candid"
 import { GenericError } from "../../exception-handler.service"
 
 const HOUR = 3_600_000
@@ -117,7 +117,6 @@ class Icrc49CallCanisterMethodService extends InteractiveMethodService {
       )
       const idl: IDL.ServiceClass = interfaceFactory({ IDL })
       const func: IDL.FuncClass = idl._fields.find((x: unknown[]) => icrc49Dto.method === x[0])![1]
-      // @ts-expect-error - Buffer is compatible with ArrayBuffer in runtime
       argument = JSON.stringify(IDL.decode(func.argTypes, Buffer.from(icrc49Dto.arg, "base64")))
     } catch (e) {
       console.warn(

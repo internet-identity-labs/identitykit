@@ -1,4 +1,3 @@
-import { Record } from "@dfinity/candid/lib/cjs/idl"
 import { GenericError, NotSupportedError } from "./exception-handler.service"
 import { idbRepository } from "./storage.service"
 

@@ -1,7 +1,7 @@
-import { Principal } from "@dfinity/principal"
+import { Principal } from "@icp-sdk/core/principal"
 import { SignerClient, SignerClientOptions, STORAGE_KEY } from "./client"
 import { AccountsRequest, AccountsResponse, fromBase64 } from "@slide-computer/signer"
-import { SubAccount } from "@dfinity/ledger-icp"
+import { SubAccount } from "@icp-sdk/canisters/ledger/icp"
 import { IdleManager } from "../timeout-managers/idle-manager"
 
 export interface AccountsSignerClientOptions extends SignerClientOptions {}
@@ -77,7 +77,7 @@ export class AccountsSignerClient extends SignerClient {
   private async setAccounts(
     accounts: {
       owner: Principal
-      subaccount: ArrayBuffer | undefined
+      subaccount: ArrayBuffer | Uint8Array | undefined
     }[]
   ) {
     return this.storage.set(
