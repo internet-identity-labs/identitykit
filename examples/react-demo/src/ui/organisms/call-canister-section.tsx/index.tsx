@@ -1,6 +1,7 @@
 import { useAgent, useAuth } from "@nfid/identitykit/react"
 import { MethodBadge } from "../../atoms"
-import { ToTarget } from "./to-target"
+import { GreetWithConsent } from "./greet-with-consent"
+import { GreetNoConsent } from "./greet-no-consent"
 import { Ledger } from "./ledger"
 import { Icrc2Approve } from "./icrc2-approve"
 import { Icrc2Transfer } from "./icrc2-transfer"
@@ -17,7 +18,8 @@ import { ICP_API_HOST } from "../../../constants"
 import { UpdateCall } from "./update-call"
 
 const MethodComponent = {
-  [CallCanisterMethod.greet_no_consent]: ToTarget,
+  [CallCanisterMethod.greet_with_consent]: GreetWithConsent,
+  [CallCanisterMethod.greet_no_consent]: GreetNoConsent,
   [CallCanisterMethod.greet_update_call]: UpdateCall,
   [CallCanisterMethod.transfer]: Ledger,
   [CallCanisterMethod.icrc2_approve]: Icrc2Approve,

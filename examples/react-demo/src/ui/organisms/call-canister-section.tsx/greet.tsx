@@ -1,9 +1,15 @@
 import { Section } from "./section"
 import { idlFactory as demoIDL } from "../../../idl/service_idl"
 import { useAuth } from "@nfid/identitykit/react"
-import { CallCanisterMethod } from "./constants"
+import { CallCanisterMethodType } from "./constants"
 
-export function ToTarget({ className }: { className?: string }) {
+export function Greet({
+  className,
+  method,
+}: {
+  className?: string
+  method: CallCanisterMethodType
+}) {
   const { user } = useAuth()
 
   return (
@@ -14,7 +20,7 @@ export function ToTarget({ className }: { className?: string }) {
         params: {
           canisterId: import.meta.env.VITE_TARGET_CANISTER,
           sender: user?.principal.toString() || "",
-          method: CallCanisterMethod.greet_no_consent,
+          method,
           arg: "RElETAABcQJtZQ==",
         },
       }}
@@ -25,7 +31,7 @@ const actor = Actor.createActor(idlFactory, {
   agent,
   canisterId: "${import.meta.env.VITE_TARGET_CANISTER}",
 })
-const response = await actor.${CallCanisterMethod.greet_no_consent}("me")`}
+const response = await actor.${method}("me")`}
     />
   )
 }
