@@ -17,8 +17,7 @@ export const CallCanisterMethodTitle = {
   [CallCanisterMethod.transfer]: "ICP transfer",
   [CallCanisterMethod.greet_with_consent]:
     "Canister query call to IdentityKit Demo canister (with consent)",
-  [CallCanisterMethod.greet_no_consent]:
-    "Canister query call to IdentityKit Demo canister (without consent)",
+  [CallCanisterMethod.greet_no_consent]: "Canister query call to IdentityKit Demo canister",
   [CallCanisterMethod.greet_update_call]:
     "Canister long running update call to IdentityKit Demo canister",
 }
