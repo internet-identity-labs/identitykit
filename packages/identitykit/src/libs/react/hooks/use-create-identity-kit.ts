@@ -5,7 +5,7 @@ import {
   IdentityKitAccountsSignerClientOptions,
   IdentityKitDelegationSignerClientOptions,
 } from "../../../lib"
-import { Signer } from "@slide-computer/signer"
+import { Signer } from "@icp-sdk/signer"
 import { Principal } from "@icp-sdk/core/principal"
 import { SubAccount } from "@icp-sdk/canisters/ledger/icp"
 
@@ -46,7 +46,6 @@ export function useCreateIdentityKit<
   const [icpBalance, setIcpBalance] = useState<undefined | number>()
 
   const onDisconnect = useCallback(async () => {
-    await selectedSigner?.value.transport.connection?.disconnect()
     setIk(null)
     setUser(undefined)
     setIcpBalance(undefined)
@@ -85,7 +84,6 @@ export function useCreateIdentityKit<
               setUser(instance.signerClient.connectedUser)
               onConnectSuccess?.()
             } catch (e) {
-              await selectedSigner.value.transport.connection?.disconnect()
               await clearSigner()
               onConnectFailure?.(e as Error)
             }

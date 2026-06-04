@@ -1,5 +1,5 @@
 import { useAsyncMemo } from "use-async-memo"
-import { SignerAgent } from "@slide-computer/signer-agent"
+import { SignerAgent } from "@icp-sdk/signer/agent"
 import { HttpAgent } from "@icp-sdk/core/agent"
 import { IdentityKitAgent, IdentityKitAuthType } from "../../../lib"
 import { useIdentity } from "./use-identity"

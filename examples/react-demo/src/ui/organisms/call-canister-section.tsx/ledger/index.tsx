@@ -5,7 +5,7 @@ import { CallCanisterMethod } from "../constants"
 import { e8s, LEDGER_CANISTER_ID } from "../../../../constants"
 import { useFormik } from "formik"
 import { Form, FormValues } from "./form"
-import { toBase64 } from "@nfid/identitykit"
+import { uint8ArrayToBase64 } from "@dfinity/utils"
 import { IDL } from "@icp-sdk/core/candid"
 import { AccountIdentifier, SubAccount } from "@icp-sdk/canisters/ledger/icp"
 import { Principal } from "@icp-sdk/core/principal"
@@ -85,7 +85,7 @@ export function Ledger({ className }: { className?: string }) {
           canisterId: LEDGER_CANISTER_ID,
           sender: user?.principal.toString() || "",
           method: CallCanisterMethod.transfer,
-          arg: isFormValid ? toBase64(IDL.encode(transferIDL.argTypes, [actorArgs])) : "",
+          arg: isFormValid ? uint8ArrayToBase64(IDL.encode(transferIDL.argTypes, [actorArgs])) : "",
         },
       }}
       onReset={() => setValues(initialValues)}

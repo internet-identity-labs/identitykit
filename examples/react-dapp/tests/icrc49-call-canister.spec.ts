@@ -179,7 +179,7 @@ for (const account of accounts) {
       await demoPage.logout()
     })
 
-    test.skip(`${account.type} user should make canister call: ICRC-1 transfer`, async ({
+    test(`${account.type} user should make canister call: ICRC-1 transfer`, async ({
       section,
       demoPage,
       requestPermissionSection,

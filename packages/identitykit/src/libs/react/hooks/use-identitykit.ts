@@ -1,5 +1,5 @@
 import { useContext } from "use-context-selector"
-import { Signer } from "@slide-computer/signer"
+import { Signer } from "@icp-sdk/signer"
 import { SubAccount } from "@icp-sdk/canisters/ledger/icp"
 import { Principal } from "@icp-sdk/core/principal"
 import { type Identity } from "@icp-sdk/core/agent"

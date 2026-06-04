@@ -1,5 +1,5 @@
 import { jest } from "@jest/globals"
-import type { Transport } from "@slide-computer/signer"
+import type { Transport } from "@icp-sdk/signer"
 import { TransportType } from "../../types"
 
 jest.unstable_mockModule(

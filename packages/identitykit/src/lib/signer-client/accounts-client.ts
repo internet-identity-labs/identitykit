@@ -1,6 +1,5 @@
 import { Principal } from "@icp-sdk/core/principal"
 import { SignerClient, SignerClientOptions, STORAGE_KEY } from "./client"
-import { AccountsRequest, AccountsResponse, fromBase64 } from "@slide-computer/signer"
 import { SubAccount } from "@icp-sdk/canisters/ledger/icp"
 import { IdleManager } from "../timeout-managers/idle-manager"
 
@@ -17,35 +16,7 @@ export class AccountsSignerClient extends SignerClient {
   }
 
   public async login(): Promise<void> {
-    // get and transform accounts from signer
-    const params = this.options.derivationOrigin
-      ? {
-          params: {
-            icrc95DerivationOrigin: this.options.derivationOrigin,
-          },
-        }
-      : {}
-
-    const accountsResponse = await this.options.signer.sendRequest<
-      AccountsRequest,
-      AccountsResponse
-    >({
-      method: "icrc27_accounts",
-      id: this.crypto.randomUUID(),
-      jsonrpc: "2.0",
-      ...params,
-    })
-
-    if ("error" in accountsResponse) {
-      throw Error(accountsResponse.error.message)
-    }
-
-    const accounts = accountsResponse.result.accounts.map(({ owner, subaccount }) => {
-      return {
-        owner: Principal.fromText(owner),
-        subaccount: subaccount === undefined ? undefined : fromBase64(subaccount),
-      }
-    })
+    const accounts = await this.options.signer.getAccounts()
     await this.setAccounts(accounts)
     const account = accounts[0]
 
@@ -77,7 +48,7 @@ export class AccountsSignerClient extends SignerClient {
   private async setAccounts(
     accounts: {
       owner: Principal
-      subaccount: ArrayBuffer | Uint8Array | undefined
+      subaccount?: Uint8Array
     }[]
   ) {
     return this.storage.set(

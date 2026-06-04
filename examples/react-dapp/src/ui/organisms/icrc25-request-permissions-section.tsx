@@ -1,12 +1,11 @@
 import { useSigner } from "../../../../../packages/identitykit/src/libs/react/hooks"
 import { Link, MethodBadge } from "../atoms"
 import { Section } from "./section"
-import { RequestPermissionsRequest } from "@slide-computer/signer"
 
 export function Icrc25RequestPermissionsSection() {
   const signer = useSigner()
   return (
-    <Section<Omit<RequestPermissionsRequest, "jsonrpc">>
+    <Section
       id="icrc25_request_permissions"
       title="1.a icrc25_request_permissions"
       description={

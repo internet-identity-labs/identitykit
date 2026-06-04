@@ -17,7 +17,7 @@ import {
 import { useFormik } from "formik"
 import { Form, FormValues } from "./form"
 import { IDL } from "@icp-sdk/core/candid"
-import { toBase64 } from "@nfid/identitykit"
+import { uint8ArrayToBase64 } from "@dfinity/utils"
 
 const schema = yup
   .object({
@@ -103,7 +103,7 @@ export function Icrc2Transfer({ className }: { className?: string }) {
           canisterId: canister_id,
           sender: user?.principal.toString() || "",
           method: CallCanisterMethod.icrc2_transfer_from,
-          arg: isFormValid ? toBase64(IDL.encode(transferIDL.argTypes, [actorArgs])) : "",
+          arg: isFormValid ? uint8ArrayToBase64(IDL.encode(transferIDL.argTypes, [actorArgs])) : "",
         },
       }}
       onReset={() => setValues(initialValues)}

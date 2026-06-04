@@ -5,7 +5,6 @@ import {
   NFIDW,
   InternetIdentity,
   IdentityKitSignerConfig,
-  Stoic,
   OISY,
 } from "@nfid/identitykit"
 import { useTheme } from "next-themes"
@@ -26,7 +25,7 @@ const environment = import.meta.env.VITE_ENVIRONMENT
 function App() {
   const { resolvedTheme } = useTheme()
   const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
-  const signers = [nfidw, InternetIdentity, OISY, Stoic].concat(
+  const signers = [nfidw, InternetIdentity, OISY].concat(
     environment !== "ic"
       ? [
           {

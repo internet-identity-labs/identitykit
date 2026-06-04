@@ -1,9 +1,6 @@
 import { Section as BaseSection } from "../section"
-import { CallCanisterRequest } from "@slide-computer/signer"
 import { useSigner } from "../../../../../../packages/identitykit/src/libs/react/hooks"
 import { CALL_CANISTER_METHODS, CallCanisterMethodType } from "./constants"
-
-type SectionRequest = Omit<CallCanisterRequest, "jsonrpc">
 
 export function Section({
   getCodeSnippet,
@@ -12,11 +9,11 @@ export function Section({
 }: {
   getCodeSnippet: (params: { canisterId: string; method: string }) => string
   className?: string
-  request: SectionRequest
+  request: any
 }) {
   const signer = useSigner()
   return (
-    <BaseSection<SectionRequest>
+    <BaseSection
       className={className}
       request={request}
       id={"icrc49_call_canister-" + request.params?.method}

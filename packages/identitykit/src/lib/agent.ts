@@ -1,34 +1,14 @@
-import { Agent as DfinityAgent, HttpAgent, Identity, pollForResponse } from "@icp-sdk/core/agent"
-import { Signer } from "@slide-computer/signer"
-import { SignerAgent } from "@slide-computer/signer-agent"
+import { Agent as DfinityAgent, HttpAgent, Identity } from "@icp-sdk/core/agent"
+import { SignerAgent } from "@icp-sdk/signer/agent"
 import { PartialIdentity } from "@icp-sdk/core/identity"
 import { Principal } from "@icp-sdk/core/principal"
 import { Delegation } from "@icp-sdk/core/identity"
 
 export type AgentOptions = {
   delegation?: Delegation
-  signerAgent: SignerAgent<Signer>
+  signerAgent: SignerAgent
   agent: HttpAgent
   identity?: Identity | PartialIdentity
-}
-
-function withUpdateMethod(signerAgent: SignerAgent<Signer>): DfinityAgent {
-  const agent = signerAgent as unknown as DfinityAgent
-  agent.update = async (canisterId, fields, pollingOptions) => {
-    const submitResponse = await signerAgent.call(canisterId, fields)
-    const pollResult = await pollForResponse(
-      signerAgent as unknown as DfinityAgent,
-      Principal.from(canisterId),
-      submitResponse.requestId,
-      pollingOptions
-    )
-    return {
-      ...pollResult,
-      requestDetails: submitResponse.requestDetails,
-      callResponse: submitResponse.response,
-    }
-  }
-  return agent
 }
 
 export class Agent implements DfinityAgent {
@@ -39,7 +19,7 @@ export class Agent implements DfinityAgent {
   ) {}
 
   static async create({ delegation, signerAgent, agent }: AgentOptions) {
-    return new Agent(withUpdateMethod(signerAgent), agent, delegation)
+    return new Agent(signerAgent, agent, delegation)
   }
 
   public async call(...params: Parameters<DfinityAgent["call"]>): ReturnType<DfinityAgent["call"]> {

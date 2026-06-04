@@ -1,6 +1,6 @@
 import { jest } from "@jest/globals"
 
-jest.unstable_mockModule("@slide-computer/signer-web", () => ({
+jest.unstable_mockModule("@icp-sdk/signer/web", () => ({
   PostMessageTransport: jest.fn(),
 }))
 
@@ -11,7 +11,7 @@ jest.unstable_mockModule(
   })
 )
 
-const { PostMessageTransport } = await import("@slide-computer/signer-web")
+const { PostMessageTransport } = await import("@icp-sdk/signer/web")
 const { getPopupTransportBuilder } = await import("./new-tab-transport.builder")
 
 describe("getPopupTransportBuilder", () => {

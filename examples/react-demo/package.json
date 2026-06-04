@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@codemirror/lang-json": "^6.0.2",
+    "@dfinity/utils": "^4.2.1",
     "@icp-sdk/canisters": "^3.6.0",
     "@icp-sdk/core": "^5.4.0",
     "@nfid/identitykit": "*",
