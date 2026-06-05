@@ -18,4 +18,3 @@ export {
   type AccountsSignerClientOptions as IdentityKitAccountsSignerClientOptions,
 } from "./signer-client"
 export * from "./signers"
-export { uint8ArrayToBase64, base64ToUint8Array } from "@dfinity/utils"
