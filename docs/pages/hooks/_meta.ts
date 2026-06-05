@@ -1,5 +1,4 @@
 export default {
-  useIdentityKit: "useIdentityKit",
   useAgent: "useAgent",
   useAuth: "useAuth",
   useBalance: "useBalance",
