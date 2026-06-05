@@ -93,7 +93,8 @@ export function Ledger({ className }: { className?: string }) {
       form={<Form values={values} errors={errors} onChange={handleChange} onBlur={handleBlur} />}
       canisterIDL={ledgerIDL}
       actorArgs={actorArgs}
-      codeSnippet={`import { fromHexString } from "@dfinity/candid"
+      codeSnippet={`import { AccountIdentifier, SubAccount } from "@icp-sdk/canisters/ledger/icp"
+import { Principal } from "@icp-sdk/core/principal"
 const agent = useAgent()
 
 const actor = Actor.createActor(idlFactory, {
@@ -103,17 +104,17 @@ const actor = Actor.createActor(idlFactory, {
 
 ${
   to_subaccount && isFormValid
-    ? `const address = AccountIdentifier.fromPrincipal({
+    ? `const recipientAccount = AccountIdentifier.fromPrincipal({
   principal: Principal.fromText("${import.meta.env.VITE_TARGET_CANISTER}"),
   ${to_subaccount ? `subAccount: SubAccount.fromBytes(new Uint8Array(${to_subaccount}))` : ""}
-}).toHex()`
-    : `const address = AccountIdentifier.fromPrincipal({
-  principal: Principal.fromText("${import.meta.env.VITE_TARGET_CANISTER}")}
-}).toHex()`
+}).toUint8Array()`
+    : `const recipientAccount = AccountIdentifier.fromPrincipal({
+  principal: Principal.fromText("${import.meta.env.VITE_TARGET_CANISTER}")
+}).toUint8Array()`
 }
 
 const transferArgs = {
-  to: fromHexString(address),
+  to: recipientAccount,
   fee: { e8s: BigInt(${actorArgs.fee.e8s}) },
   memo: BigInt(${actorArgs.memo}),
   from_subaccount: ${JSON.stringify(actorArgs.from_subaccount)},
