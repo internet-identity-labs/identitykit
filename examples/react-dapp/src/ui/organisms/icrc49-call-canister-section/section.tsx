@@ -1,27 +1,32 @@
 import { Section as BaseSection } from "../section"
-import { CallCanisterRequest } from "@slide-computer/signer"
 import { useSigner } from "../../../../../../packages/identitykit/src/libs/react/hooks"
-import { CALL_CANISTER_METHODS, CallCanisterMethodType } from "./constants"
+import { CALL_CANISTER_METHODS } from "./constants"
+import type { Signer } from "@icp-sdk/signer"
 
-type SectionRequest = Omit<CallCanisterRequest, "jsonrpc">
+type PartialSignerRequest = Omit<
+  Parameters<Signer["sendRequest"]>[0],
+  "jsonrpc" | "id" | "params"
+> & {
+  params?: Record<string, string>
+}
 
-export function Section({
+export function Section<TRequest extends PartialSignerRequest>({
   getCodeSnippet,
   className,
   request,
 }: {
   getCodeSnippet: (params: { canisterId: string; method: string }) => string
   className?: string
-  request: SectionRequest
+  request: TRequest
 }) {
   const signer = useSigner()
   return (
-    <BaseSection<SectionRequest>
+    <BaseSection
       className={className}
       request={request}
       id={"icrc49_call_canister-" + request.params?.method}
       getCodeSnippet={({ params }) => {
-        if (!CALL_CANISTER_METHODS.includes(params!.method as CallCanisterMethodType))
+        if (!CALL_CANISTER_METHODS.some((method) => method === params!.method))
           throw new Error("Method not supported")
         return getCodeSnippet({ canisterId: params!.canisterId, method: params!.method })
       }}

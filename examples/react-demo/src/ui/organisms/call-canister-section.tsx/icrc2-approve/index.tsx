@@ -1,10 +1,10 @@
 import { Section } from "../section"
 import { idlFactory as pepeIDL } from "../../../../idl/token-pepe-ledger"
-import { Principal } from "@dfinity/principal"
+import { Principal } from "@icp-sdk/core/principal"
 import { useAuth } from "@nfid/identitykit/react"
 import { CallCanisterMethod } from "../constants"
 import * as yup from "yup"
-import { IDL } from "@dfinity/candid"
+import { IDL } from "@icp-sdk/core/candid"
 import {
   principalValidation,
   subAccountValidation,
@@ -13,7 +13,7 @@ import {
 import { useFormik } from "formik"
 import { Form, FormValues } from "./form"
 import { MOCKED_SIGNER_MAIN_ACCOUNT, PEPE_LEDGER_CANISTER_ID } from "../../../../constants"
-import { toBase64 } from "@nfid/identitykit"
+import { uint8ArrayToBase64 } from "@dfinity/utils"
 
 const schema = yup
   .object({
@@ -96,7 +96,7 @@ export function Icrc2Approve({ className }: { className?: string }) {
           canisterId: canister_id,
           sender: user?.principal.toString() || "",
           method: CallCanisterMethod.icrc2_approve,
-          arg: isFormValid ? toBase64(IDL.encode(approveIDL.argTypes, [actorArgs])) : "",
+          arg: isFormValid ? uint8ArrayToBase64(IDL.encode(approveIDL.argTypes, [actorArgs])) : "",
         },
       }}
       onReset={() => setValues(initialValues)}

@@ -1,8 +1,12 @@
-import { DelegationChain, DelegationIdentity, Ed25519KeyIdentity } from "@dfinity/identity"
-import { JsonnableEd25519KeyIdentity } from "@dfinity/identity/lib/cjs/identity/ed25519.js"
+import {
+  DelegationChain,
+  DelegationIdentity,
+  Ed25519KeyIdentity,
+  JsonnableEd25519KeyIdentity,
+} from "@icp-sdk/core/identity"
 import { callCanisterService, CallCanisterRequest } from "./call-canister.service"
-import { Agent, HttpAgent, Identity } from "@dfinity/agent"
-import { IDL } from "@dfinity/candid"
+import { Agent, HttpAgent, Identity } from "@icp-sdk/core/agent"
+import { IDL } from "@icp-sdk/core/candid"
 
 const IC_HOSTNAME = "https://ic0.app"
 const HOUR = 3_600_000
@@ -39,7 +43,7 @@ describe("Call Canister Service", function () {
     }
     const response = await callCanisterService.call(request)
 
-    expect(response.contentMap).toMatch(/^2dn3p2NhcmdKRElETAABcQJtZWtjYW5pc3Rlcl9/)
-    expect(response.certificate).toMatch(/^2dn3o2pkZWxlZ2F0aW9uomtj/)
+    expect(response.contentMap).toMatch(/^2dn3p2xyZXF1ZXN0X3R5cGVkY2FsbGtjYW5pc3Rlcl9/)
+    expect(response.certificate).toMatch(/^2dn3o2R0cmVl/)
   }, 10000)
 })

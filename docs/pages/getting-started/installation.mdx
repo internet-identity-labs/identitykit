@@ -12,11 +12,11 @@ import { Callout } from "nextra/components"
 ### Prerequisites
 
 - An ICP project with a frontend canister.
-- Node.js version >= 12.7.0
+- Node.js version >= 22.18.0
 
 #### If you use Typescript:
 
-- Typescript version >= 4.7
+- Typescript version >= 5.9
 - `tsconfig.json` module set to `node16` or `nodenext` or any other with moduleResolution set to
   `node16` or `nodenext`
 
@@ -46,7 +46,7 @@ The bundle needs peer dependencies, be sure that following resources are availab
 as well:
 
 ```sh npm2yarn
-npm i @dfinity/ledger-icp @dfinity/identity @dfinity/agent @dfinity/candid @dfinity/principal @dfinity/utils @dfinity/auth-client
+npm i @icp-sdk/auth @icp-sdk/core @icp-sdk/canisters
 ```
 
 > Note: IdentityKit is a React library and exports styles that need to be imported into your
@@ -161,7 +161,6 @@ Currently known support for the icrc34_delegation standard:
 | Plug              | Yes                       |
 | OISY              | No                        |
 | Internet Identity | Yes                       |
-| Stoic             | Yes                       |
 
 ### Signer authType
 

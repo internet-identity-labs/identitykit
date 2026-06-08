@@ -17,8 +17,8 @@ import { ConnectWalletModal } from "../connect-wallet"
 import { IdentityKitTheme } from "../../constants"
 import { ThemeProvider } from "./theme-provider"
 import { Context } from "../../contexts"
-import { BrowserExtensionTransport } from "@slide-computer/signer-extension"
-import { Transport } from "@slide-computer/signer"
+import { BrowserExtensionTransport } from "@icp-sdk/signer/extension"
+import { Transport } from "@icp-sdk/signer"
 import { TransportBuilder } from "../../../../lib/service"
 
 interface ProviderProps extends PropsWithChildren {
@@ -37,7 +37,6 @@ interface ProviderProps extends PropsWithChildren {
   realConnectDisabled?: boolean
   crypto?: Pick<Crypto, "getRandomValues" | "randomUUID">
   window?: Window
-  allowInternetIdentityPinAuthentication?: boolean
   windowOpenerFeatures?: string
   excludeExtensionSignersBy?: ({ name: string } | { uuid: string })[]
 }
@@ -51,7 +50,6 @@ export const Provider = ({
   window = globalThis.window,
   authType = {},
   realConnectDisabled,
-  allowInternetIdentityPinAuthentication,
   discoverExtensionSigners = true,
   windowOpenerFeatures,
   excludeExtensionSignersBy = [],
@@ -64,9 +62,6 @@ export const Provider = ({
   }
   const [transports, setTransports] = useState<Array<{ value: Transport; signerId: string }>>()
   const [transportsLoading, setTransportsLoading] = useState(false)
-
-  const { maxTimeToLive, keyType, storage, identity } =
-    signerClientOptions as IdentityKitDelegationSignerClientOptions
 
   const { signers, featuredSigner } = useMemo(() => {
     const signersList =
@@ -87,12 +82,6 @@ export const Provider = ({
       Promise.all(
         signers.map(async (signer) => {
           const transport = await TransportBuilder.build({
-            maxTimeToLive,
-            derivationOrigin: signerClientOptions.derivationOrigin,
-            allowInternetIdentityPinAuthentication,
-            keyType,
-            storage,
-            identity,
             id: signer.id,
             transportType: signer.transportType,
             url: signer.providerUrl,
@@ -147,12 +136,6 @@ export const Provider = ({
               transport: {
                 signerId: provider.uuid,
                 value: await TransportBuilder.build({
-                  maxTimeToLive,
-                  derivationOrigin: signerClientOptions.derivationOrigin,
-                  allowInternetIdentityPinAuthentication,
-                  keyType,
-                  storage,
-                  identity,
                   id: provider.uuid,
                   transportType: TransportType.EXTENSION,
                   url: "",
@@ -191,6 +174,7 @@ export const Provider = ({
     window,
     windowOpenerFeatures,
     transports: transportsIncludingDiscovered,
+    derivationOrigin: signerClientOptions.derivationOrigin,
   })
 
   const onConnectSuccess = useCallback(() => {

@@ -1,8 +1,6 @@
 import { useSigner } from "../../../../../packages/identitykit/src/libs/react/hooks"
 import { MethodBadge } from "../atoms"
 import { Section } from "./section"
-import { AccountsRequest, AccountsResponse } from "@slide-computer/signer"
-
 export function Icrc27AccountsSection() {
   const signer = useSigner()
   return (
@@ -26,7 +24,7 @@ export function Icrc27AccountsSection() {
     }
   })`}
       handleSubmit={async (request) => {
-        const response = await signer!.sendRequest<AccountsRequest, AccountsResponse>({
+        const response = await signer!.sendRequest({
           ...request,
           id: "8932ce44-a693-4d1a-a087-8468aafe536e",
           jsonrpc: "2.0",

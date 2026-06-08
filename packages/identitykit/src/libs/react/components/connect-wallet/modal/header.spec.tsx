@@ -1,9 +1,11 @@
+import { jest } from "@jest/globals"
 import { fireEvent, render, screen } from "@testing-library/react"
-import { Header } from "./header"
 
-jest.mock("../../ui/tooltip", () => ({
+jest.unstable_mockModule(new URL("../../ui/tooltip.tsx", import.meta.url).pathname, () => ({
   Tooltip: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }))
+
+const { Header } = await import("./header")
 
 describe("ModalHeader", () => {
   const onBackMock = jest.fn()

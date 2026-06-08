@@ -19,7 +19,7 @@ export function Icrc25PermissionsSection() {
       }}
       getCodeSnippet={(request) => `await IdentityKit.init()
   const grantedPermsissions = await IdentityKit.request(${JSON.stringify(request, null, 2)})`}
-      handleSubmit={() => signer!.permissions()}
+      handleSubmit={() => signer!.getPermissions()}
     />
   )
 }

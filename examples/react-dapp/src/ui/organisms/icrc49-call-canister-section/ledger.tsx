@@ -19,7 +19,8 @@ export function Ledger({ className }: { className?: string }) {
         if (canisterId !== LEDGER_CANISTER_ID) {
           throw new Error(`Only ${LEDGER_CANISTER_ID} canister supported for this method`)
         }
-        return `import { fromHexString } from "@dfinity/candid"
+        return `import { AccountIdentifier } from "@icp-sdk/canisters/ledger/icp"
+import { Principal } from "@icp-sdk/core/principal"
 const agent = useAgent()
 
 const actor = Actor.createActor(idlFactory, {
@@ -27,12 +28,12 @@ const actor = Actor.createActor(idlFactory, {
   canisterId: "${canisterId}",
 })
 
-const address = AccountIdentifier.fromPrincipal({
+const recipientAccount = AccountIdentifier.fromPrincipal({
   principal: Principal.fromText("do25a-dyaaa-aaaak-qifua-cai"),
-}).toHex()
+}).toUint8Array()
 
 const transferArgs = {
-  to: fromHexString(address),
+  to: recipientAccount,
   fee: { e8s: BigInt(10000) },
   memo: BigInt(0),
   from_subaccount: [],

@@ -1,7 +1,7 @@
 import * as yup from "yup"
-import { Principal } from "@dfinity/principal"
-import { SubAccount } from "@dfinity/ledger-icp"
-import { IDL } from "@dfinity/candid"
+import { Principal } from "@icp-sdk/core/principal"
+import { SubAccount } from "@icp-sdk/canisters/ledger/icp"
+import { IDL } from "@icp-sdk/core/candid"
 
 export const subAccountValidation = () =>
   yup

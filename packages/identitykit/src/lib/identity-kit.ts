@@ -1,4 +1,4 @@
-import { AccountIdentifier, LedgerCanister } from "@dfinity/ledger-icp"
+import { AccountIdentifier, IcpLedgerCanister } from "@icp-sdk/canisters/ledger/icp"
 import {
   AccountsSignerClient,
   AccountsSignerClientOptions,
@@ -6,7 +6,7 @@ import {
   DelegationSignerClientOptions,
   SignerClient,
 } from "./signer-client"
-import { InternetIdentity, OISY, Stoic } from "./signers"
+import { InternetIdentity, OISY } from "./signers"
 
 export const IdentityKitAuthType = {
   DELEGATION: "DELEGATION",
@@ -17,7 +17,6 @@ export const IdentityKitAuthType = {
 export const IdentityKitCustomSignerAuthType = {
   [OISY.id]: IdentityKitAuthType.ACCOUNTS,
   [InternetIdentity.id]: IdentityKitAuthType.DELEGATION,
-  [Stoic.id]: IdentityKitAuthType.DELEGATION,
 }
 
 type ObjectValuesType<T> = T[keyof T]
@@ -37,11 +36,11 @@ export class IdentityKit<
   }
 
   async getIcpBalance(): Promise<number> {
-    const connectedUser = await (this.signerClient as SignerClient).connectedUser
+    const connectedUser = (this.signerClient as SignerClient).connectedUser
     if (!connectedUser) throw new Error("Not authenticated")
 
     const balance = (
-      await LedgerCanister.create().accountBalance({
+      await IcpLedgerCanister.create().accountBalance({
         accountIdentifier: AccountIdentifier.fromPrincipal({
           principal: connectedUser.principal,
           subAccount: connectedUser.subAccount,

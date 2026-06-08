@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import { Signer, Transport } from "@slide-computer/signer"
+import { Signer, Transport } from "@icp-sdk/signer"
 import { TransportBuilder } from "../../../lib/service"
 import { TransportType, SignerConfig } from "../../../lib/types"
 
@@ -11,6 +11,7 @@ export function useProceedSigner({
   window,
   windowOpenerFeatures,
   onConnectFailure,
+  derivationOrigin,
 }: {
   signers: SignerConfig[]
   transports?: Array<{ value: Transport; signerId: string }>
@@ -19,6 +20,7 @@ export function useProceedSigner({
   window?: Window
   windowOpenerFeatures?: string
   onConnectFailure?: (e: Error) => unknown
+  derivationOrigin?: string
 }) {
   // saved to local storage for next js (localStorage is not defined during server render)
   const [localStorageSigner, setLocalStorageSigner] = useState<string | undefined>(
@@ -48,13 +50,10 @@ export function useProceedSigner({
 
         if (!transport) throw new Error("Transport was not found")
 
-        if (!transport.connection?.connected && !localStorageSigner) {
-          await transport.connection?.connect()
-        }
-
         const createdSigner = new Signer({
           crypto,
           transport,
+          derivationOrigin,
         })
 
         setSelectedSigner({ value: createdSigner, id: signerId })
@@ -79,7 +78,7 @@ export function useProceedSigner({
         windowOpenerFeatures,
       })
 
-      const signer = new Signer({ crypto, transport })
+      const signer = new Signer({ crypto, transport, derivationOrigin })
 
       setSelectedSigner({ value: signer, id: url })
       closeModal()

@@ -1,4 +1,4 @@
-import { Principal } from "@dfinity/principal"
+import { Principal } from "@icp-sdk/core/principal"
 import { GenericError } from "./exception-handler.service"
 
 const MAX_ALTERNATIVE_ORIGINS = 10

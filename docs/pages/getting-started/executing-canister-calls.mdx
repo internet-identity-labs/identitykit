@@ -43,7 +43,7 @@ should also set up an unauthenticatedAgent for calls the user doesn't need to ex
 
 ```typescript
 import { useAgent } from "@nfid/identitykit/react"
-import { HttpAgent } from "@dfinity/agent"
+import { HttpAgent } from "@icp-sdk/core/agent"
 import { useEffect } from "react"
 
 const ICP_API_HOST = "https://icp-api.io/"
@@ -62,10 +62,7 @@ const authenticatedAgent = useAgent()
 ```
 
 <Callout type="warning" emoji="⚠️">
-  Example created for global network interaction, check also
-  <a href="/guides/local-development">
-    <strong>local-development</strong>
-  </a>
+  Example created for global network interaction.
 </Callout>
 
 ### 4. Create actors

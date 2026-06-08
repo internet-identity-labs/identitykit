@@ -20,7 +20,7 @@ export function Icrc25SupportedStandardsSection() {
       }}
       getCodeSnippet={(request) => `await IdentityKit.init()
   const supportedStandards = await IdentityKit.request(${JSON.stringify(request, null, 2)})`}
-      handleSubmit={() => signer!.supportedStandards()}
+      handleSubmit={() => signer!.getSupportedStandards()}
     />
   )
 }

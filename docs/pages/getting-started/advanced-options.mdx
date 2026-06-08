@@ -7,6 +7,8 @@ authors:
 
 import { Callout } from "nextra/components"
 
+# Advanced Options
+
 IdentityKitProvider also allows to set some important advanced props listed below:
 
 ## authType
@@ -20,7 +22,6 @@ IdentityKitProvider also allows to set some important advanced props listed belo
   [Plug.id]: IdentityKitAuthType.DELEGATION,
   [OISY.id]: IdentityKitAuthType.ACCOUNTS, // does not support icrc34_delegation
   [InternetIdentity.id]: IdentityKitAuthType.DELEGATION, // does not support icrc27_accounts
-  [Stoic.id]: IdentityKitAuthType.DELEGATION // does not support icrc27_accounts
 }
 
 import { IdentityKitProvider } from "@nfid/identitykit/react"
@@ -149,10 +150,3 @@ default.
 
 Optional string containing a comma-separated list of window features in the form `name=value` for
 signers that open in the window. For example: `left=100,top=100,width=320,height=320{:typescript}`.
-
-## allowInternetIdentityPinAuthentication
-
-`boolean | undefined{:typescript}`
-
-If present, indicates whether or not the Identity Provider should allow the user to authenticate
-and/or register using a temporary key/PIN identity.

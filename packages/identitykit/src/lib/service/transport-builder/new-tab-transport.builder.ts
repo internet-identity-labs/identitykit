@@ -1,5 +1,5 @@
-import { Transport } from "@slide-computer/signer"
-import { PostMessageTransport, PostMessageTransportOptions } from "@slide-computer/signer-web"
+import { Transport } from "@icp-sdk/signer"
+import { PostMessageTransport, type PostMessageTransportOptions } from "@icp-sdk/signer/web"
 
 export async function getPopupTransportBuilder(
   options: PostMessageTransportOptions

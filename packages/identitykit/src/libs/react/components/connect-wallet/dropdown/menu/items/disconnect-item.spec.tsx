@@ -1,9 +1,11 @@
+import { jest } from "@jest/globals"
 import { render, fireEvent } from "@testing-library/react"
-import { DisconnectItem } from "./disconnect-item"
 
-jest.mock("../../../icons", () => ({
+jest.unstable_mockModule(new URL("../../../icons/index.ts", import.meta.url).pathname, () => ({
   LogoutIcon: () => <svg data-testid="logout-icon" />,
 }))
+
+const { DisconnectItem } = await import("./disconnect-item")
 
 describe("LogoutItem", () => {
   it("renders without crashing", () => {

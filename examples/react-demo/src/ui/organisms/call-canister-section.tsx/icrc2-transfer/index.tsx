@@ -1,6 +1,6 @@
 import { Section } from "../section"
 import { idlFactory as pepeIDL } from "../../../../idl/token-pepe-ledger"
-import { Principal } from "@dfinity/principal"
+import { Principal } from "@icp-sdk/core/principal"
 import { useAuth } from "@nfid/identitykit/react"
 import { CallCanisterMethod } from "../constants"
 import * as yup from "yup"
@@ -16,8 +16,8 @@ import {
 } from "../../../../constants"
 import { useFormik } from "formik"
 import { Form, FormValues } from "./form"
-import { IDL } from "@dfinity/candid"
-import { toBase64 } from "@nfid/identitykit"
+import { IDL } from "@icp-sdk/core/candid"
+import { uint8ArrayToBase64 } from "@dfinity/utils"
 
 const schema = yup
   .object({
@@ -103,7 +103,7 @@ export function Icrc2Transfer({ className }: { className?: string }) {
           canisterId: canister_id,
           sender: user?.principal.toString() || "",
           method: CallCanisterMethod.icrc2_transfer_from,
-          arg: isFormValid ? toBase64(IDL.encode(transferIDL.argTypes, [actorArgs])) : "",
+          arg: isFormValid ? uint8ArrayToBase64(IDL.encode(transferIDL.argTypes, [actorArgs])) : "",
         },
       }}
       onReset={() => setValues(initialValues)}

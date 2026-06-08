@@ -1,14 +1,12 @@
 import { useSigner } from "../../../../../packages/identitykit/src/libs/react/hooks"
 import { MethodBadge } from "../atoms"
 import { Section } from "./section"
-import { DelegationRequest, DelegationResponse } from "@slide-computer/signer"
-
 const targetCanister = import.meta.env.VITE_TARGET_CANISTER
 
 export function Icrc34DelegationSection() {
   const signer = useSigner()
   return (
-    <Section<Omit<DelegationRequest, "jsonrpc">>
+    <Section
       id="icrc34_delegation"
       title="3.a icrc34_delegation"
       description={
@@ -37,7 +35,7 @@ const delegation = await IdentityKit.request({
   }
 })`}
       handleSubmit={async (request) => {
-        const response = await signer!.sendRequest<DelegationRequest, DelegationResponse>({
+        const response = await signer!.sendRequest({
           ...request,
           id: "8932ce44-a693-4d1a-a087-8468aafe536e",
           jsonrpc: "2.0",

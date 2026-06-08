@@ -1,10 +1,10 @@
 import { createContext } from "use-context-selector"
 import { SignerConfig } from "../../../lib/types"
-import { Signer } from "@slide-computer/signer"
+import { Signer } from "@icp-sdk/signer"
 import { IdentityKitAuthType, IdentityKitSignerClient } from "../../../lib"
 
-import { Principal } from "@dfinity/principal"
-import { SubAccount } from "@dfinity/ledger-icp"
+import { Principal } from "@icp-sdk/core/principal"
+import { SubAccount } from "@icp-sdk/canisters/ledger/icp"
 
 interface Context {
   signers: SignerConfig[]

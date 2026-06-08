@@ -1,6 +1,6 @@
-import { Agent, HttpAgent } from "@dfinity/agent"
+import { Agent, HttpAgent } from "@icp-sdk/core/agent"
 import { consentMessageService } from "./consent-message.service"
-import { IDL } from "@dfinity/candid"
+import { IDL } from "@icp-sdk/core/candid"
 
 const IC_HOSTNAME = "https://ic0.app"
 

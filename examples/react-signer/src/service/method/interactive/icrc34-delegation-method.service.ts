@@ -1,8 +1,8 @@
 import { RPCMessage, RPCSuccessResponse } from "../../../type"
 import { ComponentData, InteractiveMethodService } from "./interactive-method.service"
 import { Account, AccountKeyIdentity, AccountType, accountService } from "../../account.service"
-import { DelegationChain, Ed25519PublicKey } from "@dfinity/identity"
-import { Principal } from "@dfinity/principal"
+import { DelegationChain, Ed25519PublicKey } from "@icp-sdk/core/identity"
+import { Principal } from "@icp-sdk/core/principal"
 import { targetService } from "../../target.service"
 import { GenericError } from "../../exception-handler.service"
 import { derivationOriginService } from "../../derivation-origin.service"
@@ -150,17 +150,17 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
     )
   }
 
-  private fromBase64(base64: string): ArrayBuffer {
+  private fromBase64(base64: string): Uint8Array {
     if (typeof globalThis.Buffer !== "undefined") {
-      return globalThis.Buffer.from(base64, "base64").buffer
+      return new Uint8Array(globalThis.Buffer.from(base64, "base64"))
     }
     if (typeof globalThis.atob !== "undefined") {
-      return Uint8Array.from(globalThis.atob(base64), (m) => m.charCodeAt(0)).buffer
+      return Uint8Array.from(globalThis.atob(base64), (m) => m.charCodeAt(0))
     }
     throw Error("Could not decode base64 string")
   }
 
-  private toBase64(bytes: ArrayBuffer): string {
+  private toBase64(bytes: Uint8Array): string {
     if (typeof globalThis.Buffer !== "undefined") {
       return globalThis.Buffer.from(bytes).toString("base64")
     }
@@ -169,9 +169,7 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
         Array.from({ length: Math.ceil(bytes.byteLength / ENCODE_CHUNK_SIZE) })
           .map((_, index) =>
             String.fromCharCode(
-              ...new Uint8Array(
-                bytes.slice(index * ENCODE_CHUNK_SIZE, (index + 1) * ENCODE_CHUNK_SIZE)
-              )
+              ...bytes.slice(index * ENCODE_CHUNK_SIZE, (index + 1) * ENCODE_CHUNK_SIZE)
             )
           )
           .join("")

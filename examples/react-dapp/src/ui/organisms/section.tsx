@@ -3,9 +3,8 @@ import { useMemo, useState } from "react"
 import { toast } from "react-toastify"
 import { Button } from "../atoms"
 import { CodeSection, RequestSection, ResponseSection } from "../molecules"
-import { JsonRequest } from "@slide-computer/signer"
 
-export function Section<TRequest extends Omit<JsonRequest, "jsonrpc">>({
+export function Section<TRequest>({
   getCodeSnippet,
   title,
   className,

@@ -1,4 +1,4 @@
-import { Agent, HttpAgent } from "@dfinity/agent"
+import { Agent, HttpAgent } from "@icp-sdk/core/agent"
 import { actorService } from "./actor.service"
 import { GenericError } from "./exception-handler.service"
 import { type _SERVICE as ConsentMessageCanister } from "../idl/consent"

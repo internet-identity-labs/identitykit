@@ -1,13 +1,12 @@
-import { Agent as DfinityAgent, HttpAgent, Identity } from "@dfinity/agent"
-import { Signer } from "@slide-computer/signer"
-import { SignerAgent } from "@slide-computer/signer-agent"
-import { PartialIdentity } from "@dfinity/identity"
-import { Principal } from "@dfinity/principal"
-import { Delegation } from "@dfinity/identity"
+import { Agent as DfinityAgent, HttpAgent, Identity } from "@icp-sdk/core/agent"
+import { SignerAgent } from "@icp-sdk/signer/agent"
+import { PartialIdentity } from "@icp-sdk/core/identity"
+import { Principal } from "@icp-sdk/core/principal"
+import { Delegation } from "@icp-sdk/core/identity"
 
 export type AgentOptions = {
   delegation?: Delegation
-  signerAgent: SignerAgent<Signer>
+  signerAgent: SignerAgent
   agent: HttpAgent
   identity?: Identity | PartialIdentity
 }
@@ -63,6 +62,21 @@ export class Agent implements DfinityAgent {
 
   async status(): ReturnType<DfinityAgent["status"]> {
     return this.agentStrategy.status()
+  }
+
+  public async update(
+    ...params: Parameters<DfinityAgent["update"]>
+  ): ReturnType<DfinityAgent["update"]> {
+    const [canisterId, fields, pollingOptions] = params
+    const delegationTargets = this.delegation?.targets
+    const strategy =
+      this.delegation &&
+      (!delegationTargets?.length ||
+        delegationTargets?.find((t) => t.compareTo(Principal.from(canisterId)) === "eq"))
+        ? this.agentStrategy
+        : this.signerAgentStrategy
+
+    return strategy.update(canisterId, fields, pollingOptions)
   }
 
   async readState(

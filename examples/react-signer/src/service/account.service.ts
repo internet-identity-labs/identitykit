@@ -1,7 +1,6 @@
-import { Ed25519KeyIdentity } from "@dfinity/identity"
-import { SubAccount } from "@dfinity/ledger-icp"
+import { Ed25519KeyIdentity, JsonnableEd25519KeyIdentity } from "@icp-sdk/core/identity"
+import { SubAccount } from "@icp-sdk/canisters/ledger/icp"
 import { idbRepository } from "./storage.service"
-import { JsonnableEd25519KeyIdentity } from "@dfinity/identity/lib/cjs/identity/ed25519"
 
 const key = "accounts"
 

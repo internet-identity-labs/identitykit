@@ -8,7 +8,6 @@ import {
   MockedSigner,
   NFIDW,
   InternetIdentity,
-  Stoic,
   OISY,
 } from "@nfid/identitykit"
 
@@ -27,7 +26,7 @@ const ConnectFailureError: Record<string, string> = {
 }
 
 const nfidw: IdentityKitSignerConfig = { ...NFIDW, providerUrl: nfidSignerProviderUrl }
-const signers = [nfidw, InternetIdentity, OISY, Stoic].concat(
+const signers = [nfidw, InternetIdentity, OISY].concat(
   environment !== "ic"
     ? [
         {

@@ -1,5 +1,5 @@
-import { AnonymousIdentity, type Identity, type SignIdentity } from "@dfinity/agent"
-import { Principal } from "@dfinity/principal"
+import { AnonymousIdentity, type Identity, type SignIdentity } from "@icp-sdk/core/agent"
+import { Principal } from "@icp-sdk/core/principal"
 import {
   DelegationChain,
   DelegationIdentity,
@@ -8,21 +8,18 @@ import {
   isDelegationValid,
   PartialDelegationIdentity,
   PartialIdentity,
-  Delegation,
-} from "@dfinity/identity"
+} from "@icp-sdk/core/identity"
 import {
   IdbStorage,
-  SignerStorage,
+  type SignerStorage,
   getDelegationChain,
   getIdentity,
   removeDelegationChain,
   removeIdentity,
   setDelegationChain,
   setIdentity,
-} from "@slide-computer/signer-storage"
+} from "./storage"
 import { STORAGE_KEY, SignerClient, SignerClientOptions } from "./client"
-import { DelegationRequest, DelegationResponse, fromBase64, toBase64 } from "@slide-computer/signer"
-import { type Signature } from "@dfinity/agent"
 import { DEFAULT_MAX_TIME_TO_LIVE } from "../constants"
 import { IdleManager } from "../timeout-managers/idle-manager"
 import { TimeoutManager } from "../timeout-managers/timeout-manager"
@@ -134,43 +131,11 @@ export class DelegationSignerClient extends SignerClient {
   }
 
   public async login(): Promise<void> {
-    const params = this.options.derivationOrigin
-      ? {
-          icrc95DerivationOrigin: this.options.derivationOrigin,
-        }
-      : {}
-    const delegationChainResponse = await this.options.signer.sendRequest<
-      DelegationRequest,
-      DelegationResponse
-    >({
-      id: this.crypto.randomUUID(),
-      jsonrpc: "2.0",
-      method: "icrc34_delegation",
-      params: {
-        ...params,
-        publicKey: toBase64(this.baseIdentity.getPublicKey().toDer()),
-        targets: this.targets,
-        maxTimeToLive: this.maxTimeToLive === undefined ? undefined : String(this.maxTimeToLive),
-      },
+    const delegationChain = await this.options.signer.requestDelegation({
+      publicKey: this.baseIdentity.getPublicKey(),
+      targets: this.targets?.map((target) => Principal.fromText(target)),
+      maxTimeToLive: this.maxTimeToLive,
     })
-
-    if ("error" in delegationChainResponse) {
-      throw Error(delegationChainResponse.error.message)
-    }
-
-    const delegationChain = DelegationChain.fromDelegations(
-      delegationChainResponse.result.signerDelegation.map((delegation) => {
-        return {
-          delegation: new Delegation(
-            fromBase64(delegation.delegation.pubkey),
-            BigInt(delegation.delegation.expiration),
-            delegation.delegation.targets?.map((principal) => Principal.fromText(principal))
-          ),
-          signature: fromBase64(delegation.signature) as Signature,
-        }
-      }),
-      fromBase64(delegationChainResponse.result.publicKey)
-    )
 
     if (
       this.baseIdentity instanceof Ed25519KeyIdentity ||

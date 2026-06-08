@@ -1,4 +1,4 @@
-export { SignerAgent, type SignerAgentOptions } from "@slide-computer/signer-agent"
+export { SignerAgent, type SignerAgentOptions } from "@icp-sdk/signer/agent"
 export { Agent as IdentityKitAgent, type AgentOptions as IdentityKitAgentOptions } from "./agent"
 export {
   SignerClient as IdentityKitSignerClient,
@@ -18,4 +18,3 @@ export {
   type AccountsSignerClientOptions as IdentityKitAccountsSignerClientOptions,
 } from "./signer-client"
 export * from "./signers"
-export { toBase64, fromBase64 } from "@slide-computer/signer"

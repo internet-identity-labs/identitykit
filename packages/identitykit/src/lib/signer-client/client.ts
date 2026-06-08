@@ -1,8 +1,8 @@
-import type { Signer } from "@slide-computer/signer"
-import { IdbStorage, type SignerStorage } from "@slide-computer/signer-storage"
-import { AuthClientStorage } from "@dfinity/auth-client"
-import { SubAccount } from "@dfinity/ledger-icp"
-import { Principal } from "@dfinity/principal"
+import type { Signer } from "@icp-sdk/signer"
+import { IdbStorage, type SignerStorage } from "./storage"
+import { AuthClientStorage } from "@icp-sdk/auth/client"
+import { SubAccount } from "@icp-sdk/canisters/ledger/icp"
+import { Principal } from "@icp-sdk/core/principal"
 import { IdleManager, IdleManagerOptions } from "../timeout-managers/idle-manager"
 
 export const STORAGE_KEY = "client"
@@ -86,7 +86,7 @@ export abstract class SignerClient {
     user:
       | {
           owner: string
-          subAccount?: ArrayBuffer
+          subAccount?: ArrayBuffer | Uint8Array
         }
       | undefined
   ): Promise<void> {
@@ -115,7 +115,7 @@ export abstract class SignerClient {
     user:
       | {
           owner: string
-          subAccount?: ArrayBuffer
+          subAccount?: ArrayBuffer | Uint8Array
         }
       | undefined
   ): Promise<void> {
@@ -147,7 +147,7 @@ export abstract class SignerClient {
   protected async getConnectedUserFromStorage(): Promise<
     | {
         owner: string
-        subAccount?: ArrayBuffer
+        subAccount?: ArrayBuffer | Uint8Array
       }
     | undefined
   > {
