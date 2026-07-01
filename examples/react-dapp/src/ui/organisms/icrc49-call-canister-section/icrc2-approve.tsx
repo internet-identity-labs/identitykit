@@ -38,7 +38,7 @@ const icrc2_approve_args = {
   spender: acc,
   fee: [],
   memo: [],
-  amount: BigInt(5000 * 10 ** 18),
+  amount: BigInt(500000000),
   created_at_time: [],
   expected_allowance: [],
   expires_at: [],
