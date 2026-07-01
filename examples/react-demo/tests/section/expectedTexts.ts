@@ -6,7 +6,7 @@ export class ExpectedTexts {
       Initial_ICRC2Approve_RequestState: {
         method: "icrc49_call_canister",
         params: {
-          canisterId: "etik7-oiaaa-aaaar-qagia-cai",
+          canisterId: "mih44-vaaaa-aaaaq-aaekq-cai",
           sender: "7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae",
           method: "icrc2_approve",
           arg: "RElETAZufW17bgFueGwCs7DawwNorYbKgwUCbAjG/LYCALqJ5cIEAqLelOsGAoLz85EMA9ijjKgNfZGcnL8NAN6n99oNA8uW3LQOBAEFAAAAAICAgMnVm5n4jJ4EAAABHddbvOJ4U2u2S79mR0+xkJBPtwHztu02la8/gFECAA==",
@@ -15,7 +15,7 @@ export class ExpectedTexts {
       Initial_ICRC1Transfer_RequestState: {
         method: "icrc49_call_canister",
         params: {
-          canisterId: "etik7-oiaaa-aaaar-qagia-cai",
+          canisterId: "mih44-vaaaa-aaaaq-aaekq-cai",
           sender: "7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae",
           method: "icrc1_transfer",
           arg: "RElETAZte24AbAKzsNrDA2ithsqDBQFufW54bAb7ygECxvy2AgO6ieXCBAGi3pTrBgGC8/ORDATYo4yoDX0BBQEdXdZAg85gOc3s6DkTiv7FBn9RDHSPT6rgmlsBGgIAAAAAAICAgPXduOvktWw=",
@@ -79,7 +79,7 @@ export class ExpectedTexts {
       Initial_ICRC2Approve_RequestState: {
         method: "icrc49_call_canister",
         params: {
-          canisterId: "etik7-oiaaa-aaaar-qagia-cai",
+          canisterId: "mih44-vaaaa-aaaaq-aaekq-cai",
           sender: "pyoac-sn7yx-gvu25-p2ni3-tja44-xvrrw-vzwmg-yxfsv-o3ykq-nhu4a-qqe",
           method: "icrc2_approve",
           arg: "RElETAZufW17bgFueGwCs7DawwNorYbKgwUCbAjG/LYCALqJ5cIEAqLelOsGAoLz85EMA9ijjKgNfZGcnL8NAN6n99oNA8uW3LQOBAEFAAAAAICAgMnVm5n4jJ4EAAABHddbvOJ4U2u2S79mR0+xkJBPtwHztu02la8/gFECAA==",
@@ -97,7 +97,7 @@ export class ExpectedTexts {
       Initial_ICRC1Transfer_RequestState: {
         method: "icrc49_call_canister",
         params: {
-          canisterId: "etik7-oiaaa-aaaar-qagia-cai",
+          canisterId: "mih44-vaaaa-aaaaq-aaekq-cai",
           sender: "pyoac-sn7yx-gvu25-p2ni3-tja44-xvrrw-vzwmg-yxfsv-o3ykq-nhu4a-qqe",
           method: "icrc1_transfer",
           arg: "RElETAZte24AbAKzsNrDA2ithsqDBQFufW54bAb7ygECxvy2AgO6ieXCBAGi3pTrBgGC8/ORDATYo4yoDX0BBQEdXdZAg85gOc3s6DkTiv7FBn9RDHSPT6rgmlsBGgIAAAAAAICAgPXduOvktWw=",
