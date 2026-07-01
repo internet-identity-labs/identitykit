@@ -13,7 +13,7 @@ import {
 import {
   MOCKED_SIGNER_MAIN_ACCOUNT,
   MOCKED_SIGNER_SECOND_ACCOUNT,
-  PEPE_LEDGER_CANISTER_ID,
+  NFIDW_LEDGER_CANISTER_ID,
 } from "../../../../constants"
 import { useFormik } from "formik"
 import { Form, FormValues } from "./form"
@@ -37,7 +37,7 @@ const schema = yup
   .required()
 
 const initialValues = {
-  canister_id: PEPE_LEDGER_CANISTER_ID,
+  canister_id: NFIDW_LEDGER_CANISTER_ID,
   from_principal: MOCKED_SIGNER_MAIN_ACCOUNT,
   from_subaccount: "",
   to_principal: MOCKED_SIGNER_SECOND_ACCOUNT,

@@ -13,7 +13,7 @@ import {
 } from "../../../../validations"
 import { useFormik } from "formik"
 import { Form, FormValues } from "./form"
-import { MOCKED_SIGNER_MAIN_ACCOUNT, PEPE_LEDGER_CANISTER_ID } from "../../../../constants"
+import { MOCKED_SIGNER_MAIN_ACCOUNT, NFIDW_LEDGER_CANISTER_ID } from "../../../../constants"
 import { uint8ArrayToBase64 } from "@dfinity/utils"
 import { textToBytes } from "../../../../utils"
 
@@ -33,7 +33,7 @@ const schema = yup
   .required()
 
 const initialValues = {
-  canister_id: PEPE_LEDGER_CANISTER_ID,
+  canister_id: NFIDW_LEDGER_CANISTER_ID,
   from_subaccount: "",
   spender_principal: MOCKED_SIGNER_MAIN_ACCOUNT,
   fee: "",

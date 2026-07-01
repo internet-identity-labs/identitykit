@@ -1,4 +1,4 @@
-import { LEDGER_CANISTER_ID, MOCKED_SIGNER_MAIN_ACCOUNT } from "../../../constants"
+import { ICP_LEDGER_CANISTER_ID, MOCKED_SIGNER_MAIN_ACCOUNT } from "../../../constants"
 import { CallCanisterMethod } from "./constants"
 import { Section } from "./section"
 
@@ -9,15 +9,15 @@ export function Ledger({ className }: { className?: string }) {
       request={{
         method: "icrc49_call_canister",
         params: {
-          canisterId: LEDGER_CANISTER_ID,
+          canisterId: ICP_LEDGER_CANISTER_ID,
           sender: MOCKED_SIGNER_MAIN_ACCOUNT,
           method: CallCanisterMethod.transfer,
           arg: "RElETAZte2wB4KmzAnhuAGwB1vaOgAF4bgNsBvvKAQDG/LYCAbqJ5cIEeKLelOsGAoLz85EMBNijjKgNAQEFIOryWM4M9NaQ7WNXeb3wjbfURB8JbLIb5aI3/N+SxHRgECcAAAAAAAAAAAAAAAAAAAAAAOH1BQAAAAA=",
         },
       }}
       getCodeSnippet={({ canisterId, method }) => {
-        if (canisterId !== LEDGER_CANISTER_ID) {
-          throw new Error(`Only ${LEDGER_CANISTER_ID} canister supported for this method`)
+        if (canisterId !== ICP_LEDGER_CANISTER_ID) {
+          throw new Error(`Only ${ICP_LEDGER_CANISTER_ID} canister supported for this method`)
         }
         return `import { AccountIdentifier } from "@icp-sdk/canisters/ledger/icp"
 import { Principal } from "@icp-sdk/core/principal"

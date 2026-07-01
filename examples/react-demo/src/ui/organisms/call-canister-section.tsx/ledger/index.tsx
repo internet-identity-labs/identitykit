@@ -2,7 +2,7 @@ import { Section } from "../section"
 import { idlFactory as ledgerIDL } from "../../../../idl/ledger"
 import { useAuth } from "@nfid/identitykit/react"
 import { CallCanisterMethod } from "../constants"
-import { e8s, LEDGER_CANISTER_ID } from "../../../../constants"
+import { e8s, ICP_LEDGER_CANISTER_ID } from "../../../../constants"
 import { useFormik } from "formik"
 import { Form, FormValues } from "./form"
 import { uint8ArrayToBase64 } from "@dfinity/utils"
@@ -82,7 +82,7 @@ export function Ledger({ className }: { className?: string }) {
       request={{
         method: "icrc49_call_canister",
         params: {
-          canisterId: LEDGER_CANISTER_ID,
+          canisterId: ICP_LEDGER_CANISTER_ID,
           sender: user?.principal.toString() || "",
           method: CallCanisterMethod.transfer,
           arg: isFormValid ? uint8ArrayToBase64(IDL.encode(transferIDL.argTypes, [actorArgs])) : "",
@@ -99,7 +99,7 @@ const agent = useAgent()
 
 const actor = Actor.createActor(idlFactory, {
   agent,
-  canisterId: "${LEDGER_CANISTER_ID}",
+  canisterId: "${ICP_LEDGER_CANISTER_ID}",
 })
 
 ${

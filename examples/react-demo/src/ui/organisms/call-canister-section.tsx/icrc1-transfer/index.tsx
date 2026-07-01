@@ -10,7 +10,7 @@ import {
   principalValidation,
   subAccountValidation,
 } from "../../../../validations"
-import { MOCKED_SIGNER_SECOND_ACCOUNT, PEPE_LEDGER_CANISTER_ID } from "../../../../constants"
+import { MOCKED_SIGNER_SECOND_ACCOUNT, NFIDW_LEDGER_CANISTER_ID } from "../../../../constants"
 import { useFormik } from "formik"
 import { Form, FormValues } from "./form"
 import { IDL } from "@icp-sdk/core/candid"
@@ -31,7 +31,7 @@ const schema = yup
   .required()
 
 const initialValues = {
-  canister_id: PEPE_LEDGER_CANISTER_ID,
+  canister_id: NFIDW_LEDGER_CANISTER_ID,
   from_subaccount: "",
   to_principal: MOCKED_SIGNER_SECOND_ACCOUNT,
   to_subaccount: "",
