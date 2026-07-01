@@ -2,6 +2,7 @@ import * as yup from "yup"
 import { Principal } from "@icp-sdk/core/principal"
 import { SubAccount } from "@icp-sdk/canisters/ledger/icp"
 import { IDL } from "@icp-sdk/core/candid"
+import { textToBytes } from "./utils"
 
 export const subAccountValidation = () =>
   yup
@@ -50,4 +51,10 @@ export const numberValidation = () =>
     } catch (e) {
       return false
     }
+  })
+
+export const memoValidation = () =>
+  yup.string().test("memo", "must be at most 32 bytes when UTF-8 encoded", (value) => {
+    if (!value) return true
+    return textToBytes(value).length <= 32
   })

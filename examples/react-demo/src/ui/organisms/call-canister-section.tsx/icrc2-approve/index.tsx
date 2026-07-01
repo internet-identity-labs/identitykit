@@ -9,11 +9,13 @@ import {
   principalValidation,
   subAccountValidation,
   numberValidation,
+  memoValidation,
 } from "../../../../validations"
 import { useFormik } from "formik"
 import { Form, FormValues } from "./form"
 import { MOCKED_SIGNER_MAIN_ACCOUNT, PEPE_LEDGER_CANISTER_ID } from "../../../../constants"
 import { uint8ArrayToBase64 } from "@dfinity/utils"
+import { textToBytes } from "../../../../utils"
 
 const schema = yup
   .object({
@@ -23,7 +25,7 @@ const schema = yup
     from_subaccount: subAccountValidation(),
     fee: numberValidation(),
     amount: numberValidation().required("field is required"),
-    memo: numberValidation(),
+    memo: memoValidation(),
     created_at_time: numberValidation(),
     expires_at: numberValidation(),
     expected_allowance: numberValidation(),
@@ -73,7 +75,7 @@ export function Icrc2Approve({ className }: { className?: string }) {
       subaccount: isFormValid && spender_subaccount ? [JSON.parse(spender_subaccount)] : [],
     },
     fee: isFormValid && fee ? [BigInt(fee)] : [],
-    memo: isFormValid && memo ? [[Number(memo)]] : [],
+    memo: isFormValid && memo ? [textToBytes(memo)] : [],
     from_subaccount: isFormValid && from_subaccount ? [JSON.parse(from_subaccount)] : [],
     created_at_time: isFormValid && created_at_time ? [BigInt(created_at_time)] : [],
     expires_at: isFormValid && expires_at ? [BigInt(expires_at)] : [],
@@ -122,7 +124,7 @@ const icrc2_approve_args = {
   from_subaccount: ${JSON.stringify(actorArgs.from_subaccount)},
   spender: acc,
   fee: ${isFormValid && fee ? `[BigInt(${fee})]` : "[]"},
-  memo: ${isFormValid && memo ? `[[${Number(memo)}]]` : "[]"},
+  memo: ${JSON.stringify(actorArgs.memo)},
   amount: BigInt(${actorArgs.amount}),
   created_at_time: ${created_at_time ? `[BigInt(${created_at_time})]` : "[]"},
   expected_allowance: ${JSON.stringify(actorArgs.expected_allowance)},
