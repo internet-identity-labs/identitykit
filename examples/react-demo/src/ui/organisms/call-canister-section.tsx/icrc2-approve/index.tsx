@@ -38,7 +38,7 @@ const initialValues = {
   spender_principal: MOCKED_SIGNER_MAIN_ACCOUNT,
   fee: "",
   memo: "",
-  amount: "5000000000000000000000",
+  amount: "500000000",
   created_at_time: "",
   expected_allowance: "",
   expires_at: "",
