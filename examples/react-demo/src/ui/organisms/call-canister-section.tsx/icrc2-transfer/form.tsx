@@ -115,7 +115,6 @@ export function Form({
         <Label>memo</Label>
         <Input
           name="memo"
-          inputMode="numeric"
           invalid={!!errors.memo}
           value={values.memo}
           onChange={onChange}

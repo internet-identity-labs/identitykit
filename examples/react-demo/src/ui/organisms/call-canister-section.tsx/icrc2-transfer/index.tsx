@@ -6,6 +6,7 @@ import { CallCanisterMethod } from "../constants"
 import * as yup from "yup"
 import {
   numberValidation,
+  memoValidation,
   principalValidation,
   subAccountValidation,
 } from "../../../../validations"
@@ -18,6 +19,7 @@ import { useFormik } from "formik"
 import { Form, FormValues } from "./form"
 import { IDL } from "@icp-sdk/core/candid"
 import { uint8ArrayToBase64 } from "@dfinity/utils"
+import { textToBytes } from "../../../../utils"
 
 const schema = yup
   .object({
@@ -28,7 +30,7 @@ const schema = yup
     to_subaccount: subAccountValidation(),
     spender_subaccount: subAccountValidation(),
     amount: numberValidation().required("field is required"),
-    memo: numberValidation(),
+    memo: memoValidation(),
     created_at_time: numberValidation(),
     fee: numberValidation(),
   })
@@ -81,7 +83,7 @@ export function Icrc2Transfer({ className }: { className?: string }) {
       owner: isFormValid ? Principal.fromText(to_principal) : "",
       subaccount: isFormValid && to_subaccount ? [JSON.parse(to_subaccount)] : [],
     },
-    memo: isFormValid && memo ? [[Number(memo)]] : [],
+    memo: isFormValid && memo ? [textToBytes(memo)] : [],
     fee: isFormValid && fee ? [BigInt(fee)] : [],
     spender_subaccount: isFormValid && spender_subaccount ? [JSON.parse(spender_subaccount)] : [],
     created_at_time: isFormValid && created_at_time ? [BigInt(created_at_time)] : [],
@@ -134,7 +136,7 @@ const icrc2_transfer_from_args = {
   to: toAcc,
   amount: BigInt(${actorArgs.amount}),
   fee: ${isFormValid && fee ? `[BigInt(${fee})]` : "[]"},
-  memo: ${isFormValid && memo ? `[[${Number(memo)}]]` : "[]"},
+  memo: ${JSON.stringify(actorArgs.memo)},
   created_at_time: ${created_at_time ? `[BigInt(${created_at_time})]` : "[]"},
 }
 
