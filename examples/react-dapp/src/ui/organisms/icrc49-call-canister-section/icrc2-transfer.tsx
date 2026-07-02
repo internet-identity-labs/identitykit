@@ -1,7 +1,7 @@
 import {
   MOCKED_SIGNER_MAIN_ACCOUNT,
   MOCKED_SIGNER_SECOND_ACCOUNT,
-  PEPE_LEDGER_CANISTER_ID,
+  NFIDW_LEDGER_CANISTER_ID,
 } from "../../../constants"
 import { CallCanisterMethod } from "./constants"
 import { Section } from "./section"
@@ -13,7 +13,7 @@ export function Icrc2Transfer({ className }: { className?: string }) {
       request={{
         method: "icrc49_call_canister",
         params: {
-          canisterId: PEPE_LEDGER_CANISTER_ID,
+          canisterId: NFIDW_LEDGER_CANISTER_ID,
           sender: MOCKED_SIGNER_SECOND_ACCOUNT,
           method: CallCanisterMethod.icrc2_transfer_from,
           arg: "RElETAZte24AbAKzsNrDA2ithsqDBQFufW54bAf7ygECxvy2AgPhhcGUAgHqyoqeBAK6ieXCBAGC8/ORDATYo4yoDX0BBQEdXdZAg85gOc3s6DkTiv7FBn9RDHSPT6rgmlsBGgIAAAABHddbvOJ4U2u2S79mR0+xkJBPtwHztu02la8/gFECAAAAgICA9d246+S1bA==",

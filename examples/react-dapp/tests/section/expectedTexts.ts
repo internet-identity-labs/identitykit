@@ -184,12 +184,12 @@ export class ExpectedTexts {
     CanisterCallIcrc2ApproveRequest: [
       "Request from http://localhost:3001",
       "Canister ID",
-      "etik7-oiaaa-aaaar-qagia-cai",
+      "mih44-vaaaa-aaaaq-aaekq-cai",
       "Sender",
       "6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae",
       "Arguments",
-      '[{"fee":[],"memo":[],"from_subaccount":[],"created_at_time":[],"amount":"5000000000000000000000","expected_allowance":[],"expires_at":[],"spender":{"owner":{"__principal__":"gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe"},"subaccount":[]}}]',
-      "# Approve spending You are authorizing another address to withdraw funds from your account. **From:** `6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae` **Approve to spender:** `gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe` **Requested allowance:** `5000 ckPEPE` This is the withdrawal limit that will apply upon approval. **Approval expiration:** This approval does not have an expiration. **Approval fees:** `1000 ckPEPE` Charged for processing the approval. **Fees paid by:** `6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae`",
+      '[{"fee":[],"memo":[],"from_subaccount":[],"created_at_time":[],"amount":"500000000","expected_allowance":[],"expires_at":[],"spender":{"owner":{"__principal__":"gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe"},"subaccount":[]}}]',
+      "# Approve spending You are authorizing another address to withdraw funds from your account. **From:** `6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae` **Approve to spender:** `gohz6-e6xlo-6oe6c-tno3e-xp3gi-5h3de-eqj63-qd45w-5u3jl-lz7qb-iqe` **Requested allowance:** `5 NFIDW` This is the withdrawal limit that will apply upon approval. **Approval expiration:** This approval does not have an expiration. **Approval fees:** `0.0001 NFIDW` Charged for processing the approval. **Fees paid by:** `6pfju-rc52z-aihtt-ahhg6-z2bzc-ofp5r-igp5i-qy5ep-j6vob-gs3ae-nae`",
     ],
     CanisterCallIcrc1TransferRequest: [
       "Request from http://localhost:3001",
@@ -292,7 +292,7 @@ export class ExpectedTexts {
     ],
     CanisterCallIcrc2ApproveRequest: [
       "Request from localhost:3001",
-      "5000 ckPEPE",
+      "5 NFIDW",
       "Transaction details",
       "Proceed with caution. This website can spend up to the spending cap until you revoke this permission.",
     ],
