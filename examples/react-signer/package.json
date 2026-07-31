@@ -14,7 +14,7 @@
     "lint-staged": "lint-staged --no-stash"
   },
   "dependencies": {
-    "@icp-sdk/auth": "^5.0.0",
+    "@icp-sdk/auth": "^7.0.0",
     "@icp-sdk/canisters": "^3.6.0",
     "@icp-sdk/core": "^5.4.0",
     "@radix-ui/themes": "^3.2.1",
