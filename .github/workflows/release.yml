@@ -64,10 +64,10 @@ jobs:
           exit 1
 
       - name: Checkout repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Checkout CI repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.PAT }}
           repository: internet-identity-labs/ci_libs
@@ -104,14 +104,14 @@ jobs:
           ci_echo_success "${GITHUB_REF_TYPE} : ${GITHUB_REF_NAME}"
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: ".nvmrc"
           cache: "npm"
 
       - name: Cache Node Modules
         id: cache-node-modules
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             **/node_modules
@@ -182,10 +182,10 @@ jobs:
         exit 1
 
     - name: Checkout repo
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
 
     - name: Checkout CI repo
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         token: ${{ secrets.PAT }}
         repository: internet-identity-labs/ci_libs
@@ -227,14 +227,14 @@ jobs:
         dfx-version: 0.24.1
 
     - name: Setup Node
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: ".nvmrc"
         cache: "npm"
 
     - name: Cache Node Modules
       id: cache-node-modules
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: |
           **/node_modules

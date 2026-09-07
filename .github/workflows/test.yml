@@ -28,16 +28,16 @@ jobs:
 
     steps:
       - name: Checkout repo.
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: ".nvmrc"
           cache: "npm"
 
       - name: Cache Node Modules
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             **/node_modules
@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo.
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Docker build
         run: |
@@ -84,7 +84,7 @@ jobs:
           echo "TEST_ADD_PARAMS="${TEST_ADD_PARAMS}"" >> $GITHUB_ENV
 
       - name: Cache Node Modules
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             **/node_modules
