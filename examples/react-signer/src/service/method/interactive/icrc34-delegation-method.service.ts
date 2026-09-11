@@ -95,7 +95,7 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
         return {
           delegation: Object.assign(
             {
-              expiration: delegation.expiration,
+              expiration: delegation.expiration.toString(),
               pubkey: this.toBase64(delegation.pubkey),
             },
             targets && {
