@@ -4,6 +4,7 @@ import {
   IdentityKit,
   IdentityKitAccountsSignerClientOptions,
   IdentityKitDelegationSignerClientOptions,
+  InternetIdentity,
 } from "../../../lib"
 import { Signer } from "@icp-sdk/signer"
 import { Principal } from "@icp-sdk/core/principal"
@@ -72,6 +73,8 @@ export function useCreateIdentityKit<
         authType,
         signerClientOptions: {
           ...signerClientOptions,
+          // II can't honor scoped targets, always returns unscoped
+          ...(selectedSigner.id === InternetIdentity.id ? { targets: undefined } : {}),
           crypto,
           signer: selectedSigner.value,
           onLogout: onDisconnect,
