@@ -95,7 +95,7 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
         return {
           delegation: Object.assign(
             {
-              expiration: delegation.expiration,
+              expiration: delegation.expiration.toString(),
               pubkey: this.toBase64(delegation.pubkey),
             },
             targets && {
@@ -131,22 +131,16 @@ class Icrc34DelegationMethodService extends InteractiveMethodService {
       ? Number(icrc34Dto.maxTimeToLive) / NANOS_IN_MILLIS
       : MAX_TIME_TO_LIVE_MILLIS
 
-    if (accountKeyIdentity.type === AccountType.GLOBAL) {
-      const targets = icrc34Dto.targets.map((x) => Principal.fromText(x))
-
-      return await DelegationChain.create(
-        accountKeyIdentity.keyIdentity,
-        sessionPublicKey,
-        new Date(Date.now() + maxTimeToLive),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        { targets: targets as any }
-      )
-    }
+    const targets = icrc34Dto.targets?.length
+      ? icrc34Dto.targets.map((x) => Principal.fromText(x))
+      : undefined
 
     return await DelegationChain.create(
       accountKeyIdentity.keyIdentity,
       sessionPublicKey,
-      new Date(Date.now() + maxTimeToLive)
+      new Date(Date.now() + maxTimeToLive),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      targets && { targets: targets as any }
     )
   }
 

@@ -11,6 +11,7 @@
     "lint:fix": "eslint . --fix --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "test:e2e": "playwright test",
     "test:e2e:dev": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
     "format:write": "prettier --write '**/*.{ts,tsx,md,mdx,css}'",
     "lint-staged": "lint-staged --no-stash"
   },
