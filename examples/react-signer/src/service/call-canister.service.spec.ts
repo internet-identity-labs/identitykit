@@ -5,7 +5,7 @@ import {
   JsonnableEd25519KeyIdentity,
 } from "@icp-sdk/core/identity"
 import { callCanisterService, CallCanisterRequest } from "./call-canister.service"
-import { Agent, HttpAgent, Identity } from "@icp-sdk/core/agent"
+import { Agent, Cbor, HttpAgent, Identity } from "@icp-sdk/core/agent"
 import { IDL } from "@icp-sdk/core/candid"
 
 const IC_HOSTNAME = "https://ic0.app"
@@ -45,5 +45,38 @@ describe("Call Canister Service", function () {
 
     expect(response.contentMap).toMatch(/^2dn3p2xyZXF1ZXN0X3R5cGVkY2FsbGtjYW5pc3Rlcl9/)
     expect(response.certificate).toMatch(/^2dn3o2R0cmVl/)
+  }, 10000)
+
+  it("should include the given nonce in the signed content map", async function () {
+    // Given a call request with an explicit nonce
+    const identity = Ed25519KeyIdentity.fromParsedJson(PUBLIC_IDENTITY)
+    const sessionKey = Ed25519KeyIdentity.fromParsedJson(SESSION_IDENTITY)
+    const chain = await DelegationChain.create(
+      identity,
+      sessionKey.getPublicKey(),
+      new Date(Date.now() + 44 * HOUR),
+      {}
+    )
+    const delegation = DelegationIdentity.fromDelegation(sessionKey, chain)
+    const agent: Agent = HttpAgent.createSync({
+      host: IC_HOSTNAME,
+      identity: delegation as unknown as Identity,
+    })
+    const nonce = new Uint8Array([1, 2, 3, 4])
+    const request: CallCanisterRequest = {
+      delegation,
+      canisterId: "do25a-dyaaa-aaaak-qifua-cai",
+      calledMethodName: "greet",
+      parameters: Buffer.from(IDL.encode([IDL.Text], ["me"])).toString("base64"),
+      nonce: Buffer.from(nonce).toString("base64"),
+      agent,
+    }
+
+    // When the call is made through the signer
+    const response = await callCanisterService.call(request)
+
+    // Then the certified content map carries the same nonce bytes
+    const decoded: { nonce?: Uint8Array } = Cbor.decode(Buffer.from(response.contentMap, "base64"))
+    expect(new Uint8Array(decoded.nonce!)).toEqual(nonce)
   }, 10000)
 })
