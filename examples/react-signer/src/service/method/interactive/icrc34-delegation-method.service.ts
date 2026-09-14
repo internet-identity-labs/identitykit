@@ -1,6 +1,6 @@
 import { RPCMessage, RPCSuccessResponse } from "../../../type"
 import { ComponentData, InteractiveMethodService } from "./interactive-method.service"
-import { Account, AccountKeyIdentity, AccountType, accountService } from "../../account.service"
+import { Account, AccountKeyIdentity, accountService } from "../../account.service"
 import { DelegationChain, Ed25519PublicKey } from "@icp-sdk/core/identity"
 import { Principal } from "@icp-sdk/core/principal"
 import { targetService } from "../../target.service"
