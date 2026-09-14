@@ -258,6 +258,7 @@ export class ExpectedTexts {
           delegation: {
             expiration: expect.anything(),
             pubkey: "MCowBQYDK2VwAyEAbK2m/DMYZ4FOpBH5IQnH0WX+L1+it1Yko204OSSQrVA=",
+            targets: ["do25a-dyaaa-aaaak-qifua-cai"],
           },
           signature: expect.anything(),
         },
