@@ -26,6 +26,7 @@ export interface Icrc49Dto {
   sender: string
   method: string
   arg: string
+  nonce?: string
 }
 
 class Icrc49CallCanisterMethodService extends InteractiveMethodService {
@@ -59,6 +60,7 @@ class Icrc49CallCanisterMethodService extends InteractiveMethodService {
       canisterId: icrc49Dto.canisterId,
       calledMethodName: icrc49Dto.method,
       parameters: icrc49Dto.arg,
+      nonce: icrc49Dto.nonce,
       delegation,
       agent,
     })

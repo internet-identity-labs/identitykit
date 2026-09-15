@@ -24,6 +24,7 @@
     "test:e2e": "turbo test:e2e --force",
     "test:e2e:ui:dapp": "cd ./examples/react-dapp && npm run test:e2e:dev",
     "test:e2e:ui:demo": "cd ./examples/react-demo && npm run test:e2e:dev",
+    "test:e2e:headed:demo": "cd ./examples/react-demo && npm run test:e2e:headed",
     "prepare": "husky",
     "lint-staged": "turbo lint-staged"
   },
