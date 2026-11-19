@@ -1,4 +1,6 @@
 import { Locator, Page } from "@playwright/test"
+import { readCodeMirrorJson } from "../../../shared/e2e/codemirror.js"
+import { MAX_WAIT_MS } from "../../../shared/e2e/config.js"
 
 export abstract class Section {
   readonly submitButton: Locator
@@ -19,14 +21,12 @@ export abstract class Section {
   }
 
   async getRequestJson(): Promise<string> {
-    const json = await this.requestSection.textContent({ timeout: 10000 })
-    return json ? JSON.parse(json) : {}
+    return readCodeMirrorJson(this.requestSection, { timeout: 10000 })
   }
 
   async getResponseJson(): Promise<string> {
     await this.responseSection.waitFor({ state: "visible", timeout: 10000 })
-    const json = await this.responseSection.textContent()
-    return json ? JSON.parse(json) : {}
+    return readCodeMirrorJson(this.responseSection)
   }
 
   async clickSubmitButton(): Promise<void> {
@@ -36,6 +36,6 @@ export abstract class Section {
   async waitForResponse(): Promise<void> {
     await this.page
       .locator(`#${this.section} #response-section-${this.section} div.cm-line:nth-child(2)`)
-      .waitFor({ state: "visible", timeout: 30000 })
+      .waitFor({ state: "visible", timeout: MAX_WAIT_MS })
   }
 }

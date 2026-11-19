@@ -3,6 +3,8 @@ import { DemoPage } from "./page/demoPage.js"
 import { ProfileSection } from "./section/profile.section.js"
 import { CallCanisterSection } from "./section/callCanister.section.js"
 import { ExpectedTexts } from "./section/expectedTexts.js"
+import { NFID_URL } from "../../shared/e2e/config.js"
+import { NFIDW_USER } from "./helpers/test-user.js"
 
 type Fixtures = {
   demoPage: DemoPage
@@ -27,8 +29,8 @@ const test = base.extend<Fixtures>({
   },
   nfidPage: async ({ context, demoPage }, apply) => {
     const nfidPage = await context.newPage()
-    await nfidPage.goto("https://dev.nfid.one/")
-    await demoPage.setAccount(10974, nfidPage)
+    await nfidPage.goto(NFID_URL, { waitUntil: "domcontentloaded" })
+    await demoPage.setAccount(NFIDW_USER.anchor, nfidPage)
     await context.pages()[0]!.bringToFront()
     await apply(nfidPage)
   },
@@ -76,7 +78,7 @@ for (const account of accounts) {
             await callCanisterSection.checkNFIDPopupText(
               ExpectedTexts.NFID.Public.IdentityKitDemoCallRPCText
             )
-            await callCanisterSection.NFIDApproveButton.click()
+            await callCanisterSection.approveInNfidPopup()
           } else await callCanisterSection.callCanisterSubmitButton.click()
 
           await callCanisterSection.waitForNotEmptyResponse()

@@ -4,6 +4,17 @@ import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permis
 import { Icrc49CallCanisterSection } from "./section/icrc49-call-canister.section.js"
 import { ExpectedTexts } from "./section/expectedTexts.js"
 import { Icrc25AccountsSection } from "./section/icrc27-accounts.section.js"
+import { NFID_URL } from "../../shared/e2e/config.js"
+import { NFIDW_USER } from "./helpers/test-user.js"
+import {
+  assertLedgerBalance,
+  encodeIcrc1TransferArg,
+  NFIDW_LEDGER,
+} from "../../shared/e2e/ledger.js"
+
+// Amounts of the NFIDW ledger (8 decimals): the dapp's ICRC-1 example sends 1 NFIDW
+const ICRC1_TRANSFER_AMOUNT = BigInt(100_000_000)
+const NFIDW_FEE = BigInt(10_000)
 
 type Fixtures = {
   section: Icrc49CallCanisterSection
@@ -33,8 +44,8 @@ const test = base.extend<Fixtures>({
   },
   nfidPage: async ({ context, demoPage }, apply) => {
     const nfidPage = await context.newPage()
-    await nfidPage.goto("https://dev.nfid.one/")
-    await demoPage.setAccount(10974, nfidPage)
+    await nfidPage.goto(NFID_URL, { waitUntil: "domcontentloaded" })
+    await demoPage.setAccount(NFIDW_USER.anchor, nfidPage)
     await context.pages()[0]!.bringToFront()
     await apply(nfidPage)
     await nfidPage.close()
@@ -94,12 +105,10 @@ for (const account of accounts) {
         await section.mockedApproveButton.click()
       } else {
         await icrc25AccountsSection.selectAccountsNFID(context)
-        await section.setCallCanisterOwner(
-          '"7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae"'
-        )
+        await section.setRequestParams({ sender: NFIDW_USER.publicPrincipal })
         await section.openPopup(context)
         await section.checkPopupTextNFID(ExpectedTexts.NFID.NoConsentCaseCanisterCall)
-        await section.nfidApproveButton.click({ timeout: 10000 })
+        await section.approveInNfidPopup()
       }
 
       await section.waitForResponse()
@@ -128,12 +137,10 @@ for (const account of accounts) {
         await section.mockedApproveButton.click()
       } else {
         await icrc25AccountsSection.selectAccountsNFID(context)
-        await section.setCallCanisterOwner(
-          '"7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae"'
-        )
+        await section.setRequestParams({ sender: NFIDW_USER.publicPrincipal })
         await section.openPopup(context)
         await section.checkPopupTextNFID(ExpectedTexts.NFID.ConsentCaseCanisterCall)
-        await section.nfidApproveButton.click({ timeout: 10000 })
+        await section.approveInNfidPopup()
       }
 
       await section.waitForResponse()
@@ -151,6 +158,8 @@ for (const account of accounts) {
       context,
       nfidPage,
     }) => {
+      if (account.type === AccountType.NFIDW)
+        await assertLedgerBalance(NFIDW_LEDGER, NFIDW_USER.publicPrincipal, NFIDW_FEE)
       await nfidPage.title()
       await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account, context)
 
@@ -164,12 +173,10 @@ for (const account of accounts) {
         await section.mockedApproveButton.click()
       } else {
         await icrc25AccountsSection.selectAccountsNFID(context)
-        await section.setCallCanisterOwner(
-          '"7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae"'
-        )
+        await section.setRequestParams({ sender: NFIDW_USER.publicPrincipal })
         await section.openPopup(context)
         await section.checkPopupTextNFID(ExpectedTexts.NFID.CanisterCallIcrc2ApproveRequest)
-        await section.nfidApproveButton.click({ timeout: 10000 })
+        await section.approveInNfidPopup()
       }
 
       await section.waitForResponse()
@@ -187,6 +194,12 @@ for (const account of accounts) {
       context,
       nfidPage,
     }) => {
+      if (account.type === AccountType.NFIDW)
+        await assertLedgerBalance(
+          NFIDW_LEDGER,
+          NFIDW_USER.publicPrincipal,
+          ICRC1_TRANSFER_AMOUNT + NFIDW_FEE
+        )
       await nfidPage.title()
       await section.loginAndApprovePermissions(demoPage, requestPermissionSection, account, context)
       await section.setSelectedMethod(section.availableMethods.selectIcrc1TransferTab)
@@ -199,12 +212,14 @@ for (const account of accounts) {
         await section.mockedApproveButton.click()
       } else {
         await icrc25AccountsSection.selectAccountsNFID(context)
-        await section.setCallCanisterOwner(
-          '"7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae"'
-        )
+        // Transfer to the test wallet itself, so a run only spends the ledger fee
+        await section.setRequestParams({
+          sender: NFIDW_USER.publicPrincipal,
+          arg: encodeIcrc1TransferArg(NFIDW_USER.publicPrincipal, ICRC1_TRANSFER_AMOUNT),
+        })
         await section.openPopup(context)
         await section.checkPopupTextNFID(ExpectedTexts.NFID.CanisterCallIcrc1TransferRequest)
-        await section.nfidApproveButton.click({ timeout: 10000 })
+        await section.approveInNfidPopup()
       }
 
       await section.waitForResponse()

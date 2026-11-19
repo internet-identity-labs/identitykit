@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "type": "module",
+  "description": "Playwright helpers shared by the react-dapp and react-demo e2e suites. Not a workspace package: imported by relative path."
+}
