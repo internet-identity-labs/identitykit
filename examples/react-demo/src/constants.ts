@@ -9,3 +9,6 @@ export const MOCKED_SIGNER_SECOND_ACCOUNT =
 export const e8s = 10 ** 8
 
 export const ICP_API_HOST = "https://icp-api.io/"
+
+export const ICRC7_COLLECTION_CANISTER_ID = "pwy6s-kiaaa-aaaak-acm3q-cai"
+export const ICRC1_ORACLE_CANISTER_ID = "zjahs-wyaaa-aaaal-qjuia-cai"

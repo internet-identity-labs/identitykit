@@ -1,6 +1,7 @@
 type ObjectValuesType<T> = T[keyof T]
 
 export const CallCanisterMethod = {
+  icrc7_approve: "icrc37_approve_tokens",
   icrc2_approve: "icrc2_approve",
   icrc2_transfer_from: "icrc2_transfer_from",
   icrc1_transfer: "icrc1_transfer",
@@ -11,6 +12,7 @@ export const CallCanisterMethod = {
 } as const
 
 export const CallCanisterMethodTitle = {
+  [CallCanisterMethod.icrc7_approve]: "ICRC-7 approve",
   [CallCanisterMethod.icrc2_approve]: "ICRC-2 approve",
   [CallCanisterMethod.icrc2_transfer_from]: "ICRC-2 transfer",
   [CallCanisterMethod.icrc1_transfer]: "ICRC-1 transfer",
