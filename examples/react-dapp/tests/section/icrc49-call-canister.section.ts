@@ -2,7 +2,10 @@ import { BrowserContext, expect, Locator, Page } from "@playwright/test"
 import { Section } from "./section.js"
 import { Account, StandardsPage } from "../page/standards.page.js"
 import { Icrc25RequestPermissionsSection } from "./icrc25-request-permissions.section.js"
-import { waitForPopup } from "../helpers/helpers.js"
+import { waitForPopup, waitUntil } from "../../../shared/e2e/helpers.js"
+import { readCodeMirrorJson, updateCodeMirrorJson } from "../../../shared/e2e/codemirror.js"
+import { MAX_WAIT_MS } from "../../../shared/e2e/config.js"
+import { clickInSignerPopup } from "../../../shared/e2e/signer-popup.js"
 import { Method, RequestState } from "../helpers/types.js"
 
 export class Icrc49CallCanisterSection extends Section {
@@ -47,21 +50,15 @@ export class Icrc49CallCanisterSection extends Section {
   }
 
   async getRequestJson(): Promise<string> {
-    const json = await this.callCanisterRequestSection.textContent({
-      timeout: 10000,
-    })
-    return json ? JSON.parse(json) : {}
+    return readCodeMirrorJson(this.callCanisterRequestSection, { timeout: 10000 })
   }
 
   async getResponseJson(): Promise<string> {
-    const json = await this.callCanisterResponseSection.textContent({
-      timeout: 15000,
-    })
-    return json ? JSON.parse(json) : {}
+    return readCodeMirrorJson(this.callCanisterResponseSection, { timeout: 15000 })
   }
 
   async waitForResponse(): Promise<void> {
-    await this.callCanisterResponseSection.waitFor({ state: "attached", timeout: 30000 })
+    await this.callCanisterResponseSection.waitFor({ state: "attached", timeout: MAX_WAIT_MS })
     await this.callCanisterResponseSection.locator("div.cm-line:nth-child(2)").waitFor({
       state: "visible",
       timeout: 20000,
@@ -94,14 +91,20 @@ export class Icrc49CallCanisterSection extends Section {
     return this.popup!.locator('//button[.//text()="Approve"]')
   }
 
+  async approveInNfidPopup(): Promise<void> {
+    await clickInSignerPopup(this.popup!, this.nfidApproveButton)
+  }
+
   async getMockedPopupText() {
-    await this.popup!.locator("div > small").last().waitFor({ state: "visible", timeout: 30000 })
+    await this.popup!.locator("div > small")
+      .last()
+      .waitFor({ state: "visible", timeout: MAX_WAIT_MS })
     return await this.popup!.locator(`div > small`).allInnerTexts()
   }
 
   async getNFIDPopupText(popup: Page) {
     const selector = popup.locator(".items-center.mt-10.text-sm.text-center a").locator("..")
-    await selector.waitFor({ state: "visible", timeout: 40000 })
+    await selector.waitFor({ state: "visible", timeout: MAX_WAIT_MS })
     const header = await popup
       .locator(".items-center.mt-10.text-sm.text-center a")
       .locator("..")
@@ -119,16 +122,16 @@ export class Icrc49CallCanisterSection extends Section {
     expect(await this.getNFIDPopupText(this.popup!)).toEqual(textsExpected.join(","))
   }
 
-  async setCallCanisterOwner(sender: string): Promise<void> {
-    const addressSelector = `#request-section-${this.section}-${this.selectedMethod} .cm-content .cm-line:nth-child(5) span`
-    await this.page.waitForSelector(addressSelector, { state: "visible", timeout: 20000 })
-    await this.page.evaluate(
-      ({ selector, sender }: { selector: string; sender: string }) => {
-        const element = document.querySelector(selector)
-        if (element) element.textContent = sender
-        else throw new Error(`Element ${selector} not found`)
-      },
-      { selector: addressSelector, sender }
+  /** Overrides `params` fields of the selected call-canister request (e.g. sender, arg). */
+  async setRequestParams(params: Record<string, string>): Promise<void> {
+    await waitUntil(
+      async () =>
+        !!(await readCodeMirrorJson<{ params?: unknown }>(this.callCanisterRequestSection)).params,
+      { timeout: MAX_WAIT_MS, timeoutMsg: "Call canister request editor stayed empty" }
+    )
+    await updateCodeMirrorJson<{ params: Record<string, unknown> }>(
+      this.callCanisterRequestSection,
+      (request) => ({ ...request, params: { ...request.params, ...params } })
     )
   }
 

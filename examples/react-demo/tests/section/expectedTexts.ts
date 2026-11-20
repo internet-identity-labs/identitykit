@@ -1,4 +1,5 @@
 import { expect } from "@playwright/test"
+import { DAPP_HOST, NFIDW_USER } from "../helpers/test-user.js"
 
 export class ExpectedTexts {
   static readonly General = {
@@ -7,7 +8,7 @@ export class ExpectedTexts {
         method: "icrc49_call_canister",
         params: {
           canisterId: "mih44-vaaaa-aaaaq-aaekq-cai",
-          sender: "7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae",
+          sender: NFIDW_USER.publicPrincipal,
           method: "icrc2_approve",
           arg: "RElETAZufW17bgFueGwCs7DawwNorYbKgwUCbAjG/LYCALqJ5cIEAqLelOsGAoLz85EMA9ijjKgNfZGcnL8NAN6n99oNA8uW3LQOBAEFAAAAAIDKte4BAAABHddbvOJ4U2u2S79mR0+xkJBPtwHztu02la8/gFECAA==",
         },
@@ -16,7 +17,7 @@ export class ExpectedTexts {
         method: "icrc49_call_canister",
         params: {
           canisterId: "mih44-vaaaa-aaaaq-aaekq-cai",
-          sender: "7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae",
+          sender: NFIDW_USER.publicPrincipal,
           method: "icrc1_transfer",
           arg: "RElETAZte24AbAKzsNrDA2ithsqDBQFufW54bAb7ygECxvy2AgO6ieXCBAGi3pTrBgGC8/ORDATYo4yoDX0BBQEdXdZAg85gOc3s6DkTiv7FBn9RDHSPT6rgmlsBGgIAAAAAAICAgPXduOvktWw=",
         },
@@ -25,7 +26,7 @@ export class ExpectedTexts {
         method: "icrc49_call_canister",
         params: {
           canisterId: "ryjl3-tyaaa-aaaaa-aaaba-cai",
-          sender: "7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae",
+          sender: NFIDW_USER.publicPrincipal,
           method: "transfer",
           arg: "RElETAZte2wB4KmzAnhuAGwB1vaOgAF4bgNsBvvKAQDG/LYCAbqJ5cIEeKLelOsGAoLz85EMBNijjKgNAQEFIOryWM4M9NaQ7WNXeb3wjbfURB8JbLIb5aI3/N+SxHRgECcAAAAAAAAAAAAAAAAAAAAAAOH1BQAAAAA=",
         },
@@ -34,7 +35,7 @@ export class ExpectedTexts {
         method: "icrc49_call_canister",
         params: {
           canisterId: "do25a-dyaaa-aaaak-qifua-cai",
-          sender: "7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae",
+          sender: NFIDW_USER.publicPrincipal,
           method: "greet_no_consent",
           arg: "RElETAABcQJtZQ==",
         },
@@ -43,7 +44,7 @@ export class ExpectedTexts {
         method: "icrc49_call_canister",
         params: {
           canisterId: "do25a-dyaaa-aaaak-qifua-cai",
-          sender: "7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae",
+          sender: NFIDW_USER.publicPrincipal,
           method: "greet_update_call",
           arg: "RElETAABcQJtZQ==",
         },
@@ -67,7 +68,7 @@ export class ExpectedTexts {
       AccountsTabResponse: [
         {
           principal: {
-            __principal__: "7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae",
+            __principal__: NFIDW_USER.publicPrincipal,
           },
           subAccount: {
             bytes: expect.any(Object),
@@ -80,7 +81,7 @@ export class ExpectedTexts {
         method: "icrc49_call_canister",
         params: {
           canisterId: "mih44-vaaaa-aaaaq-aaekq-cai",
-          sender: "pyoac-sn7yx-gvu25-p2ni3-tja44-xvrrw-vzwmg-yxfsv-o3ykq-nhu4a-qqe",
+          sender: NFIDW_USER.anonymousPrincipal(DAPP_HOST),
           method: "icrc2_approve",
           arg: "RElETAZufW17bgFueGwCs7DawwNorYbKgwUCbAjG/LYCALqJ5cIEAqLelOsGAoLz85EMA9ijjKgNfZGcnL8NAN6n99oNA8uW3LQOBAEFAAAAAIDKte4BAAABHddbvOJ4U2u2S79mR0+xkJBPtwHztu02la8/gFECAA==",
         },
@@ -89,7 +90,7 @@ export class ExpectedTexts {
         method: "icrc49_call_canister",
         params: {
           canisterId: "ryjl3-tyaaa-aaaaa-aaaba-cai",
-          sender: "pyoac-sn7yx-gvu25-p2ni3-tja44-xvrrw-vzwmg-yxfsv-o3ykq-nhu4a-qqe",
+          sender: NFIDW_USER.anonymousPrincipal(DAPP_HOST),
           method: "transfer",
           arg: "RElETAZte2wB4KmzAnhuAGwB1vaOgAF4bgNsBvvKAQDG/LYCAbqJ5cIEeKLelOsGAoLz85EMBNijjKgNAQEFIOryWM4M9NaQ7WNXeb3wjbfURB8JbLIb5aI3/N+SxHRgECcAAAAAAAAAAAAAAAAAAAAAAOH1BQAAAAA=",
         },
@@ -98,7 +99,7 @@ export class ExpectedTexts {
         method: "icrc49_call_canister",
         params: {
           canisterId: "mih44-vaaaa-aaaaq-aaekq-cai",
-          sender: "pyoac-sn7yx-gvu25-p2ni3-tja44-xvrrw-vzwmg-yxfsv-o3ykq-nhu4a-qqe",
+          sender: NFIDW_USER.anonymousPrincipal(DAPP_HOST),
           method: "icrc1_transfer",
           arg: "RElETAZte24AbAKzsNrDA2ithsqDBQFufW54bAb7ygECxvy2AgO6ieXCBAGi3pTrBgGC8/ORDATYo4yoDX0BBQEdXdZAg85gOc3s6DkTiv7FBn9RDHSPT6rgmlsBGgIAAAAAAICAgPXduOvktWw=",
         },
@@ -107,7 +108,7 @@ export class ExpectedTexts {
         method: "icrc49_call_canister",
         params: {
           canisterId: "do25a-dyaaa-aaaak-qifua-cai",
-          sender: "pyoac-sn7yx-gvu25-p2ni3-tja44-xvrrw-vzwmg-yxfsv-o3ykq-nhu4a-qqe",
+          sender: NFIDW_USER.anonymousPrincipal(DAPP_HOST),
           method: "greet_no_consent",
           arg: "RElETAABcQJtZQ==",
         },
@@ -116,7 +117,7 @@ export class ExpectedTexts {
         method: "icrc49_call_canister",
         params: {
           canisterId: "do25a-dyaaa-aaaak-qifua-cai",
-          sender: "pyoac-sn7yx-gvu25-p2ni3-tja44-xvrrw-vzwmg-yxfsv-o3ykq-nhu4a-qqe",
+          sender: NFIDW_USER.anonymousPrincipal(DAPP_HOST),
           method: "greet_update_call",
           arg: "RElETAABcQJtZQ==",
         },
@@ -139,7 +140,7 @@ export class ExpectedTexts {
       AccountsTabResponse: [
         {
           principal: {
-            __principal__: "pyoac-sn7yx-gvu25-p2ni3-tja44-xvrrw-vzwmg-yxfsv-o3ykq-nhu4a-qqe",
+            __principal__: NFIDW_USER.anonymousPrincipal(DAPP_HOST),
           },
           subAccount: {
             bytes: expect.any(Object),

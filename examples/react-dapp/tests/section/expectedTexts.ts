@@ -1,4 +1,5 @@
 import { expect } from "@playwright/test"
+import { DAPP_HOST, NFIDW_USER } from "../helpers/test-user.js"
 
 export class ExpectedTexts {
   static readonly General = {
@@ -247,7 +248,7 @@ export class ExpectedTexts {
     ListOfAccountsResponse: {
       accounts: [
         {
-          owner: "7f3jf-ns7yl-tjcdk-fijk6-avi55-g5uyp-orxk6-4pv6p-f6d2c-7nex5-nae",
+          owner: NFIDW_USER.publicPrincipal,
           subaccount: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
         },
       ],
@@ -263,7 +264,7 @@ export class ExpectedTexts {
           signature: expect.anything(),
         },
       ],
-      publicKey: "MCowBQYDK2VwAyEALHdjGe0ciJb8Kmq4Xsc2/hn760QS+QgdJh7LUPc/wn0=",
+      publicKey: NFIDW_USER.anonymousDelegationPublicKey(DAPP_HOST),
     },
     NoTargetsDelegationResponse: {
       signerDelegation: [
@@ -275,7 +276,7 @@ export class ExpectedTexts {
           signature: expect.anything(),
         },
       ],
-      publicKey: "MCowBQYDK2VwAyEALHdjGe0ciJb8Kmq4Xsc2/hn760QS+QgdJh7LUPc/wn0=",
+      publicKey: NFIDW_USER.anonymousDelegationPublicKey(DAPP_HOST),
     },
     ConsentCaseCanisterCall: [
       "Request from localhost:3001",
