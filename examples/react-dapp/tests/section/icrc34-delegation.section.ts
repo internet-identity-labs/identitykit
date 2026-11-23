@@ -1,7 +1,8 @@
 import { BrowserContext, expect, Locator, Page } from "@playwright/test"
 import { Section } from "./section.js"
 import { ProfileType } from "../page/standards.page.js"
-import { waitForPopup } from "../helpers/helpers.js"
+import { waitForPopup } from "../../../shared/e2e/helpers.js"
+import { clickInSignerPopup } from "../../../shared/e2e/signer-popup.js"
 
 export class Icrc34DelegationSection extends Section {
   private popup: Page | undefined
@@ -60,9 +61,9 @@ export class Icrc34DelegationSection extends Section {
     this.popup = context.pages()[context.pages().length - 1]
     await this.popup!.bringToFront()
     if (profileType == "anonymous") {
-      await this.popupNFID.anonymousProfile().click()
+      await clickInSignerPopup(this.popup!, this.popupNFID.anonymousProfile())
     }
-    await this.popupNFID.connectButton().click()
+    await clickInSignerPopup(this.popup!, this.popupNFID.connectButton())
   }
 
   async setRequestWithNoTargets(): Promise<void> {

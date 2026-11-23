@@ -1,8 +1,10 @@
 import { BrowserContext, expect, Page } from "@playwright/test"
-import { UserService } from "../helpers/accounts-service.js"
+import { UserService } from "../../../shared/e2e/accounts-service.js"
 import { ProfileSection } from "../section/profile.section.js"
 import { ExpectedTexts } from "../section/expectedTexts.js"
-import { waitForPopup, waitUntil } from "../helpers/helpers.js"
+import { waitForPopup, waitUntil } from "../../../shared/e2e/helpers.js"
+import { clickInSignerPopup } from "../../../shared/e2e/signer-popup.js"
+import { MAX_WAIT_MS } from "../../../shared/e2e/config.js"
 
 export class DemoPage {
   connectButton
@@ -19,6 +21,20 @@ export class DemoPage {
 
   get userBalance() {
     return this.page.locator("#connect div small")
+  }
+
+  /** Displayed ICP balance; waits (up to 30 s) until the dapp has rendered a number. */
+  async getIcpBalance(): Promise<number> {
+    let balance = NaN
+    await waitUntil(
+      async () => {
+        const [text] = await this.userBalance.allTextContents()
+        balance = parseFloat((text ?? "").replace(" ICP", ""))
+        return Number.isFinite(balance)
+      },
+      { timeout: MAX_WAIT_MS, timeoutMsg: "ICP balance wasn't displayed" }
+    )
+    return balance
   }
 
   static getAccounts(): Account[] {
@@ -47,8 +63,8 @@ export class DemoPage {
     )
     const popup = context.pages()[context.pages().length - 1]
     await popup!.bringToFront()
-    await popup!.locator(`#profile_${accountProfile}`).click()
-    await popup!.locator('//button[.//text()="Connect"]').click()
+    await clickInSignerPopup(popup!, popup!.locator(`#profile_${accountProfile}`))
+    await clickInSignerPopup(popup!, popup!.locator('//button[.//text()="Connect"]'))
     expect(JSON.parse(<string>await profileSection.getProfileInfo())).toMatchObject(
       method === "Delegation"
         ? accountProfile === "public"

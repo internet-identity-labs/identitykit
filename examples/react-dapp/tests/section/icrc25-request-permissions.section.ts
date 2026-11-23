@@ -1,7 +1,7 @@
 import { BrowserContext, Page } from "@playwright/test"
 import { Section } from "./section.js"
 import { Account, AccountType } from "../page/standards.page.js"
-import { waitForPopup, waitUntil } from "../helpers/helpers.js"
+import { waitForPopup, waitUntil } from "../../../shared/e2e/helpers.js"
 
 export class Icrc25RequestPermissionsSection extends Section {
   constructor(public readonly page: Page) {

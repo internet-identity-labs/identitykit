@@ -1,6 +1,7 @@
 import { BrowserContext, Page } from "@playwright/test"
 import { Section } from "./section.js"
-import { waitForPopup, waitUntil } from "../helpers/helpers.js"
+import { waitForPopup, waitUntil } from "../../../shared/e2e/helpers.js"
+import { clickInSignerPopup } from "../../../shared/e2e/signer-popup.js"
 
 export class Icrc25AccountsSection extends Section {
   constructor(public readonly page: Page) {
@@ -26,7 +27,7 @@ export class Icrc25AccountsSection extends Section {
     await waitForPopup(context, async () => await this.submitButton.click())
     const popup = context.pages()[context.pages().length - 1]
     await popup!.bringToFront()
-    await popup!.click("//button[.//text()='Connect']", { timeout: 40000 })
+    await clickInSignerPopup(popup!, popup!.locator("//button[.//text()='Connect']"))
     await waitUntil(
       async () => {
         return !context.pages().includes(popup!)

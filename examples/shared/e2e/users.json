@@ -372,5 +372,119 @@
         "597337c738f8885ffbbbbf81aef932d8ae77742d11b6ad3124be25a252043316"
       ]
     }
+  },
+  {
+    "seed": "200000293 width insect capital orange choice wrist margin comfort bird board bridge pilot lamp talent move end hungry inform drastic juice glance flame simple define",
+    "icpAdress": "b87c5023c63c46f48ef6138673ea1b2c3e54e19b972c5ec56c9435f0f10e8746",
+    "account": {
+      "anchor": 200000293,
+      "accessPoints": [
+        {
+          "icon": "usb",
+          "device": "Security key",
+          "browser": "",
+          "lastUsed": 0,
+          "principalId": "m4hg2-y5sbv-pcymo-sx2sm-hga7r-prcyx-mlhtv-63ten-p5goo-naver-jae"
+        },
+        {
+          "icon": "document",
+          "device": "Recovery Phrase",
+          "browser": "",
+          "lastUsed": 0,
+          "principalId": "t4i5s-ooa2g-c7kei-axb6u-onizm-kzclh-fl6hq-huq2s-ufi7a-wk4er-vae"
+        }
+      ],
+      "accounts": [],
+      "principalId": "hg6h5-zqxea-cac4e-hmqaq-befrh-6shix-f2eki-fweld-aspjo-5kuub-2qe"
+    },
+    "credentials": {
+      "credentialId": "KdS-fsy966lOe8y5FOqZuCfaGSBgTsDQlydWpMKEL04",
+      "isResidentCredential": false,
+      "privateKey": "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg7O3CmRBkDPXUOHRyt-CkLrT5C-8sXBvaiOr_9Y-Nfc6hRANCAASjIZXCUY2MTEEj8ul_TKIH-bfFLDwo0DRv5nqZqsyzmMEtBER89DWzHO0kTi83tCGr4E81dxzzaDSzuhZc7sR1",
+      "signCount": 1
+    },
+    "authstate": {
+      "delegation": {
+        "delegations": [
+          {
+            "delegation": {
+              "expiration": "1917865313caaa40",
+              "pubkey": "302a300506032b657003210018d0eb654592a3a9271449c8d373c422982723514f057ca9782d6e259469da0e"
+            },
+            "signature": "b6c47fd187b89234d10ba97b652ce577f693ed59ce3955866d09cfaeb0bacac08778b3bf988a962665d111572c80eee84c4a799d6f77b062790955650ccb1a00"
+          }
+        ],
+        "publicKey": "302a300506032b6570032100a9970a9838dd0a8ed23cc643049a09e3bd9c7b56170dbe0eee3618f54e0b6287"
+      },
+      "identity": [
+        "302a300506032b657003210018d0eb654592a3a9271449c8d373c422982723514f057ca9782d6e259469da0e",
+        "1927d63cecb3782292ca26213d084f58f07c9111b7feabe6a8f1611f709057cc"
+      ]
+    },
+    "wallet": {
+      "publicPrincipal": "vhoq4-7wftz-3zs5e-b4h4j-zndq4-33fyd-dtrm5-dvrwk-urx4z-a3ifp-hae",
+      "anonymous": {
+        "localhost:3001": {
+          "delegationPublicKey": "MDwwDAYKKwYBBAGDuEMBAgMsAAoAAAAAAUBVdgEBFkTcimtkjzPwSdWUDkXO8A5SvkljXpgESY3NEFVFnW0="
+        }
+      }
+    }
+  },
+  {
+    "seed": "200000294 unknown old cloud limb loop noble advice various donkey alpha jazz unique pyramid betray avocado grunt company ketchup confirm egg virus shoe toast universe",
+    "icpAdress": "9c79bb3dedb06a8277c0aea0033b33c7c8a84e2d40177c588d65c1e546832667",
+    "account": {
+      "anchor": 200000294,
+      "accessPoints": [
+        {
+          "icon": "usb",
+          "device": "Security key",
+          "browser": "",
+          "lastUsed": 0,
+          "principalId": "onvy4-qyd6u-bhmpy-ly5ly-kvzav-lcqut-yrm5q-wawjf-n2ofk-kaaia-nae"
+        },
+        {
+          "icon": "document",
+          "device": "Recovery Phrase",
+          "browser": "",
+          "lastUsed": 0,
+          "principalId": "ro7vd-lr2ps-xuyhh-khofo-xwfm5-5v2cw-ynx7n-5sin3-xblnw-2naos-lae"
+        }
+      ],
+      "accounts": [],
+      "principalId": "3uekc-4gu5j-iwyvo-grbzq-ty5fe-wyhqm-yvtri-gzhk5-zqubr-x3r6j-jqe"
+    },
+    "credentials": {
+      "credentialId": "FkbstPjbuv5K98PwNSm-MeKnDpOjMK7CTu3os2wQjUU",
+      "isResidentCredential": false,
+      "privateKey": "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgTngqCEbunj-LEYwZ3bPGsgalwwosmG_H8pKGQDcEwtqhRANCAAR56Ur5cH5CWVQ0BIQLo1JceErp9-sJIGgPgzcIVHCVKsqX3Jq3oPbJIZ-kUhnVFGd4cN-v6Nd_Rl4GMHVSaoHo",
+      "signCount": 1
+    },
+    "authstate": {
+      "delegation": {
+        "delegations": [
+          {
+            "delegation": {
+              "expiration": "19178654af5c9a80",
+              "pubkey": "302a300506032b6570032100351ec2518494929d177610474dbe6a682bb8d5bf44d7cadc99ab87d0f73b368c"
+            },
+            "signature": "9f5df800091452d72e8e5ccf58c50d7ca8a386c0f3fac275825e4bd7506694e9baf7b07c3fc46b69a3ef4e0a931e32a1487741600c049e59bebc2536d9b09d06"
+          }
+        ],
+        "publicKey": "302a300506032b6570032100fc8670f0af4a5fa61a8431b847df05b31dea5048335af9e192b4cb99221d8ae4"
+      },
+      "identity": [
+        "302a300506032b6570032100351ec2518494929d177610474dbe6a682bb8d5bf44d7cadc99ab87d0f73b368c",
+        "33160c7b6fed68202cfbeacbc16286ce32af4ea5eb4c6da73fbfcc1d1391f15e"
+      ]
+    },
+    "wallet": {
+      "publicPrincipal": "fsjwh-q6fne-wmnt4-p4i3q-x37hk-p5ulm-45yih-qtnuu-bkr6c-u2wcd-wae",
+      "anonymous": {
+        "localhost:3002": {
+          "principal": "3urdl-5rm7a-o527a-cctp4-bm6tp-zjpof-uzqqw-e2cxi-oivul-2nlgy-qqe"
+        }
+      }
+    }
   }
 ]
