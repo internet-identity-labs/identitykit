@@ -39,7 +39,7 @@ const initialValues: FormValues = {
   expires_at: "",
 }
 
-export function Icrc7Approve({ className }: { className?: string }) {
+export function Icrc37Approve({ className }: { className?: string }) {
   const { user } = useAuth()
 
   const { values, errors, isValid, isValidating, handleChange, handleBlur, setValues } =
@@ -83,7 +83,7 @@ export function Icrc7Approve({ className }: { className?: string }) {
 
   const service = icrc7IDL({ IDL })
   const [, approveIDL] = service._fields.find(
-    ([methodName]: [string]) => methodName === CallCanisterMethod.icrc7_approve
+    ([methodName]: [string]) => methodName === CallCanisterMethod.icrc37_approve_tokens
   )
 
   return (
@@ -94,7 +94,7 @@ export function Icrc7Approve({ className }: { className?: string }) {
         params: {
           canisterId: canister_id,
           sender: user?.principal.toString() || "",
-          method: CallCanisterMethod.icrc7_approve,
+          method: CallCanisterMethod.icrc37_approve_tokens,
           arg: isFormValid ? uint8ArrayToBase64(IDL.encode(approveIDL.argTypes, [actorArgs])) : "",
         },
       }}
@@ -124,7 +124,7 @@ const approveArgs = [{
   },
 }]
 
-const response = await actor.${CallCanisterMethod.icrc7_approve}(approveArgs)`}
+const response = await actor.${CallCanisterMethod.icrc37_approve_tokens}(approveArgs)`}
     />
   )
 }
