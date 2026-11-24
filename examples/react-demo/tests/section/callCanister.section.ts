@@ -1,8 +1,11 @@
 import { BrowserContext, expect, Locator, Page } from "@playwright/test"
 import { RequestParametersBuilder } from "../helpers/requestParametersBuilder.js"
-import { waitForPopup, waitUntil } from "../helpers/helpers.js"
+import { waitForPopup, waitUntil } from "../../../shared/e2e/helpers.js"
 import { Method, RequestState } from "../helpers/types.js"
 import { DemoPage } from "../page/demoPage.js"
+import { readCodeMirror, readCodeMirrorJson } from "../../../shared/e2e/codemirror.js"
+import { MAX_WAIT_MS } from "../../../shared/e2e/config.js"
+import { clickInSignerPopup } from "../../../shared/e2e/signer-popup.js"
 
 export class CallCanisterSection extends DemoPage {
   private popup: Page | undefined
@@ -42,6 +45,10 @@ export class CallCanisterSection extends DemoPage {
     return this.popup!.locator('//button[.//text()="Approve"]')
   }
 
+  async approveInNfidPopup(): Promise<void> {
+    await clickInSignerPopup(this.popup!, this.NFIDApproveButton)
+  }
+
   availableMethods: { [key: string]: Method } = {
     icrc2_approve: {
       name: "icrc2_approve",
@@ -78,21 +85,15 @@ export class CallCanisterSection extends DemoPage {
   }
 
   async getRequestJson(): Promise<string> {
-    const json = await this.callCanisterRequestSection.textContent({
-      timeout: 10000,
-    })
-    return json ? JSON.parse(json) : {}
+    return readCodeMirrorJson(this.callCanisterRequestSection, { timeout: 10000 })
   }
 
   async getResponse(): Promise<string | null> {
-    return await this.callCanisterResponseSection.textContent({
-      timeout: 10000,
-    })
+    return readCodeMirror(this.callCanisterResponseSection, { timeout: 10000 })
   }
 
   async getResponseJson(): Promise<string> {
-    const json = await this.getResponse()
-    return json ? JSON.parse(json) : {}
+    return readCodeMirrorJson(this.callCanisterResponseSection, { timeout: 10000 })
   }
 
   async waitForResponse(): Promise<void> {
@@ -106,8 +107,8 @@ export class CallCanisterSection extends DemoPage {
     timeout = timeout ? timeout : 10000
     await waitUntil(
       async () => {
-        const value = await this.callCanisterResponseSection.textContent({ timeout: 0 })
-        return value != ""
+        const [value] = await this.callCanisterResponseSection.allTextContents()
+        return value !== undefined && value !== ""
       },
       {
         interval: 1000,
@@ -198,7 +199,7 @@ export class CallCanisterSection extends DemoPage {
       },
       {
         interval: 2000,
-        timeout: 120000,
+        timeout: MAX_WAIT_MS,
         timeoutMsg: `Balance wasn't changed. Expected ${expectedBalance} ICP, 
       but was ${await this.userBalance.innerText()}`,
       }

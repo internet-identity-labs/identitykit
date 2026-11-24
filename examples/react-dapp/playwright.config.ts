@@ -15,7 +15,9 @@ export default defineConfig({
       args: ["--disable-popup-blocking"],
     },
     viewport: { width: 1440, height: 960 },
-    actionTimeout: 0,
+    // No single action or navigation may wait longer than 30 s
+    actionTimeout: 30_000,
+    navigationTimeout: 30_000,
     ignoreHTTPSErrors: true,
     trace: "retain-on-failure",
     baseURL: "http://localhost:3001",

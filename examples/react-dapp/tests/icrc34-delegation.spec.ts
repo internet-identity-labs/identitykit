@@ -3,6 +3,8 @@ import { AccountType, ProfileType, StandardsPage } from "./page/standards.page.j
 import { Icrc25RequestPermissionsSection } from "./section/icrc25-request-permissions.section.js"
 import { Icrc34DelegationSection } from "./section/icrc34-delegation.section.js"
 import { ExpectedTexts } from "./section/expectedTexts.js"
+import { NFID_URL } from "../../shared/e2e/config.js"
+import { NFIDW_USER } from "./helpers/test-user.js"
 
 type Fixtures = {
   section: Icrc34DelegationSection
@@ -27,8 +29,8 @@ const test = base.extend<Fixtures>({
   },
   nfidPage: async ({ context, demoPage }, apply) => {
     const nfidPage = await context.newPage()
-    await nfidPage.goto("https://dev.nfid.one/")
-    await demoPage.setAccount(10974, nfidPage)
+    await nfidPage.goto(NFID_URL, { waitUntil: "domcontentloaded" })
+    await demoPage.setAccount(NFIDW_USER.anchor, nfidPage)
     await context.pages()[0]!.bringToFront()
     await apply(nfidPage)
   },

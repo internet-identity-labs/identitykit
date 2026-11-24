@@ -3,6 +3,11 @@ import { DemoPage } from "./page/demoPage.js"
 import { ProfileSection } from "./section/profile.section.js"
 import { CallCanisterSection } from "./section/callCanister.section.js"
 import { ExpectedTexts } from "./section/expectedTexts.js"
+import { NFID_URL } from "../../shared/e2e/config.js"
+import { NFIDW_USER } from "./helpers/test-user.js"
+import { assertLedgerBalance, ICP_LEDGER } from "../../shared/e2e/ledger.js"
+
+const ICP_FEE_E8S = BigInt(10_000)
 
 type Fixtures = {
   demoPage: DemoPage
@@ -27,8 +32,8 @@ const test = base.extend<Fixtures>({
   },
   nfidPage: async ({ context, demoPage }, apply) => {
     const nfidPage = await context.newPage()
-    await nfidPage.goto("https://dev.nfid.one/")
-    await demoPage.setAccount(10974, nfidPage)
+    await nfidPage.goto(NFID_URL, { waitUntil: "domcontentloaded" })
+    await demoPage.setAccount(NFIDW_USER.anchor, nfidPage)
     await context.pages()[0]!.bringToFront()
     await apply(nfidPage)
   },
@@ -49,6 +54,9 @@ for (const account of accounts) {
           profileSection,
           context,
         }) => {
+          // Only the public wallet spends ICP in this test (0.0001 ICP + ledger fee)
+          if (DemoPage.profileType[accountProfile] == "public")
+            await assertLedgerBalance(ICP_LEDGER, NFIDW_USER.publicPrincipal, ICP_FEE_E8S)
           await nfidPage.title()
           await demoPage.login(
             context,
@@ -71,9 +79,7 @@ for (const account of accounts) {
 
           if (DemoPage.profileType[accountProfile] == "legacy_0") return
 
-          const userInitialBalance = parseFloat(
-            (await demoPage.userBalance.textContent())!.replace(" ICP", "")
-          )
+          const userInitialBalance = await demoPage.getIcpBalance()
 
           const amountToSend = "10000"
           await callCanisterSection.requestBuilder
@@ -85,7 +91,7 @@ for (const account of accounts) {
           await callCanisterSection.checkNFIDPopupText(
             ExpectedTexts.NFID.Public.ICRC2ApproveRpcText
           )
-          await callCanisterSection.NFIDApproveButton.click()
+          await callCanisterSection.approveInNfidPopup()
 
           await callCanisterSection.waitForResponse()
           const actualResponse = await callCanisterSection.getResponseJson()
