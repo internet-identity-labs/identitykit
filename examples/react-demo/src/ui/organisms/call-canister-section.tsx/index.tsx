@@ -3,7 +3,8 @@ import { MethodBadge } from "../../atoms"
 import { GreetWithConsent } from "./greet-with-consent"
 import { GreetNoConsent } from "./greet-no-consent"
 import { Ledger } from "./ledger"
-import { Icrc37Approve } from "./icrc7-approve"
+import { Icrc37Approve } from "./icrc37-approve"
+import { Icrc7Transfer } from "./icrc7-transfer"
 import { Icrc2Approve } from "./icrc2-approve"
 import { Icrc2Transfer } from "./icrc2-transfer"
 import { Icrc1Transfer } from "./icrc1-transfer"
@@ -20,6 +21,7 @@ import { UpdateCall } from "./update-call"
 
 const MethodComponent = {
   [CallCanisterMethod.icrc37_approve_tokens]: Icrc37Approve,
+  [CallCanisterMethod.icrc7_transfer]: Icrc7Transfer,
   [CallCanisterMethod.greet_with_consent]: GreetWithConsent,
   [CallCanisterMethod.greet_no_consent]: GreetNoConsent,
   [CallCanisterMethod.greet_update_call]: UpdateCall,

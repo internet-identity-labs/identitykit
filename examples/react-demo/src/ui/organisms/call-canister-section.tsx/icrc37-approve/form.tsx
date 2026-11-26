@@ -6,7 +6,7 @@ import { HTMLAttributes } from "react"
 
 export type FormValues = {
   canister_id: string
-  token_id: string
+  token_ids: string
   spender_principal: string
   spender_subaccount?: string
   from_subaccount?: string
@@ -36,13 +36,13 @@ export function Form({
         />
       </FormGroup>
       <p className="text-slate-500 dark:text-zinc-500 font-semibold mb-1">Arguments</p>
-      <FormGroup error={errors.token_id}>
-        <Label>token_id</Label>
+      <FormGroup error={errors.token_ids}>
+        <Label>token_ids (e.g. "1" or "1, 2")</Label>
         <Input
-          name="token_id"
-          inputMode="numeric"
-          invalid={!!errors.token_id}
-          value={values.token_id}
+          name="token_ids"
+          inputMode="text"
+          invalid={!!errors.token_ids}
+          value={values.token_ids}
           onChange={onChange}
           onBlur={onBlur}
         />
