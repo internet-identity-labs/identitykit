@@ -5,33 +5,59 @@ import { useAuth } from "@nfid/identitykit/react"
 import { CallCanisterMethod } from "../constants"
 import * as yup from "yup"
 import { IDL } from "@icp-sdk/core/candid"
-import {
-  principalValidation,
-  subAccountValidation,
-  numberValidation,
-  memoValidation,
-} from "../../../../validations"
+import { principalValidation, subAccountValidation, memoValidation } from "../../../../validations"
 import { useFormik } from "formik"
 import { Form, FormValues } from "./form"
 import { ICRC7_COLLECTION_CANISTER_ID, ICRC1_ORACLE_CANISTER_ID } from "../../../../constants"
 import { uint8ArrayToBase64 } from "@dfinity/utils"
 import { textToBytes } from "../../../../utils"
 
+const tokenIdsValidation = () =>
+  yup
+    .string()
+    .required("field is required")
+    .test("token_ids", "must be one or more whole numbers, e.g. 1 or 1, 2", (value) => {
+      if (!value) return false
+      try {
+        const ids = value.split(",").map((s) => s.trim())
+        if (ids.length === 0) return false
+        return ids.every((id) => {
+          const n = BigInt(id)
+          IDL.encode([IDL.Nat], [n])
+          return true
+        })
+      } catch {
+        return false
+      }
+    })
+
 const schema = yup
   .object({
     canister_id: principalValidation().required("field is required"),
-    token_id: numberValidation().required("field is required"),
+    token_ids: tokenIdsValidation(),
     spender_principal: principalValidation().required("field is required"),
     spender_subaccount: subAccountValidation(),
     from_subaccount: subAccountValidation(),
     memo: memoValidation(),
-    expires_at: numberValidation(),
+    expires_at: yup
+      .string()
+      .test("expires_at", "must be a whole number greater than 0", (value) => {
+        if (!value) return true
+        try {
+          const n = BigInt(value)
+          if (n <= 0) return false
+          IDL.encode([IDL.Nat], [n])
+          return true
+        } catch {
+          return false
+        }
+      }),
   })
   .required()
 
 const initialValues: FormValues = {
   canister_id: ICRC7_COLLECTION_CANISTER_ID,
-  token_id: "1",
+  token_ids: "1",
   spender_principal: ICRC1_ORACLE_CANISTER_ID,
   spender_subaccount: "",
   from_subaccount: "",
@@ -51,7 +77,7 @@ export function Icrc37Approve({ className }: { className?: string }) {
 
   const {
     canister_id,
-    token_id,
+    token_ids,
     spender_principal,
     spender_subaccount,
     from_subaccount,
@@ -64,27 +90,40 @@ export function Icrc37Approve({ className }: { className?: string }) {
   // created_at_time is required (Nat64) — set to 5 seconds ago in nanoseconds
   const createdAtTimeNs = BigInt(Date.now()) * BigInt(1_000_000) - BigInt(5_000_000_000)
 
-  const approveTokenArg = {
-    token_id: isFormValid ? BigInt(token_id) : BigInt(0),
+  const parsedTokenIds = isFormValid
+    ? token_ids
+        .split(",")
+        .map((s) => s.trim())
+        .map(BigInt)
+    : [BigInt(0)]
+
+  const spenderAccount = {
+    owner: isFormValid ? Principal.fromText(spender_principal) : Principal.fromText("aaaaa-aa"),
+    subaccount: isFormValid && spender_subaccount ? [JSON.parse(spender_subaccount)] : [],
+  }
+
+  const actorArgs = parsedTokenIds.map((token_id) => ({
+    token_id,
     approval_info: {
       memo: isFormValid && memo ? [textToBytes(memo)] : [],
       from_subaccount: isFormValid && from_subaccount ? [JSON.parse(from_subaccount)] : [],
       created_at_time: createdAtTimeNs,
       expires_at: isFormValid && expires_at ? [BigInt(expires_at)] : [],
-      spender: {
-        owner: isFormValid ? Principal.fromText(spender_principal) : Principal.fromText("aaaaa-aa"),
-        subaccount: isFormValid && spender_subaccount ? [JSON.parse(spender_subaccount)] : [],
-      },
+      spender: spenderAccount,
     },
-  }
-
-  // actorArgs is a vector — the method signature is icrc37_approve_tokens(vec ApproveTokenArg)
-  const actorArgs = [approveTokenArg]
+  }))
 
   const service = icrc7IDL({ IDL })
   const [, approveIDL] = service._fields.find(
     ([methodName]: [string]) => methodName === CallCanisterMethod.icrc37_approve_tokens
   )
+
+  const tokenIdsList = isFormValid
+    ? token_ids
+        .split(",")
+        .map((s) => s.trim())
+        .join(", ")
+    : token_ids
 
   return (
     <Section
@@ -110,8 +149,8 @@ const actor = Actor.createActor(idlFactory, {
   canisterId: "${canister_id}",
 })
 
-const approveArgs = [{
-  token_id: BigInt(${token_id}),
+const approveArgs = [${tokenIdsList}].map((tokenId) => ({
+  token_id: BigInt(tokenId),
   approval_info: {
     memo: ${isFormValid && memo ? `[textToBytes("${memo}")]` : "[]"},
     from_subaccount: ${isFormValid && from_subaccount ? `[${from_subaccount}]` : "[]"},
@@ -122,7 +161,7 @@ const approveArgs = [{
       subaccount: ${isFormValid && spender_subaccount ? `[${spender_subaccount}]` : "[]"},
     },
   },
-}]
+}))
 
 const response = await actor.${CallCanisterMethod.icrc37_approve_tokens}(approveArgs)`}
     />
