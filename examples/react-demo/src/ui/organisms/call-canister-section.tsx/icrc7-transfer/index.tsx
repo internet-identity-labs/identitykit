@@ -8,7 +8,7 @@ import { IDL } from "@icp-sdk/core/candid"
 import { principalValidation, subAccountValidation, memoValidation } from "../../../../validations"
 import { useFormik } from "formik"
 import { Form, FormValues } from "./form"
-import { ICRC7_COLLECTION_CANISTER_ID } from "../../../../constants"
+import { ICRC7_COLLECTION_CANISTER_ID, MOCKED_SIGNER_MAIN_ACCOUNT } from "../../../../constants"
 import { uint8ArrayToBase64 } from "@dfinity/utils"
 import { textToBytes } from "../../../../utils"
 
@@ -45,7 +45,7 @@ const schema = yup
 const initialValues: FormValues = {
   canister_id: ICRC7_COLLECTION_CANISTER_ID,
   token_ids: "1",
-  to_principal: "",
+  to_principal: MOCKED_SIGNER_MAIN_ACCOUNT,
   to_subaccount: "",
   from_subaccount: "",
   memo: "",
